@@ -1,0 +1,604 @@
+#' @rdname IFFChunk
+#' @method IFFChunk IFF.ILBM
+#' @export
+IFFChunk.IFF.ILBM <- function(x, ...) {
+  if ("matrix" %in% class(x)) stop(paste("This IFF chunk interpretation is probably based on",
+                                         "an ANIM DLTA chunk. It can't be converted back into an IFFChunk object."))
+  rasterToIFF(x, ...)@chunk.data[[1]]
+}
+
+#' @rdname IFFChunk
+#' @method IFFChunk IFF.CMAP
+#' @export
+IFFChunk.IFF.CMAP <- function(x, ...) {
+  result <- colourToAmigaRaw(x, n.bytes = "3", ...)
+  return(new("IFFChunk", chunk.type = "CMAP", chunk.data = list(result)))
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.BMHD <- function(x, ...) {
+  compr <- which(c("cmpNone", "cmpByteRun1") == x$Compression) - 1
+  ## if the compression type is unknown, set to 0
+  if (length(compr) == 0) compr <- 0
+  mask <- which(c("mskNone", "mskHasMask", "mskHasTransparentColour", "mskLasso") == x$Masking) - 1
+  ## if the masking type is unknown, set to 0
+  if (length(mask) == 0) mask <- 0
+  result <- c(adfExplorer::amigaIntToRaw(c(x$w, x$h), 16, F),
+              adfExplorer::amigaIntToRaw(c(x$x, x$y), 16, T),
+              adfExplorer::amigaIntToRaw(c(x$nPlanes, mask, compr), 8, F),
+              as.raw(x$pad)[[1]],
+              adfExplorer::amigaIntToRaw(x$transparentColour, 16, F),
+              adfExplorer::amigaIntToRaw(c(x$xAspect, x$yAspect), 8, F),
+              adfExplorer::amigaIntToRaw(c(x$pageWidth, x$pageHeight), 16, F))
+  return(new("IFFChunk", chunk.type = "BMHD", chunk.data = list(result)))
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.CAMG <- function(x, ...) {
+  return(.inverseViewPort(x$display.mode, x$monitor))
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.CRNG <- function(x, ...) {
+  flag <- which(c("RNG_OFF", "RNG_ACTIVE", "RNG_REVERSE") == x$flags) - 1
+  ## if the flag is unknown, set to 0
+  if (length(flag) == 0) flag <- 0
+  dat <- c(
+    x$padding,
+    adfExplorer::amigaIntToRaw(round(x$rate*(2^14)/60), 16, F),
+    adfExplorer::amigaIntToRaw(flag, 16, F),
+    adfExplorer::amigaIntToRaw(c(x$low, x$high), 8, F)
+  )
+  result <- new("IFFChunk", chunk.type = "CRNG", chunk.data = list(dat))
+  return(result)
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.ANIM <- function(x, ...) {
+  rasterToIFF(x, ...)@chunk.data[[1]]
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.ANHD <- function(x, ...) {
+  oper <- which(x$operation == c("standard", "XOR", "LongDeltaMode", "ShortDeltaMode", "GeneralDeltamode", "ByteVerticalCompression", "StereoOp5", "ShortLongVerticalDeltaMode")) - 1
+  ## if the flag is unknown, set to 0
+  if (length(oper) == 0) oper <- 0
+  result <- c(adfExplorer::amigaIntToRaw(oper, 8, F),
+              adfExplorer::bitmapToRaw(x$mask, F, F),
+              adfExplorer::amigaIntToRaw(c(x$w, x$h), 16, F),
+              adfExplorer::amigaIntToRaw(c(x$x, x$y), 16, T),
+              adfExplorer::amigaIntToRaw(c(x$abstime, x$reltime), 32, T),
+              adfExplorer::amigaIntToRaw(x$interleave, 8, F),
+              x$pad0,
+              adfExplorer::bitmapToRaw(x$flags, T, T),
+              x$pad1
+  )
+  result <- new("IFFChunk", chunk.type = "ANHD", chunk.data = list(result))
+  return(result)
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.DLTA <- function(x, ...) {
+  return(new("IFFChunk", chunk.type = "DLTA", chunk.data = list(x)))
+}
+
+#' @rdname IFFChunk
+#' @export
+IFFChunk.IFF.DPAN <- function(x, ...) {
+  result <- c(adfExplorer::amigaIntToRaw(c(x$version, x$nframes), 16, F),
+              adfExplorer::bitmapToRaw(x$flags, T, T)
+  )
+  result <- new("IFFChunk", chunk.type = "DPAN", chunk.data = list(result))
+  return(result)
+}
+
+#' Convert AmigaFFH objects into grDevices raster images
+#'
+#' Convert AmigaFFH objects that contain bitmap images into grDevices raster
+#' images.
+#'
+#' Images on the Amiga were stored as bitmap images with indexed colour
+#' palettes. This was mainly due to hardware and memory limitations.
+#' Bitmap images could also be embedded in several file types. This method
+#' can be used to convert AmigaFFH objects read from such files into
+#' grDevices raster images (\code{\link[grDevices]{as.raster}}).
+#'
+#' @docType methods
+#' @rdname as.raster
+#' @name as.raster
+#' @aliases as.raster,IFFChunk-method
+#' @param x Object that needs to be converted into a \code{grDevices} raster. It
+#' can be an \code{\link{IFFChunk}} containing an interleaved bitmap image
+#' (ILBM) or animation (ANIM) or a \code{\link{hardwareSprite}}.
+#' @param background Use the argument \code{background} to
+#' specify a background colour in case \code{x} is a \code{\link{hardwareSprite}}.
+#' @param ... Currently ignored.
+#' @return Returns a \code{grDevices} raster image (\code{\link[grDevices]{as.raster}})
+#' based on \code{x}. If \code{x} is an animation (ANIM), a \code{list} of raster objects is
+#' returned.
+#' @examples
+#' \dontrun{
+#' ## load an IFF file
+#' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
+#' 
+#' ## The file contains an interleaved bitmap image that can be
+#' ## converted into a raster:
+#' example.raster <- as.raster(example.iff)
+#' 
+#' ## the raster can be plotted:
+#' plot(example.raster)
+#' 
+#' ## note that the IFFChunk can also be plotted directly:
+#' plot(example.iff)
+#' 
+#' ## Hardware sprites can also be converted into raster images.
+#' ## Let's generate a 16x16 sprite with a random bitmap:
+#' spr <- new("hardwareSprite",
+#'            VStop = 16,
+#'            bitmap = as.raw(sample.int(255, 64, replace = TRUE)))
+#' 
+#' ## now convert it into a raster image.
+#' ## as the background colour is not specified for hardware
+#' ## sprite, we can optionally provide it here.
+#' spr.raster <- as.raster(spr, background = "green")
+#' }
+#' @family iff.operations
+#' @family raster.operations
+#' @author Pepijn de Vries
+#' @export
+setMethod("as.raster", "IFFChunk", function(x, ...) {
+  if (x@chunk.type == "FORM") {
+    result <- lapply(x@chunk.data, function(y){
+      if (y@chunk.type == "ILBM") return(as.raster(y))
+      if (y@chunk.type == "ANIM") return(interpretIFFChunk(y))
+    })
+    if (length(result) == 1) result <- result[[1]]
+    return (result)
+  } else if (x@chunk.type == "ILBM") {
+    sub.chunks <- unlist(lapply(x@chunk.data, function(y) y@chunk.type))
+    if (!("BMHD" %in% sub.chunks)) stop("No bitmap header present. Can't interpret bitmap.")
+    if (!("BODY" %in% sub.chunks)) stop("No BODY chunk present. Can't convert the bitmap into a raster.")
+    bm.header  <- interpretIFFChunk(getIFFChunk(x, "BMHD"))
+    if (!("CAMG" %in% sub.chunks)) {
+      bm.vp.mode <- NULL
+      warning("No Amiga viewport available, interpretation possibly incorrect.")
+    } else {
+      bm.vp.mode <- interpretIFFChunk(getIFFChunk(x, "CAMG"))
+      bm.vp.mode <- .display.properties(bm.vp.mode$display.mode, bm.vp.mode$monitor)
+      if (bm.vp.mode$is.HAM) warning("HAM mode as used in this ILBM is not yet supported.")
+    }
+    ## default palette in case 'CMAP' chunk is missing:
+    bm.palette <- grDevices::gray(round(seq(0, 15, length.out = 2^bm.header$nPlanes))/15)
+    ## Colours are interpreted as 12 bit when al low bits are 0, otherwise as 24 bit
+    try(bm.palette <- interpretIFFChunk(getIFFChunk(x, "CMAP")), silent = T)
+    ## extend the palette when the extra halfbright mode is used:
+    if (!is.null(bm.vp.mode) && bm.vp.mode$is.halfbright) {
+      bm.palette <- c(bm.palette,
+                      substr(grDevices::adjustcolor(bm.palette, 1, 0.5, 0.5, 0.5), 1, 7))
+    }
+    if (bm.header$Compression == "cmpByteRun1") {
+      bm <- unPackBitmap(interpretIFFChunk(getIFFChunk(x, "BODY")))
+    } else if (bm.header$Compression == "cmpNone") {
+      bm <- interpretIFFChunk(getIFFChunk(x, "BODY"))
+    } else {
+      stop("Bitmap data is compressed with unsupported algorithm.")
+    }
+    if (length(bm.palette) < 2^(bm.header$nPlanes)) {
+      bm.palette <- c(bm.palette, rep("#000000", 2^(bm.header$nPlanes) - length(bm.palette)))
+    }
+    if (bm.header$Masking == "mskHasTransparentColour") {
+      transparent <- bm.header$transparentColour + 1
+      bm.palette[transparent] <- grDevices::adjustcolor(bm.palette[transparent],
+                                                        alpha.f = 0)
+    }
+    attr.palette <- NULL
+    if ("palette" %in% names(list(...)) && is.null(list(...)$palette)){
+      attr.palette <- bm.palette
+      bm.palette <- NULL
+    }
+    result <- bitmapToRaster(bm, bm.header$w, bm.header$h, bm.header$nPlanes, bm.palette)
+    attributes(result)[["asp"]] <- bm.vp.mode$aspect.y/bm.vp.mode$aspect.x
+    if (!is.null(attr.palette)) attributes(result)[["palette"]] <- attr.palette
+    return(result)
+  } else if (x@chunk.type == "ANIM") {
+    return(interpretIFFChunk(x))
+  } else {
+    stop(sprintf("IFF chunk of type %s cannot be converted into a raster.", x@chunk.type))
+  }
+})
+
+#' @rdname plot
+#' @name plot
+#' @export
+plot.IFF.ILBM <- function(x, y, ...) {
+  ## For ANIM frames, a matrix of palette indices is returned
+  ## turn that into a raster object with a grayscale palette
+  if ("matrix" %in% class(x)) {
+    pal <- grDevices::gray(seq(0, 1, length.out = max(round(abs(x)))))
+    asp <- attributes(x)$asp
+    x <- as.raster(apply(x, 2, function(z) pal[round(abs(z)) + 1]))
+    attributes(x)$asp <- asp
+  }
+  class(x) <- "raster"
+  if ("asp" %in% names(list(...)))
+    graphics::plot(x, y, ...) else
+      graphics::plot(x, y, asp = attributes(x)$asp, ...)
+}
+
+#' @rdname plot
+#' @name plot
+#' @export
+plot.IFF.ANIM <- function(x, y, ...) {
+  invisible(lapply(x, plot.IFF.ILBM, ...))
+}
+
+#' Convert a grDevices raster image into an IFF formated bitmap image
+#'
+#' Convert grDevices raster images (\code{\link[grDevices]{as.raster}})
+#' into a formal \code{\link{IFFChunk}} object, as an interleaved bitmap (ILBM)
+#' image.
+#'
+#' Convert any modern image into a interleaved bitmap (image) conform
+#' Interchange File Format (IFF) specifications. If your original image
+#' is in true colour (i.e., a 24 bit colour depth) it will be converted
+#' into a bitmap image with an indexed palette.
+#'
+#' @rdname rasterToIFF
+#' @name rasterToIFF
+#' @param x A raster object created with \code{\link[grDevices]{as.raster}} which
+#' needs to be converted into an IFF formated bitmap image. It is also posible to let \code{x} be
+#' a matrix of \code{character}s, representing colours.
+#' @param display.mode Specify the Amiga display mode that should be used.
+#' See \code{\link{amiga_display_modes}} for all possible options.
+#' "\code{LORES_KEY}" is used by default, this is the lowest resolution
+#' possible on the Amiga.
+#' @param monitor The Amiga monitor on which the needs to be displayed.
+#' See \code{\link{amiga_monitors}} for more details and posible options.
+#' By default "\code{DEFAULT_MONITOR_ID}" is used.
+#' @param anim.options Currently ignored. This argument will potentitally be implemented
+#' in future versions of this package. Currently, animations are always encoded
+#' with the "ByteVerticalCompression" in this pacakge (when \code{x} is a list of
+#' \code{raster} objects).
+#' @param ... Arguments passed on to \code{\link{rasterToBitmap}}.
+#' @return Returns an \code{\link{IFFChunk}} object holding an Interleaved
+#' Bitmap (ILBM) image based on \code{x}.
+#' @examples
+#' \dontrun{
+#' ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
+#' volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
+#'   min(volcano) + 1], nrow(volcano))))
+#' 
+#' ## Turning the raster into an IFFChunk object is easy:
+#' volcano.iff <- rasterToIFF(volcano.raster)
+#' 
+#' ## This object can be saved as an IFF file using write.iff
+#' }
+#' @family iff.operations
+#' @family raster.operations
+#' @author Pepijn de Vries
+#' @export
+rasterToIFF <- function(x,
+                        display.mode = as.character(AmigaFFH::amiga_display_modes$DISPLAY_MODE),
+                        monitor = as.character(AmigaFFH::amiga_monitors$MONITOR_ID),
+                        anim.options,
+                        ...) {
+  display.mode <- match.arg(display.mode)
+  monitor <- match.arg(monitor)
+  if (grepl("EHB|EXTRAHALFBRITE|HAM", display.mode)) stop("Sorry, 'hold and modify' and 'extra halfbrite' modes are currently not implemented")
+  pars <- list(...)
+  if (is.null(pars$depth)) pars$depth <- 3
+  if (is.null(pars$colour.depth)) pars$colour.depth <- "12 bit"
+  if (is.list(x)) {
+    if (length(x) < 2) stop("When x is a list of rasters, it will be converted to an anim. x should have a length of at least 2.")
+    if (any(unlist(lapply(x, function(y) !any(c("raster", "matrix") %in% class(y)) || !all(.is.colour(y))))))
+      stop("All elements of x should be a grDevices raster or a matrix of colours")
+    if ("indexing" %in% names(list(...))) {
+      x <- list(...)$indexing(x = x, length.out = 2^pars$depth)
+    } else {
+      x <- index.colours(x, length.out = 2^pars$depth)
+    }
+    pal <- attributes(x)$palette
+    trans <- attributes(x)$transparent
+
+    anhd <- lapply(1:(length(x) + 2), function(z) {
+      anhdz <- list(
+        operation       = "ByteVerticalCompression",
+        mask            = rep(F, 8),
+        w               = dim(x[[1]])[[2]],
+        h               = dim(x[[1]])[[1]],
+        x               = 0,
+        y               = 0,
+        abstime         = z*2,
+        reltime         = 2,
+        interleave      = 0,
+        pad0            = raw(1),
+        flags           = rep(F, 32),
+        pad1            = raw(16)
+      )
+      class(anhdz) <- "IFF.ANHD"
+      anhdz <- IFFChunk(anhdz)
+      anhdz
+    })
+    
+    frame1 <- .indexToBitmap(x[[1]], pars$depth, T)
+    frame1 <- .bitmapToILBM(frame1, dim(x[[1]]), display.mode, monitor, pars$depth, pars$colour.depth, pal, trans)
+    ## DPaint needs this class to set the correct number of frames:
+    dpan <- list(version = 4, nframes = length(x), flags = rep(F, 32))
+    class(dpan) <- "IFF.DPAN"
+    frame1@chunk.data <- c(frame1@chunk.data[1],
+                           anhd[[1]],
+                           frame1@chunk.data[2],
+                           IFFChunk(dpan),
+                           frame1@chunk.data[3:4])
+    frame1 <- new("IFFChunk", chunk.type = "FORM", chunk.data = list(frame1))
+
+    ## .byteVerticalCompression returns a list of DLTA chunks, with the first frame missing (NULL)
+    x <- .byteVerticalCompression(x, pars$depth)
+    x[-1] <- lapply(2:length(x), function(y) {
+      res <- new("IFFChunk", chunk.type = "ILBM", chunk.data = list(anhd[[y]], x[[y]]))
+      res <- new("IFFChunk", chunk.type = "FORM", chunk.data = list(res))
+      return(res)
+    })
+    x[[1]] <- frame1
+    x <- new("IFFChunk", chunk.type = "ANIM", chunk.data = x)
+    x <- new("IFFChunk", chunk.type = "FORM", chunk.data = list(x))
+    return(x)
+  }
+  if (!any(c("raster", "matrix") %in% class(x)) || !all(.is.colour(x))) stop("x should be a raster object or a matrix of colours.")
+  if ("depth" %in% names(list(...))) {
+    bm <- rasterToBitmap(x, ...)
+  } else {
+    bm <- rasterToBitmap(x, depth = pars$depth, ...)
+  }
+  pal <- attributes(bm)$palette
+  transparent <- attributes(bm)$transparent
+
+  ## Create an ILBM chunk based on the bitmap data
+  ilbm <- .bitmapToILBM(bm, dim(x), display.mode, monitor, pars$depth, pars$colour.depth, pal, transparent)
+  ## Create a FORM chunk, encapsulating the bitmap info
+  form <- new("IFFChunk", chunk.type = "FORM", chunk.data = list(ilbm))
+  return(form)
+}
+
+## decompression for anim dlta frames
+## dlta = raw data from dlta chunk
+.byteVerticalDecompression <- function(dlta, w, h, interleave, use.xor, previous = NULL) {
+  interleave[interleave == 0] <- 2
+  pointers <- adfExplorer::rawToAmigaInt(dlta[1:(16*4)], 32, F)[1:8]
+  if (all(pointers == 0)) {
+    if (is.null(previous) || length(previous) == 0) {
+      result <- matrix(0, h, w)
+      class(result) <- c("IFF.ILBM", "IFF.ANY", class(result))
+      return(result)
+    } else {
+      prev <- length(previous) - interleave + 1
+      prev[prev < 1] <- 1
+      return(previous[[prev]])
+    }
+  }
+  bitmap.layers <- which(pointers > 1)
+  bitmap.layers <- 1:bitmap.layers[bitmap.layers == max(bitmap.layers)]
+  bitmap.layers <- pointers[bitmap.layers]
+  ## loop the bitmap depth dimensions:
+  result <- lapply(1:length(bitmap.layers), function(y) {
+    offs <- bitmap.layers[[y]]
+    if (!is.null(previous)) {
+      prev <- length(previous) - (interleave - 1)
+      if (prev < 1) prev <- 1
+      prev <- previous[[prev]]
+      prev <- apply(prev, 2, function(z) {
+        as.logical(floor(z/(2^(y - 1))) %% 2)
+      })
+      prev <- cbind(prev, matrix(F, h, w - ncol(prev)))
+    }
+    ## if the pointer is zero for a bitmap layer, there is no change. Just return previous frame
+    if (offs == 0) return(prev)
+    ## loop columns:
+    layer <- NULL
+    for (i in 1:(w/8)) {
+      op.count <- adfExplorer::rawToAmigaInt(dlta[1 + offs], 8, F)
+      offs <- offs + 1
+      row.result <- matrix(F, 0, 8)
+      if (op.count > 0) {
+        for (j in 1:op.count) {
+          op <- adfExplorer::rawToAmigaInt(dlta[1 + offs], 8, F)
+          offs <- offs + 1
+          if (op == 0) { ## RUN operation; followed by number of repetitions and the repeating byte
+            rep.count <- adfExplorer::rawToAmigaInt(dlta[1 + offs], 8, F)
+            rep.dat <- matrix(rep(
+              as.logical(adfExplorer::rawToBitmap(dlta[2 + offs], T, F)),
+              rep.count
+            ),
+            ncol = 8, byrow = T)
+            if (use.xor)
+              rep.dat <- xor(prev[nrow(row.result) + 1:nrow(rep.dat), i*8 + (-7:0)], rep.dat)
+            row.result <- rbind(row.result, rep.dat)
+            offs <- offs + 2
+          } else if (op < 0x80) { ## SKIP operation; move the cursor op bytes forward
+            if (is.null(previous) || (is.list(previous) && length(previous) == 0)) {
+              row.result <- rbind(row.result, matrix(F, nrow = op, ncol = 8))
+            } else {
+              nroff <- nrow(row.result) + 1
+              if (length(nroff) == 0) nroff <- 1
+              row.result <- rbind(row.result, prev[nroff + 0:(op - 1), i*8 + (-7:0)])
+            }
+          } else { ## DUMP operation; use op bytes literally
+            op.cor <- op - 0x80
+            temp <- as.logical(adfExplorer::rawToBitmap(dlta[(1 + offs):(offs + op.cor)], T, F))
+            temp <- matrix(temp, ncol = 8, byrow = T)
+            if (use.xor)
+              temp <- xor(prev[nrow(row.result) + 1:nrow(temp), i*8 + (-7:0)], temp)
+            row.result <- rbind(row.result, temp)
+            offs <- offs + op.cor
+          }
+        }
+      }
+      if (nrow(row.result) == 0 || op.count == 0) {
+        if (is.null(previous)) {
+          row.result <- matrix(F, ncol = 8, nrow = h)
+        } else {
+          row.result <- prev[1:h, i*8 + (-7:0)]
+        }
+      }
+      layer <- cbind(layer, row.result)
+    }
+    layer <- apply(layer, 2, function(z) (2^(y - 1))*as.numeric(z))
+    return(layer)
+  })
+
+  result <- Reduce("+", result)
+  class(result) <- c("IFF.ILBM", "IFF.ANY", class(result))
+  return(result)
+}
+
+## vertical delta compression
+## x should be a list of matrices with palette indices
+## length of x should be > 1 (not checked here)
+## the function returns a list of DLTA chunks, with the first element empty (NULL).
+.byteVerticalCompression <- function(x, depth) {
+  x <- c(x, x[1:2])
+  h   <- dim(x[[1]])[[1]]
+  w   <- dim(x[[1]])[[2]]
+  x   <- lapply(x, function(y) cbind(y, matrix(0, nrow = h, ncol = (-w %% 16))))
+  wbm <- w + (-w %%16)
+  ## first frame should be ILBM with BMHD and BODY (constructed later and skipped here)
+  result <- vector("list", length(x))
+  for (i in 2:length(x)) {
+    prev.id <- i - 2
+    if (prev.id < 1) prev.id <- 1
+    ## loop bitmap layers
+    pointers <- NULL
+    no.change <- rep(F, 16)
+    for (j in 1:depth) {
+      ## loop columns
+      dep.data <- NULL
+      for (k in 1:(wbm/8)) {
+        previous.column <- floor((x[[prev.id]][,k*8 + (-7:0)] - 1)/(2^(j - 1))) %% 2
+        curr.column     <- floor((x[[i]][,k*8 + (-7:0)] - 1)/(2^(j - 1))) %% 2
+        row.similarity <- apply(previous.column == curr.column, 1, all)
+        ## when there are only short fragments the same, classify them as different
+        ## this is to avoid the large overhead of the operation bytes
+        run.lengths <- rle(row.similarity)$lengths
+        run.lengths <- rep(run.lengths, run.lengths)
+        row.similarity[row.similarity & run.lengths < 3] <- F
+        ## If the entire row is similar to the previous frame, add 0 as op.count to the result
+        cursor <- 1
+        op.count <- 0
+        op.data <- NULL
+        if (!all(row.similarity)) {
+          while (cursor <= h) {
+            if (row.similarity[[cursor]]) { ## when elements at the cursor are the same compared to the previous frame, the SKIP operation is in place
+              skip <- which(diff(c(row.similarity[cursor:h], F)) != 0)[[1]]
+              repskip <- floor(skip/127)
+              ## note that the op.count needs to preceed each column of data
+              ## it will be added after all ops of the column have been processed
+              op.data <- c(op.data,
+                           adfExplorer::amigaIntToRaw(c(
+                             rep(127, repskip),
+                             skip %% 127), 8, F))
+              op.count <- op.count + repskip + 1
+              cursor <- cursor + skip
+            } else {
+              dup <- c(T, duplicated(curr.column[cursor:h,, drop = F], fromLast = F)[-1]) & !row.similarity[cursor:h]
+              dup.run.length <- rle(dup)$lengths
+              dup.run1 <- dup.run.length[[1]]
+              dup.run1[dup.run1 > 255] <- 255
+              dup.run.length <- c(1, dup.run.length[1] - 1, dup.run.length[-1])
+              dup.run.length <- rep(dup.run.length, dup.run.length)
+              if (dup.run1 > 3 && length(dup) > 3 && dup[[2]]){ ## When elements at the cursor are not the same as the previous frame, and they are repetative, the RUN operation is in place
+                op.data <- c(op.data,
+                             adfExplorer::amigaIntToRaw(c(0, dup.run1), 8, F),
+                             adfExplorer::bitmapToRaw(as.logical(t(curr.column[cursor,, drop = F])),
+                                                      T, F))
+                op.count <- op.count + 1
+                cursor <- cursor + dup.run1
+              } else { ## When elements at the cursor are not the same as the previous frame, and they are not repetative, the DUMP operation is in place
+                skip <- which(diff(c(row.similarity[cursor:h] |
+                                       c(dup.run.length[-1] > 2 & dup[-1], F), T)) != 0)[[1]]
+                skip[skip > 127] <- 127
+                dat <- adfExplorer::bitmapToRaw(as.logical(t(curr.column[cursor:(cursor + skip - 1),, drop = F])),
+                                                T, F)
+                op.data <- c(op.data,
+                             adfExplorer::amigaIntToRaw(skip + 0x80, 8, F),
+                             dat)
+                cursor <- cursor + skip
+                op.count <- op.count + 1
+              }
+            }
+          }
+        }
+        ## After each column, bind the result to the previous column. Each column should start with the count of
+        ## the total number of operations in the column, followed by the encoded data.
+        dep.data <- c(dep.data,
+                      adfExplorer::amigaIntToRaw(op.count, 8, F),
+                      op.data)
+      }
+      if (all(dep.data == raw(1))) {
+        no.change[[j]] <- T
+        dep.data <- NULL
+      }
+      pointers <- c(pointers, length(dep.data))
+      if (!is.null(dep.data)) result[[i]] <- c(result[[i]], dep.data) 
+    }
+    pointers <- cumsum(pointers)
+    ptrs <- rep(0, 16)
+    ptrs[1:length(pointers)] <- 64 + c(0 , pointers[0:(length(pointers) - 1)])
+    ptrs[no.change] <- 0
+    ## combine the op-data from all bitmap layers, starting with pointers to the start of the data for each layer
+    ## if there was no change to a bitmap layer, there is no data. The pointer is set to 0 in that case.
+    result[[i]] <- c(
+      adfExplorer::amigaIntToRaw(ptrs, 32, F),
+      result[[i]]
+    )
+    ## DLTA should be preceded by an ANHD chunk, this is not added by this function
+    result[[i]] <- new("IFFChunk", chunk.type = "DLTA", chunk.data = list(result[[i]]))
+  }
+  return(result)
+}
+
+.bitmapToILBM <- function(bm, dim.x, display.mode, monitor, depth, colour.depth, pal, transparent) {
+  bm <- bitmapToRaw(bm, T, F)
+  bm <- matrix(bm, nrow = 2*ceiling(dim.x[[2]]/16), byrow = F)
+  bm <- c(unlist(apply(bm, 2, packBitmap)))
+  
+  ## Create a BODY chunk based on the bitmap data
+  body <- new("IFFChunk", chunk.type = "BODY", chunk.data = list(bm))
+  
+  ## Create a CAMG chunk, specifying the displaymode
+  camg <- .inverseViewPort(display.mode, monitor)
+  disp <- .amigaViewPortModes(camg@chunk.data[[1]])
+  disp.prop <- .display.properties(disp$display.mode, disp$monitor)
+  ## Create BMHD chunk, with bitmap header information
+  BMHD <- list(
+    w                 = dim.x[2],
+    h                 = dim.x[1],
+    x                 = 0,
+    y                 = 0,
+    nPlanes           = depth,
+    Masking           = ifelse(!is.null(transparent) && !is.na(transparent), "mskHasTransparentColour", "mskNone"),
+    Compression       = "cmpByteRun1",
+    pad               = raw(1),
+    transparentColour = ifelse(!is.null(transparent) && !is.na(transparent), transparent - 1, 0),
+    xAspect           = disp.prop$aspect.x,
+    yAspect           = disp.prop$aspect.y,
+    pageWidth         = disp.prop$screenwidth,
+    pageHeight        = disp.prop$screenheight
+  )
+  class(BMHD) <- "IFF.BMHD"
+  hdr <- IFFChunk(BMHD)
+  ## Create a CMAP chunk with palette information
+  class(pal) <- "IFF.CMAP"
+  cmap <- IFFChunk(pal, colour.depth = colour.depth)
+  # cmap <- new("IFFChunk", chunk.type = "CMAP", chunk.data = list(colourToAmigaRaw(pal, pars$colour.depth, "3")))
+  ## Create a ILBM chunk, which hold all required bitmap information
+  ilbm <- new("IFFChunk", chunk.type = "ILBM", chunk.data = list(
+    hdr, cmap, camg, body
+  ))
+  return(ilbm)
+}

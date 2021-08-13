@@ -1,0 +1,14 @@
+AmigaFFH v0.1.2 (Release date: 2018-03-13)
+=============
+
+ * A minor fix in the examples to pass CRAN checks.
+
+AmigaFFH v0.1.1 (Release date: 2018-03-10)
+=============
+
+First release:
+
+ * This is the first release that supports
+   - reading and writing IFF files
+   - interpretation of several common data flavours in IFF files
+   - interpret hardware sprites
