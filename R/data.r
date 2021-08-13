@@ -127,14 +127,14 @@ NULL
 #' @name amiga_palettes
 #' @format A named list with the following elements:
 #' \itemize{
-#'   \item{\code{wb.os1}: A \code{vector} of 4 colours that where used as the default
+#'   \item{\code{wb.os1}: A \code{vector} of 4 colours that were used as the default
 #'   palette of the Workbench on Amiga OS 1.x.}
 #'   \item{\code{wb.os2}: A \code{vector} of 8 colours. The first 4 colours are the default
 #'   colours of a standard Workbench on Amiga OS 2.x. The latter 4 are additional
 #'   colours used by the Workbench expansion MagicWB.}
-#'   \item{\code{spr.os1}: A \code{vector} of 3 colours that where used by default
+#'   \item{\code{spr.os1}: A \code{vector} of 3 colours that were used by default
 #'   for a mouse pointer sprite on Amiga OS 1.x.}
-#'   \item{\code{spr.os2}: A \code{vector} of 3 colours that where used by default
+#'   \item{\code{spr.os2}: A \code{vector} of 3 colours that were used by default
 #'   for a mouse pointer sprite on Amiga OS 2.x.}
 #' }
 #' @examples

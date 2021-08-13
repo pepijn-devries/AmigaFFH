@@ -583,8 +583,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
   if (colour.depth != "12 bit" && special.mode == "HAM6") stop("HAM6 required 12 bit colour depth")
   if (colour.depth != "24 bit" && special.mode == "HAM8") stop("HAM8 required 24 bit colour depth")
   dither <- match.arg(dither)
-  if (!.is.colour(background)) stop("background is not a colour!")
-  
+
   background <- grDevices::col2rgb(background)
 
   if (x.is.list) {
@@ -661,6 +660,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
     transparent <- which(palette[4,] == 0)[1]
     palette[4,palette[4,] > 0] <- 255
     palette <- grDevices::rgb(palette[1,], palette[2,], palette[3,], palette[4,], maxColorValue = 255)
+    result <- lapply(x, function(y) apply(y, 2, match, table = palette))
   }
 
   if (dither != "none" || special.mode %in% c("HAM6", "HAM8")) { ## dithering should also be called in case of HAM modes

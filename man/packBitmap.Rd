@@ -73,8 +73,11 @@ all(dat.srt == unPackBitmap(pack.srt))
 \url{https://en.wikipedia.org/wiki/PackBits}
 }
 \seealso{
-Other raw.operations: \code{\link{as.raw}},
+Other raw.operations: \code{\link{as.AmigaBasic}},
+  \code{\link{as.raw.AmigaBasic}},
   \code{\link{colourToAmigaRaw}},
+  \code{\link{rawToAmigaBasicShape}},
+  \code{\link{rawToAmigaBasic}},
   \code{\link{rawToAmigaBitmapFontSet}},
   \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},

@@ -634,6 +634,7 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' @author Pepijn de Vries
 #' @export
 write.AmigaIcon <- function(x, file, disk = NULL) {
+  ## TODO example generates error!
   if (class(x) != "AmigaIcon") stop("x should be of S3 class AmigaIcon.")
   .write.generic(x, file, disk)
 }

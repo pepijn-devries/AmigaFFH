@@ -10,13 +10,13 @@
 #' to represent Amiga bitmap fonts.
 #' 
 #' The Commodore Amiga had a directory named 'FONTS' located in the
-#' root, where (bitmap) fonts were stored. Font sets where stored
+#' root, where (bitmap) fonts were stored. Font sets were stored
 #' under the font name with a *.font extension. Files with the *.font
 #' extension did not contain the bitmap images of the font. Rather
 #' the *.font file contained information on which font heights (in
 #' pixels) are available, in addition to some other meta-information.
 #' 
-#' The bitmap images where stored in separate files for each individual
+#' The bitmap images were stored in separate files for each individual
 #' height. The \code{AmigaBitmapFontSet} is an S3 class that forms
 #' a comprehensive format (named \code{list}) to represent the *.font
 #' files. The \code{AmigaBitmapFont} is an S3 class is a comprehensive
@@ -918,12 +918,21 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
   .print_to_raster(text, x, style, palette)
 }
 
-#' Combine AmigaBitmapFont objects into an AmigaBitmapFontSet
+#' Combine multiple AmigaFFH objects
 #'
 #' Use this function to correctly combine one or more \code{\link{AmigaBitmapFont}}
 #' class objects into a single \code{\link{AmigaBitmapFontSet}} class
-#' object.
+#' object, or to combine multiple \code{\link{AmigaBasic}} class objects.
 #'
+#' In case \code{...} are one or more \code{\link{AmigaBasic}} class objects:
+#' 
+#' \code{\link{AmigaBasic}} class objects are combined into a single
+#' \code{\link{AmigaBasic}} class object in the same order as they
+#' are given as argument to this function. for this purpose the lines of
+#' Amiga Basic codes are simply concatenated.
+#' 
+#' In case \code{...} are one or more \code{\link{AmigaBitmapFont}} class objects:
+#' 
 #' \code{\link{AmigaBitmapFontSet}} class objects can hold multiple
 #' \code{\link{AmigaBitmapFont}} class objects. Use this method to
 #' combine font bitmaps into such a font set. Make sure each bitmap
@@ -936,17 +945,22 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #'
 #' @rdname c
 #' @name c
-#' @param ... One or more \code{\link{AmigaBitmapFont}} objects that need
-#' to becombined into a single \code{\link{AmigaBitmapFontSet}} object.
+#' @param ... Either \code{\link{AmigaBasic}} or \code{\link{AmigaBitmapFont}}
+#' class objects. In case of \code{\link{AmigaBitmapFont}} objects:
 #' Each \code{\link{AmigaBitmapFont}} object should have a
 #' unique Y-size.
-#' @param name A \code{character} string specifying the name that needs to be
+#' @param name This argument is only valid when \code{...} are one or more
+#' \code{\link{AmigaBitmapFont}} class objects.
+#' 
+#' A \code{character} string specifying the name that needs to be
 #' applied to the font set. When unspecified, the default name 'font' is
 #' used. Note that this name will also be used as a file name when writing
 #' the font to a file. So make sure the name is also a valid file name. This
-#' will not be checked for you.
-#' @return Returns an \code{link{AmigaBitmapFontSet}} in which the
-#' \code{\link{AmigaBitmapFont}} objects are combined.
+#' will not be checked for you and may thus result in errors.
+#' @return Returns an \code{\link{AmigaBitmapFontSet}} in which the
+#' \code{\link{AmigaBitmapFont}} objects are combined. Or when \code{\link{AmigaBasic}}
+#' objects are combined, an \code{\link{AmigaBasic}} object is returned
+#' in which the lines of Amiga Basic code are combined.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -957,6 +971,11 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #' 
 #' ## now bind these bitmaps again in a single set
 #' font.set <- c(font8, font9, name = "my_font_name")
+#' 
+#' ## Amiga Basic codes can also be combined:
+#' bas1 <- as.AmigaBasic("LET a = 1")
+#' bas2 <- as.AmigaBasic("PRINT a")
+#' bas  <- c(bas1, bas2)
 #' }
 #' @family AmigaBitmapFont.operations
 #' @author Pepijn de Vries

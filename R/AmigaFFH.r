@@ -18,10 +18,10 @@
 #' 
 #' \itemize{
 #'   \item{
-#'     Bitmap Font (*.font). Originally fonts where stored in separate files on
+#'     Bitmap Font (*.font). Originally fonts were stored in separate files on
 #'     the Amiga. An overarching *.font file contained generic information,
-#'     amongst others the specific pixel heights that where available for a font.
-#'     The actual font bitmap images where stored in separate files. There
+#'     amongst others the specific pixel heights that were available for a font.
+#'     The actual font bitmap images were stored in separate files. There
 #'     was a file available for each individual font height. For more details
 #'     see \code{\link{AmigaBitmapFont}} and \code{\link{AmigaBitmapFontSet}}.
 #'   }

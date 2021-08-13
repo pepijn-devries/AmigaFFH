@@ -48,8 +48,11 @@ Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
   \code{\link{read.AmigaBitmapFont}},
   \code{\link{write.AmigaBitmapFont}}
 
-Other raw.operations: \code{\link{as.raw}},
+Other raw.operations: \code{\link{as.AmigaBasic}},
+  \code{\link{as.raw.AmigaBasic}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBasicShape}},
+  \code{\link{rawToAmigaBasic}},
   \code{\link{rawToAmigaBitmapFontSet}},
   \code{\link{rawToAmigaIcon}},
   \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},

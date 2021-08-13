@@ -43,8 +43,11 @@ Other SysConfig.operations: \code{\link{SysConfig}},
   \code{\link{simpleSysConfig}},
   \code{\link{write.SysConfig}}
 
-Other raw.operations: \code{\link{as.raw}},
+Other raw.operations: \code{\link{as.AmigaBasic}},
+  \code{\link{as.raw.AmigaBasic}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBasicShape}},
+  \code{\link{rawToAmigaBasic}},
   \code{\link{rawToAmigaBitmapFontSet}},
   \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},

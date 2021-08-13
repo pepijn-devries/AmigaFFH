@@ -51,9 +51,13 @@ Other AmigaIcon.operations: \code{\link{AmigaIcon}},
   \code{\link{simpleAmigaIcon}},
   \code{\link{write.AmigaIcon}}
 
-Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
+Other io.operations: \code{\link{read.AmigaBasicShape}},
+  \code{\link{read.AmigaBasic}},
+  \code{\link{read.AmigaBitmapFontSet}},
   \code{\link{read.AmigaBitmapFont}},
   \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBasicShape}},
+  \code{\link{write.AmigaBasic}},
   \code{\link{write.AmigaBitmapFont}},
   \code{\link{write.AmigaIcon}},
   \code{\link{write.SysConfig}}, \code{\link{write.iff}}

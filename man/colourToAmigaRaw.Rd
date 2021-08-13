@@ -63,8 +63,11 @@ amigaRawToColour(as.raw(c(0xf0, 0xf0, 0xf0)), n.bytes = "3")
 amigaRawToColour(as.raw(c(0xf0, 0xf0, 0x0f)), n.bytes = "3")
 }
 \seealso{
-Other raw.operations: \code{\link{as.raw}},
+Other raw.operations: \code{\link{as.AmigaBasic}},
+  \code{\link{as.raw.AmigaBasic}},
   \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBasicShape}},
+  \code{\link{rawToAmigaBasic}},
   \code{\link{rawToAmigaBitmapFontSet}},
   \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},

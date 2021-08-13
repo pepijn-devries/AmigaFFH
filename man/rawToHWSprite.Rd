@@ -62,8 +62,11 @@ plot(spr, interpolate = FALSE)
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00B9.html}
 }
 \seealso{
-Other raw.operations: \code{\link{as.raw}},
+Other raw.operations: \code{\link{as.AmigaBasic}},
+  \code{\link{as.raw.AmigaBasic}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBasicShape}},
+  \code{\link{rawToAmigaBasic}},
   \code{\link{rawToAmigaBitmapFontSet}},
   \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},

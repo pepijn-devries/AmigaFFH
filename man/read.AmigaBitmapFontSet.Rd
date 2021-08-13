@@ -66,9 +66,13 @@ Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
   \code{\link{read.AmigaBitmapFont}},
   \code{\link{write.AmigaBitmapFont}}
 
-Other io.operations: \code{\link{read.AmigaBitmapFont}},
+Other io.operations: \code{\link{read.AmigaBasicShape}},
+  \code{\link{read.AmigaBasic}},
+  \code{\link{read.AmigaBitmapFont}},
   \code{\link{read.AmigaIcon}},
   \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBasicShape}},
+  \code{\link{write.AmigaBasic}},
   \code{\link{write.AmigaBitmapFont}},
   \code{\link{write.AmigaIcon}},
   \code{\link{write.SysConfig}}, \code{\link{write.iff}}
