@@ -360,11 +360,37 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #' (information will be lost). So don't expect the result to have the same quality as
 #' the original image.
 #'
+#' With the \code{depth} argument, the raster can also be converted
+#' to special mode bitmap images. One of these modes is the
+#' \sQuote{hold and modify} (HAM). In this mode two of the bitplanes
+#' are reserved as modifier switches. If the this switch equals
+#' zero, the remainder of the bitplanes are used as an index for
+#' colours in a fixed palette. If the switch equals 1, 2 or 3, the
+#' red, green or blue component of the previous is modified, using the
+#' number in the remainder of the bitplanes. So it holds the previous
+#' colour but modifies one of the colour components (hence the term
+#' \sQuote{hold and modify}.) Here only the HAM6 and
+#' the HAM8 mode are implemented. HAM6 uses 6 bitplanes and a 12 bit
+#' colour depth, HAM8 uses 8 bitplanes and a 24 bit colour depth.
+#' 
+#' The HAM mode was a special video modes supported by Amiga hardware.
+#' Normal mode bitmap images with a 6 bit depth would allow for a
+#' palette of 64 (2^6) colours, HAM6 can display 4096 colours with
+#' the same bit depth.
+#' 
+#' In addition to HAM6 and HAM8, sliced HAM (or SHAM) was another
+#' HAM variant. Using the coprocessor on the Amiga, it was possible
+#' to change the palette at specific scanlines, increasing the number
+#' of available colours even further. The SHAM mode is currently not
+#' supported by this package.
 #' @param x A raster object created with \code{\link[grDevices]{as.raster}} which
 #' needs to be converted into bitmap data. It is also possible to let \code{x} be
 #' a matrix of \code{character}s, representing colours.
 #' @param depth The colour depth of the bitmap image. The image will be composed
 #' of \code{2^depth} indexed colours.
+#' 
+#' \code{depth} can also be a \code{character} string "HAM6" or "HAM8"
+#' representing special Amiga display modes (see details).
 #' @param interleaved A \code{logical} value, indicating whether the bitmap needs to be
 #' interleaved. An interleaved bitmap image stores each consecutive bitmap layer per
 #' horizontal scanline.
@@ -418,11 +444,18 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #'                                              dither = "floyd-steinberg")
 #'                              })
 #' 
+#' ## Make a bitmap using a special display mode (HAM6):
+#' volcano.HAM <- rasterToBitmap(volcano.raster, "HAM6")
 #' }
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @export
 rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colours) {
+  special.mode <- "none"
+  if (depth %in% c("HAM6", "HAM8")) {
+    special.mode <- depth
+    depth <- ifelse(depth == "HAM6", 6, 8)
+  }
   depth <- round(depth[[1]])
   if (depth < 1) stop("Bitmap depth should be at least 1.")
   interleaved <- interleaved[[1]]
@@ -430,7 +463,9 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
   if (class(indexing) != "function") stop("'indexing' should be a function")
   if (!all(c("x", "length.out") %in% names(formals(indexing)))) stop("Function 'indexing' should require arguments 'x' and 'length.out'.")
   x <- as.matrix(x)
-  x <- indexing(x = x, length.out = 2^depth)
+  x <- indexing(x = x, length.out = ifelse(special.mode %in% c("HAM6", "HAM8"),
+                                           special.mode,
+                                           2^depth))
   palette <- attributes(x)$palette
   transparent <- attributes(x)$transparent
   x <- .indexToBitmap(x, depth, interleaved)
@@ -457,6 +492,12 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 #' list.
 #' @param length.out A \code{numeric} value indicating the number of desired
 #' colours in the indexed palette.
+#' 
+#' It can also be a \code{character} string indicating which special
+#' Amiga display mode should be used when indexing colours.
+#' \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
+#' See \code{\link{rasterToBitmap}} for more details on these
+#' special modes.
 #' @param palette A vector of no more than \code{length.out} colours, to be used
 #' for the bitmap image. When missing or set to \code{NULL}, a palette will be
 #' generated based on the provided colours in raster \code{x}. In that case,
@@ -474,6 +515,10 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 #' @param colour.depth A \code{character} string indicating the colour depth to be used.
 #' Can be either "\code{12 bit}" (default, standard on an Amiga with original chipset),
 #' or "\code{24 bit}".
+#' 
+#' This argument is overruled when \code{length.out} is set to \dQuote{\code{HAM6}}
+#' or \dQuote{\code{HAM8}}. In that case the colour depth linked to that special mode
+#' is used (12 bit for HAM6, 24 bit for HAM8).
 #' @param ... Arguments that are passed onto \code{\link[stats]{kmeans}} (see
 #' \code{palette} argument).
 #' @return Returns a \code{matrix} with the same dimensions as \code{x} containing
@@ -514,19 +559,29 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFFFF",
                           dither = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"),
                           colour.depth = c("12 bit", "24 bit"), ...) {
+  special.mode <- "none"
   x.is.list <- is.list(x)
   list.length <- 1
   if (x.is.list) list.length <- length(x)
   if (x.is.list) x <- lapply(x, as.matrix) else x <- as.matrix(x)
   if (!all(.is.colour(c(unlist(x))))) stop("x should be a matrix of colours or a grDevices raster object.")
-  length.out <- round(length.out[[1]])
-  if (length.out < 2) stop("length.out should be 2 or more.")
+  if (length.out %in% c("HAM6", "HAM8")) {
+    special.mode <- length.out
+    length.out <- ifelse(length.out == "HAM6", 16, 64)
+    ## overrule the colour.depth argument when HAM6 or HAM8
+    colour.depth <- ifelse(special.mode == "HAM6", "12 bit", "24 bit")
+  } else {
+    length.out <- round(length.out[[1]])
+    if (length.out < 2) stop("length.out should be 2 or more.")
+  }
   if (!is.null(palette) && !all(.is.colour(palette))) stop("palette should consist of colours.")
   if (!is.null(palette) && length(palette) < 2) stop("palette should consist of at least 2 colours.")
   background <- background[[1]]
   if (!.is.colour(background)) stop("background is not a valid colour.")
   
   colour.depth <- match.arg(colour.depth)
+  if (colour.depth != "12 bit" && special.mode == "HAM6") stop("HAM6 required 12 bit colour depth")
+  if (colour.depth != "24 bit" && special.mode == "HAM8") stop("HAM8 required 24 bit colour depth")
   dither <- match.arg(dither)
   if (!.is.colour(background)) stop("background is not a colour!")
   
@@ -543,6 +598,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
   }
 
   col.vals <- grDevices::col2rgb(x, T)
+  if (special.mode %in% c("HAM6", "HAM8")) col.vals.rgb <- col.vals
   alpha <- col.vals[4,]
   col.vals <- col.vals[-4,]
   col.vals <- (col.vals*rbind(alpha, alpha, alpha) +
@@ -567,10 +623,26 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
       transparent <- which(substr(palette, 8, 9) == "00")[1]
       result <- lapply(x, function(y) apply(y, 2, match, table = palette))
     } else {
-      palette <- stats::kmeans(as.matrix(t(col.vals)), length.out, ...)
-      result <- palette$cluster
-      result <- array(palette$cluster, c(c.dim, list.length))
-      result <- lapply(1:list.length, function(y) result[,,y])
+      if (special.mode %in% c("HAM6", "HAM8")) {
+        col.diff <- array(col.vals.rgb[-4,], c(3, c.dim, list.length))
+        col.diff <- c(apply(col.diff, 4, function(z) {
+          z <- (z[,,-1] - z[,,-dim(z)[3]])^2
+          z <- apply(z, c(2, 3), function(z2) {
+            z2[which(z2 == max(z2))[[1]]] <- 0
+            prod(1 + z2)/(256*256)
+          })
+          z <- cbind(rep(0, nrow(z)), z)
+          z
+        }))
+        ## include information on where the image changes a lot in R, G and B value
+        col.vals <- rbind(col.vals, col.diff)
+        palette <- stats::kmeans(as.matrix(t(col.vals)), length.out, ...)
+      } else {
+        palette <- stats::kmeans(as.matrix(t(col.vals)), length.out, ...)
+        result <- palette$cluster
+        result <- array(palette$cluster, c(c.dim, list.length))
+        result <- lapply(1:list.length, function(y) result[,,y])
+      }
       transparent <- which(palette$centers[,4] == 0)[1]
       palette <- apply(palette$centers, 1, function(x) grDevices::hsv(x[1], x[2], x[3], x[4]))
     }
@@ -591,10 +663,12 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
     palette <- grDevices::rgb(palette[1,], palette[2,], palette[3,], palette[4,], maxColorValue = 255)
   }
 
-  if (dither != "none" || is.null(result)) {
-    if (x.is.list)
-      result <- lapply(x, function(y) dither(y, method = dither, palette = palette)) else
-        result <- dither(x[[1]], method = dither, palette = palette)
+  if (dither != "none" || special.mode %in% c("HAM6", "HAM8")) { ## dithering should also be called in case of HAM modes
+    if (x.is.list) {
+      result <- lapply(x, function(y) dither(y, method = dither, palette = palette, mode = special.mode))
+    } else {
+      result <- dither(x[[1]], method = dither, palette = palette, mode = special.mode)
+    }
   } else if (!x.is.list) {
     result <- result[[1]]
   }
@@ -632,6 +706,11 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' no dithering is applied.
 #' @param palette A palette to which the image should be dithered. It should be a
 #' \code{vector} of \code{character} strings representing colours.
+#' @param mode A \code{character} string indicating whether a special
+#' Amiga display mode should be used when dithering. By default
+#' \sQuote{\code{none}} is used (no special mode). In addition,
+#' \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
+#' See \code{\link{rasterToBitmap}} for more details.
 #' @param ... Currently ignored.
 #' @return Returns a \code{matrix} with the same dimensions as \code{x} containing
 #' \code{numeric} index values. The corresponding palette is returned as attribute,
@@ -668,7 +747,8 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @export
-dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"), palette, ...) {
+dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"), palette, mode = c("none", "HAM6", "HAM8"), ...) {
+  mode <- match.arg(mode)
   if (!all(.is.colour(c(x)))) stop("x should be a matrix of colours or a grDevices raster object.")
   if (!is.null(palette) && !all(.is.colour(palette))) stop("palette should consist of colours.")
   if (!is.null(palette) && length(palette) < 2) stop("palette should consist of at least 2 colours.")
@@ -718,7 +798,7 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
     ir2 <- 0:1
     jr2 <- -1:1
   }
-  if (method == "none") {
+  if (method == "none" & !(mode %in% c("HAM6", "HAM8"))) {
     result <- apply(x, 2, function(a) {
       res <- apply(a, 1, function(b) {
         dst <- sqrt(colSums((pal.rgb - b)^2))
@@ -728,15 +808,49 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
     })
     result <- t(result)
   } else {
-    for(i in 1:dim(x)[1]){
-      for(j in 1:dim(x)[2]){
+    color_multi   <- ifelse(mode == "HAM8", 255/63, 17)
+    for(j in 1:dim(x)[2]) {
+      if (mode %in% c("HAM6", "HAM8")) prev <- c(grDevices::col2rgb(palette[1]))
+      for(i in 1:dim(x)[1]) {
         ## find the closest matching colour in the palette compared to the
         ## current pixel. This is the colour where the Euclidean distance
         ## in RGBA space is smallest compared to the actual colour:
-        dst <- sqrt(colSums((pal.rgb - x[i, j, ])^2))
-        result[j, i] <- which(dst == min(dst))[[1]]
-        if (!(j == dim(x)[[2]] && i == dim(x)[[1]])) {
-          P            <- pal.rgb[,result[j, i]]
+        if (mode %in% c("HAM6", "HAM8")) {
+          dst <- apply(pal.rgb, 2, function(z) {
+            dst <- abs(x[i, j, ] - z)
+            sqrt(sum(dst^2))
+          })
+          dst.diff <- abs(x[i, j, 1:3] - prev)
+          control.flag = which(dst.diff == max(dst.diff))[[1]]
+          dst.diff[control.flag] <- 0
+          dst.diff <- sqrt(sum(dst.diff^2))
+          if (all(dst.diff < dst)) {
+            idx <- round(x[i,j,][control.flag]/ifelse(mode == "HAM6", 17, (255/63)))
+            prev[control.flag] <- color_multi*idx
+            control.flag <- c(2, 3, 1)[control.flag]
+          } else {
+            control.flag <- 0
+            ## Possible improvement for future versions:
+            ## When multiple colours in the palette match best with the current
+            ## pixel, now the first matching colour is selected.
+            ## it is better to also look ahead to see if the pixel to the
+            ## right matches best with this colour in the palette.
+            idx <- which(dst == min(dst))[[1]] - 1
+            prev <- c(grDevices::col2rgb(palette[[idx + 1]]))
+          }
+          result[j, i] <- idx + bitwShiftL(control.flag, ifelse(mode == "HAM6", 4, 6))
+        } else {
+          dst <- sqrt(colSums((pal.rgb - x[i, j, ])^2))
+          result[j, i] <- which(dst == min(dst))[[1]]
+        }
+        if (method != "none" && !(j == dim(x)[[2]] && i == dim(x)[[1]])) {
+          if (mode %in% c("HAM6", "HAM8")) {
+            ## seems to create a slight horizontal stripes artifact in HAM modes.
+            ## See if this can be avoided
+            P            <- c(prev, 255)
+          } else {
+            P            <- pal.rgb[,result[j, i]]
+          }
           
           ## calculate the error (difference) between the actual colour and the colour
           ## from the palette:
@@ -760,6 +874,7 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
         }
       }
     }
+    if (mode %in% c("HAM6", "HAM8")) result <- result + 1
   }
   return(result)
 }
@@ -768,8 +883,8 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' @name dither
 #' @aliases dither.matrix
 #' @export
-dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"), palette, ...) {
-  dither.raster(grDevices::as.raster(x), method, palette)
+dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"), palette, mode = c("none", "HAM6", "HAM8"), ...) {
+  dither.raster(grDevices::as.raster(x), method, palette, mode, ...)
 }
 
 #' (De)compress 8-bit continuous signals.
@@ -789,7 +904,7 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' The algorithm was first described by Steve Hayes and was used in 8SVX audio stored in
 #' the Interchange File Format (IFF). The quality loss is considerable (especially
 #' when the audio contained many large deltas) and was even in
-#' the time it was developped (1985) not used much. The function is provided here for
+#' the time it was developed (1985) not used much. The function is provided here for
 #' the sake of completeness. The implementation here only compresses 8-bit data, as
 #' for 16-bit data the quality loss will be more considerable.
 #' @param x A \code{vector} of \code{raw} data that needs to be (de)compressed.
@@ -926,9 +1041,8 @@ deltaFibonacciDecompress <- function(x, ...) {
 
 .inverseViewPort <- function(display.mode, monitor) {
   adm <- AmigaFFH::amiga_display_modes
-  camg <- adm$DISPLAY_MODE_ID[adm$DISPLAY_MODE == display.mode][[1]] &
+  camg <- adm$DISPLAY_MODE_ID[adm$DISPLAY_MODE == display.mode][[1]] |
     AmigaFFH::amiga_monitors$CODE[AmigaFFH::amiga_monitors$MONITOR_ID == monitor][[1]]
-  vp <- .amigaViewPortModes(camg)
   new("IFFChunk", chunk.type = "CAMG", chunk.data = list(camg))
 }
 
@@ -949,7 +1063,7 @@ deltaFibonacciDecompress <- function(x, ...) {
   
   if (!any(as.logical(x & MONITOR_ID_MASK)) ||
       (any(as.logical(x & EXTENDED_MODE)) && !any(as.logical(x & UPPER_MASK)))) {
-    if (!all(x == as.raw(c(0x00, 0x00, 0x00, 0x00)))) {
+    if (any(as.logical(x & (EXTENDED_MODE|SPRITES|GENLOCK_AUDIO|GENLOCK_VIDEO|VP_HIDE)))) {
       warning("CAMG / display mode contains old style bad bits, I will knock them out...")
       x <- x & !(EXTENDED_MODE|SPRITES|GENLOCK_AUDIO|GENLOCK_VIDEO|VP_HIDE)
     }
@@ -1227,4 +1341,56 @@ print.AmigaTimeVal <- function(x, ...) {
     if (class(result) == "raw") result <- ""
   }
   return(result)
+}
+
+.read.generic <- function(file, disk = NULL) {
+  ## If the file size can be determined from 'file', that size
+  ## will be read. Other wise, the file will be read in 5 kB chunks.
+  size <- 5*1024
+  if (!is.null(disk)) {
+    if ("adfExplorer" %in% rownames(utils::installed.packages())) {
+      dat <- adfExplorer::get.adf.file(disk, file)
+      size <- length(dat)
+      file <- rawConnection(dat, "rb")
+    } else {
+      stop("When specifying 'disk', the 'adfExplorer' package needs to be installed.")
+    }
+  }
+  if ("character" %in% class(file)) {
+    size <- file.size(file)
+    file <- file(file, "rb")
+  }
+  if ("connection" %in% class(file)) {
+    con_info <- summary(file)
+    if (con_info$`can read` != "yes" || con_info$text != "binary") stop("file is not a connection from which binary data can be read...")
+  }
+  result <- NULL
+  repeat {
+    l1 <- length(result)
+    result <- c(result, readBin(file, "raw", size))
+    l2 <- length(result)
+    if ((l2 - l1) < size) break
+  }
+  close(file)
+  return(result)
+}
+
+.write.generic <- function(x, file, disk = NULL, ...) {
+  raw.dat <- as.raw(x, ...)
+  if (is.null(disk)) {
+    if (class(file) == "character") con <- file(file, "wb")
+    if ("connection" %in% class(file)) {
+      con_info <- summary(con)
+      if (con_info$`can write` != "yes" || con_info$text != "binary") stop("file is not a connection to which binary data can be written...")
+      con <- file
+    }
+    writeBin(raw.dat, con, endian = "big")
+    if (class(file) == "character") return(close(con))
+  } else {
+    if ("adfExplorer" %in% rownames(utils::installed.packages())) {
+      return(adfExplorer::put.adf.file(disk, raw.dat, file))
+    } else {
+      stop("When specifying 'disk', the 'adfExplorer' package needs to be installed.")
+    }
+  }
 }

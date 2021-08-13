@@ -9,7 +9,7 @@
 #' See references below for more details.
 #' 
 #' Definitions of the system-configuration have file been revised at some points.
-#' Revisions are minor and usually targetted at backward compatibility. Here
+#' Revisions are minor and usually targeted at backward compatibility. Here
 #' revision V38.2 (released on 16 September 1992) is implemented, which is the
 #' latest documented version.
 #' 
@@ -23,7 +23,7 @@
 #' The SysConfig object is a comprehensive representation of the binary
 #' system-configuration file. It is a a \code{list} where the elements have identical
 #' names as listed in the documents provided the references. The names are usually
-#' self-explenatory, but the referred documents can also be
+#' self-explanatory, but the referred documents can also be
 #' consulted to obtain more detailed information with respect to each of
 #' these elements. The mouse pointer is included as a \code{\link{hardwareSprite}} object
 #' in the list. The pointer image can be replaced by a different \code{\link{hardwareSprite}},
@@ -39,6 +39,7 @@
 #' to write system-configuration files. With \code{\link{rawToSysConfig}} and
 #' \code{\link[AmigaFFH]{as.raw}} SysConfig can be coerced back and forth from and to
 #' its raw (binary) form.
+#' 
 #' @docType class
 #' @name SysConfig
 #' @rdname SysConfig
@@ -187,6 +188,11 @@ as.raw.SysConfig <- function(x, ...) {
 #' @rdname read.SysConfig
 #' @name read.SysConfig
 #' @param file The file name of a system-configuration file to be read.
+#' Can also be a connection that allows reading binary data.
+#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
+#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
 #' @return Returns an S3 \link{SysConfig} class object based on the file that is read.
 #' @examples
 #' \dontrun{
@@ -203,11 +209,9 @@ as.raw.SysConfig <- function(x, ...) {
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-read.SysConfig <- function(file) {
-  con <- file(file, "rb")
-  sys.config <- readBin(con, "raw", file.size(file))
-  close(con)
-  rawToSysConfig(sys.config)
+read.SysConfig <- function(file, disk = NULL) {
+  dat <- .read.generic(file, disk)
+  rawToSysConfig(dat)
 }
 
 #' Write an Amiga system-configuration file
@@ -222,9 +226,15 @@ read.SysConfig <- function(file) {
 #' @name write.SysConfig
 #' @param x An S3 \link{SysConfig} class object.
 #' @param file A file name to which the binary file should be written.
+#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
+#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
 #' @return Returns \code{NULL} or an \code{integer} status passed on by the
 #' \code{\link{close}} function, that is used to close the file connection.
-#' It is returned invisibly.
+#' It is returned invisibly. Or, when \code{disk} is specified, a copy of
+#' \code{disk} is returned to which the file is written.
+#' 
 #' @examples
 #' \dontrun{
 #' ## First generate a simple SysConfig object to write to a file:
@@ -237,11 +247,9 @@ read.SysConfig <- function(file) {
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-write.SysConfig <- function(x, file) {
+write.SysConfig <- function(x, file, disk = NULL) {
   if (!("SysConfig" %in% class(x))) stop("x should be of class SysConfig.")
-  con <- file(file, "wb")
-  sys.config <- writeBin(as.raw(x), con)
-  close(con)
+  .write.generic(x, file, disk)
 }
 
 #' Coerce raw data into a SysConfig class object
@@ -329,27 +337,33 @@ rawToSysConfig <- function(x) {
 #'
 #' The Amiga used the system-configuration file to store certain system preferences
 #' in a binary file. In the AmigaFFH package such files can be represented by the more
-#' comprensive \link{SysConfig} class object. Use this function to create such an object
+#' comprehensive \link{SysConfig} class object. Use this function to create such an object
 #' with basic settings (which can be modified).
 #'
 #' @rdname simpleSysConfig
 #' @name simpleSysConfig
+#' @param options A named \code{list} with elements of the target
+#' \code{\link{SysConfig}} object that need to be modified.
 #' @return Returns a comprehensive representation of a system-configuration file in the
 #' for of a \link{SysConfig} class object.
 #' @examples
 #' \dontrun{
 #' ## Create a simple system-configuration (S3 SysConfigClass)
-#' sc <- simpleSysConfig
+#' sc <- simpleSysConfig()
 #' 
 #' ## And modify it as you wish.
 #' ## in this case change the setting for the printer
 #' ## from the parallel port to the serial port:
 #' sc$PrinterPort <- factor("SERIAL_PRINTER", levels(sc$PrinterPort))
+#' 
+#' ## It is also to provide modifications to the configuration
+#' ## via the 'options' argument:
+#' sc <- simpleSysConfig(options = list(FontHeight = 9))
 #' }
 #' @family SysConfig.operations
 #' @author Pepijn de Vries
 #' @export
-simpleSysConfig <- function() {
+simpleSysConfig <- function(options) {
   result <- paste0("789ce3606060650083c301608a53fd0090646460f0538088373430341c3c",
                    "e078e0b142f2836b02e51fce70d4ff38c152ffe70053fdbf038c60fac701",
                    "96fa0f0738ea1f1c1000d320fe9f06260686ffff4126fcffc8e7c2c0c0f7",
@@ -360,7 +374,13 @@ simpleSysConfig <- function() {
   result <- as.raw(as.numeric(
     paste0("0x",c(sapply(result, substring, first = pos, last = pos + 1)))))
   result <- memDecompress(result, "gzip")
-  return(rawToSysConfig(result))
+  result <- rawToSysConfig(result)
+  if (!missing(options)) {
+    for (opt in names(options)) {
+      result[[opt]] <- options[[opt]]
+    }
+  }
+  return(result)
 }
 
 #' @export
@@ -373,9 +393,9 @@ simpleSysConfig <- function() {
 `[[<-.SysConfig` <- function(x, i, value) {
   if (!("character" %in% class(i))) stop("Refer to elements by name, not by index number, when replacing them.")
   # make sure that x is in the correct order:
-  x <- x[.SysConfigData$par.names]
-  if (!(i %in% .SysConfigData$par.names)) stop("This element is not part of SysConfig and cannot be assigned.")
   cl <- class(x)
+  x <- x[.SysConfigData$par.names]
+  if (!(i %in% .SysConfigData$par.names)) stop(sprintf("Element \"%s\" is not part of SysConfig and cannot be assigned.", i))
   class(x) <- NULL
   if (i %in% c("WBColours", "spriteColours") && !all(.is.colour(value))) stop(sprintf("Can only assign colours to %s.", i))
   if (i == "WBColours" && length(value) != 4) stop("WBColours needs a vector of 4 colours.")

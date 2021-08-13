@@ -15,7 +15,7 @@ gradually phased out and some settings may not be usable in the later versions.
 See references below for more details.
 
 Definitions of the system-configuration have file been revised at some points.
-Revisions are minor and usually targetted at backward compatibility. Here
+Revisions are minor and usually targeted at backward compatibility. Here
 revision V38.2 (released on 16 September 1992) is implemented, which is the
 latest documented version.
 
@@ -29,7 +29,7 @@ of the file.
 The SysConfig object is a comprehensive representation of the binary
 system-configuration file. It is a a \code{list} where the elements have identical
 names as listed in the documents provided the references. The names are usually
-self-explenatory, but the referred documents can also be
+self-explanatory, but the referred documents can also be
 consulted to obtain more detailed information with respect to each of
 these elements. The mouse pointer is included as a \code{\link{hardwareSprite}} object
 in the list. The pointer image can be replaced by a different \code{\link{hardwareSprite}},

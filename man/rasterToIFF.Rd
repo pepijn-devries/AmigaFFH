@@ -55,19 +55,31 @@ volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[vo
 volcano.iff <- rasterToIFF(volcano.raster)
 
 ## This object can be saved as an IFF file using write.iff
+
+## in special modes HAM6 and HAM 8 higher quality images
+## can be obtained. See 'rasterToBitmap' for more info on the
+## special HAM modes.
+volcano.ham <- rasterToIFF(volcano.raster, "HAM_KEY", depth = "HAM8")
+
+## The result can be further improved by applying dithering
+volcano.ham.dither <- rasterToIFF(volcano.raster, "HAM_KEY", depth = "HAM8",
+  indexing = function(x, length.out) {
+    index.colours(x, length.out, dither = "JJN", iter.max = 20)
+  })
 }
 }
 \seealso{
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{as.raw}}, \code{\link{getIFFChunk}},
+  \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
   \code{\link{rawToIFFChunk}}, \code{\link{read.iff}},
   \code{\link{write.iff}}
 
-Other raster.operations: \code{\link{as.raster}},
-  \code{\link{bitmapToRaster}}, \code{\link{dither}},
-  \code{\link{index.colours}},
+Other raster.operations: \code{\link{AmigaBitmapFont}},
+  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
+  \code{\link{dither}}, \code{\link{index.colours}},
+  \code{\link{rasterToAmigaBitmapFont}},
   \code{\link{rasterToBitmap}},
   \code{\link{rasterToHWSprite}}
 }

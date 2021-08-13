@@ -80,8 +80,7 @@ new("IFFChunk",
 }
 \seealso{
 Other iff.operations: \code{\link{WaveToIFF}},
-  \code{\link{as.raster}}, \code{\link{as.raw}},
-  \code{\link{getIFFChunk}},
+  \code{\link{as.raster}}, \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
   \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
   \code{\link{read.iff}}, \code{\link{write.iff}}

@@ -22,7 +22,7 @@ Workbench icon files (*.info). Use this function to convert \code{raw} data from
 such a file to an \code{\link{AmigaIcon}} object.
 }
 \details{
-Icons files (*.info) were used as a grapical representations of files and
+Icons files (*.info) were used as a graphical representations of files and
 directories on the Commodore Amiga. This function will convert the raw data from such files
 into a more comprehensive names list (see \code{\link{AmigaIcon}}). Use
 \code{\link[AmigaFFH]{as.raw}} to achieve the inverse.
@@ -47,6 +47,8 @@ Other AmigaIcon.operations: \code{\link{AmigaIcon}},
 
 Other raw.operations: \code{\link{as.raw}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBitmapFontSet}},
+  \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
   \code{\link{rawToSysConfig}},
   \code{\link{simpleAmigaIcon}}

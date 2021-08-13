@@ -1,3 +1,30 @@
+AmigaFFH v0.3.1 (Release date: 2019-04-31)
+=============
+
+ * Resubmission to CRAN due to offline URL references in documentation
+
+AmigaFFH v0.3.0 (Release date: 2019-03-30)
+=============
+
+ * Added support for Amiga Bitmap fonts
+
+ * Added support for interpretation and creation of
+   HAM6 and HAM8 mode (special modes on the Amiga) bitmap images.
+
+ * Added support for directly reading files from and writing files to
+   amigaDisk class objects (from the adfExplorer package).
+
+ * Modified 'simpleSysConfig' such that specific settings can be
+   passed as arguments
+
+ * Fixed bug in viewportmode checks
+
+ * Corrected replace functions for SysConfig objects
+ 
+ * Suppressed unnecessary warnings in the as.raw.AmigaIcon function
+ 
+ * Minor corrections to the manual
+
 AmigaFFH v0.2.0 (Release date: 2019-01-27)
 =============
 

@@ -25,7 +25,7 @@ the mouse pointer.
 
 This object simply holds the basic information belonging to
 hardware sprite. Use \code{\link{as.raster}} to convert it to
-a raster which is a more usuful graphical element in R.
+a raster which is a more useful graphical element in R.
 }
 \section{Slots}{
 

@@ -4,17 +4,24 @@
 \alias{write.iff}
 \title{Write Interchange File Format (IFF)}
 \usage{
-write.iff(x, file)
+write.iff(x, file, disk = NULL)
 }
 \arguments{
 \item{x}{An \code{\link{IFFChunk}} object that needs to be written to a file.}
 
 \item{file}{A filename for the IFF file to which the \code{\link{IFFChunk}} needs
 to be saved, or a connection to which the data should be written.}
+
+\item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
+written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+this argument requires the adfExplorer package.
+When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns either \code{NULL} or an \code{integer} status invisibly as passed
 by the \code{\link[base]{close}} statement used to close the file connection.
+When \code{disk} is specified, a copy of \code{disk} is returned
+to which the file is written.
 }
 \description{
 Write an \code{\link{IFFChunk}} object conform the Interchange File Format (IFF).
@@ -40,14 +47,17 @@ write.iff(example.iff, file.path(tempdir(), "image.iff"))
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 }
 \seealso{
-Other io.operations: \code{\link{read.AmigaIcon}},
+Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
+  \code{\link{read.AmigaBitmapFont}},
+  \code{\link{read.AmigaIcon}},
   \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBitmapFont}},
   \code{\link{write.AmigaIcon}},
   \code{\link{write.SysConfig}}
 
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{as.raw}}, \code{\link{getIFFChunk}},
+  \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
   \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
   \code{\link{read.iff}}

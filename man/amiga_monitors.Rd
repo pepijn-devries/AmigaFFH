@@ -3,7 +3,7 @@
 \docType{data}
 \name{amiga_monitors}
 \alias{amiga_monitors}
-\title{A list om Amiga monitors}
+\title{A list of Amiga monitors}
 \format{A \code{data.frame} with 2 columns:
 \itemize{
   \item{The column named `MONITOR_ID': a \code{factor} representing an Amiga monitor}

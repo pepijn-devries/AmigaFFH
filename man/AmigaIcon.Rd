@@ -9,7 +9,7 @@ A comprehensive representation of an Amiga Workbench icon file.
 }
 \details{
 Files, directories and other similar objects were depicted as icons on the
-Amiga Workbench (the Amiga's equivalent of what is now mostly known as the compmuter's
+Amiga Workbench (the Amiga's equivalent of what is now mostly known as the computer's
 desktop). Icons were actually separate files with the exact same name as the
 file or directory it represents, except for an additional `.info' extension.
 
@@ -24,9 +24,9 @@ memory pointers that are really not necassary to store in a file.
 The S3 AmigaIcon class is used to represent these complex files as a named
 \code{list}. The elements in that \code{list} have mostly identical
 names as listed in the document at the top referenced below. The names are usually
-self-explenatory, but the referred documents can also be
+self-explanatory, but the referred documents can also be
 consulted to obtain more detailed information with respect to each of
-these elements. As pointed out ealier, not all elements will have a meaningful
+these elements. As pointed out earlier, not all elements will have a meaningful
 use.
 
 It is possible to change the values of the list, but not all values may be valid.

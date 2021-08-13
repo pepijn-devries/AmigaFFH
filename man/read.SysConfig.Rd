@@ -4,10 +4,16 @@
 \alias{read.SysConfig}
 \title{Read an Amiga system-configuration file}
 \usage{
-read.SysConfig(file)
+read.SysConfig(file, disk = NULL)
 }
 \arguments{
-\item{file}{The file name of a system-configuration file to be read.}
+\item{file}{The file name of a system-configuration file to be read.
+Can also be a connection that allows reading binary data.}
+
+\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
+read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+this argument requires the adfExplorer package.
+When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns an S3 \link{SysConfig} class object based on the file that is read.
@@ -37,8 +43,11 @@ Other SysConfig.operations: \code{\link{SysConfig}},
   \code{\link{simpleSysConfig}},
   \code{\link{write.SysConfig}}
 
-Other io.operations: \code{\link{read.AmigaIcon}},
-  \code{\link{read.iff}}, \code{\link{write.AmigaIcon}},
+Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
+  \code{\link{read.AmigaBitmapFont}},
+  \code{\link{read.AmigaIcon}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBitmapFont}},
+  \code{\link{write.AmigaIcon}},
   \code{\link{write.SysConfig}}, \code{\link{write.iff}}
 }
 \author{

@@ -34,7 +34,7 @@ data is reduced with almost 50\% (the exact compression ratio is (4 + n)/(2n)).
 The algorithm was first described by Steve Hayes and was used in 8SVX audio stored in
 the Interchange File Format (IFF). The quality loss is considerable (especially
 when the audio contained many large deltas) and was even in
-the time it was developped (1985) not used much. The function is provided here for
+the time it was developed (1985) not used much. The function is provided here for
 the sake of completeness. The implementation here only compresses 8-bit data, as
 for 16-bit data the quality loss will be more considerable.
 }

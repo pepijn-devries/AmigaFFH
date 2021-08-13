@@ -84,7 +84,7 @@ getIFFChunk(example.iff, c("ILBM", "BMHD")) <- bmhd
 \seealso{
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{as.raw}}, \code{\link{interpretIFFChunk}},
+  \code{\link{interpretIFFChunk}},
   \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
   \code{\link{read.iff}}, \code{\link{write.iff}}
 }

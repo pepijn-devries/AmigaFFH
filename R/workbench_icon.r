@@ -3,7 +3,7 @@
 #' A comprehensive representation of an Amiga Workbench icon file.
 #' 
 #' Files, directories and other similar objects were depicted as icons on the
-#' Amiga Workbench (the Amiga's equivalent of what is now mostly known as the compmuter's
+#' Amiga Workbench (the Amiga's equivalent of what is now mostly known as the computer's
 #' desktop). Icons were actually separate files with the exact same name as the
 #' file or directory it represents, except for an additional `.info' extension.
 #' 
@@ -18,9 +18,9 @@
 #' The S3 AmigaIcon class is used to represent these complex files as a named
 #' \code{list}. The elements in that \code{list} have mostly identical
 #' names as listed in the document at the top referenced below. The names are usually
-#' self-explenatory, but the referred documents can also be
+#' self-explanatory, but the referred documents can also be
 #' consulted to obtain more detailed information with respect to each of
-#' these elements. As pointed out ealier, not all elements will have a meaningful
+#' these elements. As pointed out earlier, not all elements will have a meaningful
 #' use.
 #' 
 #' It is possible to change the values of the list, but not all values may be valid.
@@ -232,7 +232,7 @@ simpleAmigaIcon <- function(version    = c("OS1.x", "OS2.x"),
 #' Workbench icon files (*.info). Use this function to convert \code{raw} data from
 #' such a file to an \code{\link{AmigaIcon}} object.
 #'
-#' Icons files (*.info) were used as a grapical representations of files and
+#' Icons files (*.info) were used as a graphical representations of files and
 #' directories on the Commodore Amiga. This function will convert the raw data from such files
 #' into a more comprehensive names list (see \code{\link{AmigaIcon}}). Use
 #' \code{\link[AmigaFFH]{as.raw}} to achieve the inverse.
@@ -372,8 +372,60 @@ rawToAmigaIcon <- function(x, palette = NULL) {
   return(result)
 }
 
+#' Plot AmigaFFH objects
+#' 
+#' Plot AmigaFFH objects using \code{base} plotting routines.
+#' 
+#' A plotting routine is implemented for most AmigaFFH objects. See the usage section
+#' for all supported objects.
 #' @rdname plot
 #' @name plot
+#' @param x An AmigaFFH object to be plotted. See usage section for supported object
+#' classes. If \code{x} is an \code{\link{AmigaBitmapFont}} or \code{\link{AmigaBitmapFontSet}}
+#' class object, it will plot the full bitmap that is used to extract the font glyphs.
+#' @param y When \code{x} is an \code{\link{AmigaIcon}} class object, \code{y} can be used as
+#' an index. In that case, when \code{y=1} the first icon image is shown. When \code{y=2}
+#' the selected icon image is shown.
+#' 
+#' When \code{x} is an \code{AmigaBitmapFontSet}
+#' object, \code{y} can be used to plot the bitmap of a specific font height (\code{y}).
+#' @param asp A \code{numeric} value indicating the aspect ratio for the plot. For
+#' many AmigaFFH, the aspect ratio will be based on the Amiga display mode when known.
+#' For \code{\link{AmigaIcon}} objects a default aspect ratio of \code{2} is used (tall
+#' pixels).
+#' 
+#' When \code{x} is an \code{\link{AmigaBitmapFont}} or \code{\link{AmigaBitmapFontSet}} object,
+#' an aspect ratio of 1 is used by default. When the \code{TALLDOT} flag
+#' is set for that font, the aspect ratio s multiplied by 2. When the
+#' \code{WIDEDOT} flag is set, it will be divided by 2.
+#' 
+#' A custom aspect ratio can also be used and will override the ratios specified above.
+#' @param ... Parameters passed onto the generic \code{graphics} plotting routine.
+#' 
+#' When \code{x} is an \code{\link{AmigaBitmapFont}} or an \code{\link{AmigaBitmapFontSet}}
+#' object, '\code{...}' can also be used for arguments that need to be
+#' passed onto the \code{\link[AmigaFFH]{as.raster}} function.
+#' @return Returns \code{NULL} silently.
+#' @examples
+#' \dontrun{
+#' ## load an IFF file
+#' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
+#' 
+#' ## and plot it:
+#' plot(example.iff)
+#' 
+#' ## AmigaIcons can also be plotted:
+#' plot(simpleAmigaIcon())
+#' 
+#' ## As can the cursor from a SysConfig object:
+#' plot(simpleSysConfig())
+#' 
+#' ## As can amiga fonts:
+#' data(font_example)
+#' plot(font_example)
+#' plot(font_example, text = "foo bar", style = "underlined", interpolate = F)
+#' }
+#' @author Pepijn de Vries
 #' @export
 plot.AmigaIcon <- function(x, y, asp = 2, ...) {
   if (missing(y)) y <- 1
@@ -438,102 +490,108 @@ print.AmigaIcon <- function(x, ...) {
 #' @name as.raw
 #' @export
 as.raw.AmigaIcon <- function(x, ...) {
-  x$ic_Gadget$ga_Flags <- .bitmapToRaw(rev(x$ic_Gadget$ga_Flags), T, F)
-  x$ic_Gadget$ga_UserData <- .match.factor.inv(x$ic_Gadget,
-                                               "ga_UserData", 0:1,
-                                               c("OS1.x", "OS2.x"))
-  sec.img <- x$ic_Gadget$ga_SelectRender != 0
-  x$ic_Gadget <- .write.amigaData(x$ic_Gadget,
-                                  .icon.gadget.data$byte,
-                                  .icon.gadget.data$signed,
-                                  .icon.gadget.data$par.names)
-  x$ic_Type <- .match.factor.inv(x,
-                                 "ic_Type", 1:8,
-                                 c("WBDISK", "WBDRAWER", "WBTOOL", "WBPROJECT", "WBGARBAGE", "WBDEVICE", "WBKICK", "WBAPPICON"))
-  if (x$ic_DrawerData != 0) {
-    x$drawer$NewWindow$nw_IDCMPFlags <- .bitmapToRaw(x$drawer$NewWindow$nw_IDCMPFlags, F, T)
-    x$drawer$NewWindow$nw_Flags      <- .bitmapToRaw(x$drawer$NewWindow$nw_Flags, F, T)
-    x$drawer$NewWindow <- with(.icon.new.window.data, .write.amigaData(x$drawer$NewWindow, byte, signed, par.names))
-    x$drawer           <- with(.icon.drawer.data,     .write.amigaData(x$drawer, byte, signed, par.names))
-  } else {
-    x$drawer <- NULL
-  }
-  iconImgToRaw <- function(y) {
-    pal <- attributes(y$im_Bitmap)[["palette"]][1:(2^y$im_Depth)]
-    list(
-      bmhead = .write.amigaData(y,
-                                .icon.image.data$byte,
-                                .icon.image.data$signed,
-                                .icon.image.data$par.names),
-      bm     = .bitmapToRaw(rasterToBitmap(
-        y$im_Bitmap,
-        depth = y$im_Depth,
-        interleaved = F,
-        indexing = function(x, length.out) index.colours(x, length.out,
-                                                         palette = pal)),
-        T, F)
-    )
-  }
-  x$firstImage <- iconImgToRaw(x$firstImage)
-  if (sec.img) {
-    x$secondImage <- iconImgToRaw(x$secondImage)
-  } else {
-    x$secondImage <- NULL
-  }
-  if (x$defaultTool != "") {
-    x$defaultTool <- c(
-      .amigaIntToRaw(nchar(x$defaultTool) + 1, 32, F),
-      charToRaw(x$defaultTool),
-      raw(1))
-  } else {
-    x$defaultTool <- NULL
-  }
-  if (length(x$toolTypes) == 1 && x$toolTypes == "") {
-    x$toolTypes <- NULL
-  } else {
-    x$toolTypes <- c(
-      .amigaIntToRaw(length(x$toolTypes), 32, F),
-      unlist(lapply(x$toolTypes, function(y){
-        nc <- nchar(y)
-        if (nc == 0) yc <- raw(0) else yc <- charToRaw(y)
-        c(.amigaIntToRaw(nc, 32, F),
-          yc,
-          raw(1))
-      }))
-    )
-  }
-  if (x$toolWindow != "") {
-    x$toolWindow <- c(
-      .amigaIntToRaw(nchar(x$toolWindow) + 1, 32, F),
-      charToRaw(x$toolWindow),
-      raw(1))
-  } else {
-    x$toolWindow <- NULL
-  }
-  x[.icon.data.head$par.names] <- lapply(1:nrow(.icon.data.head), function(y) {
-    .write.amigaData(x[.icon.data.head$par.names[y]],
-                     .icon.data.head$byte[y],
-                     .icon.data.head$signed[y],
-                     .icon.data.head$par.names[y])
+  withCallingHandlers({ ## XXX remove calling handlers once the replace functions are fully implemented
+    x$ic_Gadget$ga_Flags <- .bitmapToRaw(rev(x$ic_Gadget$ga_Flags), T, F)
+    x$ic_Gadget$ga_UserData <- .match.factor.inv(x$ic_Gadget,
+                                                 "ga_UserData", 0:1,
+                                                 c("OS1.x", "OS2.x"))
+    sec.img <- x$ic_Gadget$ga_SelectRender != 0
+    x$ic_Gadget <- .write.amigaData(x$ic_Gadget,
+                                    .icon.gadget.data$byte,
+                                    .icon.gadget.data$signed,
+                                    .icon.gadget.data$par.names)
+    x$ic_Type <- .match.factor.inv(x,
+                                   "ic_Type", 1:8,
+                                   c("WBDISK", "WBDRAWER", "WBTOOL", "WBPROJECT", "WBGARBAGE", "WBDEVICE", "WBKICK", "WBAPPICON"))
+    if (x$ic_DrawerData != 0) {
+      x$drawer$NewWindow$nw_IDCMPFlags <- .bitmapToRaw(x$drawer$NewWindow$nw_IDCMPFlags, F, T)
+      x$drawer$NewWindow$nw_Flags      <- .bitmapToRaw(x$drawer$NewWindow$nw_Flags, F, T)
+      x$drawer$NewWindow <- with(.icon.new.window.data, .write.amigaData(x$drawer$NewWindow, byte, signed, par.names))
+      x$drawer           <- with(.icon.drawer.data,     .write.amigaData(x$drawer, byte, signed, par.names))
+    } else {
+      x$drawer <- NULL
+    }
+    iconImgToRaw <- function(y) {
+      pal <- attributes(y$im_Bitmap)[["palette"]][1:(2^y$im_Depth)]
+      list(
+        bmhead = .write.amigaData(y,
+                                  .icon.image.data$byte,
+                                  .icon.image.data$signed,
+                                  .icon.image.data$par.names),
+        bm     = .bitmapToRaw(rasterToBitmap(
+          y$im_Bitmap,
+          depth = y$im_Depth,
+          interleaved = F,
+          indexing = function(x, length.out) index.colours(x, length.out,
+                                                           palette = pal)),
+          T, F)
+      )
+    }
+    x$firstImage <- iconImgToRaw(x$firstImage)
+    if (sec.img) {
+      x$secondImage <- iconImgToRaw(x$secondImage)
+    } else {
+      x$secondImage <- NULL
+    }
+    if (x$defaultTool != "") {
+      x$defaultTool <- c(
+        .amigaIntToRaw(nchar(x$defaultTool) + 1, 32, F),
+        charToRaw(x$defaultTool),
+        raw(1))
+    } else {
+      x$defaultTool <- NULL
+    }
+    if (length(x$toolTypes) == 1 && x$toolTypes == "") {
+      x$toolTypes <- NULL
+    } else {
+      x$toolTypes <- c(
+        .amigaIntToRaw(length(x$toolTypes), 32, F),
+        unlist(lapply(x$toolTypes, function(y){
+          nc <- nchar(y)
+          if (nc == 0) yc <- raw(0) else yc <- charToRaw(y)
+          c(.amigaIntToRaw(nc, 32, F),
+            yc,
+            raw(1))
+        }))
+      )
+    }
+    if (x$toolWindow != "") {
+      x$toolWindow <- c(
+        .amigaIntToRaw(nchar(x$toolWindow) + 1, 32, F),
+        charToRaw(x$toolWindow),
+        raw(1))
+    } else {
+      x$toolWindow <- NULL
+    }
+    x[.icon.data.head$par.names] <- lapply(1:nrow(.icon.data.head), function(y) {
+      .write.amigaData(x[.icon.data.head$par.names[y]],
+                       .icon.data.head$byte[y],
+                       .icon.data.head$signed[y],
+                       .icon.data.head$par.names[y])
+    })
+    if (length(x$dd_Flags) == 1) {
+      x$dd_Flags <- .match.factor.inv(x, "dd_Flags", 0:2,
+                                      c("DDFLAGS_SHOWDEFAULT", "DDFLAGS_SHOWICONS", "DDFLAGS_SHOWALL"))
+      x$dd_Flags <- .amigaIntToRaw(x$dd_Flags, 32, F)
+    } else {
+      x$dd_Flags <- NULL
+    }
+    if (length(x$dd_ViewModes) == 1) {
+      x$dd_ViewModes <- .match.factor.inv(x, "dd_ViewModes", 0:5,
+                                          c("DDVM_BYDEFAULT", "DDVM_BYICON", "DDVM_BYNAME",
+                                            "DDVM_BYDATE", "DDVM_BYSIZE", "DDVM_BYTYPE"))
+      x$dd_ViewModes <- .amigaIntToRaw(x$dd_ViewModes, 16, F)
+    } else {
+      x$dd_ViewModes <- NULL
+    }
+    x <- unlist(x)
+    names(x) <- NULL
+    return(x)
+  },
+  warning=function(w) {
+    if (startsWith(conditionMessage(w), "Replacement operator for AmigaIcon"))
+      invokeRestart("muffleWarning")
   })
-  if (length(x$dd_Flags) == 1) {
-    x$dd_Flags <- .match.factor.inv(x, "dd_Flags", 0:2,
-                                    c("DDFLAGS_SHOWDEFAULT", "DDFLAGS_SHOWICONS", "DDFLAGS_SHOWALL"))
-    x$dd_Flags <- .amigaIntToRaw(x$dd_Flags, 32, F)
-  } else {
-    x$dd_Flags <- NULL
-  }
-  if (length(x$dd_ViewModes) == 1) {
-    x$dd_ViewModes <- .match.factor.inv(x, "dd_ViewModes", 0:5,
-                                        c("DDVM_BYDEFAULT", "DDVM_BYICON", "DDVM_BYNAME",
-                                          "DDVM_BYDATE", "DDVM_BYSIZE", "DDVM_BYTYPE"))
-    x$dd_ViewModes <- .amigaIntToRaw(x$dd_ViewModes, 16, F)
-  } else {
-    x$dd_ViewModes <- NULL
-  }
-  x <- unlist(x)
-  names(x) <- NULL
-  return(x)
 }
 
 #' Write an Amiga Workbench icon (info) file
@@ -542,7 +600,7 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' separate files (with the .info extension) on the Amiga. This function writes
 #' \code{\link{AmigaIcon}} class objects to such files.
 #'
-#' The \code{\link{AmigaIcon}} S3 object provides a comprihensive format
+#' The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
 #' for Amiga icons, which are used as a graphical representation of files
 #' and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
 #' list containing all information of an icon. Use this function to
@@ -554,9 +612,15 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' @param x An \code{\link{AmigaIcon}} class object.
 #' @param file A \code{character} string representing the file name to which the
 #' icon data should be written.
+#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
+#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
 #' @return Returns \code{NULL} or an \code{integer} status passed on by the
 #' \code{\link{close}} function, that is used to close the file connection.
-#' It is returned invisibly.
+#' It is returned invisibly. Or, when \code{disk} is specified, a copy of
+#' \code{disk} is returned to which the file is written.
+#' 
 #' @examples
 #' \dontrun{
 #' ## create a simple AmigaIcon:
@@ -569,11 +633,9 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-write.AmigaIcon <- function(x, file) {
+write.AmigaIcon <- function(x, file, disk = NULL) {
   if (class(x) != "AmigaIcon") stop("x should be of S3 class AmigaIcon.")
-  con <- file(file, "wb")
-  writeBin(as.raw(x), con)
-  close(con)
+  .write.generic(x, file, disk)
 }
 
 #' Read an Amiga Workbench icon (info) file
@@ -582,7 +644,7 @@ write.AmigaIcon <- function(x, file) {
 #' separate files (with the .info extension) on the Amiga. This function reads such files
 #' and imports them as \code{\link{AmigaIcon}} class objects.
 #'
-#' The \code{\link{AmigaIcon}} S3 object provides a comprihensive format
+#' The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
 #' for Amiga icons, which are used as a graphical representation of files
 #' and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
 #' list containing all information of an icon. Use this function to
@@ -593,6 +655,10 @@ write.AmigaIcon <- function(x, file) {
 #' @name read.AmigaIcon
 #' @param file A \code{character} string representing the file name from which the
 #' icon data should be read.
+#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
+#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
 #' @param ... Arguments passed on to \code{\link{rawToAmigaIcon}}.
 #' @return Returns an \code{\link{AmigaIcon}} class object as read from the \code{file}.
 #' @examples
@@ -610,11 +676,8 @@ write.AmigaIcon <- function(x, file) {
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-read.AmigaIcon <- function(file, ...) {
-  fz <- file.size(file)
-  con <- file(file, "rb")
-  dat <- readBin(con, "raw", fz)
-  close(con)
+read.AmigaIcon <- function(file, disk = NULL, ...) {
+  dat <- .read.generic(file, disk)
   rawToAmigaIcon(dat, ...)
 }
 

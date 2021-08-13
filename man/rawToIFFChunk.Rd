@@ -45,13 +45,15 @@ identical(example.iff, example.iff.new)
 \seealso{
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{as.raw}}, \code{\link{getIFFChunk}},
+  \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
   \code{\link{rasterToIFF}}, \code{\link{read.iff}},
   \code{\link{write.iff}}
 
 Other raw.operations: \code{\link{as.raw}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBitmapFontSet}},
+  \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},
   \code{\link{rawToHWSprite}},
   \code{\link{rawToSysConfig}},

@@ -4,11 +4,16 @@
 \alias{read.AmigaIcon}
 \title{Read an Amiga Workbench icon (info) file}
 \usage{
-read.AmigaIcon(file, ...)
+read.AmigaIcon(file, disk = NULL, ...)
 }
 \arguments{
 \item{file}{A \code{character} string representing the file name from which the
 icon data should be read.}
+
+\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
+read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+this argument requires the adfExplorer package.
+When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Arguments passed on to \code{\link{rawToAmigaIcon}}.}
 }
@@ -21,7 +26,7 @@ separate files (with the .info extension) on the Amiga. This function reads such
 and imports them as \code{\link{AmigaIcon}} class objects.
 }
 \details{
-The \code{\link{AmigaIcon}} S3 object provides a comprihensive format
+The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
 for Amiga icons, which are used as a graphical representation of files
 and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
 list containing all information of an icon. Use this function to
@@ -46,8 +51,11 @@ Other AmigaIcon.operations: \code{\link{AmigaIcon}},
   \code{\link{simpleAmigaIcon}},
   \code{\link{write.AmigaIcon}}
 
-Other io.operations: \code{\link{read.SysConfig}},
-  \code{\link{read.iff}}, \code{\link{write.AmigaIcon}},
+Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
+  \code{\link{read.AmigaBitmapFont}},
+  \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBitmapFont}},
+  \code{\link{write.AmigaIcon}},
   \code{\link{write.SysConfig}}, \code{\link{write.iff}}
 }
 \author{

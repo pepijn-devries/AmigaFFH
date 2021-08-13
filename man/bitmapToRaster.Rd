@@ -84,8 +84,10 @@ plot(example.raster, interpolate = FALSE)
 }
 }
 \seealso{
-Other raster.operations: \code{\link{as.raster}},
-  \code{\link{dither}}, \code{\link{index.colours}},
+Other raster.operations: \code{\link{AmigaBitmapFont}},
+  \code{\link{as.raster}}, \code{\link{dither}},
+  \code{\link{index.colours}},
+  \code{\link{rasterToAmigaBitmapFont}},
   \code{\link{rasterToBitmap}},
   \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }

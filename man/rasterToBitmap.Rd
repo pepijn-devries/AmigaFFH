@@ -12,7 +12,10 @@ needs to be converted into bitmap data. It is also possible to let \code{x} be
 a matrix of \code{character}s, representing colours.}
 
 \item{depth}{The colour depth of the bitmap image. The image will be composed
-of \code{2^depth} indexed colours.}
+of \code{2^depth} indexed colours.
+
+\code{depth} can also be a \code{character} string "HAM6" or "HAM8"
+representing special Amiga display modes (see details).}
 
 \item{interleaved}{A \code{logical} value, indicating whether the bitmap needs to be
 interleaved. An interleaved bitmap image stores each consecutive bitmap layer per
@@ -52,6 +55,30 @@ will allow you to convert a \code{raster} object into binary bitmap data with
 an indexed palette. This means that the image is converted in a lossy way
 (information will be lost). So don't expect the result to have the same quality as
 the original image.
+
+With the \code{depth} argument, the raster can also be converted
+to special mode bitmap images. One of these modes is the
+\sQuote{hold and modify} (HAM). In this mode two of the bitplanes
+are reserved as modifier switches. If the this switch equals
+zero, the remainder of the bitplanes are used as an index for
+colours in a fixed palette. If the switch equals 1, 2 or 3, the
+red, green or blue component of the previous is modified, using the
+number in the remainder of the bitplanes. So it holds the previous
+colour but modifies one of the colour components (hence the term
+\sQuote{hold and modify}.) Here only the HAM6 and
+the HAM8 mode are implemented. HAM6 uses 6 bitplanes and a 12 bit
+colour depth, HAM8 uses 8 bitplanes and a 24 bit colour depth.
+
+The HAM mode was a special video modes supported by Amiga hardware.
+Normal mode bitmap images with a 6 bit depth would allow for a
+palette of 64 (2^6) colours, HAM6 can display 4096 colours with
+the same bit depth.
+
+In addition to HAM6 and HAM8, sliced HAM (or SHAM) was another
+HAM variant. Using the coprocessor on the Amiga, it was possible
+to change the palette at specific scanlines, increasing the number
+of available colours even further. The SHAM mode is currently not
+supported by this package.
 }
 \examples{
 \dontrun{
@@ -83,12 +110,15 @@ volcano.bw <- rasterToBitmap(volcano.raster,
                                              dither = "floyd-steinberg")
                              })
 
+## Make a bitmap using a special display mode (HAM6):
+volcano.HAM <- rasterToBitmap(volcano.raster, "HAM6")
 }
 }
 \seealso{
-Other raster.operations: \code{\link{as.raster}},
-  \code{\link{bitmapToRaster}}, \code{\link{dither}},
-  \code{\link{index.colours}},
+Other raster.operations: \code{\link{AmigaBitmapFont}},
+  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
+  \code{\link{dither}}, \code{\link{index.colours}},
+  \code{\link{rasterToAmigaBitmapFont}},
   \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }
 \author{

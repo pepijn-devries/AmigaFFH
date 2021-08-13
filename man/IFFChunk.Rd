@@ -95,7 +95,7 @@ IFF file (\code{\link{read.iff}}). These objects reflect the file structure
 well, but the data is stored as \code{raw} information. IFF files can contain
 a wide variety of information types, ranging from bitmap images to audio
 clips. The raw information stored in \code{\link{IFFChunk}} objects can
-be interpreted into more meaningfull representations that can be handled in
+be interpreted into more meaningful representations that can be handled in
 R. This is achieved with the \code{\link{interpretIFFChunk}} method, which
 returns \code{IFF.ANY} objects.
 
@@ -287,7 +287,7 @@ More detailed information about IFF chunks can be found in the IFF chunk registr
         to the display mode in which the bitmap image should be displayed.
         This information can be used to determine the correct pixel aspect
         ratio, or is sometimes required to correctly interpret the bitmap
-        information. The \code{IFF.CAMG} chunk is intepreted as a named list
+        information. The \code{IFF.CAMG} chunk is interpreted as a named list
         containing the following elements:
         \itemize{
           \item{

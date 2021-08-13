@@ -4,17 +4,23 @@
 \alias{write.SysConfig}
 \title{Write an Amiga system-configuration file}
 \usage{
-write.SysConfig(x, file)
+write.SysConfig(x, file, disk = NULL)
 }
 \arguments{
 \item{x}{An S3 \link{SysConfig} class object.}
 
 \item{file}{A file name to which the binary file should be written.}
+
+\item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
+written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+this argument requires the adfExplorer package.
+When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns \code{NULL} or an \code{integer} status passed on by the
 \code{\link{close}} function, that is used to close the file connection.
-It is returned invisibly.
+It is returned invisibly. Or, when \code{disk} is specified, a copy of
+\code{disk} is returned to which the file is written.
 }
 \description{
 Write a \link{SysConfig} class object to an Amiga binary system-configuration file.
@@ -39,8 +45,11 @@ Other SysConfig.operations: \code{\link{SysConfig}},
   \code{\link{read.SysConfig}},
   \code{\link{simpleSysConfig}}
 
-Other io.operations: \code{\link{read.AmigaIcon}},
+Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
+  \code{\link{read.AmigaBitmapFont}},
+  \code{\link{read.AmigaIcon}},
   \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBitmapFont}},
   \code{\link{write.AmigaIcon}}, \code{\link{write.iff}}
 }
 \author{

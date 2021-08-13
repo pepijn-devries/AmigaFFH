@@ -64,6 +64,8 @@ plot(spr, interpolate = FALSE)
 \seealso{
 Other raw.operations: \code{\link{as.raw}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBitmapFontSet}},
+  \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},
   \code{\link{rawToIFFChunk}},
   \code{\link{rawToSysConfig}},

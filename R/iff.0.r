@@ -98,7 +98,7 @@ setClass("IFFChunk",
 #' Read the Interchange File Format (IFF) as an \code{\link{IFFChunk}} object.
 #'
 #' Information is stored as `chunks' in IFF files (see \code{\link{IFFChunk}}).
-#' Each chunk should at least contain a lable of the type of chunk and the data
+#' Each chunk should at least contain a label of the type of chunk and the data
 #' for that chunk. This function reads all chunks from a valid IFF file, including
 #' all nested chunks and stores them in an \code{\link{IFFChunk}} object. IFF
 #' files can hold any kind of data (e.g. images or audio), this read function
@@ -109,6 +109,10 @@ setClass("IFFChunk",
 #' @name read.iff
 #' @param file A filename of an IFF file to be read, or a connection from which
 #' binary data can be read.
+#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
+#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
 #' @return Returns a \code{\link{IFFChunk}} object read from the specified file.
 #' @examples
 #' \dontrun{
@@ -123,24 +127,10 @@ setClass("IFFChunk",
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
-read.iff <- function(file) {
-  if ("character" %in% class(file)) con <- file(file, "rb")
-  if ("connection" %in% class(file)) {
-    con_info <- summary(con)
-    if (con_info$`can read` != "yes" || con_info$text != "binary") stop("file is not a connection from which binary data can be read...")
-    con <- file
-  }
-  if (!all(readBin(con, "raw", 4) == charToRaw("FORM"))) stop("FORM is currently the only supported IFF container. LIST, CAT and others are not...")
-  seek(con, 0)
-  file.data <- raw(0)
-  while (T) {
-    chunk <- readBin(con, "raw", 1048576L)
-    file.data <- c(file.data, chunk)
-    if (length(chunk) == 0) break
-  }
-  result <- .rawToIFFChunk(file.data)
-  if ("character" %in% class(file)) close(con)
-  if (length(result) == 1) return(result[[1]])
+read.iff <- function(file, disk = NULL) {
+  result <- .read.generic(file, disk)
+  result <- rawToIFFChunk(result)
+  if (result@chunk.type != "FORM") stop("FORM is currently the only supported IFF container. LIST, CAT and others are not...")
   return (result)
 }
 
@@ -152,6 +142,10 @@ read.iff <- function(file) {
 #' Objects originating from this package can in some cases be converted into
 #' raw data, as they would be stored on an original Amiga. See the usage section
 #' for the currently supported objects.
+#' 
+#' Not all information from \code{x} may be included in the \code{raw}
+#' data that is returned, so handle with care.
+#' 
 #' As this package grows additional objects can be converted with this method.
 #'
 #' @docType methods
@@ -169,7 +163,6 @@ read.iff <- function(file) {
 #' ## This will recreate the exact raw data as it was read from the file:
 #' example.raw <- as.raw(example.iff)
 #' }
-#' @family iff.operations
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
@@ -221,8 +214,15 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' @param x An \code{\link{IFFChunk}} object that needs to be written to a file.
 #' @param file A filename for the IFF file to which the \code{\link{IFFChunk}} needs
 #' to be saved, or a connection to which the data should be written.
+#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
+#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
 #' @return Returns either \code{NULL} or an \code{integer} status invisibly as passed
 #' by the \code{\link[base]{close}} statement used to close the file connection.
+#' When \code{disk} is specified, a copy of \code{disk} is returned
+#' to which the file is written.
+#' 
 #' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 #' @examples
 #' \dontrun{
@@ -238,17 +238,9 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
-write.iff <- function(x, file) {
+write.iff <- function(x, file, disk = NULL) {
   if (class(x) != "IFFChunk") stop("x should be of class IFFChunk.")
-  raw.dat <- as.raw(x)
-  if (class(file) == "character") con <- file(file, "wb")
-  if ("connection" %in% class(file)) {
-    con_info <- summary(con)
-    if (con_info$`can write` != "yes" || con_info$text != "binary") stop("file is not a connection to which binary data can be written...")
-    con <- file
-  }
-  writeBin(raw.dat, con, endian = "big")
-  if (class(file) == "character") close(con)
+  .write.generic(x, file, disk)
 }
 
 setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric("getIFFChunk"))
@@ -530,11 +522,20 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 
     palettes <- lapply(result, function(z) attributes(z)$palette)
     asps     <- lapply(result, function(z) attributes(z)$asp)
+    modes    <- lapply(result, function(z) attributes(z)$mode)
+    
     for (i in 1:length(palettes)) {
       if (is.null(palettes[[i]])) palettes[[i]] <- palettes[[i - 1]]
       if (is.null(asps[[i]])) asps[[i]] <- asps[[i - 1]]
+      if (i > 1 && !is.null(modes[[1]]) && is.null(modes[[i]])) modes[[i]] <- modes[[i - 1]]
 
-      result[[i]] <- grDevices::as.raster(apply(result[[i]], 2, function(z) palettes[[i]][z + 1]))
+      if (!is.null(modes[[i]]) && modes[[i]] %in% c("HAM6", "HAM8")) {
+        result[[i]] <- .indexToHAMraster(result[[i]],
+                                         ifelse(modes[[i]] == "HAM8", 8, 6),
+                                         palettes[[i]], 0) ## assume transparent colour is zero        
+      } else {
+        result[[i]] <- grDevices::as.raster(apply(result[[i]], 2, function(z) palettes[[i]][z + 1]))
+      }
       class(result[[i]]) <- c("IFF.ILBM", "IFF.ANY", class(result[[i]]))
       attributes(result[[i]])[["asp"]] <- asps[[i]]
     }
@@ -667,7 +668,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' well, but the data is stored as \code{raw} information. IFF files can contain
 #' a wide variety of information types, ranging from bitmap images to audio
 #' clips. The raw information stored in \code{\link{IFFChunk}} objects can
-#' be interpreted into more meaningfull representations that can be handled in
+#' be interpreted into more meaningful representations that can be handled in
 #' R. This is achieved with the \code{\link{interpretIFFChunk}} method, which
 #' returns \code{IFF.ANY} objects.
 #' 
@@ -859,7 +860,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #'         to the display mode in which the bitmap image should be displayed.
 #'         This information can be used to determine the correct pixel aspect
 #'         ratio, or is sometimes required to correctly interpret the bitmap
-#'         information. The \code{IFF.CAMG} chunk is intepreted as a named list
+#'         information. The \code{IFF.CAMG} chunk is interpreted as a named list
 #'         containing the following elements:
 #'         \itemize{
 #'           \item{
@@ -1222,35 +1223,8 @@ IFFChunk.IFF.copyright <- function(x, ...) {
   return(.text.chunk(x, "(c) ", ...))
 }
 
-#' Plot AmigaFFH objects
-#' 
-#' Plot AmigaFFH objects using \code{base} plotting routines.
-#' 
-#' A plotting routine is implemented for most AmigaFFH objects. See the usage section
-#' for all supported objects.
 #' @rdname plot
 #' @name plot
-#' @param x An AmigaFFH object to be plotted. See usage section for supported object
-#' classes.
-#' @param y When \code{x} is an \code{AmigaIcon} class object, \code{y} can be used as
-#' an index. In that case, when \code{y=1} the first icon image is shown. When \code{y=2}
-#' the selected icon image is shown.
-#' @param asp A \code{numeric} value indicating the aspect ratio for the plot. For
-#' many AmigaFFH, the aspect ratio will be based on the Amiga display mode when known.
-#' For \code{\link{AmigaIcon}} objects a default aspect ratio of \code{2} is used (tall
-#' pixels).
-#' A custom aspect ratio can also be used.
-#' @param ... Parameters passed onto the generic \code{graphics} plotting routine.
-#' @return Returns \code{NULL} silently.
-#' @examples
-#' \dontrun{
-#' ## load an IFF file
-#' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
-#' 
-#' ## and plot it:
-#' plot(example.iff)
-#' }
-#' @author Pepijn de Vries
 #' @export
 plot.IFFChunk <- function(x, y, ...) {
   if (missing(y)) y <- NULL

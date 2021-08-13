@@ -45,6 +45,8 @@ Other SysConfig.operations: \code{\link{SysConfig}},
 
 Other raw.operations: \code{\link{as.raw}},
   \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaBitmapFontSet}},
+  \code{\link{rawToAmigaBitmapFont}},
   \code{\link{rawToAmigaIcon}},
   \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
   \code{\link{simpleAmigaIcon}}

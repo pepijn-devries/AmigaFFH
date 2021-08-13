@@ -113,7 +113,8 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' @name as.raster
 #' @param x Object that needs to be converted into a \code{grDevices} raster. It
 #' can be an \code{\link{IFFChunk}} containing an interleaved bitmap image
-#' (ILBM) or animation (ANIM) or a \code{\link{hardwareSprite}}.
+#' (ILBM) or animation (ANIM), a \code{\link{hardwareSprite}}, an
+#' \code{\link{AmigaBitmapFont}} object or an \code{\link{AmigaBitmapFontSet}} object.
 #' @param background Use the argument \code{background} to
 #' specify a background colour in case \code{x} is a \code{\link{hardwareSprite}}.
 #' @param selected This argument is only allowed when \code{x} is an object of class
@@ -173,7 +174,6 @@ as.raster.IFFChunk <- function(x, ...) {
     } else {
       bm.vp.mode <- interpretIFFChunk(getIFFChunk(x, "CAMG"))
       bm.vp.mode <- .display.properties(bm.vp.mode$display.mode, bm.vp.mode$monitor)
-      if (bm.vp.mode$is.HAM) warning("HAM mode as used in this ILBM is not yet supported.")
     }
     ## default palette in case 'CMAP' chunk is missing:
     bm.palette <- grDevices::gray(round(seq(0, 15, length.out = 2^bm.header$nPlanes))/15)
@@ -191,9 +191,12 @@ as.raster.IFFChunk <- function(x, ...) {
     } else {
       stop("Bitmap data is compressed with unsupported algorithm.")
     }
-    if (length(bm.palette) < 2^(bm.header$nPlanes)) {
-      bm.palette <- c(bm.palette, rep("#000000", 2^(bm.header$nPlanes) - length(bm.palette)))
+    np <- bm.header$nPlanes
+    if (length(bm.palette) < (2^np)) {
+      if (bm.vp.mode$is.HAM) np <- ifelse(np == 8, 6, 5)
+      bm.palette <- c(bm.palette, rep("#000000", (2^np) - length(bm.palette)))
     }
+    rm(np)
     if (bm.header$Masking == "mskHasTransparentColour") {
       transparent <- bm.header$transparentColour + 1
       bm.palette[transparent] <- grDevices::adjustcolor(bm.palette[transparent],
@@ -204,7 +207,21 @@ as.raster.IFFChunk <- function(x, ...) {
       attr.palette <- bm.palette
       bm.palette <- NULL
     }
-    result <- bitmapToRaster(bm, bm.header$w, bm.header$h, bm.header$nPlanes, bm.palette)
+    if (bm.vp.mode$is.HAM) {
+      result <- bitmapToRaster(bm, bm.header$w, bm.header$h, bm.header$nPlanes, NULL)
+      ## It is assumed that the image is HAM8 in case there are 8 bitplanes,
+      ## HAM6 in all other cases...
+      ## if bm.palette is null, we are dealing with an animation
+      ## and we need to return the indices rather than the colours
+      if (!is.null(bm.palette)) {
+        result <- .indexToHAMraster(result, bm.header$nPlanes, bm.palette, bm.header$transparentColour)
+      }
+    } else {
+      result <- bitmapToRaster(bm, bm.header$w, bm.header$h, bm.header$nPlanes, bm.palette)
+    }
+    if (bm.vp.mode$is.HAM) {
+      attributes(result)[["mode"]] <- ifelse(bm.header$nPlanes == 8, "HAM8", "HAM6")
+    }
     attributes(result)[["asp"]] <- bm.vp.mode$aspect.y/bm.vp.mode$aspect.x
     if (!is.null(attr.palette)) attributes(result)[["palette"]] <- attr.palette
     return(result)
@@ -280,6 +297,17 @@ plot.IFF.ANIM <- function(x, y, ...) {
 #' volcano.iff <- rasterToIFF(volcano.raster)
 #' 
 #' ## This object can be saved as an IFF file using write.iff
+#' 
+#' ## in special modes HAM6 and HAM 8 higher quality images
+#' ## can be obtained. See 'rasterToBitmap' for more info on the
+#' ## special HAM modes.
+#' volcano.ham <- rasterToIFF(volcano.raster, "HAM_KEY", depth = "HAM8")
+#' 
+#' ## The result can be further improved by applying dithering
+#' volcano.ham.dither <- rasterToIFF(volcano.raster, "HAM_KEY", depth = "HAM8",
+#'   indexing = function(x, length.out) {
+#'     index.colours(x, length.out, dither = "JJN", iter.max = 20)
+#'   })
 #' }
 #' @family iff.operations
 #' @family raster.operations
@@ -292,18 +320,36 @@ rasterToIFF <- function(x,
                         ...) {
   display.mode <- match.arg(display.mode)
   monitor <- match.arg(monitor)
-  if (grepl("EHB|EXTRAHALFBRITE|HAM", display.mode)) stop("Sorry, 'hold and modify' and 'extra halfbrite' modes are currently not implemented")
   pars <- list(...)
   if (is.null(pars$depth)) pars$depth <- 3
   if (is.null(pars$colour.depth)) pars$colour.depth <- "12 bit"
+  if (grepl("EHB|EXTRAHALFBRITE", display.mode)) stop("Sorry, 'extra halfbrite' modes is currently not implemented")
+  special.mode <- "none"
+  if (pars$depth %in% c("HAM6", "HAM8")) {
+    if (!grepl("HAM", display.mode)) warning("Display mode should be a HAM mode, when 'depth' is set to 'HAM6' or 'HAM8'. Display mode is corrected to 'HAM_KEY'.")
+    display.mode <- "HAM_KEY"
+  }
+  if (grepl("HAM", display.mode)) {
+    if (pars$depth %in% c("HAM6", "HAM8")) {
+      special.mode <- pars$depth
+      pars$colour.depth <- ifelse(special.mode == "HAM6", "12 bit", "24 bit")
+      pars$depth <- ifelse(special.mode == "HAM6", 6, 8)
+    } else {
+      special.mode <- ifelse(pars$colour.depth == "24 bit", "HAM8", "HAM6")
+    }
+  }
   if (is.list(x)) {
     if (length(x) < 2) stop("When x is a list of rasters, it will be converted to an anim. x should have a length of at least 2.")
     if (any(unlist(lapply(x, function(y) !any(c("raster", "matrix") %in% class(y)) || !all(.is.colour(y))))))
       stop("All elements of x should be a grDevices raster or a matrix of colours")
     if ("indexing" %in% names(list(...))) {
-      x <- list(...)$indexing(x = x, length.out = 2^pars$depth)
+      x <- list(...)$indexing(x = x, length.out = ifelse(special.mode %in% c("HAM6", "HAM8"),
+                                                         special.mode,
+                                                         2^pars$depth))
     } else {
-      x <- index.colours(x, length.out = 2^pars$depth)
+      x <- index.colours(x, length.out = ifelse(special.mode %in% c("HAM6", "HAM8"),
+                                                special.mode,
+                                                2^pars$depth))
     }
     pal <- attributes(x)$palette
     trans <- attributes(x)$transparent
@@ -356,7 +402,9 @@ rasterToIFF <- function(x,
   if ("depth" %in% names(list(...))) {
     bm <- rasterToBitmap(x, ...)
   } else {
-    bm <- rasterToBitmap(x, depth = pars$depth, ...)
+    bm <- rasterToBitmap(x, depth = ifelse(special.mode %in% c("HAM6", "HAM8"),
+                                           special.mode,
+                                           pars$depth), ...)
   }
   pal <- attributes(bm)$palette
   transparent <- attributes(bm)$transparent
@@ -576,7 +624,7 @@ rasterToIFF <- function(x,
   
   ## Create a BODY chunk based on the bitmap data
   body <- new("IFFChunk", chunk.type = "BODY", chunk.data = list(bm))
-  
+
   ## Create a CAMG chunk, specifying the displaymode
   camg <- .inverseViewPort(display.mode, monitor)
   disp <- .amigaViewPortModes(camg@chunk.data[[1]])
@@ -608,4 +656,32 @@ rasterToIFF <- function(x,
     hdr, cmap, camg, body
   ))
   return(ilbm)
+}
+
+.indexToHAMraster <- function(x, depth, palette, transparentColour) {
+  control.mask  <- bitwShiftL(3, depth - 2)
+  max_color     <- ifelse(depth == 8, 255, 15)
+  color_divisor <- ifelse(depth == 8, 1, 17)
+  color_multi   <- ifelse(depth == 8, 255/63, 1)
+  x <- apply(x, 1, function(y) {
+    control.flags <- 3*bitwAnd(y, control.mask)/control.mask
+    y.shift <- (y - control.mask*control.flags/3)
+    z             <- rep(NA, length(y))
+    z[control.flags == 0] <- palette[y.shift[control.flags == 0] + 1]
+    for (i in 1:length(y)) {
+      if (is.na(z[i])) {
+        z0   <- z[i - 1]
+        if (length(z0) == 0) z0 <- palette[transparentColour + 1]
+        cl   <- grDevices::col2rgb(z0)
+        z[i] <- grDevices::rgb(
+          ifelse(control.flags[i] == 2, color_multi*y.shift[i], cl["red",]/color_divisor),
+          ifelse(control.flags[i] == 3, color_multi*y.shift[i], cl["green",]/color_divisor),
+          ifelse(control.flags[i] == 1, color_multi*y.shift[i], cl["blue",]/color_divisor),
+          maxColorValue = max_color
+        )
+      }
+    }
+    z
+  })
+  as.raster(t(x))
 }

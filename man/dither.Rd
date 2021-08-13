@@ -12,11 +12,11 @@ dither(x, method, ...)
 
 \method{dither}{raster}(x, method = c("none", "floyd-steinberg", "JJN",
   "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"),
-  palette, ...)
+  palette, mode = c("none", "HAM6", "HAM8"), ...)
 
 \method{dither}{matrix}(x, method = c("none", "floyd-steinberg", "JJN",
   "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"),
-  palette, ...)
+  palette, mode = c("none", "HAM6", "HAM8"), ...)
 }
 \arguments{
 \item{x}{Original image data that needs to be dithered. Should be a raster object
@@ -32,6 +32,12 @@ no dithering is applied.}
 
 \item{palette}{A palette to which the image should be dithered. It should be a
 \code{vector} of \code{character} strings representing colours.}
+
+\item{mode}{A \code{character} string indicating whether a special
+Amiga display mode should be used when dithering. By default
+\sQuote{\code{none}} is used (no special mode). In addition,
+\sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
+See \code{\link{rasterToBitmap}} for more details.}
 }
 \value{
 Returns a \code{matrix} with the same dimensions as \code{x} containing
@@ -91,9 +97,10 @@ J. F. Jarvis, C. N. Judice, and W. H. Ninke, \emph{A survey of techniques for th
 \seealso{
 Other colour.quantisation.operations: \code{\link{index.colours}}
 
-Other raster.operations: \code{\link{as.raster}},
-  \code{\link{bitmapToRaster}},
+Other raster.operations: \code{\link{AmigaBitmapFont}},
+  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
   \code{\link{index.colours}},
+  \code{\link{rasterToAmigaBitmapFont}},
   \code{\link{rasterToBitmap}},
   \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }

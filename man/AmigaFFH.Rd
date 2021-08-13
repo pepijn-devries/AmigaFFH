@@ -26,6 +26,14 @@ The following formats are supported by this package (to some extend):
 
 \itemize{
   \item{
+    Bitmap Font (*.font). Originally fonts where stored in separate files on
+    the Amiga. An overarching *.font file contained generic information,
+    amongst others the specific pixel heights that where available for a font.
+    The actual font bitmap images where stored in separate files. There
+    was a file available for each individual font height. For more details
+    see \code{\link{AmigaBitmapFont}} and \code{\link{AmigaBitmapFontSet}}.
+  }
+  \item{
     Interchange File Format (IFF). This file format is actually a container for a wide variety of data flavours. Of which the
     following are supported:
     \itemize{
@@ -33,12 +41,12 @@ The following formats are supported by this package (to some extend):
         8SVX (8-bit sampled voices (i.e., audio)). There are no major restrictions in this package's implementation.
       }
       \item{
-        ILBM (InterLeaved BitMap images). Some specific display modes (the `hold and modify' and
-        the `extra halfbrite') are not (fully) supported yet.
-      }
-      \item{
         ANIM (animations). Not all display modes are supported as per ILBM. Furthermore, the vertical byterun
         encoding for the animation frames is the only encoding currently supported.
+      }
+      \item{
+        ILBM (InterLeaved BitMap images). Specific display modes (such as \sQuote{extra halfbrite}) can in
+        some cases be decoded, but encoding for these modes may not (yet) be supported.
       }
     }
     For more details see \code{\link{IFFChunk}}, \code{\link{interpretIFFChunk}}, \code{\link{read.iff}} and
@@ -47,17 +55,17 @@ The following formats are supported by this package (to some extend):
   \item{
     Hardware sprites. This format follows the hardware structure for displaying sprites on the screen. It is usually not used
     as a file format as such, but it can be found embedded in some files (for instance the mouse pointer is embeded as a
-    hardware sprite in the `system-configuration' file). For more details see \code{\link{hardwareSprite}}.
+    hardware sprite in the \sQuote{system-configuration} file). For more details see \code{\link{hardwareSprite}}.
+  }
+  \item{
+    System-configuration. A file that was stored in the \sQuote{devs} directory of a system disk.
+    As the file name suggests, it holds many of the systems configurations. See \link{SysConfig}
+    for more details.
   }
   \item{
     Workbench icons (*.info). Icons (i.e., graphical representation of files and directories
-    on the amiga) were stored as separate files with the extension *.info. See
+    on the Amiga) were stored as separate files with the extension *.info. See
     \code{\link{AmigaIcon}} for more details.
-  }
-  \item{
-    System-configuration. A file that was stored in the 'devs' directory of a system disk.
-    As the file name suggests, it holds many of the systems configurations. See \link{SysConfig}
-    for more details.
   }
 }
 

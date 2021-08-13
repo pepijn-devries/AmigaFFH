@@ -59,7 +59,7 @@ NULL
 #' data("amiga_display_keys")
 NULL
 
-#' A list om Amiga monitors
+#' A list of Amiga monitors
 #'
 #' This table lists Amiga monitors and corresponding \code{raw} codes that represent
 #' these monitors.
@@ -139,4 +139,24 @@ NULL
 #' }
 #' @examples
 #' data("amiga_palettes")
+NULL
+
+#' An example object for the AmigaBitmapFontSet class
+#'
+#' An example object for the \code{\link{AmigaBitmapFontSet}} class used in
+#' examples throughout this package. It also contains a nested
+#' \code{\link{AmigaBitmapFont}} class objects, which can be obtain by
+#' using \code{getAmigaBitmapFont(font_example, 9)}.
+#'
+#' The \code{font_example} contains a font that was designed as an example
+#' for this package. It holds bitmap glyphs for 8 and 9 pixels tall
+#' characters.
+#'
+#' @docType data
+#' @name font_example
+#' @format \code{font_example} is an \code{\link{AmigaBitmapFontSet}}
+#' object. For details see the object class documentation.
+#' @family AmigaBitmapFont.operations
+#' @examples
+#' data("font_example")
 NULL

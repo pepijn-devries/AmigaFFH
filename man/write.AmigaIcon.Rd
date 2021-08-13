@@ -4,18 +4,24 @@
 \alias{write.AmigaIcon}
 \title{Write an Amiga Workbench icon (info) file}
 \usage{
-write.AmigaIcon(x, file)
+write.AmigaIcon(x, file, disk = NULL)
 }
 \arguments{
 \item{x}{An \code{\link{AmigaIcon}} class object.}
 
 \item{file}{A \code{character} string representing the file name to which the
 icon data should be written.}
+
+\item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
+written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+this argument requires the adfExplorer package.
+When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns \code{NULL} or an \code{integer} status passed on by the
 \code{\link{close}} function, that is used to close the file connection.
-It is returned invisibly.
+It is returned invisibly. Or, when \code{disk} is specified, a copy of
+\code{disk} is returned to which the file is written.
 }
 \description{
 Graphical representation of files and directories (icons) are stored as
@@ -23,7 +29,7 @@ separate files (with the .info extension) on the Amiga. This function writes
 \code{\link{AmigaIcon}} class objects to such files.
 }
 \details{
-The \code{\link{AmigaIcon}} S3 object provides a comprihensive format
+The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
 for Amiga icons, which are used as a graphical representation of files
 and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
 list containing all information of an icon. Use this function to
@@ -45,8 +51,11 @@ Other AmigaIcon.operations: \code{\link{AmigaIcon}},
   \code{\link{read.AmigaIcon}},
   \code{\link{simpleAmigaIcon}}
 
-Other io.operations: \code{\link{read.AmigaIcon}},
+Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
+  \code{\link{read.AmigaBitmapFont}},
+  \code{\link{read.AmigaIcon}},
   \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaBitmapFont}},
   \code{\link{write.SysConfig}}, \code{\link{write.iff}}
 }
 \author{

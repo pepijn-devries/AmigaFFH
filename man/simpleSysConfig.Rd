@@ -4,7 +4,11 @@
 \alias{simpleSysConfig}
 \title{Function to generate a simple Amiga system-configuration representation}
 \usage{
-simpleSysConfig()
+simpleSysConfig(options)
+}
+\arguments{
+\item{options}{A named \code{list} with elements of the target
+\code{\link{SysConfig}} object that need to be modified.}
 }
 \value{
 Returns a comprehensive representation of a system-configuration file in the
@@ -17,18 +21,22 @@ system-configuration files. Use this function to create a simple \link{SysConfig
 \details{
 The Amiga used the system-configuration file to store certain system preferences
 in a binary file. In the AmigaFFH package such files can be represented by the more
-comprensive \link{SysConfig} class object. Use this function to create such an object
+comprehensive \link{SysConfig} class object. Use this function to create such an object
 with basic settings (which can be modified).
 }
 \examples{
 \dontrun{
 ## Create a simple system-configuration (S3 SysConfigClass)
-sc <- simpleSysConfig
+sc <- simpleSysConfig()
 
 ## And modify it as you wish.
 ## in this case change the setting for the printer
 ## from the parallel port to the serial port:
 sc$PrinterPort <- factor("SERIAL_PRINTER", levels(sc$PrinterPort))
+
+## It is also to provide modifications to the configuration
+## via the 'options' argument:
+sc <- simpleSysConfig(options = list(FontHeight = 9))
 }
 }
 \seealso{

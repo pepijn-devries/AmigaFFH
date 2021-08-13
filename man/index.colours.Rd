@@ -17,7 +17,13 @@ have identical dimensions. An overall palette will be generated for elements in 
 list.}
 
 \item{length.out}{A \code{numeric} value indicating the number of desired
-colours in the indexed palette.}
+colours in the indexed palette.
+
+It can also be a \code{character} string indicating which special
+Amiga display mode should be used when indexing colours.
+\sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
+See \code{\link{rasterToBitmap}} for more details on these
+special modes.}
 
 \item{palette}{A vector of no more than \code{length.out} colours, to be used
 for the bitmap image. When missing or set to \code{NULL}, a palette will be
@@ -38,7 +44,11 @@ is applied. See \code{\link{dither}} for more details.}
 
 \item{colour.depth}{A \code{character} string indicating the colour depth to be used.
 Can be either "\code{12 bit}" (default, standard on an Amiga with original chipset),
-or "\code{24 bit}".}
+or "\code{24 bit}".
+
+This argument is overruled when \code{length.out} is set to \dQuote{\code{HAM6}}
+or \dQuote{\code{HAM8}}. In that case the colour depth linked to that special mode
+is used (12 bit for HAM6, 24 bit for HAM8).}
 
 \item{...}{Arguments that are passed onto \code{\link[stats]{kmeans}} (see
 \code{palette} argument).}
@@ -89,8 +99,10 @@ plot(volcano.dith, interpolate = F)
 \seealso{
 Other colour.quantisation.operations: \code{\link{dither}}
 
-Other raster.operations: \code{\link{as.raster}},
-  \code{\link{bitmapToRaster}}, \code{\link{dither}},
+Other raster.operations: \code{\link{AmigaBitmapFont}},
+  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
+  \code{\link{dither}},
+  \code{\link{rasterToAmigaBitmapFont}},
   \code{\link{rasterToBitmap}},
   \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }
