@@ -28,7 +28,7 @@
 #' 
 #' Although the IFF format is still in use, and new standardised chunk types can
 #' still be registered, this package will focus on the older chunk types that
-#' were primarely used on the Commodore Amiga (OS <= 3.0). IFF files could
+#' were primarily used on the Commodore Amiga (OS <= 3.0). IFF files could
 #' contain any kind of information. It could contain bitmap images, but also
 #' audio clips or (formatted) texts.
 #' 
@@ -124,7 +124,7 @@ setClass("IFFChunk",
 #' @author Pepijn de Vries
 #' @export
 read.iff <- function(file) {
-  if (class(file) == "character") con <- file(file, "rb")
+  if ("character" %in% class(file)) con <- file(file, "rb")
   if ("connection" %in% class(file)) {
     con_info <- summary(con)
     if (con_info$`can read` != "yes" || con_info$text != "binary") stop("file is not a connection from which binary data can be read...")
@@ -139,7 +139,7 @@ read.iff <- function(file) {
     if (length(chunk) == 0) break
   }
   result <- .rawToIFFChunk(file.data)
-  if (class(file) == "character") close(con)
+  if ("character" %in% class(file)) close(con)
   if (length(result) == 1) return(result[[1]])
   return (result)
 }
@@ -178,7 +178,7 @@ setMethod("as.raw", "IFFChunk", function(x) {
     result <- charToRaw(y@chunk.type)
     if (class(y@chunk.data[[1]]) == "raw") {
       ## only store chunk size if parent is not a container (i.e., FORM, LIST or CAT)
-      if (!parent.is.container) result <- c(result, adfExplorer::amigaIntToRaw(length(y@chunk.data[[1]]), 32, F))
+      if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(y@chunk.data[[1]]), 32, F))
       result <- c(result, y@chunk.data[[1]])
       ## Chunks should always be WORD aligned (pad with zeros if
       ## it is not):
@@ -189,7 +189,7 @@ setMethod("as.raw", "IFFChunk", function(x) {
       dat <- unlist(lapply(y@chunk.data, get.data,
                            parent.is.container = container))
       ## only store chunk size if parent is not a container (i.e., FORM, LIST, CAT or PROP)
-      if (!parent.is.container) result <- c(result, adfExplorer::amigaIntToRaw(length(dat), 32, F))
+      if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(dat), 32, F))
       result <- c(result, dat)
     } else {
       stop("IFFChunk contains invalid data")
@@ -261,7 +261,7 @@ setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric(
 #' \code{IFFChunk} objects have 4 \code{character} identifiers, indicating what type
 #' of chunk you are dealing with. These chunks can be nested inside of each other.
 #' Use this method to extract specific chunks by referring to there respective
-#' identifiers. The idintifiers are shown when calling \code{print} on an
+#' identifiers. The identifiers are shown when calling \code{print} on an
 #' \code{\link{IFFChunk}}. If a specified path doesn't exist, this method throws a
 #' `subscript out of range' error.
 #'
@@ -426,7 +426,7 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
-setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
+setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
   type <- x@chunk.type
   if (class(x@chunk.data[[1]]) != "raw") sub.types <- unlist(lapply(x@chunk.data, function(x) x@chunk.type))
   dat  <- x@chunk.data[[1]]
@@ -446,41 +446,45 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
       dlta <- x@chunk.data[sub.types %in% "DLTA"][[1]]@chunk.data[[1]]
       wbm <- with(anhd, w + (-w %% 16))
       if (anhd$operation == "ByteVerticalCompression") {
-        return(.byteVerticalDecompression(dlta, wbm, anhd$h, anhd$interleave, anhd$flags[2], list(...)$hidden)[,0:anhd$w])
+        result <- .byteVerticalDecompression(dlta, wbm, anhd$h, anhd$interleave, anhd$flags[2], list(...)$hidden)
+        cl <- class(result)
+        result <- result[,0:anhd$w]
+        class(result) <- cl
+        return(result)
       } else {
         stop("Sorry this animation format is not (yet) supported by this package.")
       }
     }
     if ("hidden" %in% names(list(...))) {
-      result <- AmigaFFH::as.raster(x, palette = NULL)
+      result <- grDevices::as.raster(x, palette = NULL)
     } else {
-      result <- AmigaFFH::as.raster(x)
+      result <- grDevices::as.raster(x)
     }
     class(result) <- c("IFF.ILBM", "IFF.ANY", class(result))
     return(result)
   } else if (type == "CMAP") {
     ## COLOUR MAP
     ## when all low bits are 0 assume 12 bit, otherwise asume 24 bit
-    colour.depth  <- ifelse(all(loNybble(x@chunk.data[[1]]) == 0), "12 bit", "24 bit")
+    colour.depth  <- ifelse(all(ProTrackR::loNybble(x@chunk.data[[1]]) == 0), "12 bit", "24 bit")
     result        <- amigaRawToColour(dat, colour.depth, "3")
     class(result) <- c("IFF.CMAP", "IFF.ANY")
     return(result)
   } else if(type == "BMHD") {
     ## BITMAP HEADER
     result <- list(
-      w                  = adfExplorer::rawToAmigaInt(dat[1:2],   16, F),
-      h                  = adfExplorer::rawToAmigaInt(dat[3:4],   16, F),
-      x                  = adfExplorer::rawToAmigaInt(dat[5:6],   16, T),
-      y                  = adfExplorer::rawToAmigaInt(dat[7:8],   16, T),
-      nPlanes            = adfExplorer::rawToAmigaInt(dat[9],     8, F),
-      Masking            = adfExplorer::rawToAmigaInt(dat[10],    8, F),
-      Compression        = adfExplorer::rawToAmigaInt(dat[11],    8, F),
+      w                  = .rawToAmigaInt(dat[1:2],   16, F),
+      h                  = .rawToAmigaInt(dat[3:4],   16, F),
+      x                  = .rawToAmigaInt(dat[5:6],   16, T),
+      y                  = .rawToAmigaInt(dat[7:8],   16, T),
+      nPlanes            = .rawToAmigaInt(dat[9],     8, F),
+      Masking            = .rawToAmigaInt(dat[10],    8, F),
+      Compression        = .rawToAmigaInt(dat[11],    8, F),
       pad                = dat[12],
-      transparentColour  = adfExplorer::rawToAmigaInt(dat[13:14], 16, F),
-      xAspect            = adfExplorer::rawToAmigaInt(dat[15],    8, F),
-      yAspect            = adfExplorer::rawToAmigaInt(dat[16],    8, F),
-      pageWidth          = adfExplorer::rawToAmigaInt(dat[17:18], 16, T),
-      pageHeight         = adfExplorer::rawToAmigaInt(dat[19:20], 16, T)
+      transparentColour  = .rawToAmigaInt(dat[13:14], 16, F),
+      xAspect            = .rawToAmigaInt(dat[15],    8, F),
+      yAspect            = .rawToAmigaInt(dat[16],    8, F),
+      pageWidth          = .rawToAmigaInt(dat[17:18], 16, T),
+      pageHeight         = .rawToAmigaInt(dat[19:20], 16, T)
     )
     if (result$Masking > 3) result$Masking <- 4
     result$Masking <- c("mskNone", "mskHasMask", "mskHasTransparentColour", "mskLasso", "mskUnknown")[result$Masking + 1]
@@ -497,10 +501,10 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
     ## DPaint colour range (used for colour cycling)
     result <- list(
       padding = dat[1:2],
-      rate    = adfExplorer::rawToAmigaInt(dat[3:4], 16, F)*60/(2^14), ## steps per second
-      flags   = adfExplorer::rawToAmigaInt(dat[5:6], 16, F),
-      low     = adfExplorer::rawToAmigaInt(dat[7], 8, F),
-      high    = adfExplorer::rawToAmigaInt(dat[8], 8, F)
+      rate    = .rawToAmigaInt(dat[3:4], 16, F)*60/(2^14), ## steps per second
+      flags   = .rawToAmigaInt(dat[5:6], 16, F),
+      low     = .rawToAmigaInt(dat[7], 8, F),
+      high    = .rawToAmigaInt(dat[8], 8, F)
     )
     result$flags[result$flags > 2] <- 2
     result$flags <- c("RNG_OFF", "RNG_ACTIVE", "RNG_REVERSE", "RNG_UNKNOWN")[result$flags + 1]
@@ -540,17 +544,17 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
     return(result)
   } else if (type == "ANHD") {
     result <- list(
-      operation       = adfExplorer::rawToAmigaInt(dat[1], 8, F),
-      mask            = as.logical(adfExplorer::rawToBitmap(dat[2], F, F)),
-      w               = adfExplorer::rawToAmigaInt(dat[3:4], 16, F),
-      h               = adfExplorer::rawToAmigaInt(dat[5:6], 16, F),
-      x               = adfExplorer::rawToAmigaInt(dat[7:8], 16, T),
-      y               = adfExplorer::rawToAmigaInt(dat[9:10], 16, T),
-      abstime         = adfExplorer::rawToAmigaInt(dat[11:14], 32, T),
-      reltime         = adfExplorer::rawToAmigaInt(dat[15:18], 32, T),
-      interleave      = adfExplorer::rawToAmigaInt(dat[19], 8, F),
+      operation       = .rawToAmigaInt(dat[1], 8, F),
+      mask            = as.logical(.rawToBitmap(dat[2], F, F)),
+      w               = .rawToAmigaInt(dat[3:4], 16, F),
+      h               = .rawToAmigaInt(dat[5:6], 16, F),
+      x               = .rawToAmigaInt(dat[7:8], 16, T),
+      y               = .rawToAmigaInt(dat[9:10], 16, T),
+      abstime         = .rawToAmigaInt(dat[11:14], 32, T),
+      reltime         = .rawToAmigaInt(dat[15:18], 32, T),
+      interleave      = .rawToAmigaInt(dat[19], 8, F),
       pad0            = dat[20],
-      flags           = as.logical(rawToBitmap(dat[21:24], F, T)),
+      flags           = as.logical(.rawToBitmap(dat[21:24], F, T)),
       pad1            = dat[25:40]
     )
     if (result$operation > 7) result$operation <- "UnknownMode" else
@@ -565,17 +569,17 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
   } else if (type == "DPAN") {
     ## DPaint Animation chunk, is only used to determine number of animation frames
     result <- list(
-      version         = adfExplorer::rawToAmigaInt(dat[1:2], 16, F),
-      nframes         = adfExplorer::rawToAmigaInt(dat[3:4], 16, F),
-      flags           = as.logical(adfExplorer::rawToBitmap(dat[5:8], F, T))
+      version         = .rawToAmigaInt(dat[1:2], 16, F),
+      nframes         = .rawToAmigaInt(dat[3:4], 16, F),
+      flags           = as.logical(.rawToBitmap(dat[5:8], F, T))
     )
     return(result)
   } else if (type == "VHDR") {
-    result <- as.list(adfExplorer::rawToAmigaInt(dat[1:(3*4)], 32, F))
+    result <- as.list(.rawToAmigaInt(dat[1:(3*4)], 32, F))
     result <- c(result,
-                adfExplorer::rawToAmigaInt(dat[13:14], 16, F),
-                adfExplorer::rawToAmigaInt(dat[15:16], 8, F),
-                adfExplorer::rawToAmigaInt(dat[17:20], 32, F))
+                .rawToAmigaInt(dat[13:14], 16, F),
+                .rawToAmigaInt(dat[15:16], 8, F),
+                .rawToAmigaInt(dat[17:20], 32, F))
     names(result) <- c("oneShotHiSamples",
                        "repeatHiSamples",
                        "samplesPerHiCycle",
@@ -588,7 +592,7 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
     class(result) <- c("IFF.VHDR", "IFF.ANY")
     return(result)
   } else if (type == "CHAN") {
-    result <- which(c(2, 4, 6) %in% adfExplorer::rawToAmigaInt(dat, 32, F))[[1]]
+    result <- which(c(2, 4, 6) %in% .rawToAmigaInt(dat, 32, F))[[1]]
     if (length(result) == 0) result <- list(channel = "UNKOWN") else
       result <- list(channel = c("LEFT", "RIGHT", "STEREO")[result])
     class(result) <- c("IFF.CHAN", "IFF.ANY")
@@ -616,7 +620,7 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
         l <- ((vhdr$oneShotHiSamples + vhdr$repeatHiSamples)*(2^(y - 1)))
         result <- body[samp.offset + (1:l)]
         samp.offset <<- samp.offset + l
-        adfExplorer::rawToAmigaInt(result, 8, T) + 128
+        .rawToAmigaInt(result, 8, T) + 128
       })
     })
     ## wav will be a list of one or more Wave objects.
@@ -643,7 +647,7 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
     return(dat)
   } else if (type %in% c("ANNO", "AUTH", "CHRS", "NAME", "TEXT", "(c) ")) {
     ## These are simply just ASCII texts, return them as such...
-    result <- ProTrackR::rawToCharNull(dat)
+    result <- .rawToCharNull(dat)
     type[type == "(c) "] <- "copyright"
     class(result) <- c(paste0("IFF.", type), "IFF.ANY")
     return(result)
@@ -661,7 +665,7 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
 #' IFF data is stored in a \code{\link{IFFChunk-class}} object when read from an
 #' IFF file (\code{\link{read.iff}}). These objects reflect the file structure
 #' well, but the data is stored as \code{raw} information. IFF files can contain
-#' a wide variaty of information types, ranging from bitmap images to audio
+#' a wide variety of information types, ranging from bitmap images to audio
 #' clips. The raw information stored in \code{\link{IFFChunk}} objects can
 #' be interpreted into more meaningfull representations that can be handled in
 #' R. This is achieved with the \code{\link{interpretIFFChunk}} method, which
@@ -671,9 +675,9 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
 #' IFF Chunk, but are easier to handle in R. The interpretation method is lossy
 #' and may not preserve all information in the \code{IFF.ANY} object.
 #' The \code{\link{IFFChunk-method}} can coerce \code{IFF.ANY} back
-#' to the more stricktly defined \code{\link{IFFChunk-class}} objects.
+#' to the more strictly defined \code{\link{IFFChunk-class}} objects.
 #' Be careful with conversions between \code{\link{IFFChunk-class}} and
-#' \code{IFF.ANY} objects and vice vers, as information may get lost.
+#' \code{IFF.ANY} objects and vice versa, as information may get lost.
 #' 
 #' More detailed information about IFF chunks can be found in the IFF chunk registry
 #' (see references).
@@ -790,7 +794,7 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
 #'           }
 #'           \item{
 #'             \code{x} and \code{y} are \code{numeric} values specifying the plotting
-#'             possition relative to the topleft position of the screen.
+#'             position relative to the top left position of the screen.
 #'             Although required in the bitmap header. It is ignored in the
 #'             interpretation of bitmap images.
 #'           }
@@ -847,13 +851,13 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
 #'       }
 #'       \item{
 #'         \code{IFF.CMAP} represents the colour map (CMAP) or palette of a bitmap image. Although common,
-#'         the chunk is optional and can be omitted from the ILBM parent chunk. It is interpreted as a
+#'         the chunk is optional and can be omitted from the parent ILBM chunk. It is interpreted as a
 #'         vector of colours (i.e., a \code{character} string formatted as `#RRGGBB' or named colours such as `blue').
 #'       }
 #'       \item{
 #'         \code{IFF.CAMG} represents a chunk with information with respect
 #'         to the display mode in which the bitmap image should be displayed.
-#'         This information can be used to determin the correct pixel aspect
+#'         This information can be used to determine the correct pixel aspect
 #'         ratio, or is sometimes required to correctly interpret the bitmap
 #'         information. The \code{IFF.CAMG} chunk is intepreted as a named list
 #'         containing the following elements:
@@ -968,7 +972,7 @@ setMethod("interpretIFFChunk", c("IFFChunk"), function(x, ...) {
 #'   \item{
 #'     \code{IFF.ANNO}, \code{IFF.AUTH}, \code{IFF.CHRS}, \code{IFF.NAME}, \code{IFF.TEXT} and \code{IFF.copyright}
 #'     are all unformatted text chunks that can be included optionally in any of the chunk types. Respectively, they
-#'     represent an annotation, the author's name, a generic character string, the name of the work, generic unformated text,
+#'     represent an annotation, the author's name, a generic character string, the name of the work, generic unformatted text,
 #'     and copyright text. They are interpreted as a \code{character} string.
 #'   }
 #' }
@@ -1228,8 +1232,14 @@ IFFChunk.IFF.copyright <- function(x, ...) {
 #' @name plot
 #' @param x An AmigaFFH object to be plotted. See usage section for supported object
 #' classes.
-#' @param y This argument is inherited from the generic plot-function but is currently
-#' ignored in this package.
+#' @param y When \code{x} is an \code{AmigaIcon} class object, \code{y} can be used as
+#' an index. In that case, when \code{y=1} the first icon image is shown. When \code{y=2}
+#' the selected icon image is shown.
+#' @param asp A \code{numeric} value indicating the aspect ratio for the plot. For
+#' many AmigaFFH, the aspect ratio will be based on the Amiga display mode when known.
+#' For \code{\link{AmigaIcon}} objects a default aspect ratio of \code{2} is used (tall
+#' pixels).
+#' A custom aspect ratio can also be used.
 #' @param ... Parameters passed onto the generic \code{graphics} plotting routine.
 #' @return Returns \code{NULL} silently.
 #' @examples
@@ -1294,7 +1304,7 @@ as.list.IFFChunk <- function(x, ...) {
                                chunk.type = chunk.type,
                                chunk.data = .rawToIFFChunk(x[(offset + 1):length(x)]))))
     }
-    chunk.size <- adfExplorer::rawToAmigaInt(x[offset + 5:8], 32, F)
+    chunk.size <- .rawToAmigaInt(x[offset + 5:8], 32, F)
     offset <- offset + 8
     chunk.data <- x[offset + 1:chunk.size]
     offset <- offset + chunk.size
@@ -1302,6 +1312,8 @@ as.list.IFFChunk <- function(x, ...) {
     if ((offset %% 2) == 1) offset <- offset + 1
     if (chunk.type %in% "FORM") { ## contains nested chunks, the container directly following 'FORM' will not specify the chunk length (hence the skip)
       chunk.data <- .rawToIFFChunk(chunk.data, skip.size = T)
+    } else if (chunk.type %in% c("ILBM", "8SVX", "ANIM")) {
+      chunk.data <- .rawToIFFChunk(chunk.data, skip.size = F)
     }
     if (class(chunk.data) == "raw") chunk.data <- list(chunk.data)
     chunks[[length(chunks) + 1]] <- methods::new("IFFChunk",
@@ -1314,3 +1326,48 @@ as.list.IFFChunk <- function(x, ...) {
 .text.chunk <- function(x, type, ...) {
   return(new("IFFChunk", chunk.type = type, chunk.data = list(charToRaw(x))))
 }
+
+setGeneric("rawToIFFChunk", function(x) standardGeneric("rawToIFFChunk"))
+
+#' Coerce raw data to an IFFChunk class object
+#'
+#' Coerce raw data, as it would be stored in the Interchange File Format (IFF), and
+#' convert it into an \code{\link{IFFChunk}} class object.
+#'
+#' This method should work for all IFF chunk types that are implemented in this package
+#' (see \code{\link{IFFChunk-method}} for details). For non-implemented chunks this method
+#' may work properly as long as the chunks are nested inside a FORM type container chunk.
+#' This method is provided for your convenience, but it is recommended to import IFFChunk
+#' methods using the \code{\link{read.iff}} function. Use \code{\link[AmigaFFH]{as.raw}}
+#' to achieve the inverse of this method.
+#'
+#' @docType methods
+#' @rdname rawToIFFChunk
+#' @name rawToIFFChunk
+#' @aliases rawToIFFChunk,raw-method
+#' @param x A vector of raw data that needs to be converted into a \code{\link{IFFChunk}}
+#' class object.
+#' @return Returns an \code{\link{IFFChunk}} class object based on \code{x}.
+#' @examples
+#' \dontrun{
+#' ## Get an IFFChunk object:
+#' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
+#' 
+#' ## Coerce it to raw data:
+#' example.raw <- as.raw(example.iff)
+#' 
+#' ## Coerce raw data to IFF chunk:
+#' example.iff.new <- rawToIFFChunk(example.raw)
+#' 
+#' ## These conversions were non-destructive:
+#' identical(example.iff, example.iff.new)
+#' }
+#' @family iff.operations
+#' @family raw.operations
+#' @author Pepijn de Vries
+#' @export
+setMethod("rawToIFFChunk", "raw", function(x) {
+  result <- .rawToIFFChunk(x)
+  if (length(result) == 1) result <- result[[1]]
+  return(result)
+})

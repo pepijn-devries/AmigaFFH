@@ -25,7 +25,7 @@
 #' hardware sprites on the Commodore Amiga.
 #'
 #' Amiga hardware supported sprites, which are graphical objects that
-#' could be moved around the display and indepently from eachother.
+#' could be moved around the display and independently from each other.
 #' Basic sprites were 16 pixels wide and any number of pixels high and
 #' were composed of four colours, of which one is transparent.
 #' 
@@ -138,15 +138,16 @@ setGeneric("rawToHWSprite", function(x, col) standardGeneric("rawToHWSprite"))
 #' spr <- rawToHWSprite(dat, c("#EE4444", "#000000", "#EEEECC"))
 #' plot(spr, interpolate = FALSE)
 #' @family raw.operations
+#' @family HWSprite.operations
 #' @author Pepijn de Vries
 #' @export
 setMethod("rawToHWSprite", c("raw", "missing"), function(x, col) {
   result <- methods::new("hardwareSprite")
-  result@HStart <- adfExplorer::rawToAmigaInt(x[1], 8, F)
-  result@VStart <- adfExplorer::rawToAmigaInt(x[2], 8, F)
-  result@VStop  <- adfExplorer::rawToAmigaInt(x[3], 8, F)
+  result@HStart <- .rawToAmigaInt(x[1], 8, F)
+  result@VStart <- .rawToAmigaInt(x[2], 8, F)
+  result@VStop  <- .rawToAmigaInt(x[3], 8, F)
   if (result@VStop == 0) result@VStop <- 16 ## This appears to be the case for the mouse pointer. Check if this is always the case
-  result@control.bits <- as.logical(adfExplorer::rawToBitmap(x[4], invert.longs = F))
+  result@control.bits <- as.logical(.rawToBitmap(x[4], invert.longs = F))
   vlen <- result@VStop - result@VStart
   result@bitmap <- x[4 + 1:(vlen*4)]
   offset <- vlen*4 + 4
@@ -173,10 +174,12 @@ setMethod("rawToHWSprite", c("raw", "character"), function(x, col) {
 #' @name as.raster
 #' @aliases as.raster,hardwareSprite-method
 #' @export
-setMethod("as.raster", c("hardwareSprite"), function(x, background = "#AAAAAA", ...) {
+as.raster.hardwareSprite <- function(x, background = "#AAAAAA", ...) {
+  ## Make sure that background is a valid color
+  background <- grDevices::adjustcolor(background)
   cols <- c(background, x@colours)
   return(bitmapToRaster(x@bitmap, 16, length(x@bitmap)*8/(2*16), 2, cols)) # assume 2 bitplanes
-})
+}
 
 #' @rdname plot
 #' @name plot
@@ -191,8 +194,8 @@ plot.hardwareSprite <- function(x, y, ...) {
 #' @export
 setMethod("as.raw", "hardwareSprite", function(x) {
   result <- c(
-    adfExplorer::amigaIntToRaw(c(x@HStart, x@VStart, x@VStop), 8, F),
-    adfExplorer::bitmapToRaw(x@control.bits, invert.longs = F, invert.bytes = F),
+    .amigaIntToRaw(c(x@HStart, x@VStart, x@VStop), 8, F),
+    .bitmapToRaw(x@control.bits, invert.longs = F, invert.bytes = F),
     x@bitmap,
     x@end.of.data
   )
@@ -208,3 +211,89 @@ print.hardwareSprite <- function(x, ...) {
 setMethod("show", "hardwareSprite", function(object){
   print(object)
 })
+
+#' Convert a raster object into an hardwareSprite object
+#'
+#' Convert a grDevices raster object into an Amiga hardwareSprite class object.
+#'
+#' A \code{\link{grDevices}} raster image can be converted into a
+#' \code{\link{hardwareSprite}} class object with this function. For this purpose
+#' the any true-colour image will be converted to an indexed palette with 4 colours.
+#' The Amiga hardware sprite will reserve one of the colours as transparent. Thos function
+#' will use fully transparent colours in the original image (i.e., the alpha level equals 0)
+#' for this purpose. Or when the image has no fully transparent colours, it will use the
+#' most frequently occuring colour (at least when the default \code{indexing} function
+#' is used).
+#'
+#' @rdname rasterToHWSprite
+#' @name rasterToHWSprite
+#' @param x A \code{\link{grDevices}} raster object (\code{\link[grDevices]{as.raster}})
+#' that needs to be converted into a \code{\link{hardwareSprite}} class object.
+#' Note that a \code{\link{hardwareSprite}} has a maximum width of 16 pixels.
+#' When \code{x} is wider, it will be cropped.
+#' @param indexing A function that accepts two arguments: \code{x} (a grDevices
+#' \code{raster} object); \code{length.out}, a numeric value indicating the
+#' desired size of the palette (i.e., the number of colours). It should return
+#' a matrix with numeric palette indices (ranging from 1 up to the number of
+#' colours in the palette). The result should have an attribute named `palette' that
+#' contains the colours that correspond with the index numbers. The result should
+#' also carry an attribute with the name `transparent', with a single numeric value
+#' representing which colour in the palette should be treated as transparent (or
+#' \code{NA} when no transparency is required). By default the
+#' function \code{\link{index.colours}} is used.
+#' @return Returns a \code{\link{hardwareSprite}} class object based on \code{x}
+#' @examples
+#' \dontrun{
+#' ## first create a raster object that can be used as input
+#' ## (making sure that the background is transparent):
+#' rst <- as.raster(simpleSysConfig()$PointerMatrix, "#AAAAAA00")
+#' 
+#' ## now turn it into a hardware sprite:
+#' spr <- rasterToHWSprite(rst)
+#' 
+#' ## and plot it as a check:
+#' plot(spr)
+#' }
+#' @family raster.operations
+#' @family HWSprite.operations
+#' @author Pepijn de Vries
+#' @export
+rasterToHWSprite <- function(x, indexing = index.colours) {
+  if (!("raster" %in% class(x))) stop ("x should be of class raster")
+  if (class(indexing) != "function") stop("'indexing' should be a function")
+  if (!all(c("x", "length.out") %in% names(formals(indexing)))) stop("Function 'indexing' should require arguments 'x' and 'length.out'.")
+  if (dim(x)[2] > 16) {
+    warning("Raster is more then 16 pixels wide. It will be cropped.")
+    x <- x[,1:16]
+  }
+  pal <- NULL
+  bm <- rasterToBitmap(x, 2, indexing = function(x, length.out) {
+    result <- indexing(x, length.out)
+    pal   <<- attributes(result)[["palette"]]
+    trans <- attributes(result)[["transparent"]]
+    ## make sure that the transparent colour is the first colour in the palette:
+    if (!is.na(trans) && trans != 1) {
+      result[result == 1] <- -1
+      result[result == trans] <- 1
+      result[result == -1] <- trans
+      pal[c(1, trans)] <<- pal[c(trans, 1)]
+      trans <- 1
+    }
+    attributes(result)[["palette"]] <- pal
+    attributes(result)[["transparent"]] <- trans
+    result
+  })
+  bm <- .bitmapToRaw(bm, T, F)
+  result <- new("hardwareSprite",
+                VStop   = dim(x)[1],
+                bitmap  = bm,
+                colours = pal[-1])
+  result
+}
+
+#' @export
+dim.hardwareSprite <- function(x) {
+  result <- x@VStop - x@VStart
+  result[result == 0] <- 16
+  c(result, 16)
+}

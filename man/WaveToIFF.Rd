@@ -37,13 +37,13 @@ Convert \code{\link[tuneR]{WaveMC}} objects (or objects that can be coerced to
 can be stored as a valid Iterchange File Format (\code{\link{write.iff}}).
 }
 \details{
-\code{\link[tuneR]{WaveMC}} objects can be read from contempory file containers
+\code{\link[tuneR]{WaveMC}} objects can be read from contemporary file containers
 with \code{\link[tuneR]{readWave}} or \code{\link[tuneR]{readMP3}}. With this
 function such objects can be converted into an \code{\link{IFFChunk-class}} object
 which can be stored conform the Interchange File Format (\code{\link{write.iff}}).
 
 When \code{x} is not a pcm formatted 8-bit sample, \code{x} will first be
-normalized and scaled to a pcm-formatted 8-bit sample using
+normalised and scaled to a pcm-formatted 8-bit sample using
 \code{\link[tuneR]{normalize}}. If you don't like the result you need to convert
 the sample to 8-bit pcm yourself before calling this function.
 }
@@ -75,8 +75,8 @@ Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{as.raster}}, \code{\link{as.raw}},
   \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{read.iff}},
-  \code{\link{write.iff}}
+  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
+  \code{\link{read.iff}}, \code{\link{write.iff}}
 }
 \author{
 Pepijn de Vries

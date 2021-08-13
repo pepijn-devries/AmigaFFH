@@ -21,7 +21,7 @@ The image will be composed of \code{2^depth} indexed colours.}
 
 \item{palette}{A \code{vector} of \code{2^depth} colours, to be used for the indexed
 colours of the bitmap image. By default, a grayscale palette is used.
-When explicitely set to \code{NULL}, this function returns a matrix with palette index
+When explicitly set to \code{NULL}, this function returns a matrix with palette index
 values.}
 
 \item{interleaved}{A \code{logical} value, indicating whether the bitmap is interleaved.
@@ -42,7 +42,7 @@ Bitmap images stored as raw data, representing palette index colours, can
 be converted into raster data (\code{\link[grDevices]{as.raster}}). The latter
 data can easily be plotted in R. It is usually not necessary to call this function
 directly, as there are several more convenient wrappers for this function. Those
-wrappers can convert specfic file formats (such as IFF ILBM and Hardware Sprites,
+wrappers can convert specific file formats (such as IFF ILBM and Hardware Sprites,
 see \code{\link[AmigaFFH]{as.raster}}) into raster objects. This function is
 provided for completeness sake (or for when you want to search for images in an
 amiga memory dump).
@@ -86,7 +86,8 @@ plot(example.raster, interpolate = FALSE)
 \seealso{
 Other raster.operations: \code{\link{as.raster}},
   \code{\link{dither}}, \code{\link{index.colours}},
-  \code{\link{rasterToBitmap}}, \code{\link{rasterToIFF}}
+  \code{\link{rasterToBitmap}},
+  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }
 \author{
 Pepijn de Vries

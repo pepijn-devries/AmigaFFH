@@ -40,13 +40,17 @@ write.iff(example.iff, file.path(tempdir(), "image.iff"))
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 }
 \seealso{
-Other io.operations: \code{\link{read.iff}}
+Other io.operations: \code{\link{read.AmigaIcon}},
+  \code{\link{read.SysConfig}}, \code{\link{read.iff}},
+  \code{\link{write.AmigaIcon}},
+  \code{\link{write.SysConfig}}
 
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
   \code{\link{as.raw}}, \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{read.iff}}
+  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
+  \code{\link{read.iff}}
 }
 \author{
 Pepijn de Vries

@@ -13,7 +13,7 @@
 #'
 #' @docType data
 #' @name amiga_display_modes
-#' @format a \code{data.frame} with 4 columns:
+#' @format A \code{data.frame} with 4 columns:
 #' \itemize{
 #'   \item{The column named `DISPLAY_MODE': a \code{factor} reflecting
 #'   the display mode}
@@ -72,7 +72,7 @@ NULL
 #'
 #' @docType data
 #' @name amiga_monitors
-#' @format a \code{data.frame} with 2 columns:
+#' @format A \code{data.frame} with 2 columns:
 #' \itemize{
 #'   \item{The column named `MONITOR_ID': a \code{factor} representing an Amiga monitor}
 #'   \item{The column named `CODE': A \code{list} containing a \code{vector} of 4
@@ -88,8 +88,8 @@ NULL
 #' This file is provided to demonstrate the structure of an Interchange File
 #' Format and is used in several examples throughout this package.
 #'
-#' The Interchange File Format stores information compartimentally in separate
-#' containers called called `chunks'. This file demonstrates how a bitmap image
+#' The Interchange File Format stores information compartmentally in separate
+#' containers called `chunks'. This file demonstrates how a bitmap image
 #' is stored in this format. In addition to the raw bitmap data, the file
 #' also contains meta-information on the bitmap dimensions, its colour palette and
 #' the display mode that should be used on an Amiga. See also
@@ -110,4 +110,33 @@ NULL
 #' }
 #' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 #' @references \url{http://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
+NULL
+
+#' Commonly used palettes on the Commodore Amiga
+#'
+#' \code{amiga_palettes} is a named list, where each element represents a commonly
+#' used palette on the Commodore Amiga.
+#'
+#' Some files that contain bitmap images with an indexed palette did not store the
+#' palette in the same file. Amiga Workbench icons (\code{\link{AmigaIcon}}) for instance
+#' only store the index values of the palette, but not the palette itself.
+#' \code{amiga_palettes} therefore provides some commonly used palettes on the Amiga,
+#' such that these files can be interpreted.
+#'
+#' @docType data
+#' @name amiga_palettes
+#' @format A named list with the following elements:
+#' \itemize{
+#'   \item{\code{wb.os1}: A \code{vector} of 4 colours that where used as the default
+#'   palette of the Workbench on Amiga OS 1.x.}
+#'   \item{\code{wb.os2}: A \code{vector} of 8 colours. The first 4 colours are the default
+#'   colours of a standard Workbench on Amiga OS 2.x. The latter 4 are additional
+#'   colours used by the Workbench expansion MagicWB.}
+#'   \item{\code{spr.os1}: A \code{vector} of 3 colours that where used by default
+#'   for a mouse pointer sprite on Amiga OS 1.x.}
+#'   \item{\code{spr.os2}: A \code{vector} of 3 colours that where used by default
+#'   for a mouse pointer sprite on Amiga OS 2.x.}
+#' }
+#' @examples
+#' data("amiga_palettes")
 NULL

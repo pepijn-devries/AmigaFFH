@@ -11,8 +11,8 @@ This file is provided to demonstrate the structure of an Interchange File
 Format and is used in several examples throughout this package.
 }
 \details{
-The Interchange File Format stores information compartimentally in separate
-containers called called `chunks'. This file demonstrates how a bitmap image
+The Interchange File Format stores information compartmentally in separate
+containers called `chunks'. This file demonstrates how a bitmap image
 is stored in this format. In addition to the raw bitmap data, the file
 also contains meta-information on the bitmap dimensions, its colour palette and
 the display mode that should be used on an Amiga. See also

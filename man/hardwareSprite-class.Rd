@@ -11,7 +11,7 @@ hardware sprites on the Commodore Amiga.
 }
 \details{
 Amiga hardware supported sprites, which are graphical objects that
-could be moved around the display and indepently from eachother.
+could be moved around the display and independently from each other.
 Basic sprites were 16 pixels wide and any number of pixels high and
 were composed of four colours, of which one is transparent.
 

@@ -67,7 +67,7 @@ colourToAmigaRaw <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
   }
   if (colour.depth == "24 bit") col <- col/16
   if (n.bytes == "3") {
-    as.vector(apply(col, 2, function(y) adfExplorer::amigaIntToRaw(16*y, 8, F)))
+    as.vector(apply(col, 2, function(y) .amigaIntToRaw(16*y, 8, F)))
   } else {
     as.vector(apply(col, 2, function(y) as.raw(c(y[1], y[2]*16 + y[3]))))
   }
@@ -84,15 +84,15 @@ amigaRawToColour <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
   if (n.bytes == "2" && (length(x) %% 2) != 0) stop("x should be a vector of even length.")
   if (n.bytes == "3" && (length(x) %% 3) != 0) stop("x should be a vector with a multiple length of 3.")
   if (colour.depth == "24 bit" && n.bytes == "2") stop("3 bytes are required to store 24 bit colours!")
-  hi <- ProTrackR::hiNybble(x)
-  lo <- ProTrackR::loNybble(x)
+  hi <- .hiNybble(x)
+  lo <- .loNybble(x)
   if (colour.depth == "24 bit" && n.bytes == "3") {
     sq <- seq(1, to = length(x), by = 3)
-    x <- adfExplorer::rawToAmigaInt(x, 8, F)
+    x <- .rawToAmigaInt(x, 8, F)
     return(grDevices::rgb(x[sq]/255, x[sq + 1]/255, x[sq + 2]/255))
   } else if (colour.depth == "12 bit" && n.bytes == "3") {
     sq <- seq(1, to = length(x), by = 3)
-    hi <- ProTrackR::hiNybble(x)
+    hi <- .hiNybble(x)
     if (any(lo != 0)) warning("The low nybble is not zero for all colours.")
     return(grDevices::rgb(hi[sq]/15, hi[sq + 1]/15, hi[sq + 2]/15))
   } else {
@@ -198,16 +198,16 @@ packBitmap <- function(x) {
     yl <- length(y)
     result <- NULL
     while (yl > 128) {
-      result <- c(result, adfExplorer::amigaIntToRaw(127, 8, T), y[1:128])
+      result <- c(result, .amigaIntToRaw(127, 8, T), y[1:128])
       yl <- yl - 128
       y <- y[-1:-128]
     }
-    return(c(result, adfExplorer::amigaIntToRaw(yl - 1, 8, T), y))
+    return(c(result, .amigaIntToRaw(yl - 1, 8, T), y))
   })
   result <- rep(list(raw(0)), length(l))
   result[one.series.start] <- one.series
   more.series <- mapply(function(y, dat, rep) {
-    list(c(adfExplorer::amigaIntToRaw(-rep + 1, 8, T), dat))
+    list(c(.amigaIntToRaw(-rep + 1, 8, T), dat))
   }, dat = x[i[l > 1]], rep = l[l > 1])
   result[l > 1] <- more.series
   result <- unlist(result)
@@ -224,7 +224,7 @@ unPackBitmap <- function(x) {
   result <- raw(0)
   offset <- 0
   while (offset < length(x)) {
-    n <- adfExplorer::rawToAmigaInt(x[offset + 1], 8, T)
+    n <- .rawToAmigaInt(x[offset + 1], 8, T)
     if (n == -128) {
       offset <- offset + 1
     } else if (n < 0) {
@@ -248,7 +248,7 @@ unPackBitmap <- function(x) {
 #' be converted into raster data (\code{\link[grDevices]{as.raster}}). The latter
 #' data can easily be plotted in R. It is usually not necessary to call this function
 #' directly, as there are several more convenient wrappers for this function. Those
-#' wrappers can convert specfic file formats (such as IFF ILBM and Hardware Sprites,
+#' wrappers can convert specific file formats (such as IFF ILBM and Hardware Sprites,
 #' see \code{\link[AmigaFFH]{as.raster}}) into raster objects. This function is
 #' provided for completeness sake (or for when you want to search for images in an
 #' amiga memory dump).
@@ -262,7 +262,7 @@ unPackBitmap <- function(x) {
 #' The image will be composed of \code{2^depth} indexed colours.
 #' @param palette A \code{vector} of \code{2^depth} colours, to be used for the indexed
 #' colours of the bitmap image. By default, a grayscale palette is used.
-#' When explicitely set to \code{NULL}, this function returns a matrix with palette index
+#' When explicitly set to \code{NULL}, this function returns a matrix with palette index
 #' values.
 #' @param interleaved A \code{logical} value, indicating whether the bitmap is interleaved.
 #' An interleaved bitmap image stores each consecutive bitmap layer per horizontal scanline.
@@ -322,7 +322,7 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
   interleaved <- as.logical(interleaved[[1]])
   ## invert bytes and longs is opposite to the defaults in adfExplorer.
   ## Does the user need to be able to change these values for bitmap images?
-  x <- adfExplorer::rawToBitmap(x, invert.bytes = T, invert.longs = F)
+  x <- .rawToBitmap(x, invert.bytes = T, invert.longs = F)
   if (interleaved) {
     x <- array(x, c(16*ceiling(w/16), depth, h))
     x <- apply(x, c(1, 3), function(y) {
@@ -361,7 +361,7 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #' the original image.
 #'
 #' @param x A raster object created with \code{\link[grDevices]{as.raster}} which
-#' needs to be converted into bitmap data. It is also posible to let \code{x} be
+#' needs to be converted into bitmap data. It is also possible to let \code{x} be
 #' a matrix of \code{character}s, representing colours.
 #' @param depth The colour depth of the bitmap image. The image will be composed
 #' of \code{2^depth} indexed colours.
@@ -465,7 +465,7 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 #' centres will be used as palette colours.
 #' @param background On the Amiga, indexed images could not be semi-transparent.
 #' Only a single colour could be designated as being fully transparent. The
-#' `\code{background}' argument should contain a background colour  with which
+#' `\code{background}' argument should contain a background colour with which
 #' semi-transparent colours should be mixed, before colour quantisation. It is
 #' white by default.
 #' @param dither Dither the output image using the algorithm specified here.
@@ -564,7 +564,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
     if (current.total.length <= length.out || current.unique.length < length.out) {
       palette <- rep("#000000", length.out)
       palette[1:current.unique.length] <- unique(c(unlist(x)))
-      transparent <- integer(0)[1]
+      transparent <- which(substr(palette, 8, 9) == "00")[1]
       result <- lapply(x, function(y) apply(y, 2, match, table = palette))
     } else {
       palette <- stats::kmeans(as.matrix(t(col.vals)), length.out, ...)
@@ -622,7 +622,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' and the palette colours used for dithering, but is also a matter of taste. Note
 #' that the dithering algorithm is relatively slow and is provided in this package
 #' for your convenience. As it is not in the main scope of this package you should
-#' use dedicaded software for faster/better results.
+#' use dedicated software for faster/better results.
 #' @param x Original image data that needs to be dithered. Should be a raster object
 #' (\code{\link[grDevices]{as.raster}}), or a matrix of \code{character} string
 #' representing colours.
@@ -677,8 +677,8 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
   method <- match.arg(method)
   c.dim <- dim(x)
   
-  ## create an array with width, height, hue, saturation, value and alpha as separate dimensions
-  x <- col2rgb(x, T)
+  ## create an array with width, height, r, g, b and alpha as separate dimensions
+  x <- grDevices::col2rgb(x, T)
   x <- lapply(split(x, row(x)), matrix, nrow = c.dim)
   x <- array(c(x[[1]], x[[2]], x[[3]], x[[4]]), dim = c(rev(c.dim), 4))
   
@@ -735,22 +735,29 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
         ## in RGBA space is smallest compared to the actual colour:
         dst <- sqrt(colSums((pal.rgb - x[i, j, ])^2))
         result[j, i] <- which(dst == min(dst))[[1]]
-        P            <- pal.rgb[,result[j, i]]
-
-        ## calculate the error (difference) between the actual colour and the colour
-        ## from the palette:
-        e            <- x[i, j, ] - P
-
-        ## get the proper row and column indices for the error distribution matrix.
-        ## This is necessary when we are close to the edge of the image:
-        sel.i        <- i + ir2
-        ir           <- ir2[sel.i %in% 1:dim(x)[1]]
-        sel.j        <- j + jr2
-        jr           <- jr2[sel.j %in% 1:dim(x)[2]]
-
-        ## Distribute the error (e) over the surrounding pixels using the error
-        ## distribution matrix (e2) for the selected method:
-        x[i + ir, j + jr, ] <- x[i + ir, j + jr, ] + (e2 %o% e)[ir - min(ir2) + 1, jr -min(jr2) + 1,]
+        if (!(j == dim(x)[[2]] && i == dim(x)[[1]])) {
+          P            <- pal.rgb[,result[j, i]]
+          
+          ## calculate the error (difference) between the actual colour and the colour
+          ## from the palette:
+          e            <- x[i, j, ] - P
+          
+          ## get the proper row and column indices for the error distribution matrix.
+          ## This is necessary when we are close to the edge of the image:
+          sel.i        <- i + ir2
+          ir           <- ir2[sel.i %in% 1:dim(x)[1]]
+          sel.j        <- j + jr2
+          jr           <- jr2[sel.j %in% 1:dim(x)[2]]
+          
+          ## Distribute the error (e) over the surrounding pixels using the error
+          ## distribution matrix (e2) for the selected method:
+          repl <- x[i + ir, j + jr, ]
+          repl <- repl + (e2 %o% e)[ir - min(ir2) + 1, jr -min(jr2) + 1,]
+          ## Put some constrains on the error:
+          repl[repl < 0] <- 0
+          repl[repl > 255] <- 255
+          x[i + ir, j + jr, ] <- repl
+        }
       }
     }
   }
@@ -815,14 +822,14 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' ## Plot the original wave in black, the decompressed wave in blue
 #' ## and the error in red (difference between the original and decompressed
 #' ## wave). The error is actually very small here.
-#' plot(waveform(buzz) - 128, type = "l")
+#' plot(ProTrackR::waveform(buzz) - 128, type = "l")
 #' lines(buzz.decompress, col = "blue")
-#' buzz.error <- waveform(buzz) - 128 - buzz.decompress
+#' buzz.error <- ProTrackR::waveform(buzz) - 128 - buzz.decompress
 #' lines(buzz.error, col = "red")
 #' 
 #' ## this can also be visualised by plotting the orignal wave data against
 #' ## the decompressed data (and observe a very good correlation):
-#' plot(waveform(buzz) - 128, buzz.decompress)
+#' plot(ProTrackR::waveform(buzz) - 128, buzz.decompress)
 #' 
 #' ## Let's do the same with a sample of a snare drum, which has larger
 #' ## delta values:
@@ -843,14 +850,14 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' ## Now if we make the same comparison as before, we note that the
 #' ## error in the decompressed wave is much larger than in the previous
 #' ## case (red line):
-#' plot(waveform(snare.drum) - 128, type = "l")
+#' plot(ProTrackR::waveform(snare.drum) - 128, type = "l")
 #' lines(snare.decompress, col = "blue")
-#' snare.error <- waveform(snare.drum) - 128 - snare.decompress
+#' snare.error <- ProTrackR::waveform(snare.drum) - 128 - snare.decompress
 #' lines(snare.error, col = "red")
 #' 
 #' ## this can also be visualised by plotting the orignal wave data against
 #' ## the decompressed data (and observe a nice but not perfect correlation):
-#' plot(waveform(snare.drum) - 128, snare.decompress)
+#' plot(ProTrackR::waveform(snare.drum) - 128, snare.decompress)
 #' }
 #' @references \url{https://en.wikipedia.org/wiki/Delta_encoding}
 #' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node02D6.html}
@@ -862,7 +869,7 @@ deltaFibonacciCompress <- function(x, ...) {
   ## achieved with Audiomaster IV. But the total error is smaller
   ## in this implementation
   result <- c(raw(1), x[1])
-  x <- adfExplorer::rawToAmigaInt(x, 8, T)
+  x <- .rawToAmigaInt(x, 8, T)
   fibonacci <- rev(c(-34,-21,-13,-8,-5,-3,-2,-1,0,1,2,3,5,8,13,21))
   fib.deltas <- rep(NA, length(x))
   new.wave <- fib.deltas
@@ -884,7 +891,7 @@ deltaFibonacciCompress <- function(x, ...) {
   if (length(fib.odd) < length(fib.even)) fib.odd <- c(fib.odd, as.raw(8))
   if (length(fib.odd) > length(fib.even)) fib.even <- c(fib.even, as.raw(8))
   result <- c(result,
-              adfExplorer::amigaIntToRaw(adfExplorer::rawToAmigaInt(fib.odd)*0x10) | fib.even)
+              .amigaIntToRaw(.rawToAmigaInt(fib.odd)*0x10) | fib.even)
   return(result)
 }
 
@@ -902,11 +909,11 @@ deltaFibonacciDecompress <- function(x, ...) {
   ## first byte is a padding byte; second is already stored; skip them:
   x <- x[-1:-2]
   fibonacci <- c(-34,-21,-13,-8,-5,-3,-2,-1,0,1,2,3,5,8,13,21)
-  result <- c(rbind(ProTrackR::hiNybble(x), ProTrackR::loNybble(x)))
+  result <- c(rbind(.hiNybble(x), .loNybble(x)))
   result <- fibonacci[result + 1]
-  result <- adfExplorer::rawToAmigaInt(base.val, 8, T) + cumsum(result)
+  result <- .rawToAmigaInt(base.val, 8, T) + cumsum(result)
   result <- ((result + 128) %% 256) - 128
-  return(adfExplorer::amigaIntToRaw(result, 8, T))
+  return(.amigaIntToRaw(result, 8, T))
 }
 
 .is.colour <- function(x)
@@ -1039,11 +1046,11 @@ deltaFibonacciDecompress <- function(x, ...) {
   return(attribs)
 }
 
-## x should be a matrix of palette indices
 .indexToBitmap <- function(x, depth, interleaved) {
+  ## x should be a matrix of palette indices
   x <- cbind(x, matrix(1, ncol = -ncol(x)%%16, nrow = nrow(x)))
   x.dim <- dim(x)
-  x <- rawToBitmap(amigaIntToRaw(c(x) - 1, 32, F), T, F)
+  x <- .rawToBitmap(.amigaIntToRaw(c(x) - 1, 32, F), T, F)
   sq <- c(outer(31:(32 - depth), seq(1, length(x), by = 32), "+"))
   x <- as.logical(x[sq])
   rm(sq)
@@ -1054,6 +1061,170 @@ deltaFibonacciDecompress <- function(x, ...) {
     x <- c(aperm(x, c(3, 1, 2)))
   } else {
     ## rearrange dimensions to bitplane, height, width (interleaved.)
-    x <- c(aperm(x, c(1, 3, 2)))
+    x <- c(aperm(x, c(3, 2, 1)))
   }
+}
+
+#' Get an Amiga timeval struct value from raw data
+#'
+#' Some Amiga applications use a timeval struct (see references) to represent a
+#' time span in seconds. This function coerces raw data to such a numeric time span.
+#'
+#' Timeval is a structure (struct) as specified in device/timer.h on the Amiga (see
+#' references). It represents a timespan in seconds. This function retrieves the
+#' numeric value from \code{raw} data. Amongst others, the timeval struct was used
+#' in the system-configuration file (see \link{SysConfig}) to specify key repeat speed,
+#' key repeat delay and mouse double click speed. Use \code{as.raw} for the inverse
+#' of this function and get the original raw data.
+#' @rdname timeval
+#' @name timeval
+#' @param x a \code{vector} of \code{raw} data that need to be converted into
+#' Amiga timeval structs.
+#' @return Returns a \code{numeric} \code{vector} of a timespan in seconds. It is
+#' represented as an S3 AmigaTimeVal class.
+#' @examples
+#' ## First four raw values represent seconds, the latter four microseconds:
+#' temp <- timeval(as.raw(c(0, 0, 0, 1, 0, 0, 0, 1)))
+#' print(temp)
+#' 
+#' ## You can use 'as.raw' to get the original raw data again:
+#' as.raw(temp)
+#' @author Pepijn de Vries
+#' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node0053.html}
+#' @export
+timeval <- function(x) {
+  ## get timeval struct from raw data
+  if ((length(x) %% 8) != 0) stop("The length of x should be a multiple of 8.")
+  if (typeof(x) != "raw") stop("x should be of type 'raw'.")
+  x <- matrix(.rawToAmigaInt(x, 32, F), ncol = 2, byrow = T)
+  result <- apply(x, 1, function(y) y[[1]] + y[[2]]/1e6)
+  class(result) <- "AmigaTimeVal"
+  return(result)
+}
+
+#' @name as.raw
+#' @rdname as.raw
+#' @export
+as.raw.AmigaTimeVal <- function(x, ...) {
+  ## convert a timval (time interval in seconds) to raw timeval struct
+  if (class(x) != "AmigaTimeVal") stop("x should be of S3 class AmigaTimeVal.")
+  secs   <- floor(x)
+  micros <- round((x - secs)*1e6)
+  secs[secs >= 2^32] <-  (2^32) - 1
+  micros[micros >= 2^32] <-  (2^32) - 1
+  .amigaIntToRaw(c(rbind(secs, micros)), 32, F)
+}
+
+#' @export
+print.AmigaTimeVal <- function(x, ...) {
+  invisible(lapply(x, function(y) cat(sprintf("%f [s] Amiga timeval struct\n", y, ...))))
+}
+
+.read.amigaData <- function(dat, n.bytes, signed, par.names) {
+  ## read numeric and raw data from amiga raw input
+  ## dat = vector of raw data
+  ## n.bytes = vector of lengths of bytes to be read from input data. Negative values are negated and indicate that raw data should be read as is
+  ## signed = vector of logicals. Indicate whether the values read from data are signed (T) or unsigned (F)
+  ## par.names = parameter names for the data read from the input data
+  n.bytes <- round(n.bytes)
+  offset <- 0
+  result <- mapply(function(n.b, sgnd) {
+    res <- NULL
+    if (n.b > 0) {
+      res <- .rawToAmigaInt(dat[offset + (1:n.b)], n.b*8, sgnd)
+    } else if (n.b < 0){
+      n.b <- -n.b
+      res <- dat[offset + (1:n.b)]
+    }
+    offset <<- offset + n.b
+    return(res)
+  }, n.b = n.bytes, sgnd = signed, SIMPLIFY = F)
+  names(result) <- par.names
+  result
+}
+
+.write.amigaData <- function(lst, n.bytes, signed, par.names) {
+  ## inverse function for .read.amigaData
+  ## first make sure list is in correct order:
+  lst <- lst[par.names]
+  if (any(n.bytes > 0)) {
+    lst[n.bytes > 0] <- lapply(1:sum(n.bytes > 0), function(y) {
+      .amigaIntToRaw(lst[n.bytes > 0][[y]],
+                                 8*n.bytes[n.bytes > 0][y],
+                                 signed[n.bytes > 0][y])
+    })
+  }
+  lst <- unlist(lst)
+  names(lst) <- NULL
+  return(lst)
+}
+
+.match.factor <- function(lst, element.name, vals, levs) {
+  result <- match(lst[[element.name]], vals)
+  if (is.na(result)) stop(sprintf("Unknown %s.", element.name))
+  result <- factor(levs[result], levs)
+  return(result)
+}
+
+.match.factor.inv <- function(lst, element.name, vals, levs) {
+  result <- vals[which(levs %in% lst[[element.name]])]
+  if (length(result) == 0) stop(sprintf("Unknown level for %s.", element.name))
+  if (length(result) > 1) stop(sprintf("Only a single value for %s is allowed.", element.name))
+  return(result)
+}
+
+.bitwOrAll <- function(x) {
+  while (length(x) > 1) {
+    x <- c(bitwOr(x[1], x[2]), x[-1:-2])
+  }
+  return(x)
+}
+
+.match.multi.factor <- function(lst, element.name, vals, levs) {
+  result <- levs[bitwAnd(lst[[element.name]], vals) == vals]
+  result <- factor(result, levs)
+}
+
+.match.multi.factor.inv <- function(lst, element.name, vals, levs) {
+  result <- vals[which(levs %in% lst[[element.name]])]
+  while (length(result) > 1) {
+    result <- c(bitwOr(result[1], result[2]), result[-1:-2])
+  }
+  return(result)
+}
+
+.loNybble <-
+  function(raw_dat)
+    ## function that gets the value [0,16] of the 4 low bits of a raw byte
+  {
+    if (class(raw_dat) != "raw") stop ("Only raw data is accepted as input")
+    return(as.integer(raw_dat)%%16)
+  }
+
+.hiNybble <-
+  function(raw_dat)
+    ## function that gets the value [0,16] of the 4 high bits of a raw byte
+  {
+    if (class(raw_dat) != "raw") stop ("Only raw data is accepted as input")
+    return(as.integer(as.integer(raw_dat)/16))
+  }
+
+.rawToCharNull <- function(raw_dat) {
+  result <- ""
+  if (length(raw_dat) < 3) try(result <- (rawToChar(raw_dat)), silent = T) else
+  {
+    result    <- raw_dat
+    runlength <- rle(result)$lengths
+    if (length(runlength) > 2)
+    {
+      rel_range <- (runlength[1] + 1):(length(result) - runlength[length(runlength)])
+      if (result[[1]] != raw(1)) rel_range <- 1:rel_range[length(rel_range)]
+      if (result[[length(result)]] != raw(1)) rel_range <- rel_range[1]:length(result)
+      result[rel_range][result[rel_range] == as.raw(0x00)] <- as.raw(0x20)
+      result <- result[result != raw(1)]
+    }
+    try(result <- rawToChar(result), silent = T)
+    if (class(result) == "raw") result <- ""
+  }
+  return(result)
 }

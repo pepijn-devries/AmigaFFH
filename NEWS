@@ -1,3 +1,32 @@
+AmigaFFH v0.2.0 (Release date: 2019-01-27)
+=============
+
+ * Added support for Amiga Workbench Icons (*.info)
+
+ * Added support for the Amiga's system-configuration file
+
+ * Added rasterToHWSprite function
+
+ * Changed 'as.raster' from S4 method to S3 function
+   for more flexibility.
+
+ * 'rasterToBitmap' did not decode continuous bitmaps
+   correctly. This has been fixed. Fortunately the Amiga
+   mostly uses interleaved bitmaps anyway.
+
+ * Added constrains to error distribution in dither method
+   of 'index.colours'. Without these constrains errors could
+   accumulate for certain images and cause undesirable results.
+
+ * Fixed transparency detection in 'index.colour' function
+
+ * Bug-fix in the interpretation of IFF ANIM frames
+
+ * Moved ProTrackR and adfExplorer from 'Depends' to 'Suggests'
+   to avoid circular dependancy
+
+ * Several minor corrections to the manual
+
 AmigaFFH v0.1.2 (Release date: 2018-03-13)
 =============
 

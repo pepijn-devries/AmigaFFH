@@ -11,7 +11,7 @@ rasterToIFF(x,
 }
 \arguments{
 \item{x}{A raster object created with \code{\link[grDevices]{as.raster}} which
-needs to be converted into an IFF formated bitmap image. It is also posible to let \code{x} be
+needs to be converted into an IFF formated bitmap image. It is also possible to let \code{x} be
 a matrix of \code{character}s, representing colours.}
 
 \item{display.mode}{Specify the Amiga display mode that should be used.
@@ -25,7 +25,7 @@ By default "\code{DEFAULT_MONITOR_ID}" is used.}
 
 \item{anim.options}{Currently ignored. This argument will potentitally be implemented
 in future versions of this package. Currently, animations are always encoded
-with the "ByteVerticalCompression" in this pacakge (when \code{x} is a list of
+with the "ByteVerticalCompression" in this package (when \code{x} is a list of
 \code{raster} objects).}
 
 \item{...}{Arguments passed on to \code{\link{rasterToBitmap}}.}
@@ -61,12 +61,15 @@ volcano.iff <- rasterToIFF(volcano.raster)
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
   \code{\link{as.raw}}, \code{\link{getIFFChunk}},
-  \code{\link{interpretIFFChunk}}, \code{\link{read.iff}},
+  \code{\link{interpretIFFChunk}},
+  \code{\link{rawToIFFChunk}}, \code{\link{read.iff}},
   \code{\link{write.iff}}
 
 Other raster.operations: \code{\link{as.raster}},
   \code{\link{bitmapToRaster}}, \code{\link{dither}},
-  \code{\link{index.colours}}, \code{\link{rasterToBitmap}}
+  \code{\link{index.colours}},
+  \code{\link{rasterToBitmap}},
+  \code{\link{rasterToHWSprite}}
 }
 \author{
 Pepijn de Vries

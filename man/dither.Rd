@@ -56,7 +56,7 @@ Which method results in the best quality image will depend on the original image
 and the palette colours used for dithering, but is also a matter of taste. Note
 that the dithering algorithm is relatively slow and is provided in this package
 for your convenience. As it is not in the main scope of this package you should
-use dedicaded software for faster/better results.
+use dedicated software for faster/better results.
 }
 \examples{
 \dontrun{
@@ -94,7 +94,8 @@ Other colour.quantisation.operations: \code{\link{index.colours}}
 Other raster.operations: \code{\link{as.raster}},
   \code{\link{bitmapToRaster}},
   \code{\link{index.colours}},
-  \code{\link{rasterToBitmap}}, \code{\link{rasterToIFF}}
+  \code{\link{rasterToBitmap}},
+  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }
 \author{
 Pepijn de Vries

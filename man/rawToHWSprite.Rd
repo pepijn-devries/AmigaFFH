@@ -63,7 +63,13 @@ plot(spr, interpolate = FALSE)
 }
 \seealso{
 Other raw.operations: \code{\link{as.raw}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}}
+  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
+  \code{\link{rawToAmigaIcon}},
+  \code{\link{rawToIFFChunk}},
+  \code{\link{rawToSysConfig}},
+  \code{\link{simpleAmigaIcon}}
+
+Other HWSprite.operations: \code{\link{rasterToHWSprite}}
 }
 \author{
 Pepijn de Vries

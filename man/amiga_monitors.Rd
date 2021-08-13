@@ -4,7 +4,7 @@
 \name{amiga_monitors}
 \alias{amiga_monitors}
 \title{A list om Amiga monitors}
-\format{a \code{data.frame} with 2 columns:
+\format{A \code{data.frame} with 2 columns:
 \itemize{
   \item{The column named `MONITOR_ID': a \code{factor} representing an Amiga monitor}
   \item{The column named `CODE': A \code{list} containing a \code{vector} of 4

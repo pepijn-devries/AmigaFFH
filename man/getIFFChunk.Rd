@@ -54,7 +54,7 @@ to get a specific chunk with a specific label.
 \code{IFFChunk} objects have 4 \code{character} identifiers, indicating what type
 of chunk you are dealing with. These chunks can be nested inside of each other.
 Use this method to extract specific chunks by referring to there respective
-identifiers. The idintifiers are shown when calling \code{print} on an
+identifiers. The identifiers are shown when calling \code{print} on an
 \code{\link{IFFChunk}}. If a specified path doesn't exist, this method throws a
 `subscript out of range' error.
 }
@@ -85,8 +85,8 @@ getIFFChunk(example.iff, c("ILBM", "BMHD")) <- bmhd
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
   \code{\link{as.raw}}, \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{read.iff}},
-  \code{\link{write.iff}}
+  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
+  \code{\link{read.iff}}, \code{\link{write.iff}}
 }
 \author{
 Pepijn de Vries

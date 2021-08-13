@@ -36,13 +36,17 @@ plot(example.iff)
 }
 }
 \seealso{
-Other io.operations: \code{\link{write.iff}}
+Other io.operations: \code{\link{read.AmigaIcon}},
+  \code{\link{read.SysConfig}},
+  \code{\link{write.AmigaIcon}},
+  \code{\link{write.SysConfig}}, \code{\link{write.iff}}
 
 Other iff.operations: \code{\link{IFFChunk-class}},
   \code{\link{WaveToIFF}}, \code{\link{as.raster}},
   \code{\link{as.raw}}, \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{write.iff}}
+  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
+  \code{\link{write.iff}}
 }
 \author{
 Pepijn de Vries

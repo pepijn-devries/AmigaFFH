@@ -26,7 +26,7 @@ The following formats are supported by this package (to some extend):
 
 \itemize{
   \item{
-    Interchange File Format (IFF). This file format is actually a container for a wide variaty of data flavours. Of which the
+    Interchange File Format (IFF). This file format is actually a container for a wide variety of data flavours. Of which the
     following are supported:
     \itemize{
       \item{
@@ -46,8 +46,18 @@ The following formats are supported by this package (to some extend):
   }
   \item{
     Hardware sprites. This format follows the hardware structure for displaying sprites on the screen. It is usually not used
-    as a file format as such, but it can be found embeded in some files (for instance the mouse pointer is embeded as a
+    as a file format as such, but it can be found embedded in some files (for instance the mouse pointer is embeded as a
     hardware sprite in the `system-configuration' file). For more details see \code{\link{hardwareSprite}}.
+  }
+  \item{
+    Workbench icons (*.info). Icons (i.e., graphical representation of files and directories
+    on the amiga) were stored as separate files with the extension *.info. See
+    \code{\link{AmigaIcon}} for more details.
+  }
+  \item{
+    System-configuration. A file that was stored in the 'devs' directory of a system disk.
+    As the file name suggests, it holds many of the systems configurations. See \link{SysConfig}
+    for more details.
   }
 }
 

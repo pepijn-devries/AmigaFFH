@@ -8,7 +8,7 @@ rasterToBitmap(x, depth = 3, interleaved = T, indexing = index.colours)
 }
 \arguments{
 \item{x}{A raster object created with \code{\link[grDevices]{as.raster}} which
-needs to be converted into bitmap data. It is also posible to let \code{x} be
+needs to be converted into bitmap data. It is also possible to let \code{x} be
 a matrix of \code{character}s, representing colours.}
 
 \item{depth}{The colour depth of the bitmap image. The image will be composed
@@ -88,7 +88,8 @@ volcano.bw <- rasterToBitmap(volcano.raster,
 \seealso{
 Other raster.operations: \code{\link{as.raster}},
   \code{\link{bitmapToRaster}}, \code{\link{dither}},
-  \code{\link{index.colours}}, \code{\link{rasterToIFF}}
+  \code{\link{index.colours}},
+  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }
 \author{
 Pepijn de Vries

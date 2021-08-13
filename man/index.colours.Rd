@@ -28,7 +28,7 @@ centres will be used as palette colours.}
 
 \item{background}{On the Amiga, indexed images could not be semi-transparent.
 Only a single colour could be designated as being fully transparent. The
-`\code{background}' argument should contain a background colour  with which
+`\code{background}' argument should contain a background colour with which
 semi-transparent colours should be mixed, before colour quantisation. It is
 white by default.}
 
@@ -91,7 +91,8 @@ Other colour.quantisation.operations: \code{\link{dither}}
 
 Other raster.operations: \code{\link{as.raster}},
   \code{\link{bitmapToRaster}}, \code{\link{dither}},
-  \code{\link{rasterToBitmap}}, \code{\link{rasterToIFF}}
+  \code{\link{rasterToBitmap}},
+  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
 }
 \author{
 Pepijn de Vries

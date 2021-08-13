@@ -64,7 +64,10 @@ amigaRawToColour(as.raw(c(0xf0, 0xf0, 0x0f)), n.bytes = "3")
 }
 \seealso{
 Other raw.operations: \code{\link{as.raw}},
-  \code{\link{packBitmap}}, \code{\link{rawToHWSprite}}
+  \code{\link{packBitmap}}, \code{\link{rawToAmigaIcon}},
+  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
+  \code{\link{rawToSysConfig}},
+  \code{\link{simpleAmigaIcon}}
 }
 \author{
 Pepijn de Vries

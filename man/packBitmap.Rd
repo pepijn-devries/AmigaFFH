@@ -75,7 +75,10 @@ all(dat.srt == unPackBitmap(pack.srt))
 \seealso{
 Other raw.operations: \code{\link{as.raw}},
   \code{\link{colourToAmigaRaw}},
-  \code{\link{rawToHWSprite}}
+  \code{\link{rawToAmigaIcon}},
+  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
+  \code{\link{rawToSysConfig}},
+  \code{\link{simpleAmigaIcon}}
 }
 \author{
 Pepijn de Vries

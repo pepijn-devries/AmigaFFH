@@ -2,7 +2,7 @@
 #' @export
 IFFChunk.IFF.CHAN <- function(x, ...) {
   x <- c(2, 4, 6)[c("LEFT", "RIGHT", "STEREO") == x$channel[[1]]]
-  x <- list(adfExplorer::amigaIntToRaw(x, 32, F))
+  x <- list(.amigaIntToRaw(x, 32, F))
   return(new("IFFChunk", chunk.type = "CHAN", chunk.data = x))
 }
 
@@ -14,12 +14,12 @@ IFFChunk.IFF.VHDR <- function(x, ...) {
   ## if the compression type is unknown, set to 0
   if (length(compr) == 0) compr <- 0
   result <- c(
-    adfExplorer::amigaIntToRaw(c(x$oneShotHiSamples,
+    .amigaIntToRaw(c(x$oneShotHiSamples,
                                  x$repeatHiSamples,
                                  x$samplesPerHiCycle), 32, F),
-    adfExplorer::amigaIntToRaw(x$samplesPerSec, 16, F),
-    adfExplorer::amigaIntToRaw(c(x$ctOctave, compr), 8, F),
-    adfExplorer::amigaIntToRaw(x$volume, 32, F)
+    .amigaIntToRaw(x$samplesPerSec, 16, F),
+    .amigaIntToRaw(c(x$ctOctave, compr), 8, F),
+    .amigaIntToRaw(x$volume, 32, F)
   )
   return(new("IFFChunk", chunk.type = "VHDR", chunk.data = list(result)))
 }
@@ -43,7 +43,7 @@ IFFChunk.IFF.8SVX <- function(x, ...) {
   if (!all(unlist(lapply(x, function(y) y@pcm)))) {
     stop("All waves in x should be pcm formatted.")
   }
-  wav  <- adfExplorer::amigaIntToRaw(c(do.call(c, lapply(x, function(y) y@left)) - 128,
+  wav  <- .amigaIntToRaw(c(do.call(c, lapply(x, function(y) y@left)) - 128,
                                        do.call(c, lapply(x, function(y) y@right)) - 128), 8, T)
   if ((length(wav) %% 2) != 0) wav <- c(wav, raw(1))
   vhdr <- list(
@@ -84,7 +84,7 @@ plot.IFF.8SVX <- function(x, y, ...) {
 #' When a FORM container contains multiple 8SVX samples, they are also played successively.
 #' 
 #' Note that a separate package is developed to interpret and play ProTracker modules and samples
-#' (\code{\link{ProTrackR}}).
+#' (\code{\link[ProTrackR]{ProTrackR}}).
 #' @rdname play
 #' @name play
 #' @aliases play,ANY-method
@@ -138,13 +138,13 @@ setMethod("play", "IFFChunk", function(object, player = NULL, ...) {
 #' \code{WaveMC} objects) into an \code{\link{IFFChunk-class}} object which
 #' can be stored as a valid Iterchange File Format (\code{\link{write.iff}}).
 #'
-#' \code{\link[tuneR]{WaveMC}} objects can be read from contempory file containers
+#' \code{\link[tuneR]{WaveMC}} objects can be read from contemporary file containers
 #' with \code{\link[tuneR]{readWave}} or \code{\link[tuneR]{readMP3}}. With this
 #' function such objects can be converted into an \code{\link{IFFChunk-class}} object
 #' which can be stored conform the Interchange File Format (\code{\link{write.iff}}).
 #' 
 #' When \code{x} is not a pcm formatted 8-bit sample, \code{x} will first be
-#' normalized and scaled to a pcm-formatted 8-bit sample using
+#' normalised and scaled to a pcm-formatted 8-bit sample using
 #' \code{\link[tuneR]{normalize}}. If you don't like the result you need to convert
 #' the sample to 8-bit pcm yourself before calling this function.
 #'
@@ -251,7 +251,7 @@ WaveToIFF <- function(x, loop.start = NA, octaves = 1, compress = c("sCmpNone", 
   chan <- IFFChunk(chan)
 
   wav <- unlist(lapply(1:ncol(x[[1]]@.Data), function(z) {
-    unlist(lapply(x, function(y) adfExplorer::amigaIntToRaw(y@.Data[,z] - 128, 8, T)))
+    unlist(lapply(x, function(y) .amigaIntToRaw(y@.Data[,z] - 128, 8, T)))
   }))
   
   if (compress == "sCmpFibDelta") {

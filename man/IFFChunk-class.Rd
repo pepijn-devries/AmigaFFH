@@ -18,7 +18,7 @@ as PNG images and XML files).
 
 Although the IFF format is still in use, and new standardised chunk types can
 still be registered, this package will focus on the older chunk types that
-were primarely used on the Commodore Amiga (OS <= 3.0). IFF files could
+were primarily used on the Commodore Amiga (OS <= 3.0). IFF files could
 contain any kind of information. It could contain bitmap images, but also
 audio clips or (formatted) texts.
 
@@ -83,8 +83,8 @@ Other iff.operations: \code{\link{WaveToIFF}},
   \code{\link{as.raster}}, \code{\link{as.raw}},
   \code{\link{getIFFChunk}},
   \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{read.iff}},
-  \code{\link{write.iff}}
+  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
+  \code{\link{read.iff}}, \code{\link{write.iff}}
 }
 \author{
 Pepijn de Vries

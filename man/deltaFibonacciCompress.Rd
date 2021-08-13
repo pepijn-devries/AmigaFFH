@@ -63,14 +63,14 @@ buzz.decompress <- adfExplorer::rawToAmigaInt(buzz.decompress, 8, T)
 ## Plot the original wave in black, the decompressed wave in blue
 ## and the error in red (difference between the original and decompressed
 ## wave). The error is actually very small here.
-plot(waveform(buzz) - 128, type = "l")
+plot(ProTrackR::waveform(buzz) - 128, type = "l")
 lines(buzz.decompress, col = "blue")
-buzz.error <- waveform(buzz) - 128 - buzz.decompress
+buzz.error <- ProTrackR::waveform(buzz) - 128 - buzz.decompress
 lines(buzz.error, col = "red")
 
 ## this can also be visualised by plotting the orignal wave data against
 ## the decompressed data (and observe a very good correlation):
-plot(waveform(buzz) - 128, buzz.decompress)
+plot(ProTrackR::waveform(buzz) - 128, buzz.decompress)
 
 ## Let's do the same with a sample of a snare drum, which has larger
 ## delta values:
@@ -91,14 +91,14 @@ snare.decompress <- adfExplorer::rawToAmigaInt(snare.decompress, 8, T)
 ## Now if we make the same comparison as before, we note that the
 ## error in the decompressed wave is much larger than in the previous
 ## case (red line):
-plot(waveform(snare.drum) - 128, type = "l")
+plot(ProTrackR::waveform(snare.drum) - 128, type = "l")
 lines(snare.decompress, col = "blue")
-snare.error <- waveform(snare.drum) - 128 - snare.decompress
+snare.error <- ProTrackR::waveform(snare.drum) - 128 - snare.decompress
 lines(snare.error, col = "red")
 
 ## this can also be visualised by plotting the orignal wave data against
 ## the decompressed data (and observe a nice but not perfect correlation):
-plot(waveform(snare.drum) - 128, snare.decompress)
+plot(ProTrackR::waveform(snare.drum) - 128, snare.decompress)
 }
 }
 \references{

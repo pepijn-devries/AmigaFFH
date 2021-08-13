@@ -93,7 +93,7 @@ created with this method by providing the chunk type name.
 IFF data is stored in a \code{\link{IFFChunk-class}} object when read from an
 IFF file (\code{\link{read.iff}}). These objects reflect the file structure
 well, but the data is stored as \code{raw} information. IFF files can contain
-a wide variaty of information types, ranging from bitmap images to audio
+a wide variety of information types, ranging from bitmap images to audio
 clips. The raw information stored in \code{\link{IFFChunk}} objects can
 be interpreted into more meaningfull representations that can be handled in
 R. This is achieved with the \code{\link{interpretIFFChunk}} method, which
@@ -103,9 +103,9 @@ These \code{IFF.ANY} objects are a less strict representation of the
 IFF Chunk, but are easier to handle in R. The interpretation method is lossy
 and may not preserve all information in the \code{IFF.ANY} object.
 The \code{\link{IFFChunk-method}} can coerce \code{IFF.ANY} back
-to the more stricktly defined \code{\link{IFFChunk-class}} objects.
+to the more strictly defined \code{\link{IFFChunk-class}} objects.
 Be careful with conversions between \code{\link{IFFChunk-class}} and
-\code{IFF.ANY} objects and vice vers, as information may get lost.
+\code{IFF.ANY} objects and vice versa, as information may get lost.
 
 More detailed information about IFF chunks can be found in the IFF chunk registry
 (see references).
@@ -222,7 +222,7 @@ More detailed information about IFF chunks can be found in the IFF chunk registr
           }
           \item{
             \code{x} and \code{y} are \code{numeric} values specifying the plotting
-            possition relative to the topleft position of the screen.
+            position relative to the top left position of the screen.
             Although required in the bitmap header. It is ignored in the
             interpretation of bitmap images.
           }
@@ -279,13 +279,13 @@ More detailed information about IFF chunks can be found in the IFF chunk registr
       }
       \item{
         \code{IFF.CMAP} represents the colour map (CMAP) or palette of a bitmap image. Although common,
-        the chunk is optional and can be omitted from the ILBM parent chunk. It is interpreted as a
+        the chunk is optional and can be omitted from the parent ILBM chunk. It is interpreted as a
         vector of colours (i.e., a \code{character} string formatted as `#RRGGBB' or named colours such as `blue').
       }
       \item{
         \code{IFF.CAMG} represents a chunk with information with respect
         to the display mode in which the bitmap image should be displayed.
-        This information can be used to determin the correct pixel aspect
+        This information can be used to determine the correct pixel aspect
         ratio, or is sometimes required to correctly interpret the bitmap
         information. The \code{IFF.CAMG} chunk is intepreted as a named list
         containing the following elements:
@@ -400,7 +400,7 @@ More detailed information about IFF chunks can be found in the IFF chunk registr
   \item{
     \code{IFF.ANNO}, \code{IFF.AUTH}, \code{IFF.CHRS}, \code{IFF.NAME}, \code{IFF.TEXT} and \code{IFF.copyright}
     are all unformatted text chunks that can be included optionally in any of the chunk types. Respectively, they
-    represent an annotation, the author's name, a generic character string, the name of the work, generic unformated text,
+    represent an annotation, the author's name, a generic character string, the name of the work, generic unformatted text,
     and copyright text. They are interpreted as a \code{character} string.
   }
 }
