@@ -1,39 +1,62 @@
 #' The S3 AmigaBasic class
 #' 
-#' XXX
+#' A class that represents the content of Amiga Basic files.
 #' 
-#' XXX add to package documentation
+#' Amiga Basic is a \href{https://en.wikipedia.org/wiki/BASIC}{BASIC}-style programming language that was shipped
+#' with early Commodore Amiga machines. It requires an interpreter to run an Amiga Basic script. The AmigaFFH
+#' package does not interpret Amiga Basic scripts. It does allow for encoding and decoding scripts in the binary
+#' format in which it was originally stored on the Amiga. Amiga Basic scripts were stored as encoded binaries instead
+#' of ASCII text files in order to save (at the time precious) memory and disk space.
 #' 
-#' @note No documentation XXX all the product of reverse engineering from my part
+#' Amiga Basic binary files start with a file header (as an identifier) and is followed by each line of the script
+#' as binary data. The \code{AmigaBasic}-class object stores each line of the script as a \code{list} item as a \code{vector}
+#' of \code{raw} data. Use \code{\link{as.character}} and \code{\link{as.AmigaBasic}} to switch between
+#' \code{character} data and \code{AmigaBasic}-class objects.
+#' 
+#' @note Although there is ample reference material on the Amiga BASIC language, there is no documentation
+#' available on the script file storage format. The implementation in the AmigaFFH package is all the result of
+#' painstaking reverse engineering on my part. Consequently the Amiga Basic file encoders and decoders implemented
+#' here may not be infallible.
 #' @docType class
-#' @aliases AmigaBasic
 #' @name AmigaBasic
 #' @rdname AmigaBasic
 #' @family AmigaBasic.operations
 #' @author Pepijn de Vries
 #' @examples
 #' \dontrun{
-#' ## XXX
+#' ## This creates an AmigaBasic-class object:
+#' bas <- as.AmigaBasic("PRINT \"hello world!\"")
+#' 
+#' ## This will decode the object as plain text:
+#' as.character(bas)
 #' }
+#' @references \url{https://en.wikipedia.org/wiki/AmigaBASIC}
 NULL
 
 #' The S3 AmigaBasicShape class
 #' 
-#' XXX implement plot+as.raster function
+#' A class that represents the file format used by Amiga Basic to store bitmap graphics: blitter objects and sprites.
 #' 
-#' XXX add to package documentation
+#' Amiga Basic used a specific format to store bitmap images that could be displayed using Basic code. Both
+#' sprites and blitter objects can be stored and used. This class is used to represent such files.
 #' 
 #' @docType class
-#' @aliases AmigaBasicShape
 #' @name AmigaBasicShape
 #' @rdname AmigaBasicShape
 #' @family AmigaBasicShape.operations
 #' @author Pepijn de Vries
 #' @examples
 #' \dontrun{
-#' ## XXX
+#' ball   <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
+#' r_logo <- read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
+#' 
+#' plot(ball)
+#' plot(r_logo)
 #' }
 NULL
+
+.amigabasicshape.flags <- c("fVSprite", "collisionPlaneIncluded", "imageShadowIncluded", "saveBack", "overlay", "saveBob",
+                            sprintf("reserved%02i", 1:10))
 
 .amigabasic_commands <- read.table(text =
 "code1,code2,command
@@ -179,6 +202,7 @@ f8,b8,MOUSE
 f8,b9,POINT
 f8,ba,PRESET
 f8,bb,PSET
+f8,bc,RESET
 f8,bd,TIMER
 f8,be,SUB
 f8,bf,EXIT
@@ -246,11 +270,24 @@ fb,ff,PTAB", header = T, sep = ",", quote = "", as.is = T)
 .amigabasic_commands$code1 <- as.raw(paste0("0x", .amigabasic_commands$code1))
 .amigabasic_commands$code2 <- as.raw(paste0("0x", .amigabasic_commands$code2))
 
-#' XXX
+.valid_code <- function(x) {
+  apply(
+    .amigabasic_commands[,c("code1", "code2")],
+    1, function(y) {
+      y <- as.raw(paste0("0x", y))
+      (length(x) > 0 && y[[1]] == x[[1]]) &&
+        (y[[2]] == 0x00 || (length(x) > 1 && x[[2]] == y[[2]]))
+    })
+}
+
+#' Coerce raw data into an AmigaBasic class object
 #'
-#' XXX
+#' \code{\link{AmigaBasic}} objects are comprehensive representations of binary-encode Amiga Basic scripts.
+#' Use this function to convert raw content from encoded Amiga Basic scripts to an \code{\link{AmigaBasic}}
+#' object.
 #'
-#' XXX
+#' This function will convert raw data as stored in Amiga Basic files into its corresponding S3
+#' \code{\link{AmigaBasic}}-class object.
 #' 
 #' @rdname rawToAmigaBasic
 #' @name rawToAmigaBasic
@@ -289,6 +326,7 @@ rawToAmigaBasic <- function(x, ...) {
         cursor <- cursor + 1
       }
       if ((cursor %% 2) == 1) {
+        ## This padding byte only occurs align files to word (2byte) size. It does not seem to have any other function.
         if (x[cursor] != raw(1)) warning("Non-zero padding data encountered")
         cursor <- cursor + 1
       }
@@ -313,6 +351,7 @@ as.raw.AmigaBasic <- function(x, ...) {
   if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
   nms <- attr(x, "basic_names")
   basic_header <- attr(x, "basic_header")
+  x <- unclass(x)
   lngths <- 1 + unlist(lapply(x, length))
   if (any(lngths > 255)) stop(sprintf("Lines %s are to long to encode", paste(which(lngths > 255), collapse = ", ")))
   x <- lapply(1:length(x), function(i) c(as.raw(lngths[i]), x[i]))
@@ -333,13 +372,13 @@ as.raw.AmigaBasic <- function(x, ...) {
 #' Normally Amiga Basic code is stored encoded in a binary format
 #' (\code{\link{rawToAmigaBasic}}).
 #' This function reads the binary data from a file (which can be
-#' stored on a virtual disk (\code{\link[adfExplorer]{amigaDisk}}))
+#' stored on a virtual disk (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}))
 #' and converts in into an \code{\link{AmigaBasic}} class objec.
 #' @rdname read.AmigaBasic
 #' @name read.AmigaBasic
 #' @param file A \code{character} string of the filename of the Amiga Basic file to be read.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Currently ignored
@@ -353,6 +392,10 @@ as.raw.AmigaBasic <- function(x, ...) {
 #' ## Now let's read the same file:
 #' bas <- read.AmigaBasic(file.path(tempdir(), "helloworld.bas"))
 #' }
+#' 
+#' ## There's also a demo file included with the package
+#' demo.bas <- read.AmigaBasic(system.file("demo.bas", package = "AmigaFFH"))
+#' demo.bas
 #' @family AmigaBasic.operations
 #' @family io.operations
 #' @author Pepijn de Vries
@@ -369,7 +412,7 @@ read.AmigaBasic <- function(file, disk = NULL, ...) {
 #' This function encodes the Amiga Basic code in its binary format
 #' (using \code{\link{as.raw}}) and writes it to a file. The file
 #' can also be stored onto a virtual Amiga disk
-#' (\code{\link[adfExplorer]{amigaDisk}}).
+#' (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
 #' 
 #' @rdname write.AmigaBasic
 #' @name write.AmigaBasic
@@ -378,7 +421,7 @@ read.AmigaBasic <- function(file, disk = NULL, ...) {
 #' @param file A \code{character} string specifying the file location
 #' to which \code{x} (an \code{\link{AmigaBasic}} object) needs to be written.
 #' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Invisibly returns the result of the call of \code{close} to the
@@ -403,9 +446,11 @@ write.AmigaBasic <- function(x, file, disk = NULL) {
 
 #' Coerce an AmigaBasic class object to its character representation
 #'
-#' XXX
+#' Coerce an \code{\link{AmigaBasic}}-class object to its character representation
 #'
-#' Amiga Basic files are encoded in a binary format. XXX
+#' Amiga Basic files are encoded in a binary format and are also stored as such
+#' in \code{\link{AmigaBasic}}-class objects. Use this function to convert
+#' these objects into legible \code{character} data.
 #' 
 #' @rdname as.character
 #' @name as.character
@@ -430,17 +475,24 @@ as.character.AmigaBasic <- function(x, ...) {
   if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
   nms <- attr(x, "basic_names")
   class(x) <- NULL
-  i <- 0 #XXX
-  code8 <- data.frame(where = character(), byte1=raw(), byte2 = raw(), byte3 = raw(), value = numeric()) #XXX
   x <- lapply(x, function(ln) {
-    cmdln <- strrep(" ", .rawToAmigaInt(ln[1], 8, F))
+    cmdln <- strrep(" ", .rawToAmigaInt(ln[1], 8 , F))
     ln <- ln[-1]
-    i <<- i + 1 ###XXX
-    while (length(ln) > 0) {
-      # if (i >= 4) browser()##XXX
+    while (length(ln) > 2) {
       ln1 <- ln[1]
       ln <- ln[-1]
-      #if (grepl("ELSEIF", cmdln)) browser()#XXX
+      
+      if (cmdln == "" && length(ln) > 1) { ## Check if line starts with numeric label
+        if (((utils::tail(ln, 1) & as.raw(0x80)) != 0x00) || !(any(.valid_code(c(ln1, ln[1]))) || ln1 %in% as.raw(1:3)) &&
+            (length(ln) < 3 || (any(.valid_code(ln[2:3])) || ln[2] %in% as.raw(1:3)))) {
+          ln[length(ln)] <- xor(utils::tail(ln, 1), as.raw(0x80))
+          cmdln <- paste0(cmdln, as.character(readBin(c(ln1, ln[1]), "integer", 2, 2, F, "big")))
+          ln1 <- ln[2]
+          ln <- ln[-1:-2]
+          if (length(ln) > 2) cmdln <- paste0(cmdln, " ")
+        }
+      }
+      #TODO 'THEN' and 'ELSEIF' seems to be followed by redundant binaries
       m1 <- which(.amigabasic_commands$code1 %in% ln1)
       if ((length(m1) > 1 && length(ln) > 0) ||
           (length(m1) == 1 && .amigabasic_commands$code2[m1] != raw(1))) {
@@ -462,24 +514,23 @@ as.character.AmigaBasic <- function(x, ...) {
             if (ln[1] != raw(1)) warning(sprintf("Encountered non-zero padding byte (%02x).", as.numeric(ln[1])))
             ln <- ln[-1]
           }
-          ## XXX check if this long is signed.
-          ## XXX this will only cause problems at very large numbers...
-          idx <- readBin(ln[1:2], "integer", size = 2, endian = "big") + 1
+          idx <- .rawToAmigaInt(ln[1:2], 16, F) + 1
           cmdln <- paste0(cmdln, nms[idx])
           ln <- ln[-1:-2]
         } else if(ln1 == as.raw(0x08)) {
-          #if (grepl("ELSEIF", cmdln)) browser()#XXX
-          ## XXX what the heck is this? ignore ln[1] bytes of code
-          ## XXX this always occurs after if then statement, or within elseif line
-          code8 <<- rbind(code8,
-                          data.frame(where = cmdln,
-                                     byte1 = ln[1],
-                                     byte2 = ln[2],
-                                     byte3 = ln[3],
-                                     value = readBin(ln[2:3], "integer", size = 2, signed = F, endian = "big"))) #XXX remove code8 later on
-          ln <- ln[-1:-3] ## byte1 says nothing about the length of the data. byte1 is mostly 2, but can have different values. the amount of data is always fixed
+          ## TODO This code appears to be redundant and follows after THEN or ELSEIF statements
+          ln <- ln[-1:-3] ## byte1 says nothing about the length of the data. byte1 is mostly 2, but can have different values. the amount of data is always fixed. There seems to be a correlation with the line number in which this occurs
         } else if (ln1 %in% as.raw(0x11:0x1a)) {
           cmdln <- paste0(cmdln, as.numeric(ln1) - 0x11)
+        } else if (ln1 == as.raw(0x0b)) { ## octal number
+          cmdln <- sprintf("%s&O%o", cmdln, readBin(ln[1:2], "integer", size = 2, endian = "big", signed = F))
+          ln <- ln[-1:-2]
+        } else if (ln1 == as.raw(0x0c)) { ## hexadecimal short signed integer
+          cmdln <- sprintf("%s&H%X", cmdln, readBin(ln[1:2], "integer", size = 2, endian = "big", signed = F))
+          ln <- ln[-1:-2]
+        } else if (ln1 == as.raw(0x0e)) { ## longish unsigned integer
+          cmdln <- paste0(cmdln, readBin(c(raw(1), ln[1:3]), "integer", size = 4, endian = "big"))
+          ln <- ln[-1:-3]
         } else if (ln1 == as.raw(0x0f)) {
           cmdln <- paste0(cmdln, as.numeric(ln[1]))
           ln <- ln[-1]
@@ -529,7 +580,7 @@ as.character.AmigaBasic <- function(x, ...) {
       } else {
         cmd <- .amigabasic_commands$command[m1]
         if (cmd %in% c("ELSE", "REM", "'")) {
-          ## remove preceeding ":" if it is there
+          ## remove preceding ":" if it is there
           if (nchar(cmdln) > 0) {
             if (substr(cmdln, nchar(cmdln), nchar(cmdln)) == ":")
               cmdln <- substr(cmdln, 0, nchar(cmdln) - 1)
@@ -546,7 +597,6 @@ as.character.AmigaBasic <- function(x, ...) {
     return(cmdln)
   })
   x <- unlist(x)
-  if (!is.null(x)) attr(x, "code8") <- code8 #XXX
   return(x)
 }
 
@@ -559,7 +609,7 @@ as.character.AmigaBasic <- function(x, ...) {
 #' This function will return a full list of reserved Amiga Basic
 #' words. This list does not serve as a manual for basic (for
 #' that purpose consult external resources). This list is meant to
-#' consult when chosing label names in Amiga Basic code. These
+#' consult when choosing label names in Amiga Basic code. These
 #' reserved words are not allowed as names.
 #' 
 #' @rdname AmigaBasic.reserved
@@ -577,9 +627,11 @@ AmigaBasic.reserved <- function() {
 
 #' Coerce raw or character data to an AmigaBasic class object
 #'
-#' XXX
+#' Coerce raw or character data to an \code{\link{AmigaBasic}} S3 class object
 #'
-#' XXX
+#' Convert text to an \code{\link{AmigaBasic}} S3 class object. The text should
+#' consist of valid Amiga BASIC syntaxis. This function does not perform a
+#' full check of the syntaxis, but will break on some fundamental syntaxis malformations
 #' 
 #' @rdname as.AmigaBasic
 #' @name as.AmigaBasic
@@ -612,6 +664,7 @@ AmigaBasic.reserved <- function() {
 #' ## Note that this effectively the same as calling 'rawToAmigaBasic'
 #' bas <- as.AmigaBasic(bas.raw)
 #' }
+#' @references \url{https://en.wikipedia.org/wiki/AmigaBASIC}
 #' @family AmigaBasic.operations
 #' @family raw.operations
 #' @author Pepijn de Vries
@@ -629,6 +682,7 @@ as.AmigaBasic <- function(x, ...) {
     
     nms <- NULL
     x <- lapply(x, function(y) {
+      trailing_marker <- raw(1)
       result <- raw(0)
       while (length(y) > 0) {
         ## This cannot be moved outside the loop, as the extra split modifies the text.
@@ -639,12 +693,12 @@ as.AmigaBasic <- function(x, ...) {
           extrasplit <- gregexpr("[^\\d.!#%&]", y[1], perl = T)[[1]]
           ## except for when it is an exponent
           extrasplit <- extrasplit[extrasplit != exponent[1]]
-          ## Find first occurence of !#%&
+          ## Find first occurrence of !#%&
           extrasplit <- c(extrasplit, 1 + gregexpr("[!#%&]", y[1], perl = T)[[1]])
-          ## second occurence of period:
+          ## second occurrence of period:
           extrasplit <- c(extrasplit, gregexpr("(?:.*?\\K[.]){2}", y[1], perl = T)[[1]])
           extrasplit[extrasplit < 1] <- 1 + nchar(y[1])
-          extrasplit <- extrasplit[extrasplit == min(extrasplit)]
+          extrasplit <- extrasplit[which(extrasplit == min(extrasplit))[1]]
           if (extrasplit > 1 && extrasplit <= nchar(y[1])) {
             extrasplit <- c(substr(y[1], 1, extrasplit - 1), " ", substr(y[1], extrasplit, nchar(y[1])))
           } else extrasplit <- y[1]
@@ -653,8 +707,15 @@ as.AmigaBasic <- function(x, ...) {
                  y[-1])
           y <- y[nchar(y) > 0]
         }
-        if (y[1] == "?") y[1] <- "PRINT "
+        if (y[1] == "?") y <- c("PRINT", " ", y[-1])
         cmd <- match(toupper(y[1]), .amigabasic_commands$command)
+        if (is.na(cmd) && length(y) > 1 && y[2] == "$") {
+          cmd <- match(toupper(paste0(y[1], y[2])), .amigabasic_commands$command)
+          if (!is.na(cmd)) {
+            y[1] <- paste0(y[1], y[2])
+            y <- y[-2]
+          }
+        }
         if (!is.na(cmd)) {
           cmd <- unlist(.amigabasic_commands[cmd, c("code1", "code2")], use.names = F)
           cmd <- cmd[cmd != raw(1)]
@@ -674,11 +735,26 @@ as.AmigaBasic <- function(x, ...) {
             if (length(y) == 0 || y[1] == "\"") break
           }
           if (length(y)> 0) result <- c(result, charToRaw(y[1]))
-        } else if (suppressWarnings(!is.na(as.numeric(gsub("D", "E", toupper(y[1])))))) { ## if it is a numeric
+        } else if (suppressWarnings(!is.na(as.numeric(gsub("^O", "", gsub("^H", "0x", gsub("D", "E", toupper(y[1])))))))) { ## if it is a numeric
+          if (any(y[y != "  "][1] == "$")) stop("Fatal syntax error, numeric cannot be followed by '$'.")
           dot <- grepl("[.]", y[1])
           tp <- NA
-          if (grepl("D", toupper(y[[1]]))) tp = "#" ## if The exponent is noted with a 'D', it is a double precision float
-          if (grepl("E", toupper(y[[1]]))) tp = "!" ## if The exponent is noted with a 'E', it is a single precision float
+          if (grepl("D", toupper(y[[1]]))) tp <- "#" ## if The exponent is noted with a 'D', it is a double precision float
+          if (grepl("E", toupper(y[[1]]))) tp <- "!" ## if The exponent is noted with a 'E', it is a single precision float
+          if (startsWith(toupper(y[1]), "H") && length(result) > 0 && utils::tail(result, 1) == as.raw(0x26)) tp <- "&H" ## a signed hexadecimal short int (two bytes)
+          if (startsWith(toupper(y[1]), "O") || (is.na(tp) && length(result) > 0 && utils::tail(result, 1) == as.raw(0x26))) tp <- "&O" ## an octal number
+          if (length(result) == 0) tp <- "numeric_label"
+          if (length(result) > 2) {
+            comm_check <- .amigabasic_commands$command %in% c("GOTO", "GOSUB", "BREAK", "COLLISION", "ERROR", "MENU", "MOUSE", "TIMER")
+            comm_check <- .amigabasic_commands[comm_check, c("code1", "code2")]
+            check <- any(apply(comm_check, 1, function(cc) {
+              code <- as.raw(paste0("0x", cc))
+              code <- if (!any(code == 0x00)) c(as.raw(c(0xaa, 0x20)), code) else code[code != 0x00] # 0xaa20 == "on "
+              code <- c(code, as.raw(0x20))
+              return(length(result) >= length(code) && identical(code, utils::tail(result, length(code))))
+            }))
+            if (check) tp <- "numeric_ref"
+          }
           if (grepl("E|D", toupper(y[[1]])) && (length(y) > 1) && y[2] %in% c("+", "-")) {
             y[1] <- paste0(y[1], y[2])
             y <- y[-2]
@@ -695,7 +771,8 @@ as.AmigaBasic <- function(x, ...) {
               y <- y[-2]
             }
           }
-          num <- as.numeric(gsub("D", "E", toupper(as.character(y[1]))))
+          num <- suppressWarnings(as.numeric(gsub("D", "E", toupper(as.character(y[1])))))
+          if (is.na(num) && !(tp %in% c("&H", "&O"))) stop(sprintf("Fatal error in number format: %s%s.", tp, y[1]))
           if (is.na(tp) && length(y) > 1 && y[2] %in% c("!", "#", "%", "&")) {
             if (length(y) > 2 && !grepl("^[ ()/,:;-]", y[3])) y <- c(y[1:2], " ", y[-1:-2])
             tp <- y[2]
@@ -710,7 +787,7 @@ as.AmigaBasic <- function(x, ...) {
               ## it's either a single or a double float
               fm <- format(num, scientific = T)
               fm <- strsplit(fm, "e")[[1]]
-              ## XXX need to test this more extensively
+              ## TODO need to test this more extensively
               tp <- ifelse(nchar(fm[1]) > 8 || abs(as.numeric(fm[2])) > 38,
                            "#", "!")
             }
@@ -727,14 +804,45 @@ as.AmigaBasic <- function(x, ...) {
                 as.raw(c(0x0f, num))
               )
             }
+          } else if(tp %in% c("numeric_label", "numeric_ref")) {
+            if (as.integer(y[1]) < 0) stop("Fatal syntax error: numeric labels cannot be negative.")
+            if (as.integer(y[1]) > 0xfff9) {
+              y <- c(substr(y[1], 1, 4), substr(y[1], 5, nchar(y[1])), y[-1])
+            }
+            result <- c(result, if(tp == "numeric_ref") as.raw(c(0x0e, 0x00)) else raw(),
+                        writeBin(as.integer(y[1]), raw(), 2, "big"))
+            z <- y[y != " "]
+            valid_current <- any(.valid_code(result)) || result[[1]] %in% as.raw(1:3)
+            valid_next    <- length(z) > 1 &&
+              (toupper(z[2]) %in% .amigabasic_commands$command || !is.na(suppressWarnings(try(as.numeric(z[2])))) ||
+                                              (!is.null(nms) && toupper(z[2]) %in% toupper(nms)) ||
+                 grepl("[ !#$%\\^&*()\\-+=/?,<>:;\"']", z[2], perl = T))
+            ## TODO This check isn't 100% similar to original amigabasic. It will produce a different outcome on as.AmigaBasic("1 PRINT \"ja\":GOTO 9"), but it will still work
+            if (length(result) == 2 &&
+                (!(valid_current && (length(y) == 1 || valid_next)) || valid_current)) trailing_marker <- as.raw(0x80)
+            if (length(y) > 2 && y[2] == " ") y <- y[-2]
           } else {
+            if (tp %in% c("&H", "&O")) result <- utils::head(result, -1) ## remove the '&' previously written to the result
             result <- c(
               result,
-              as.raw(c(0x1c, 0x1e, 0x1d, 0x1f))[match(tp, c("%", "&", "!", "#"))],
+              as.raw(c(0x0b, 0x0c, 0x1c, 0x1d, 0x1e, 0x1f))[match(tp, c("&O", "&H", "%", "!", "&", "#"))],
               writeBin(
-                ifelse(tp %in% c("%", "&"), as.integer(num), num),
+                ifelse(tp %in% c("%", "&"), as.integer(num),
+                       ifelse(tp == "&H", { ## two byte hexadecimal
+                         num <- as.integer(gsub("^H", "0x", y[1]))
+                         as.integer(ifelse(num > 0x8000, num - 0x10000, num))
+                       },
+                       ifelse(tp =="&O", { ## two byte octal
+                         y[1] <- gsub("^O", "", toupper(y[1]))
+                         num <- strsplit(y[1], "[^0-7]")[[1]]
+                         y_insert <- substr(y[1], nchar(num) + 1, nchar(y[1]))
+                         if (y_insert != "") y <- c(y[1], " ", y_insert, utils::tail(y, -1))
+                         num <- as.numeric(strsplit(num, "")[[1]])
+                         num <- as.integer(sum(num * (8 ^ (rev(seq_along(num) - 1)))))
+                         as.integer(ifelse(num > 0x8000, num - 0x10000, num))
+                       }, num))),
                 raw(),
-                size = ifelse(tp == "%", 2, ifelse(tp == "#", 8, 4)),
+                size = ifelse(tp %in% c("&H", "&O", "%"), 2, ifelse(tp == "#", 8, 4)),
                 endian = "big")
             )
           }
@@ -745,15 +853,15 @@ as.AmigaBasic <- function(x, ...) {
             y[1] <- substr(y[1], 3, nchar(y[1]))
           }
           
-          if (any(as.logical(check.AmigaBasic.names(y[1])))) stop(sprintf("Fatal syntax error Basic code at: '%s'", paste(y, collapse = "")))
+          if (any(as.logical(check.names.AmigaBasic(y[1])))) stop(sprintf("Fatal syntax error Basic code at: '%s'", paste(y, collapse = "")))
           
           ## Check if the name was already used before, otherwise
           ## append it to the vector of names.
-          nm <- match(toupper(y[1]), toupper(nms)) ## the first definition will deterimine the case of the characters in the name
+          nm <- match(toupper(y[1]), toupper(nms)) ## the first definition will determine the case of the characters in the name
           
           cd <- 1 ## variable or static sub label
-          ## if the name is directly followed by a colon, it is a label definition
-          if (length(y) > 1 && y[2] == ":") {
+          ## if the name is directly followed by a colon (and nothing else), it is a label definition
+          if (length(y) == 2 && y[2] == ":") {
             cd <- 2 ## label definition
           } else {
             goto.gosub <- c(
@@ -772,18 +880,28 @@ as.AmigaBasic <- function(x, ...) {
           }
           result <- c(
             result,
-            as.raw(cd),
+            as.raw(cd), if(cd == 3) raw(1) else raw(),
             writeBin(as.integer(nm - 1), raw(), size = 2, endian = "big")
           )
         }
         y <- y[-1]
       }
+      attributes(result)$trailing_marker <- trailing_marker
       return (result)
     })
-    x <- lapply(1:length(x), function(i) {
-      c(leading.spaces[[i]], x[[i]], raw(2))
+    x <- lapply(seq_along(x), function(i) {
+      padding <- raw(2)
+      if (!is.null(attr(x[[i]], "trailing_marker"))) {
+        padding[2] <- attr(x[[i]], "trailing_marker")
+        attr(x[[i]], "trailing_marker") <- NULL
+      }
+      c(leading.spaces[[i]], x[[i]], padding)
     })
-    ## XXX protected basic files have header 0xf4, 0xc2. U suspect that this is followed by a 5 byte encryption key, followed by encrypted data
+    x <- lapply(x, function(y) {
+      if (length(y) > 2 && identical(y[1:3], as.raw(c(0x00, 0xaf, 0xe8)))) y <- c(y[1], as.raw(0x3a), y[-1])
+      y
+    })
+    ## TODO protected basic files have header 0xf4, 0xc2. U suspect that this is followed by a 5 byte encryption key, followed by encrypted data
     attr(x, "basic_header") <- as.raw(c(0xf5, 0x00))
     attr(x, "basic_names") <- nms
     class(x) <- "AmigaBasic"
@@ -797,21 +915,23 @@ as.AmigaBasic <- function(x, ...) {
 
 #' Extract or replace lines of Amiga Basic code
 #'
-#' XXX
+#' Extract or replace lines of Amiga Basic code
 #'
-#' XXX
+#' Extract or replace specific lines in an \code{\link{AmigaBasic}}-class object.
 #' 
 #' @rdname ExtractBasic
 #' @name [.AmigaBasic
 #' @param x An \code{AmigaBasic} class object from which specific lines
 #' need to be extracted or replaced.
-#' @param i A \code{vector} of \code{numeric} indices. This index
+#' @param i In case of `[[', an integer index, representing the line-number of basic code to be selected.
+#' In case of `[': a \code{vector} of \code{numeric} indices. This index
 #' is used to select specific lines. Negative values will deselect lines.
 #' @param value A \code{vector} of \code{character} strings or an
 #' \code{\link{AmigaBasic}} class object that is used to replace
 #' the selected indices \code{i}. \code{value} should represent the
 #' same number of lines of code as the selected number of lines.
-#' @return XXX
+#' @return The extraction method returns an \code{\link{AmigaBasic}} object based in the lines selected with \code{i}.
+#' The replacement method returns an \code{\link{AmigaBasic}} object with the selected lines replaced with \code{value}.
 #' @examples
 #' \dontrun{
 #' ## First generate a few lines of Basic code:
@@ -835,19 +955,15 @@ as.AmigaBasic <- function(x, ...) {
 #' 
 #' ## You can also use AmigaBasic class object as replacement
 #' bas[2] <- as.AmigaBasic("a = a + 3")
+#' 
+#' ## single lines can also be selected with '[['
+#' bas[[2]]
 #' }
 #' @family AmigaBasic.operations
 #' @author Pepijn de Vries
 #' @export
 `[.AmigaBasic` <- function(x, i) {
-  if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
-  a <- attributes(x)
-  cl <- class(x)
-  class(x) <- NULL
-  x <- x[i]
-  attributes(x) <- a
-  class(x) <- cl
-  x
+  vctrs::vec_restore(NextMethod(), x)
 }
 
 #' @rdname ExtractBasic
@@ -855,31 +971,26 @@ as.AmigaBasic <- function(x, ...) {
 #' @export
 `[<-.AmigaBasic` <- function(x, i, value) {
   if (!inherits(x, "AmigaBasic")) stop("'x' should be of class AmigaBasic.")
-  value <- as.character(value)
   x <- as.character(x)
-  x[i] <- value
+  x[i] <- as.character(value)
   return(as.AmigaBasic(x))
 }
 
-## XXX extract function is called recursively, even without selecting an element
-# `[[.AmigaBasic` <- function(x, i) {
-#   browser()#XXX
-#   if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
-#   sink();print("Maar ik kom ook hier [[")#XXX
-#   a <- attributes(x)
-#   cl <- class(x)
-#   class(x) <- NULL
-#   x <- list(x[[i]])
-#   attributes(x) <- a
-#   class(x) <- cl
-#   x
-# }
+#' @rdname ExtractBasic
+#' @name `[[.AmigaBasic`
+#' @export
+`[[.AmigaBasic` <- function(x, i) {
+  vctrs::vec_restore(list(NextMethod()), x)
+}
 
+#' @rdname ExtractBasic
+#' @name `[[<-.AmigaBasic`
 #' @export
 `[[<-.AmigaBasic` <- function(x, i, value) {
   if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
-  browser()#XXX
-  x
+  x <- as.character(x)
+  x[[i]] <- as.character(value)
+  return(as.AmigaBasic(x))
 }
 
 #' @export
@@ -892,16 +1003,17 @@ print.AmigaBasic <- function(x, ...) {
 #'
 #' In the binary Amiga Basic files, names for labels and variables
 #' in the code are stored at the end of the file. In the encoded
-#' there is only a reference to the index of the name in that list. Use
+#' there is only a pointer to the index of the name in that list. Use
 #' this function to list, select or replace names included in the code
 #' 
-#' XXX
+#' Make sure that variable and label names are valid for the basic script (see \link{check.names.AmigaBasic}).
 #' 
-#' @rdname AmigaBasic.names
-#' @name AmigaBasic.names
-#' @param x XXX
-#' @param value XXX
-#' @return XXX
+#' @rdname names.AmigaBasic
+#' @name names.AmigaBasic
+#' @param x An \code{\link{AmigaBasic}}-class object for which to obtain or change variable and/or label names
+#' @param value A (\code{vector} of) \code{character} string of desired replacement variable/label names.
+#' @return A \code{vector} of \code{character} strings with label and variable names in the basic script.
+#' In case of the replacement method a \code{\link{AmigaBasic}}-class with replaced names is returned.
 #' @examples
 #' ## Let's create some Basic code with labels and variables:
 #' bas <- as.AmigaBasic(c(
@@ -915,28 +1027,28 @@ print.AmigaBasic <- function(x, ...) {
 #' ))
 #' 
 #' ## list the names in the script above:
-#' AmigaBasic.names(bas)
+#' names(bas)
 #' 
 #' ## change the first name:
-#' AmigaBasic.names(bas)[1] <- "better.label"
+#' names(bas)[1] <- "better.label"
 #' @family AmigaBasic.operations
 #' @author Pepijn de Vries
 #' @export
-AmigaBasic.names <- function(x) {
+names.AmigaBasic <- function(x) {
   if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
   result <- attr(x, "basic_names")
   if (length(result) == 0) character() else result
 }
 
-#' @rdname AmigaBasic.names
-#' @name AmigaBasic.names<-
+#' @rdname names.AmigaBasic
+#' @name names<-.AmigaBasic
 #' @export
-`AmigaBasic.names<-` <- function(x, value) {
+`names<-.AmigaBasic` <- function(x, value) {
   if (!inherits(x, "AmigaBasic")) stop("x should be of class AmigaBasic.")
   if (!is.character(value) || length(value) != length(attr(x, "basic_names")))
     stop("Replacement should be a vector of characters of the same length.")
   if (any(duplicated(toupper(value)))) stop("All names should be unique.")
-  if (any(nchar(value) > 255 | nchar(value) < 1)) stop("All names should be more than 1 and less than 255 characters long.")
+  if (any(nchar(value) > 255 | nchar(value) < 1)) stop("All names should be one or more and less than 255 characters in length.")
   if (any(toupper(value) %in% .amigabasic_commands$command)) stop("Names cannot be reserved AmigaBasic words.")
   if (any(grepl("[^a-zA-Z0-9.]", value, perl = TRUE))) stop("Names should consist of alphanumerics or periods.")
   if (any(grepl("[0-9]", substr(value, 1, 1), perl = T))) stop("Names should not start with numeric characters.")
@@ -945,17 +1057,54 @@ AmigaBasic.names <- function(x) {
   x
 }
 
+#' Check Amiga Basic label/variable names for validity
+#'
+#' Check Amiga Basic label/variable names for validity
+#' 
+#' Names for variables and labels should adhere to the following rules in Amiga Basic:
+#' 
+#' \itemize{
+#'   \item{Length of the names should be in the range of 1 up to 255 character}
+#'   \item{Names cannot be \code{\link{AmigaBasic.reserved}} words}
+#'   \item{Names should only contain alphanumeric characters or periods and
+#'   should not contain special characters (i.e., reserved for type definition,
+#'   such as dollar- or percentage sign)}
+#'   \item{Names should not start with a numeric character}
+#' }
+#' 
+#' This function tests names against each of these criteria.
+#' 
+#' @rdname check.names.AmigaBasic
+#' @name check.names.AmigaBasic
+#' @param x A \code{vector} of \code{character} strings that need to be checked
+#' @param ... Currently ignored.
+#' @return A \code{data.frame} with \code{logical} values with the same number of rows as the length of \code{x}.
+#' Columns in the data.frame corresponds with the criteria listed in the details.
+#' \code{FALSE} for invalid names.
+#' @examples
+#' \dontrun{
+#' ## These are valid names in Amiga Basic:
+#' check.names.AmigaBasic(c("Foo", "Bar"))
+#' 
+#' ## Reserved words and repeated names are not allowed:
+#' 
+#' check.names.AmigaBasic(c("Print", "Foo", "Foo"))
+#' }
+#' @family AmigaBasic.operations
+#' @author Pepijn de Vries
 #' @export
-check.AmigaBasic.names <- function(x, ...) {
-  data.frame(
-    duplicated = duplicated(toupper(x)),
-    length     = nchar(x) > 255 | nchar(x) < 1,
-    reserved   = toupper(x) %in% .amigabasic_commands$command,
-    characters = grepl("[^a-zA-Z0-9.]", x, perl = TRUE),
-    start      = grepl("^[0-9.]", x, perl = TRUE)
+check.names.AmigaBasic <- function(x, ...) {
+  nm <- if (inherits(x, "AmigaBasic")) names(x) else as.character(x)
+  result <- data.frame(
+    duplicated = duplicated(toupper(nm)),
+    length     = nchar(nm) > 255 | nchar(nm) < 1,
+    reserved   = toupper(nm) %in% .amigabasic_commands$command,
+    characters = grepl("[^a-zA-Z0-9.]", nm, perl = TRUE),
+    start      = grepl("^[0-9.]", nm, perl = TRUE)
   )
+  row.names(result) <- nm
+  result
 }
-
 
 #' @rdname c
 #' @name c
@@ -975,72 +1124,113 @@ c.AmigaBasic <- function(...) {
   stringsAsFactors = F
 )
 
-#' XXX
+#' Coerce raw data into an AmigaBasicShape class object
 #'
-#' XXX
+#' Coerce raw data into an \code{\link{AmigaBasicShape}}-class object
 #'
-#' XXX
-#' 
+#' \code{\link{AmigaBasicShape}} objects are comprehensive representations of blitter
+#' and sprite graphics that can be used in \code{\link{AmigaBasic}} scripts. Use this function
+#' to convert \code{raw} content to an \code{\link{AmigaBasicShape}} object.
+#'
 #' @rdname rawToAmigaBasicShape
 #' @name rawToAmigaBasicShape
 #' @param x A \code{vector} of \code{raw} data that is to be converted
 #' into an \code{\link{AmigaBasicShape}} class object.
-#' @param ... Arguments passed on to \code{\link{bitmapToRaster}}.
-#' As the palette is not stored in the file. This can be used to
-#' pass on a custom \code{palette} to \code{\link{bitmapToRaster}}.
-#' @return XXX
+#' @param palette A \code{vector} of \code{character} strings, where each element represents a colour in the palette.
+#' This palette will be used to display the graphics (note that the raw format does not store the palette, but this
+#' S3 class does). When this argument is omitted a grey scale palette will be generated.
+#' @return returns an \code{\link{AmigaBasicShape}}-class object.
 #' @examples
 #' \dontrun{
-#' ## XXX
+#' filename <- system.file("ball.shp", package = "AmigaFFH")
+#' 
+#' ## read as binary:
+#' con      <- file(filename, "rb")
+#' ball.raw <- readBin(con, "raw", file.size(filename))
+#' close(con)
+#' 
+#' ## convert raw data into something useful:
+#' ball     <- rawToAmigaBasicShape(ball.raw)
+#' 
+#' ## A shortcut would be to call read.AmigaBasicShape
+#' ball2    <- read.AmigaBasicShape(filename)
 #' }
 #' @family AmigaBasicShapes.operations
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
-rawToAmigaBasicShape <- function(x, ...) {
+rawToAmigaBasicShape <- function(x, palette) {
   ## colorset and dataset seem to be ignored in the basic object editor.
   ## They seem not required for interpretation of the file
-  result <- with(.basic.shape.header, AmigaFFH:::.read.amigaData(x, byte, signed, par.names))
-  x <- x[-1:-sum(abs(.basic.shape.header$byte))]
-  bm <- with(result, AmigaFFH:::bitmapToRaster(x, width, height, depth, interleaved = F, ...))
-  sz <- 2*ceiling(result$width/16)*result$height*result$depth
-  x <- x[-1:-sz]
-  browser()
-  result$flags <- rev(as.logical(AmigaFFH:::.rawToBitmap(result$flags, T, F)))
-  names(result$flags) <- c("fVSprite", "collisionPlaneIncluded", "imageShadowIncluded", "saveBack", "overlay", "saveBob",
-                           sprintf("reserved%02i", 1:10))
+  if (missing(palette)) palette <- NULL
+  result        <- with(.basic.shape.header, .read.amigaData(x, byte, signed, par.names))
+  if (is.null(palette)) {
+    palette <- grDevices::grey(seq(0, 1, length.out = 2^result$depth))
+  } else {
+    if (length(palette) != 2^result$depth)
+      stop(sprintf("This shape requires a palette of %i colours, but got %i.", 2^result$depth, length(palette)))
+  }
+  x             <- x[-1:-sum(abs(.basic.shape.header$byte))]
+  result$bitmap <- with(result, bitmapToRaster(x, width, height, depth, palette, interleaved = F))
+  attributes(result$bitmap)$palette <- palette
+  sz_alt        <- 2*ceiling(result$width/16)*result$height
+  sz            <- sz_alt*result$depth
+  x             <- x[-1:-sz]
+  result$flags <- rev(as.logical(.rawToBitmap(c(raw(2), result$flags), T, F)))[1:16]
+  result$planeOnOff <- rev(as.logical(.rawToBitmap(c(raw(2), result$planeOnOff), T, F)))[1:16]
+  names(result$flags) <- .amigabasicshape.flags
   if (result$flags["fVSprite"] && result$depth != 2) warning("Unexpected bitmap depth for sprite mode.")
   if (result$flag["imageShadowIncluded"]) {
-    #TODO read collision bitmap plane
+    result$shadow <- with(result, bitmapToRaster(x, width, height, 1, interleaved = F, palette = c("black", "white")))
+    x <- x[-1:-sz_alt]
   }
   if (result$flag["collisionPlaneIncluded"]) {
-    #TODO read collision bitmap plane
+    result$collision <- with(result, bitmapToRaster(x, width, height, 1, interleaved = F, palette = c("black", "white")))
+    x <- x[-1:-sz_alt]
   }
   if (result$flags["fVSprite"]) {
-    #TODO read 3x2 bytes (color of sprite)
+    result$sprite_palette <- amigaRawToColour(x[1:6], "12 bit", "2")
+    x <- x[-1:-6]
   }
   if (length(x) > 0) warning("Unexpected and unused trailing data!")
-  ## XXX for now, just return the bitmap
-  bm
+  class(result) <- "AmigaBasicShape"
+  result
 }
 
 #' Read Amiga Basic Shape files
 #'
-#' XXX
+#' Read Amiga Basic Shape files
 #'
-#' XXX
+#' AmigaBasic used the term 'shapes' for graphics (sprites and blitter objects) which it could display.
+#' These graphics were stored in a specific binary format, which can be read with this function. See
+#' \code{\link{AmigaBasicShape}} for more details. The file can also be read from a virtual Amiga disk
+#' (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
 #' @rdname read.AmigaBasicShape
 #' @name read.AmigaBasicShape
 #' @param file A \code{character} string of the filename of the Amiga Basic Shape file to be read.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @param ... XXX
+#' @param ... Arguments passed to \code{\link{rawToAmigaBasicShape}}.
 #' @return Returns an \code{\link{AmigaBasicShape}} class object read from the \code{file}.
 #' @examples
 #' \dontrun{
-#' ## XXX
+#' filename <- system.file("ball.shp", package = "AmigaFFH")
+#' ball     <- read.AmigaBasicShape(filename)
+#' ## This is a sprite:
+#' ball$flags[["fVSprite"]]
+#' 
+#' filename <- system.file("r_logo.shp", package = "AmigaFFH")
+#' ## The palette is not stored with an Amiga Basic Shape, so let's provide one:
+#' r_logo   <- read.AmigaBasicShape(filename,
+#'                                  palette = c("#FFFFFF", "#2266BB", "#3366BB", "#4477AA",
+#'                                  "#778899", "#999999", "#AAAAAA", "#BBBBBB"))
+#' ## This is a blitter object:
+#' r_logo$flags[["fVSprite"]]
+#' 
+#' ## Just for fun, plot it:
+#' plot(r_logo)
 #' }
 #' @family AmigaBasicShape.operations
 #' @family io.operations
@@ -1056,9 +1246,9 @@ read.AmigaBasicShape <- function(file, disk = NULL, ...) {
 #' Write an \code{\link{AmigaBasicShape}} class object to a file in its binary format.
 #'
 #' This function coerces the Amiga Basic Shape into its binary format
-#' (using \code{\link{as.raw}}) and writes it to a file. The file
+#' (using \code{\link[AmigaFFH]{as.raw}}) and writes it to a file. The file
 #' can also be stored onto a virtual Amiga disk
-#' (\code{\link[adfExplorer]{amigaDisk}}).
+#' (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
 #' 
 #' @rdname write.AmigaBasicShape
 #' @name write.AmigaBasicShape
@@ -1067,7 +1257,7 @@ read.AmigaBasicShape <- function(file, disk = NULL, ...) {
 #' @param file A \code{character} string specifying the file location
 #' to which \code{x} (an \code{\link{AmigaBasicShape}} object) needs to be written.
 #' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Invisibly returns the result of the call of \code{close} to the
@@ -1075,7 +1265,9 @@ read.AmigaBasicShape <- function(file, disk = NULL, ...) {
 #' \code{disk} is returned to which the file(s) is/are written.
 #' @examples
 #' \dontrun{
-#' ## XXX
+#' filename <- system.file("ball.shp", package = "AmigaFFH")
+#' ball     <- read.AmigaBasicShape(filename)
+#' write.AmigaBasicShape(ball, file.path(tempdir(), "ball.shp"))
 #' }
 #' @family AmigaBasicShape.operations
 #' @family io.operations
@@ -1090,7 +1282,360 @@ write.AmigaBasicShape <- function(x, file, disk = NULL) {
 #' @name as.raw.AmigaBasicShape
 #' @export
 as.raw.AmigaBasicShape <- function(x, ...) {
-  ## XXX update documentation
   if (!inherits(x, "AmigaBasicShape")) stop("x should be of class AmigaBasicShape.")
-  ## XXX
+  sprite        <- x$flags[["fVSprite"]]
+  shadow        <- x$flags[["imageShadowIncluded"]]
+  collision     <- x$flags[["collisionPlaneIncluded"]]
+  x$flags       <- .bitmapToRaw(c(x$flags, rep(F, 16)), T, T)[3:4]
+  x$planeOnOff  <- .bitmapToRaw(c(x$planeOnOff, rep(F, 16)), T, T)[3:4]
+  result        <- with(.basic.shape.header, .write.amigaData(x[par.names], byte, signed, par.names))
+  pal <- attributes(x$bitmap)$palette
+  result        <- c(result,
+                     .bitmapToRaw(rasterToBitmap(
+                       x$bitmap,
+                       depth = x$depth,
+                       interleaved = F,
+                       indexing = function(x, length.out) index.colours(x, length.out,
+                                                                        palette = pal)),
+                       T, F)
+  )
+  if (shadow) {
+    if (is.null(x$shadow)) stop("Expected shadow layer, but found nothing") else {
+      result        <- c(result,
+                         .bitmapToRaw(rasterToBitmap(
+                           x$shadow,
+                           depth = 1,
+                           interleaved = F,
+                           indexing = function(x, length.out) index.colours(x, length.out,
+                                                                            palette = c("black", "white"))),
+                           T, F)
+      )
+                         
+    }
+  }
+  if (collision) {
+    if (is.null(x$collision)) stop("Expected shadow layer, but found nothing") else {
+      result        <- c(result,
+                         .bitmapToRaw(rasterToBitmap(
+                           x$collision,
+                           depth = 1,
+                           interleaved = F,
+                           indexing = function(x, length.out) index.colours(x, length.out,
+                                                                            palette = c("black", "white"))),
+                           T, F)
+      )
+    }
+  }
+  if (sprite) {
+    if (is.null(x$sprite_palette)) stop("Expected sprite palette, but found nothing") else {
+      result <- c(result, colourToAmigaRaw(x$sprite_palette, "12 bit", "2"))
+    }
+  }
+  return(result)
+}
+
+#' @export
+print.AmigaBasicShape <- function(x, ...) {
+  print(sprintf("A %i x %i %s with %i colours to be used in Amiga Basic.",
+                x$width, x$height,
+                c("blitter object", "sprite")[as.numeric(x$flags[["fVSprite"]]) + 1], 2^x$depth), ...)
+}
+
+#' @rdname plot
+#' @name plot.AmigaBasicShape
+#' @export
+plot.AmigaBasicShape <- function(x, y, ...) {
+  if (!inherits(x, "AmigaBasicShape")) stop("x should be of class AmigaBasicShape.")
+  if (missing(y)) y <- "bitmap"
+  plot(as.raster(x, selected = y), ...)
+}
+
+#' @rdname as.raster
+#' @name as.raster.AmigaBasicShape
+#' @export
+as.raster.AmigaBasicShape <- function(x, selected = c("bitmap", "shadow", "collision"), ...) {
+  if (!inherits(x, "AmigaBasicShape")) stop("x should be of class AmigaBasicShape.")
+  bm <- x[[match.arg(selected, c("bitmap", "shadow", "collision"))]]
+  if (is.null(bm)) stop(sprintf("No %s layer available in this object!", selected))
+  bm
+}
+
+#' Convert a grDevices raster object into an AmigaBasicShape class object.
+#'
+#' Convert a \code{\link[grDevices:as.raster]{raster}} object into an \code{\link{AmigaBasicShape}} class object.
+#'
+#' TODO
+#' 
+#' @rdname rasterToAmigaBasicShape
+#' @name rasterToAmigaBasicShape
+#' @param x A \code{\link[grDevices:as.raster]{raster}} class object to convert into a \code{\link{AmigaBasicShape}} class obejct.
+#' @param type A \code{character} string indicating what type of graphic needs to be created: "\code{blitter object}" (default) or "\code{sprite}".
+#' @param palette A \code{vector} of \code{character} strings, where each element represents a colour. This palette is used to quantize the
+#' colours that occur in the \code{raster} \code{x}.
+#' @param ... Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.
+#' @return Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
+#' @examples
+#' \dontrun{
+#' ## get a raster image:
+#' ilbm <- as.raster(read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH")))
+#' 
+#' ## convert to an Amiga Basic blitter object:
+#' bob <- rasterToAmigaBasicShape(ilbm, "blitter object")
+#' }
+#' @family AmigaBasicShape.operations
+#' @family raster.operations
+#' @author Pepijn de Vries
+#' @export
+rasterToAmigaBasicShape <- function(x, type = c("blitter object", "sprite"), palette, ...) {
+  if (missing(palette)) {
+    palette <- table(x)
+    palette <- palette[order(-palette)]
+    palette <- names(palette)
+  }
+  depth <- ceiling(log2(length(palette)))
+  ## if not all pixel colours are in palette, the bitmap needs to be quantized
+  if (!all((x %in% palette))) {
+    x <- apply(
+      index.colours(x, length.out = 2^depth, palette = palette, ...), 2,
+      function(y) palette[y])
+    x <- as.raster(x)
+    attributes(x)$palette <- palette
+  }
+  type <- match.arg(type, c("blitter object", "sprite"))
+  if (type == "sprite" && (length(palette) != 4 || attributes(x)$dim[[2]] != 16))
+    stop("AmigaBasicShape sprites have to be 16 pixels wide and consist of 4 colours!")
+  result <- sapply(.basic.shape.header$par.names, function(x) NULL)
+  result$colorset     <- 0
+  result$dataset      <- 0
+  result$depth        <- depth
+  result$width        <- attributes(x)$dim[[2]]
+  result$height       <- attributes(x)$dim[[1]]
+  result$flags        <- rep(F, 16)
+  names(result$flags) <- .amigabasicshape.flags
+  result$flags[c("saveBack", "overlay")] <- T
+  result$flags["fVSprite"] <- type == "sprite"
+  result$planePick    <- 2^depth - 1
+  result$planeOnOff   <- rep(F, 16)
+  result$bitmap       <- x
+  attributes(result$bitmap)$palette <- palette
+  # TODO add missing elements (shadow and collision layer)
+  if (type == "sprite") result$sprite_palette <- palette[-1] ## background colour is not stored for sprite, hence -1
+  class(result) <- "AmigaBasicShape"
+  result
+}
+
+#' The S3 AmigaBasicBMAP class
+#' 
+#' A class that represents the content of Amiga Basic BMAP files.
+#' 
+#' The Amiga operating system made use of library files to execute specific (repetitive/routine) tasks. Amiga Basic
+#' was also able to call such routines from library files. In order to do so, it required a 'bmap' file for each
+#' library. This file contains a map of the library where it specifies: the name of routine; the `Library Vector Offset'
+#' (explained below); and used CPU registers (explained below).
+#' 
+#' The `Library Vector Offset' is an offset to the base address of a library in memory. This offsets indicates where
+#' a specific executable routine starts. The CPU registers are used to (temporary) store (pointers to) input data
+#' used by the routine. The BMAP file thus lists which CPU registers are used by specified routines.
+#' 
+#' @docType class
+#' @name AmigaBasicBMAP
+#' @rdname AmigaBasicBMAP
+#' @family AmigaBasic.operations
+#' @author Pepijn de Vries
+#' @references \url{https://en.wikipedia.org/wiki/AmigaOS#Libraries_and_devices}
+NULL
+
+#' Read Amiga Basic BMAP files
+#'
+#' Read \code{\link{AmigaBasicBMAP}} binary file format.
+#'
+#' TODO
+#' @rdname read.AmigaBasicBMAP
+#' @name read.AmigaBasicBMAP
+#' @param file A \code{character} string of the filename of the Amiga Basic BMAP file to be read.
+#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
+#' @return Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file}.
+#' @examples
+#' \dontrun{
+#' ## TODO
+#' }
+#' @family AmigaBasic.operations
+#' @family io.operations
+#' @author Pepijn de Vries
+#' @export
+read.AmigaBasicBMAP <- function(file, disk = NULL) {
+  dat <- .read.generic(file, disk)
+  rawToAmigaBasicBMAP(dat)
+}
+
+#' Write an AmigaBasicBMAP object to a file
+#'
+#' Write an \code{\link{AmigaBasicBMAP}} class object to a file in its binary format.
+#'
+#' TODO details
+#' 
+#' @rdname write.AmigaBasicBMAP
+#' @name write.AmigaBasicBMAP
+#' @param x The \code{\link{AmigaBasicBMAP}} class object that needs to be
+#' stored.
+#' @param file A \code{character} string specifying the file location
+#' to which \code{x} (an \code{\link{AmigaBasicBMAP}} object) needs to be written.
+#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' this argument requires the adfExplorer package.
+#' When set to \code{NULL}, this argument is ignored.
+#' @return Invisibly returns the result of the call of \code{close} to the
+#' file connection. Or, when \code{disk} is specified, a copy of
+#' \code{disk} is returned to which the file(s) is/are written.
+#' @examples
+#' \dontrun{
+#' ## TODO
+#' }
+#' @family AmigaBasic.operations
+#' @family io.operations
+#' @author Pepijn de Vries
+#' @export
+write.AmigaBasicBMAP <- function(x, file, disk = NULL) {
+  .write.generic(x, file, disk)
+}
+
+#' @rdname as.raw
+#' @name as.raw.AmigaBasicBMAP
+#' @export
+as.raw.AmigaBasicBMAP <- function(x) {
+  .validate_AmigaBasicBMAP(x)
+  unlist(lapply(seq_along(x), function(i) {
+    c(charToRaw(names(x)[i]), raw(1),
+      .amigaIntToRaw(x[[i]]$libraryVectorOffset, 16, T),
+      x[[i]]$registers, raw(1))
+  }))
+}
+
+#' @export
+print.AmigaBasicBMAP <- function(x, ...) {
+  print(sprintf("An AmigaBasicBMAP with %i references.", length(x)), ...)
+}
+
+#' Coerce raw data into an AmigaBasicBMAP class object
+#'
+#' Coerce raw data into an \code{\link{AmigaBasicBMAP}} class object
+#'
+#' TODO
+#' 
+#' @rdname rawToAmigaBasicBMAP
+#' @name rawToAmigaBasicBMAP
+#' @param x A \code{vector} of \code{raw} data that is to be converted
+#' into an \code{\link{AmigaBasicBMAP}} class object.
+#' @param ... Currently ignored.
+#' @return An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
+#' @examples
+#' \dontrun{
+#' ##TODO
+#' }
+#' @family AmigaBasic.operations
+#' @family raw.operations
+#' @author Pepijn de Vries
+#' @export
+rawToAmigaBasicBMAP <- function(x, ...) {
+  x <- c(raw(1), x)
+  terminator <- c(which(x == 0x00), length(x) + 1)
+  
+  nm <- utils::head(unlist(lapply(
+    mapply(seq,
+           from = terminator[seq.int(1, length(terminator), 2)] + 1,
+           to   = terminator[seq.int(2, length(terminator), 2)] - 1),
+    function(y) rawToChar(x[y]))), -1)
+  
+  lvo <- utils::head(unlist(lapply(
+    mapply(seq,
+           from = terminator[seq.int(2, length(terminator), 2)] + 1,
+           to   = terminator[seq.int(2, length(terminator), 2)] + 2, SIMPLIFY = F),
+    function(y) .rawToAmigaInt(as.raw(x[y]), 16, T))), -1)
+  registers <- lapply(
+    mapply(seq,
+           from = utils::head(terminator[seq.int(2, length(terminator), 2)] + 3, -1),
+           to   = utils::head(terminator[seq.int(2, length(terminator), 2) + 1] -1, -1), SIMPLIFY = F),
+    function(y) as.raw(x[y]))
+  no_reg <- diff(terminator) < 4
+  no_reg <- which(no_reg[c(F, T)])
+  registers[no_reg] <- lapply(seq_along(no_reg), function(i) raw())
+  
+  result <- lapply(seq_along(nm), function(i) {
+    list(libraryVectorOffset = lvo[[i]],
+         registers           = registers[[i]])
+  })
+  names(result) <- nm
+  class(result) <- "AmigaBasicBMAP"
+  .validate_AmigaBasicBMAP(result)
+  return (result)
+}
+
+#' @export
+as.list.AmigaBasicBMAP <- function(x, ...) {
+  unclass(x)
+}
+
+#' Coerce raw or named list to an AmigaBasicBMAP class object
+#'
+#' Coerce raw or named list to an \code{\link{AmigaBasicBMAP}} class object
+#'
+#' TODO
+#' 
+#' @rdname as.AmigaBasicBMAP
+#' @name as.AmigaBasicBMAP
+#' @param x When \code{x} is a \code{vector} of \code{raw} data, it needs to be structured as it would be
+#' when stored in a binary file (see \code{\link{read.AmigaBasicBMAP}}). \code{x} can also be a named \code{list},
+#' where the name of each element corresponds with a routine in the library. Each element should than consist
+#' of a \code{list} with 2 elements: The first should be named `libraryVectorOffset' and should hold the \code{numeric}
+#' offset of the routine in the library (see details). The second element should be named `registers' and should
+#' contain a \code{vector} of \code{raw} values refering to CPU registers used by the routine (see details).
+#' @return Returns a \code{\link{AmigaBasicBMAP}} based on \code{x}
+#' @examples
+#' \dontrun{
+#' ## For the dos.library, the start of the bmap list would look like:
+#' dos.list <- list(
+#'   xOpen = list(
+#'     libraryVectorOffset = -30,
+#'     registers = as.raw(2:3)
+#'   ),
+#'   xClose = list(
+#'     libraryVectorOffset = -36,
+#'     registers = as.raw(2)
+#'   ),
+#'   xRead = list(
+#'     libraryVectorOffset = -42,
+#'     registers = as.raw(2:4)
+#'   )
+#' )
+#' 
+#' ## Note that the list above is incomplete, the dos.library holds more routines than shown here.
+#' ## This merely serves as an example.
+#' ## This list can be converted to an S3 class as follows:
+#' dos.bmap <- as.AmigaBasicBMAP(dos.list)
+#' }
+#' @family AmigaBasic.operations
+#' @author Pepijn de Vries
+#' @export
+as.AmigaBasicBMAP <- function(x) {
+  if (typeof(x) == "raw") return(rawToAmigaBasicBMAP(x))
+  if (typeof(x) != "list") stop("No method available for converting this object into AmigaBasicBMAP")
+  x <- as.list(x)
+  class(x) <- "AmigaBasicBMAP"
+  .validate_AmigaBasicBMAP(x)
+  x
+}
+
+.validate_AmigaBasicBMAP <- function(x) {
+  if (!inherits(x, "AmigaBasicBMAP")) stop("AmigaBasicBMAP should inherit AmigaBasicBMAP class")
+  if (typeof(x) != "list") stop("AmigaBasicBMAP should be of type list")
+  if (any(apply(check.names.AmigaBasic(names(x)), 1, any))) stop("AmigaBasicBMAP should contain valid basic names")
+  registers_ok  <- unlist(lapply(x, function(y) {
+    y$libraryVectorOffset >= -32768 && y$libraryVectorOffset < 0 &&
+      (length(y$registers) == 0 || ((y$registers %in% as.raw(1:15)) && !any(duplicated(y$registers))))
+  }))
+  if (!any(registers_ok)) stop("Register numbers should be unique raw values ranging from 1 to 15, and library vector offsets should be in the range of -1 to -32768")
+  return (T)
 }

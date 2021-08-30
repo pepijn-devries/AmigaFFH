@@ -1,9 +1,13 @@
-AmigaFFH v0.3.2 (Release date: XXX)
+AmigaFFH v0.3.2 (Release date: TODO)
 =============
 
- * XXX
+ * TODO
+ 
+ * Fixed bug in Amiga Icon implementation
+ 
+ * Added support for Amiga Basic files
 
- * Minor corrections to the manual.
+ * Minor corrections and updates to the manual.
 
 AmigaFFH v0.3.1 (Release date: 2019-04-31)
 =============

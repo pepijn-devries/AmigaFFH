@@ -48,13 +48,18 @@ names(bas)[1] <- "better.label"
 \seealso{
 Other AmigaBasic.operations: 
 \code{\link{AmigaBasic.reserved}()},
+\code{\link{AmigaBasicBMAP}},
 \code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},
+\code{\link{rawToAmigaBasicBMAP}()},
 \code{\link{rawToAmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasic}()},
+\code{\link{write.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasic}()}
 }
 \author{

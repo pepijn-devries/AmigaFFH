@@ -220,7 +220,7 @@ packBitmap <- function(x) {
 unPackBitmap <- function(x) {
   if (typeof(x) != "raw") stop("Argument 'x' should be raw data")
   ## Very simple packing routine for bitmap images
-  ## XXX this routine is very slow due to the while loop. See if this routine can be implemented more efficiently
+  ## TODO this routine is very slow due to the while loop. See if this routine can be implemented more efficiently
   result <- raw(0)
   offset <- 0
   while (offset < length(x)) {

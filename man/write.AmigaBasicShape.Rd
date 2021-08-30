@@ -14,7 +14,7 @@ stored.}
 to which \code{x} (an \code{\link{AmigaBasicShape}} object) needs to be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
@@ -28,30 +28,41 @@ Write an \code{\link{AmigaBasicShape}} class object to a file in its binary form
 }
 \details{
 This function coerces the Amiga Basic Shape into its binary format
-(using \code{\link{as.raw}}) and writes it to a file. The file
+(using \code{\link[AmigaFFH]{as.raw}}) and writes it to a file. The file
 can also be stored onto a virtual Amiga disk
-(\code{\link[adfExplorer]{amigaDisk}}).
+(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
 }
 \examples{
 \dontrun{
-## XXX
+filename <- system.file("ball.shp", package = "AmigaFFH")
+ball     <- read.AmigaBasicShape(filename)
+write.AmigaBasicShape(ball, file.path(tempdir(), "ball.shp"))
 }
 }
 \seealso{
-Other AmigaBasicShape.operations: \code{\link{AmigaBasicShape}},
-  \code{\link{read.AmigaBasicShape}}
+Other AmigaBasicShape.operations: 
+\code{\link{AmigaBasicShape}},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{read.AmigaBasicShape}()}
 
-Other io.operations: \code{\link{read.AmigaBasicShape}},
-  \code{\link{read.AmigaBasic}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{read.SysConfig}}, \code{\link{read.iff}},
-  \code{\link{write.AmigaBasic}},
-  \code{\link{write.AmigaBitmapFont}},
-  \code{\link{write.AmigaIcon}},
-  \code{\link{write.SysConfig}}, \code{\link{write.iff}}
+Other io.operations: 
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasicShape}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{read.SysConfig}()},
+\code{\link{read.iff}()},
+\code{\link{write.AmigaBasicBMAP}()},
+\code{\link{write.AmigaBasic}()},
+\code{\link{write.AmigaBitmapFont}()},
+\code{\link{write.AmigaIcon}()},
+\code{\link{write.SysConfig}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasicShape.operations}
+\concept{io.operations}

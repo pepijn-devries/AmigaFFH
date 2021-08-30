@@ -4,7 +4,8 @@
 \name{amiga_display_modes}
 \alias{amiga_display_modes}
 \title{A table of display modes on the Amiga and corresponding \code{raw} codes}
-\format{A \code{data.frame} with 4 columns:
+\format{
+A \code{data.frame} with 4 columns:
 \itemize{
   \item{The column named `DISPLAY_MODE': a \code{factor} reflecting
   the display mode}
@@ -20,7 +21,8 @@
   chip set (in some countries known as just Advanced Architecture). AGA could
   also display OCS and ECS modes, ECS could also display OCS modes, OCS could only
   display OCS modes.}
-}}
+}
+}
 \description{
 A table of display modes on the Amiga and corresponding \code{raw} codes
 representing these modes.

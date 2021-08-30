@@ -19,29 +19,40 @@ each element of the \code{vector} is a \code{character} representation
 of a line of Amiga Basic code stored in \code{x}.
 }
 \description{
-XXX
+Coerce an \code{\link{AmigaBasic}}-class object to its character representation
 }
 \details{
-Amiga Basic files are encoded in a binary format. XXX
+Amiga Basic files are encoded in a binary format and are also stored as such
+in \code{\link{AmigaBasic}}-class objects. Use this function to convert
+these objects into legible \code{character} data.
 }
 \examples{
 \dontrun{
 ## First create an Amiga Basic object:
-bas <- as.AmigaBasic("PRINT \\"Hello world!\\"")
+bas <- as.AmigaBasic("PRINT \"Hello world!\"")
 
 ## now convert the object back into text:
 bas.txt <- as.character(bas)
 }
 }
 \seealso{
-Other AmigaBasic.operations: \code{\link{AmigaBasic.names}},
-  \code{\link{AmigaBasic.reserved}},
-  \code{\link{AmigaBasic}}, \code{\link{[.AmigaBasic}},
-  \code{\link{as.AmigaBasic}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{read.AmigaBasic}},
-  \code{\link{write.AmigaBasic}}
+Other AmigaBasic.operations: 
+\code{\link{AmigaBasic.reserved}()},
+\code{\link{AmigaBasicBMAP}},
+\code{\link{AmigaBasic}},
+\code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
+\code{\link{as.AmigaBasic}()},
+\code{\link{check.names.AmigaBasic}()},
+\code{\link{names.AmigaBasic}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{write.AmigaBasicBMAP}()},
+\code{\link{write.AmigaBasic}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasic.operations}

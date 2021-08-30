@@ -18,7 +18,7 @@ When set to \code{NULL}, this argument is ignored.}
 Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file}.
 }
 \description{
-TODO
+Read \code{\link{AmigaBasicBMAP}} binary file format.
 }
 \details{
 TODO
@@ -34,6 +34,7 @@ Other AmigaBasic.operations:
 \code{\link{AmigaBasicBMAP}},
 \code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},

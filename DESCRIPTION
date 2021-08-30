@@ -2,7 +2,7 @@ Package: AmigaFFH
 Type: Package
 Title: Commodore Amiga File Format Handler
 Version: 0.3.2
-Date: XXX
+Date: TODO
 Authors@R: c(person("Pepijn", "de Vries", role = c("aut", "cre", "dtc"),
     email = "pepijn.devries@outlook.com"))
 Author: Pepijn de Vries [aut, cre, dtc]
@@ -18,10 +18,11 @@ Depends:
 Imports:
     grDevices,
     methods,
-    utils
+    utils,
+    vctrs
 Suggests:
     ProTrackR (>= 0.3.4),
     adfExplorer (>= 0.1.4)
 License: GPL-3
 LazyData: True
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1

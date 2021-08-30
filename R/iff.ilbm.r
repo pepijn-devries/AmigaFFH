@@ -117,10 +117,13 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' \code{\link{AmigaBitmapFont}} object or an \code{\link{AmigaBitmapFontSet}} object.
 #' @param background Use the argument \code{background} to
 #' specify a background colour in case \code{x} is a \code{\link{hardwareSprite}}.
-#' @param selected This argument is only allowed when \code{x} is an object of class
-#' \code{\link{AmigaIcon}}. When set to \code{TRUE}, the raster of the \code{\link{AmigaIcon}}
+#' @param selected When \code{x} is an object of class \code{\link{AmigaIcon}}, \code{selected} can be
+#' used to select a specific state. When set to \code{TRUE}, the raster of the \code{\link{AmigaIcon}}
 #' will be based on the `selected' state of the icon. Otherwise it will be based on the
-#' unselected state (default).
+#' deselected state (default).
+#' 
+#' When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{selected} can be used to select a
+#' specific layer of the shape to plot, which can be one of \code{"bitmap"} (default), \code{"shadow"} or \code{"collision"}.
 #' @param ... Currently ignored.
 #' @return Returns a \code{grDevices} raster image (\code{\link[grDevices]{as.raster}})
 #' based on \code{x}. If \code{x} is an animation (\code{\link{IFFChunk}} of type ANIM),
@@ -150,6 +153,10 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' ## as the background colour is not specified for hardware
 #' ## sprite, we can optionally provide it here.
 #' spr.raster <- as.raster(spr, background = "green")
+#'
+#' ## AmigaBasicShape objects can also be converted into rasters:
+#' ball <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
+#' ball.rst <- as.raster(ball)
 #' }
 #' @family iff.operations
 #' @family raster.operations

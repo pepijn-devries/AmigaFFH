@@ -152,7 +152,7 @@ setMethod("play", "IFFChunk", function(object, player = NULL, ...) {
 #' @name WaveToIFF
 #' @param x A \code{\link[tuneR]{WaveMC}} object that needs to be converted into an \code{\link{IFFChunk}} object. \code{x}
 #' can also be any other class object that can be coerced into a \code{\link[tuneR]{WaveMC}} object. \code{\link[tuneR]{Wave}}
-#' and \code{\link[ProTrackR]{PTSample}} objects are therefore also allowed.
+#' and \code{\link[ProTrackR:PTSample-class]{PTSample}} objects are therefore also allowed.
 #' @param loop.start If the sample should be looped from a specific position to the
 #' end of the sample, this argument specifies the starting position in samples (with
 #' a base of 0) for looping. \code{loop.start} therefore should be a whole non-negative

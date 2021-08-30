@@ -45,17 +45,20 @@ fontName(font_example)
 }
 }
 \seealso{
-Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{availableFontSizes}}, \code{\link{c}},
-  \code{\link{font_example}},
-  \code{\link{getAmigaBitmapFont}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{write.AmigaBitmapFont}}
+Other AmigaBitmapFont.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{availableFontSizes}()},
+\code{\link{c}()},
+\code{\link{font_example}},
+\code{\link{getAmigaBitmapFont}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{write.AmigaBitmapFont}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBitmapFont.operations}

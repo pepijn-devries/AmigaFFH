@@ -52,11 +52,13 @@ and to its raw (binary) form.
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node05D6.html}
 }
 \seealso{
-Other AmigaIcon.operations: \code{\link{rawToAmigaIcon}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{simpleAmigaIcon}},
-  \code{\link{write.AmigaIcon}}
+Other AmigaIcon.operations: 
+\code{\link{rawToAmigaIcon}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{simpleAmigaIcon}()},
+\code{\link{write.AmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaIcon.operations}

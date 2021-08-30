@@ -52,11 +52,13 @@ its raw (binary) form.
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node063B.html}
 }
 \seealso{
-Other SysConfig.operations: \code{\link{rawToSysConfig}},
-  \code{\link{read.SysConfig}},
-  \code{\link{simpleSysConfig}},
-  \code{\link{write.SysConfig}}
+Other SysConfig.operations: 
+\code{\link{rawToSysConfig}()},
+\code{\link{read.SysConfig}()},
+\code{\link{simpleSysConfig}()},
+\code{\link{write.SysConfig}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{SysConfig.operations}

@@ -4,27 +4,34 @@
 \alias{rasterToAmigaBasicShape}
 \title{Convert a grDevices raster object into an AmigaBasicShape class object.}
 \usage{
-rasterToAmigaBasicShape(x, type = c("blitter object", "sprite"), palette)
+rasterToAmigaBasicShape(x, type = c("blitter object", "sprite"), palette, ...)
 }
 \arguments{
-\item{x}{A \code{\link[grDevices:raster]{raster}} class object to convert into a \code{\link{AmigaBasicShape}} class obejct.}
+\item{x}{A \code{\link[grDevices:as.raster]{raster}} class object to convert into a \code{\link{AmigaBasicShape}} class obejct.}
 
-\item{type}{TODO}
+\item{type}{A \code{character} string indicating what type of graphic needs to be created: "\code{blitter object}" (default) or "\code{sprite}".}
 
-\item{palette}{TODO}
+\item{palette}{A \code{vector} of \code{character} strings, where each element represents a colour. This palette is used to quantize the
+colours that occur in the \code{raster} \code{x}.}
+
+\item{...}{Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.}
 }
 \value{
-TODO
+Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
 }
 \description{
-TODO
+Convert a \code{\link[grDevices:as.raster]{raster}} object into an \code{\link{AmigaBasicShape}} class object.
 }
 \details{
 TODO
 }
 \examples{
 \dontrun{
-## TODO
+## get a raster image:
+ilbm <- as.raster(read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH")))
+
+## convert to an Amiga Basic blitter object:
+bob <- rasterToAmigaBasicShape(ilbm, "blitter object")
 }
 }
 \seealso{

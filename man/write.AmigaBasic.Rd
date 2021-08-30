@@ -14,7 +14,7 @@ stored.}
 to which \code{x} (an \code{\link{AmigaBasic}} object) needs to be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
@@ -30,36 +30,52 @@ Write an \code{\link{AmigaBasic}} class object to a file in its binary format.
 This function encodes the Amiga Basic code in its binary format
 (using \code{\link{as.raw}}) and writes it to a file. The file
 can also be stored onto a virtual Amiga disk
-(\code{\link[adfExplorer]{amigaDisk}}).
+(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
 }
 \examples{
 \dontrun{
 ## First create an AmigaBasic object:
-bas <- as.AmigaBasic("PRINT \\"hello world!\\"")
+bas <- as.AmigaBasic("PRINT \"hello world!\"")
 
 ## write to tempdir:
 write.AmigaBasic(bas, file.path(tempdir(), "helloworld.bas"))
 }
 }
 \seealso{
-Other AmigaBasic.operations: \code{\link{AmigaBasic.names}},
-  \code{\link{AmigaBasic.reserved}},
-  \code{\link{AmigaBasic}}, \code{\link{[.AmigaBasic}},
-  \code{\link{as.AmigaBasic}}, \code{\link{as.character}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{read.AmigaBasic}}
+Other AmigaBasic.operations: 
+\code{\link{AmigaBasic.reserved}()},
+\code{\link{AmigaBasicBMAP}},
+\code{\link{AmigaBasic}},
+\code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.character}()},
+\code{\link{check.names.AmigaBasic}()},
+\code{\link{names.AmigaBasic}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{write.AmigaBasicBMAP}()}
 
-Other io.operations: \code{\link{read.AmigaBasicShape}},
-  \code{\link{read.AmigaBasic}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{read.SysConfig}}, \code{\link{read.iff}},
-  \code{\link{write.AmigaBasicShape}},
-  \code{\link{write.AmigaBitmapFont}},
-  \code{\link{write.AmigaIcon}},
-  \code{\link{write.SysConfig}}, \code{\link{write.iff}}
+Other io.operations: 
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasicShape}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{read.SysConfig}()},
+\code{\link{read.iff}()},
+\code{\link{write.AmigaBasicBMAP}()},
+\code{\link{write.AmigaBasicShape}()},
+\code{\link{write.AmigaBitmapFont}()},
+\code{\link{write.AmigaIcon}()},
+\code{\link{write.SysConfig}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasic.operations}
+\concept{io.operations}

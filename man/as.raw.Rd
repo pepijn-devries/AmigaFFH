@@ -5,26 +5,23 @@
 \name{as.raw.AmigaBasic}
 \alias{as.raw.AmigaBasic}
 \alias{as.raw.AmigaBasicShape}
+\alias{as.raw.AmigaBasicBMAP}
 \alias{as.raw}
 \alias{as.raw.AmigaBitmapFont}
-\alias{as.raw}
 \alias{as.raw.AmigaBitmapFontSet}
-\alias{as.raw}
 \alias{as.raw.AmigaTimeVal}
-\alias{as.raw}
 \alias{as.raw,hardwareSprite-method}
-\alias{as.raw}
 \alias{as.raw,IFFChunk-method}
 \alias{as.raw.IFF.ANY}
-\alias{as.raw}
 \alias{as.raw.SysConfig}
-\alias{as.raw}
 \alias{as.raw.AmigaIcon}
 \title{Convert AmigaFFH objects into raw data}
 \usage{
 \method{as.raw}{AmigaBasic}(x, ...)
 
 \method{as.raw}{AmigaBasicShape}(x, ...)
+
+\method{as.raw}{AmigaBasicBMAP}(x)
 
 \method{as.raw}{AmigaBitmapFont}(x, ...)
 
@@ -76,17 +73,22 @@ example.raw <- as.raw(example.iff)
 }
 }
 \seealso{
-Other raw.operations: \code{\link{as.AmigaBasic}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBasicShape}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{raw.operations}

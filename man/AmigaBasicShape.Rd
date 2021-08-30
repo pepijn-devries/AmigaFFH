@@ -5,20 +5,28 @@
 \alias{AmigaBasicShape}
 \title{The S3 AmigaBasicShape class}
 \description{
-XXX implement plot+as.raster function
+A class that represents the file format used by Amiga Basic to store bitmap graphics: blitter objects and sprites.
 }
 \details{
-XXX add to package documentation
+Amiga Basic used a specific format to store bitmap images that could be displayed using Basic code. Both
+sprites and blitter objects can be stored and used. This class is used to represent such files.
 }
 \examples{
 \dontrun{
-## XXX
+ball   <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
+r_logo <- read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
+
+plot(ball)
+plot(r_logo)
 }
 }
 \seealso{
-Other AmigaBasicShape.operations: \code{\link{read.AmigaBasicShape}},
-  \code{\link{write.AmigaBasicShape}}
+Other AmigaBasicShape.operations: 
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{read.AmigaBasicShape}()},
+\code{\link{write.AmigaBasicShape}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasicShape.operations}

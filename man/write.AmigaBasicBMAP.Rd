@@ -40,6 +40,7 @@ Other AmigaBasic.operations:
 \code{\link{AmigaBasicBMAP}},
 \code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},

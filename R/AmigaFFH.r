@@ -18,6 +18,10 @@
 #' 
 #' \itemize{
 #'   \item{
+#'     \link[AmigaFFH:AmigaBasic]{Amiga Basic} binary encode scripts and \link[AmigaFFH:AmigaBasicShape]{Amiga Basic shapes} which
+#'     were used by such scripts to display specific graphics.
+#'   }
+#'   \item{
 #'     Bitmap Font (*.font). Originally fonts were stored in separate files on
 #'     the Amiga. An overarching *.font file contained generic information,
 #'     amongst others the specific pixel heights that were available for a font.

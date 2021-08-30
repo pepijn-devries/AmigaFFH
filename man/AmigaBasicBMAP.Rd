@@ -8,18 +8,24 @@
 A class that represents the content of Amiga Basic BMAP files.
 }
 \details{
-TODO
+The Amiga operating system made use of library files to execute specific (repetitive/routine) tasks. Amiga Basic
+was also able to call such routines from library files. In order to do so, it required a 'bmap' file for each
+library. This file contains a map of the library where it specifies: the name of routine; the `Library Vector Offset'
+(explained below); and used CPU registers (explained below).
+
+The `Library Vector Offset' is an offset to the base address of a library in memory. This offsets indicates where
+a specific executable routine starts. The CPU registers are used to (temporary) store (pointers to) input data
+used by the routine. The BMAP file thus lists which CPU registers are used by specified routines.
 }
-\examples{
-\dontrun{
-## TODO
-}
+\references{
+\url{https://en.wikipedia.org/wiki/AmigaOS#Libraries_and_devices}
 }
 \seealso{
 Other AmigaBasic.operations: 
 \code{\link{AmigaBasic.reserved}()},
 \code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},

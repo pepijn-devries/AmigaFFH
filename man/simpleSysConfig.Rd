@@ -40,11 +40,13 @@ sc <- simpleSysConfig(options = list(FontHeight = 9))
 }
 }
 \seealso{
-Other SysConfig.operations: \code{\link{SysConfig}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{read.SysConfig}},
-  \code{\link{write.SysConfig}}
+Other SysConfig.operations: 
+\code{\link{SysConfig}},
+\code{\link{rawToSysConfig}()},
+\code{\link{read.SysConfig}()},
+\code{\link{write.SysConfig}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{SysConfig.operations}

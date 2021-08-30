@@ -16,7 +16,7 @@ into an \code{\link{AmigaBasicBMAP}} class object.}
 An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
 }
 \description{
-TODO
+Coerce raw data into an \code{\link{AmigaBasicBMAP}} class object
 }
 \details{
 TODO
@@ -32,6 +32,7 @@ Other AmigaBasic.operations:
 \code{\link{AmigaBasicBMAP}},
 \code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},

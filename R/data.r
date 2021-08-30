@@ -112,6 +112,24 @@ NULL
 #' @references \url{http://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
 NULL
 
+#' 'demo.bas', 'r_logo.shp' and 'ball.shp' as example files for AmigaBasic and AmigaBasicShape objects
+#'
+#' TODO
+#'
+#' TODO
+#'
+#' @docType data
+#' @aliases demo.bas r_logo.shp ball.shp
+#' @name AmigaBasic-files
+#' @rdname AmigaBasic-files
+#' @format See \code{\link{AmigaBasic}} and \code{\link{AmigaBasicShape}} for more information
+#' about the format.
+#' @examples
+#' \dontrun{
+#' TODO
+#' }
+NULL
+
 #' Commonly used palettes on the Commodore Amiga
 #'
 #' \code{amiga_palettes} is a named list, where each element represents a commonly

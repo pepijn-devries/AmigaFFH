@@ -24,10 +24,12 @@ this package does not implement an interpreter for the code.}
 Returns an \code{\link{AmigaBasic}} class object based on \code{x}.
 }
 \description{
-XXX
+Coerce raw or character data to an \code{\link{AmigaBasic}} S3 class object
 }
 \details{
-XXX
+Convert text to an \code{\link{AmigaBasic}} S3 class object. The text should
+consist of valid Amiga BASIC syntaxis. This function does not perform a
+full check of the syntaxis, but will break on some fundamental syntaxis malformations
 }
 \examples{
 \dontrun{
@@ -36,7 +38,7 @@ XXX
 ## in the vector:
 bas <- as.AmigaBasic(c(
   "CLS ' Clear the screen",
-  "PRINT \\"Hello world!\\" ' Print a message on the screen"
+  "PRINT \"Hello world!\" ' Print a message on the screen"
 ))
 
 ## Let's make it raw data:
@@ -47,26 +49,43 @@ bas.raw <- as.raw(bas)
 bas <- as.AmigaBasic(bas.raw)
 }
 }
+\references{
+\url{https://en.wikipedia.org/wiki/AmigaBASIC}
+}
 \seealso{
-Other AmigaBasic.operations: \code{\link{AmigaBasic.names}},
-  \code{\link{AmigaBasic.reserved}},
-  \code{\link{AmigaBasic}}, \code{\link{[.AmigaBasic}},
-  \code{\link{as.character}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{read.AmigaBasic}},
-  \code{\link{write.AmigaBasic}}
+Other AmigaBasic.operations: 
+\code{\link{AmigaBasic.reserved}()},
+\code{\link{AmigaBasicBMAP}},
+\code{\link{AmigaBasic}},
+\code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
+\code{\link{as.character}()},
+\code{\link{check.names.AmigaBasic}()},
+\code{\link{names.AmigaBasic}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{write.AmigaBasicBMAP}()},
+\code{\link{write.AmigaBasic}()}
 
-Other raw.operations: \code{\link{as.raw.AmigaBasic}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBasicShape}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasic.operations}
+\concept{raw.operations}

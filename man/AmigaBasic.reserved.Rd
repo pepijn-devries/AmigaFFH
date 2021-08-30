@@ -18,20 +18,30 @@ allowed as names of variables or labels in Amiga Basic.
 This function will return a full list of reserved Amiga Basic
 words. This list does not serve as a manual for basic (for
 that purpose consult external resources). This list is meant to
-consult when chosing label names in Amiga Basic code. These
+consult when choosing label names in Amiga Basic code. These
 reserved words are not allowed as names.
 }
 \examples{
 AmigaBasic.reserved()
 }
 \seealso{
-Other AmigaBasic.operations: \code{\link{AmigaBasic.names}},
-  \code{\link{AmigaBasic}}, \code{\link{[.AmigaBasic}},
-  \code{\link{as.AmigaBasic}}, \code{\link{as.character}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{read.AmigaBasic}},
-  \code{\link{write.AmigaBasic}}
+Other AmigaBasic.operations: 
+\code{\link{AmigaBasicBMAP}},
+\code{\link{AmigaBasic}},
+\code{\link{[.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.character}()},
+\code{\link{check.names.AmigaBasic}()},
+\code{\link{names.AmigaBasic}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{write.AmigaBasicBMAP}()},
+\code{\link{write.AmigaBasic}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasic.operations}

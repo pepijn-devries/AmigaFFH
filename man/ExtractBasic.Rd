@@ -3,17 +3,26 @@
 \name{[.AmigaBasic}
 \alias{[.AmigaBasic}
 \alias{[<-.AmigaBasic}
+\alias{`[[.AmigaBasic`}
+\alias{[[.AmigaBasic}
+\alias{`[[<-.AmigaBasic`}
+\alias{[[<-.AmigaBasic}
 \title{Extract or replace lines of Amiga Basic code}
 \usage{
 \method{[}{AmigaBasic}(x, i)
 
 \method{[}{AmigaBasic}(x, i) <- value
+
+\method{[[}{AmigaBasic}(x, i)
+
+\method{[[}{AmigaBasic}(x, i) <- value
 }
 \arguments{
 \item{x}{An \code{AmigaBasic} class object from which specific lines
 need to be extracted or replaced.}
 
-\item{i}{A \code{vector} of \code{numeric} indices. This index
+\item{i}{In case of `[[', an integer index, representing the line-number of basic code to be selected.
+In case of `[': a \code{vector} of \code{numeric} indices. This index
 is used to select specific lines. Negative values will deselect lines.}
 
 \item{value}{A \code{vector} of \code{character} strings or an
@@ -22,13 +31,14 @@ the selected indices \code{i}. \code{value} should represent the
 same number of lines of code as the selected number of lines.}
 }
 \value{
-XXX
+The extraction method returns an \code{\link{AmigaBasic}} object based in the lines selected with \code{i}.
+The replacement method returns an \code{\link{AmigaBasic}} object with the selected lines replaced with \code{value}.
 }
 \description{
-XXX
+Extract or replace lines of Amiga Basic code
 }
 \details{
-XXX
+Extract or replace specific lines in an \code{\link{AmigaBasic}}-class object.
 }
 \examples{
 \dontrun{
@@ -36,9 +46,9 @@ XXX
 bas <- as.AmigaBasic(c(
   "LET a = 1",
   "a = a + 1",
-  "PRINT \\"a now equals\\";a",
-  "INPUT \\"clear screen (y/n)? \\", b$",
-  "IF b$ = \\"y\\" THEN CLS"
+  "PRINT \"a now equals\";a",
+  "INPUT \"clear screen (y/n)? \", b$",
+  "IF UCASE$(b$) = \"Y\" THEN CLS"
 ))
 
 ## Select only lines 4 and 5:
@@ -53,17 +63,29 @@ bas[2] <- "a = a + 2"
 
 ## You can also use AmigaBasic class object as replacement
 bas[2] <- as.AmigaBasic("a = a + 3")
+
+## single lines can also be selected with '[['
+bas[[2]]
 }
 }
 \seealso{
-Other AmigaBasic.operations: \code{\link{AmigaBasic.names}},
-  \code{\link{AmigaBasic.reserved}},
-  \code{\link{AmigaBasic}}, \code{\link{as.AmigaBasic}},
-  \code{\link{as.character}},
-  \code{\link{rawToAmigaBasic}},
-  \code{\link{read.AmigaBasic}},
-  \code{\link{write.AmigaBasic}}
+Other AmigaBasic.operations: 
+\code{\link{AmigaBasic.reserved}()},
+\code{\link{AmigaBasicBMAP}},
+\code{\link{AmigaBasic}},
+\code{\link{as.AmigaBasicBMAP}()},
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.character}()},
+\code{\link{check.names.AmigaBasic}()},
+\code{\link{names.AmigaBasic}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{write.AmigaBasicBMAP}()},
+\code{\link{write.AmigaBasic}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBasic.operations}

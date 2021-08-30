@@ -3,7 +3,6 @@
 \name{c}
 \alias{c}
 \alias{c.AmigaBasic}
-\alias{c}
 \alias{c.AmigaBitmapFont}
 \title{Combine multiple AmigaFFH objects}
 \usage{
@@ -75,17 +74,20 @@ bas  <- c(bas1, bas2)
 }
 }
 \seealso{
-Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{availableFontSizes}}, \code{\link{fontName}},
-  \code{\link{font_example}},
-  \code{\link{getAmigaBitmapFont}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{write.AmigaBitmapFont}}
+Other AmigaBitmapFont.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{availableFontSizes}()},
+\code{\link{fontName}()},
+\code{\link{font_example}},
+\code{\link{getAmigaBitmapFont}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{write.AmigaBitmapFont}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBitmapFont.operations}
