@@ -55,8 +55,7 @@ Other AmigaBasic.operations:
 \code{\link{rawToAmigaBasicBMAP}()},
 \code{\link{rawToAmigaBasic}()},
 \code{\link{read.AmigaBasicBMAP}()},
-\code{\link{read.AmigaBasic}()},
-\code{\link{write.AmigaBasicBMAP}()}
+\code{\link{read.AmigaBasic}()}
 
 Other io.operations: 
 \code{\link{read.AmigaBasicBMAP}()},
@@ -67,7 +66,6 @@ Other io.operations:
 \code{\link{read.AmigaIcon}()},
 \code{\link{read.SysConfig}()},
 \code{\link{read.iff}()},
-\code{\link{write.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasicShape}()},
 \code{\link{write.AmigaBitmapFont}()},
 \code{\link{write.AmigaIcon}()},

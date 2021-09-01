@@ -50,7 +50,6 @@ Other AmigaBasic.operations:
 \code{\link{rawToAmigaBasicBMAP}()},
 \code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasic}()},
-\code{\link{write.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasic}()}
 
 Other raw.operations: 

@@ -12,13 +12,21 @@ See \code{\link{AmigaBasic}} and \code{\link{AmigaBasicShape}} for more informat
 about the format.
 }
 \description{
-TODO
+`demo.bas', `r_logo.shp' and `ball.shp' as example files for \code{\link{AmigaBasic}} and
+\code{\link{AmigaBasicShape}} objects
 }
 \details{
-TODO
+The `r_logo.shp' and `ball.shp' files are formatted such that they can be read with
+\code{\link{read.AmigaBasicShape}}. They serve as an example of the \code{\link{AmigaBasicShape}} class, where
+the first represents a blitter object, and the latter a sprite.
+
+The `demo.bas' file is an example of a binary encoded \link[AmigaFFH:AmigaBasic]{Amiga Basic} script. It can be read with
+\code{\link{read.AmigaBasic}}. The script demonstrates how the shape files could be used in Amiga Basic.
 }
 \examples{
 \dontrun{
-TODO
+read.AmigaBasic(system.file("demo.bas", package = "AmigaFFH"))
+read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
+read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
 }
 }

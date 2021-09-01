@@ -18,10 +18,13 @@ contain a \code{vector} of \code{raw} values refering to CPU registers used by t
 Returns a \code{\link{AmigaBasicBMAP}} based on \code{x}
 }
 \description{
-Coerce raw or named list to an \code{\link{AmigaBasicBMAP}} class object
+Coerce \code{raw} or named \code{list} to an \code{\link{AmigaBasicBMAP}} class object
 }
 \details{
-TODO
+An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+function converts the raw format in which it would be stored as a file into a comprehensive S3 class object. It
+can also convert a named list into an S3 class object. See `Arguments' and `Examples' sections on how to format
+this list.
 }
 \examples{
 \dontrun{
@@ -61,7 +64,6 @@ Other AmigaBasic.operations:
 \code{\link{rawToAmigaBasic}()},
 \code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasic}()},
-\code{\link{write.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasic}()}
 }
 \author{

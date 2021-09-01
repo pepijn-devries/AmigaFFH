@@ -4,7 +4,14 @@
 \alias{rasterToAmigaBasicShape}
 \title{Convert a grDevices raster object into an AmigaBasicShape class object.}
 \usage{
-rasterToAmigaBasicShape(x, type = c("blitter object", "sprite"), palette, ...)
+rasterToAmigaBasicShape(
+  x,
+  type = c("blitter object", "sprite"),
+  palette,
+  shadow,
+  collision,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{\link[grDevices:as.raster]{raster}} class object to convert into a \code{\link{AmigaBasicShape}} class obejct.}
@@ -13,6 +20,16 @@ rasterToAmigaBasicShape(x, type = c("blitter object", "sprite"), palette, ...)
 
 \item{palette}{A \code{vector} of \code{character} strings, where each element represents a colour. This palette is used to quantize the
 colours that occur in the \code{raster} \code{x}.}
+
+\item{shadow}{An optional layer that could be stored with the graphics. This layer could be used for specific
+shadow effects when blitting the graphics to the screen. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
+as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).}
+
+\item{collision}{An optional layer that could be stored with the graphics. This layer could be used for collision
+detection between graphical objects. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
+as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).}
 
 \item{...}{Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.}
 }
@@ -23,7 +40,10 @@ Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
 Convert a \code{\link[grDevices:as.raster]{raster}} object into an \code{\link{AmigaBasicShape}} class object.
 }
 \details{
-TODO
+This method can be used to turn any graphics into an \code{\link{AmigaBasicShape}} class object. In order to do
+so, the colours of the input image (a \code{\link[grDevices:as.raster]{raster}} object) will be quantized to a
+limited palette. This palette can be forced as an argument to this function. Otherwise, it will be based on
+the input image.
 }
 \examples{
 \dontrun{

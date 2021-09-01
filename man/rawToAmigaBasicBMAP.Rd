@@ -19,11 +19,32 @@ An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
 Coerce raw data into an \code{\link{AmigaBasicBMAP}} class object
 }
 \details{
-TODO
+An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+function converts the raw format in which it would be stored as a file into a comprehensive S3 class object.
 }
 \examples{
 \dontrun{
-##TODO
+## A small fragment of the dos.library BMAP would look like this:
+dos.bmap <- as.AmigaBasicBMAP(list(
+  xOpen = list(
+    libraryVectorOffset = -30,
+    registers = as.raw(2:3)
+  ),
+  xClose = list(
+    libraryVectorOffset = -36,
+    registers = as.raw(2)
+  ),
+  xRead = list(
+    libraryVectorOffset = -42,
+    registers = as.raw(2:4)
+  )
+))
+
+## The raw representation would be
+dos.bmap.raw <- as.raw(dos.bmap)
+
+## And the reverse
+rawToAmigaBasicBMAP(dos.bmap.raw)
 }
 }
 \seealso{
@@ -40,7 +61,6 @@ Other AmigaBasic.operations:
 \code{\link{rawToAmigaBasic}()},
 \code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasic}()},
-\code{\link{write.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasic}()}
 
 Other raw.operations: 

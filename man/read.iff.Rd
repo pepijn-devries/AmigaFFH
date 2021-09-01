@@ -49,7 +49,6 @@ Other io.operations:
 \code{\link{read.AmigaBitmapFont}()},
 \code{\link{read.AmigaIcon}()},
 \code{\link{read.SysConfig}()},
-\code{\link{write.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasicShape}()},
 \code{\link{write.AmigaBasic}()},
 \code{\link{write.AmigaBitmapFont}()},

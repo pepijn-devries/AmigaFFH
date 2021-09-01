@@ -476,7 +476,7 @@ as.character.AmigaBasic <- function(x, ...) {
   nms <- attr(x, "basic_names")
   class(x) <- NULL
   x <- lapply(x, function(ln) {
-    cmdln <- strrep(" ", .rawToAmigaInt(ln[1], 8 , F))
+    cmdln <- strrep(" ", .rawToAmigaInt(ln[1], 8, F))
     ln <- ln[-1]
     while (length(ln) > 2) {
       ln1 <- ln[1]
@@ -1167,8 +1167,13 @@ rawToAmigaBasicShape <- function(x, palette) {
   if (is.null(palette)) {
     palette <- grDevices::grey(seq(0, 1, length.out = 2^result$depth))
   } else {
-    if (length(palette) != 2^result$depth)
-      stop(sprintf("This shape requires a palette of %i colours, but got %i.", 2^result$depth, length(palette)))
+    if (length(palette) < 2^result$depth) {
+      palette <- rep_len(palette, 2^result$depth)
+      warning(sprintf("Palette contains too few colours. Provided palette is repeated to length.out %i.", 2^result$depth))
+    } else if (length(palette) > 2^result$depth) {
+      palette <- palette[1:(2^result$depth)]
+      warning(sprintf("Palette contains too many colours. Provided palette is truncated to length.out %i.", 2^result$depth))
+    }
   }
   x             <- x[-1:-sum(abs(.basic.shape.header$byte))]
   result$bitmap <- with(result, bitmapToRaster(x, width, height, depth, palette, interleaved = F))
@@ -1364,7 +1369,10 @@ as.raster.AmigaBasicShape <- function(x, selected = c("bitmap", "shadow", "colli
 #'
 #' Convert a \code{\link[grDevices:as.raster]{raster}} object into an \code{\link{AmigaBasicShape}} class object.
 #'
-#' TODO
+#' This method can be used to turn any graphics into an \code{\link{AmigaBasicShape}} class object. In order to do
+#' so, the colours of the input image (a \code{\link[grDevices:as.raster]{raster}} object) will be quantized to a
+#' limited palette. This palette can be forced as an argument to this function. Otherwise, it will be based on
+#' the input image.
 #' 
 #' @rdname rasterToAmigaBasicShape
 #' @name rasterToAmigaBasicShape
@@ -1372,6 +1380,14 @@ as.raster.AmigaBasicShape <- function(x, selected = c("bitmap", "shadow", "colli
 #' @param type A \code{character} string indicating what type of graphic needs to be created: "\code{blitter object}" (default) or "\code{sprite}".
 #' @param palette A \code{vector} of \code{character} strings, where each element represents a colour. This palette is used to quantize the
 #' colours that occur in the \code{raster} \code{x}.
+#' @param shadow An optional layer that could be stored with the graphics. This layer could be used for specific
+#' shadow effects when blitting the graphics to the screen. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+#' object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
+#' as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).
+#' @param collision An optional layer that could be stored with the graphics. This layer could be used for collision
+#' detection between graphical objects. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+#' object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
+#' as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).
 #' @param ... Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.
 #' @return Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
 #' @examples
@@ -1386,12 +1402,18 @@ as.raster.AmigaBasicShape <- function(x, selected = c("bitmap", "shadow", "colli
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @export
-rasterToAmigaBasicShape <- function(x, type = c("blitter object", "sprite"), palette, ...) {
+rasterToAmigaBasicShape <- function(x, type = c("blitter object", "sprite"), palette, shadow, collision, ...) {
   if (missing(palette)) {
-    palette <- table(x)
-    palette <- palette[order(-palette)]
-    palette <- names(palette)
+    if (is.null(attributes(x)$palette)) {
+      palette <- table(x)
+      palette <- palette[order(-palette)]
+      palette <- names(palette)
+    } else {
+      palette <- attributes(x)$palette
+    }
   }
+  if (missing(shadow)) shadow <- NULL
+  if (missing(collision)) collision <- NULL
   depth <- ceiling(log2(length(palette)))
   ## if not all pixel colours are in palette, the bitmap needs to be quantized
   if (!all((x %in% palette))) {
@@ -1413,12 +1435,26 @@ rasterToAmigaBasicShape <- function(x, type = c("blitter object", "sprite"), pal
   result$flags        <- rep(F, 16)
   names(result$flags) <- .amigabasicshape.flags
   result$flags[c("saveBack", "overlay")] <- T
-  result$flags["fVSprite"] <- type == "sprite"
+  result$flags["fVSprite"]               <- type == "sprite"
+  result$flags["imageShadowIncluded"]    <- !is.null(shadow)
+  result$flags["collisionPlaneIncluded"] <- !is.null(collision)
   result$planePick    <- 2^depth - 1
   result$planeOnOff   <- rep(F, 16)
   result$bitmap       <- x
   attributes(result$bitmap)$palette <- palette
-  # TODO add missing elements (shadow and collision layer)
+  specialLayer <- function(z, w) {
+    z <- as.raster(z)
+    if (!identical(dim(z), dim(result$bitmap))) stop("Shadow layer should have the same dimensions as the bitmap")
+    z <- index.colours(z, 2)
+    cols <- grDevices::rgb2hsv(grDevices::col2rgb(attributes(z)$palette))
+    l <- (2 - cols["s",])*cols["v",]/2
+    attributes(z)$palette <- c("black", "white")[order(l)]
+    z <- as.raster(apply(z, 2, function(i) attributes(z)$palette[i]))
+    attributes(z)$palette <- c("black", "white")
+    z
+  }
+  if (!is.null(shadow)) result$shadow <- specialLayer(shadow, "shadow")
+  if (!is.null(collision)) result$collision <- specialLayer(collision, "collision")
   if (type == "sprite") result$sprite_palette <- palette[-1] ## background colour is not stored for sprite, hence -1
   class(result) <- "AmigaBasicShape"
   result
@@ -1445,22 +1481,48 @@ rasterToAmigaBasicShape <- function(x, type = c("blitter object", "sprite"), pal
 #' @references \url{https://en.wikipedia.org/wiki/AmigaOS#Libraries_and_devices}
 NULL
 
-#' Read Amiga Basic BMAP files
+#' Read and write Amiga Basic BMAP files
 #'
-#' Read \code{\link{AmigaBasicBMAP}} binary file format.
+#' Read and write \code{\link{AmigaBasicBMAP}} binary file format.
 #'
-#' TODO
-#' @rdname read.AmigaBasicBMAP
+#' An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries and can be
+#' read as a comprehensive list and written back to a binary file using these functions.
+#' @rdname AmigaBasicBMAP-io
 #' @name read.AmigaBasicBMAP
-#' @param file A \code{character} string of the filename of the Amiga Basic BMAP file to be read.
+#' @param x A \code{\link{AmigaBasicBMAP}} class object that needs to be
+#' stored.
+#' @param file A \code{character} string of the filename of the Amiga Basic BMAP file to be read or written.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' read or written to. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file}.
+#' @return Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file} in case of
+#' \code{read.AmigaBasicBMAP}. Otherwise, invisibly returns the result of the call of \code{close} to the
+#' file connection. Or, when \code{disk} is specified, a copy of
+#' \code{disk} is returned to which the file is written.
 #' @examples
 #' \dontrun{
-#' ## TODO
+#' ## A small fragment of the dos.library BMAP would look like this:
+#' dos.bmap <- as.AmigaBasicBMAP(list(
+#'   xOpen = list(
+#'     libraryVectorOffset = -30,
+#'     registers = as.raw(2:3)
+#'   ),
+#'   xClose = list(
+#'     libraryVectorOffset = -36,
+#'     registers = as.raw(2)
+#'   ),
+#'   xRead = list(
+#'     libraryVectorOffset = -42,
+#'     registers = as.raw(2:4)
+#'   )
+#' ))
+#' 
+#' ## This will write the BMAP to a file:
+#' write.AmigaBasicBMAP(dos.bmap, file.path(tempdir(), "dos.bmap"))
+#' 
+#' ## This will read the same file:
+#' dos.bmap.copy <- read.AmigaBasicBMAP(file.path(tempdir(), "dos.bmap"))
 #' }
 #' @family AmigaBasic.operations
 #' @family io.operations
@@ -1471,32 +1533,8 @@ read.AmigaBasicBMAP <- function(file, disk = NULL) {
   rawToAmigaBasicBMAP(dat)
 }
 
-#' Write an AmigaBasicBMAP object to a file
-#'
-#' Write an \code{\link{AmigaBasicBMAP}} class object to a file in its binary format.
-#'
-#' TODO details
-#' 
-#' @rdname write.AmigaBasicBMAP
+#' @rdname AmigaBasicBMAP-io
 #' @name write.AmigaBasicBMAP
-#' @param x The \code{\link{AmigaBasicBMAP}} class object that needs to be
-#' stored.
-#' @param file A \code{character} string specifying the file location
-#' to which \code{x} (an \code{\link{AmigaBasicBMAP}} object) needs to be written.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
-#' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @return Invisibly returns the result of the call of \code{close} to the
-#' file connection. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file(s) is/are written.
-#' @examples
-#' \dontrun{
-#' ## TODO
-#' }
-#' @family AmigaBasic.operations
-#' @family io.operations
-#' @author Pepijn de Vries
 #' @export
 write.AmigaBasicBMAP <- function(x, file, disk = NULL) {
   .write.generic(x, file, disk)
@@ -1523,8 +1561,9 @@ print.AmigaBasicBMAP <- function(x, ...) {
 #'
 #' Coerce raw data into an \code{\link{AmigaBasicBMAP}} class object
 #'
-#' TODO
-#' 
+#' An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+#' function converts the raw format in which it would be stored as a file into a comprehensive S3 class object.
+#'  
 #' @rdname rawToAmigaBasicBMAP
 #' @name rawToAmigaBasicBMAP
 #' @param x A \code{vector} of \code{raw} data that is to be converted
@@ -1533,7 +1572,27 @@ print.AmigaBasicBMAP <- function(x, ...) {
 #' @return An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
-#' ##TODO
+#' ## A small fragment of the dos.library BMAP would look like this:
+#' dos.bmap <- as.AmigaBasicBMAP(list(
+#'   xOpen = list(
+#'     libraryVectorOffset = -30,
+#'     registers = as.raw(2:3)
+#'   ),
+#'   xClose = list(
+#'     libraryVectorOffset = -36,
+#'     registers = as.raw(2)
+#'   ),
+#'   xRead = list(
+#'     libraryVectorOffset = -42,
+#'     registers = as.raw(2:4)
+#'   )
+#' ))
+#' 
+#' ## The raw representation would be
+#' dos.bmap.raw <- as.raw(dos.bmap)
+#' 
+#' ## And the reverse
+#' rawToAmigaBasicBMAP(dos.bmap.raw)
 #' }
 #' @family AmigaBasic.operations
 #' @family raw.operations
@@ -1580,9 +1639,12 @@ as.list.AmigaBasicBMAP <- function(x, ...) {
 
 #' Coerce raw or named list to an AmigaBasicBMAP class object
 #'
-#' Coerce raw or named list to an \code{\link{AmigaBasicBMAP}} class object
+#' Coerce \code{raw} or named \code{list} to an \code{\link{AmigaBasicBMAP}} class object
 #'
-#' TODO
+#' An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+#' function converts the raw format in which it would be stored as a file into a comprehensive S3 class object. It
+#' can also convert a named list into an S3 class object. See `Arguments' and `Examples' sections on how to format
+#' this list.
 #' 
 #' @rdname as.AmigaBasicBMAP
 #' @name as.AmigaBasicBMAP
@@ -1631,7 +1693,7 @@ as.AmigaBasicBMAP <- function(x) {
 .validate_AmigaBasicBMAP <- function(x) {
   if (!inherits(x, "AmigaBasicBMAP")) stop("AmigaBasicBMAP should inherit AmigaBasicBMAP class")
   if (typeof(x) != "list") stop("AmigaBasicBMAP should be of type list")
-  if (any(apply(check.names.AmigaBasic(names(x)), 1, any))) stop("AmigaBasicBMAP should contain valid basic names")
+  if (any(apply(check.names.AmigaBasic(names(x)), 1, any))) stop("AmigaBasicBMAP routine names should not be Amiga Basic reserved words!")
   registers_ok  <- unlist(lapply(x, function(y) {
     y$libraryVectorOffset >= -32768 && y$libraryVectorOffset < 0 &&
       (length(y$registers) == 0 || ((y$registers %in% as.raw(1:15)) && !any(duplicated(y$registers))))
