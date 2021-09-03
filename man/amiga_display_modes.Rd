@@ -40,7 +40,7 @@ raster images.
 data("amiga_display_modes")
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+\url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 
 \url{http://amigadev.elowar.com/read/ADCD_2.1/AmigaMail_Vol2_guide/node00FD.html}
 }

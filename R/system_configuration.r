@@ -46,7 +46,7 @@
 #' @family SysConfig.operations
 #' @author Pepijn de Vries
 #' @references
-#' \url{http://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
+#' \url{https://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node00D5.html}
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node063B.html}
 NULL

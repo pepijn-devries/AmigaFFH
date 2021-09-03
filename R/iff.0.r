@@ -55,8 +55,8 @@
 #' \code{IFFChunk}s or a single \code{vector} of \code{raw} data. This data
 #' can only be interpreted in context of the specified type or in some cases
 #' information from other \code{IFFChunk}s.
-#' @references \url{http://wiki.amigaos.net/wiki/IFF_Standard}
-#' @references \url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+#' @references \url{https://wiki.amigaos.net/wiki/IFF_Standard}
+#' @references \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 #' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 #' @name IFFChunk-class
 #' @rdname IFFChunk-class
@@ -1018,7 +1018,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' ## This creates a basic colour palette:
 #' cmap <- IFFChunk("CMAP")
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+#' @references \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 #' @name IFFChunk-method
 #' @rdname IFFChunk
 #' @export

@@ -30,7 +30,7 @@
 #'   also display OCS and ECS modes, ECS could also display OCS modes, OCS could only
 #'   display OCS modes.}
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+#' @references \url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 #' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/AmigaMail_Vol2_guide/node00FD.html}
 #' @examples
 #' data("amiga_display_modes")
@@ -53,7 +53,7 @@ NULL
 #'   \item{The column named `mode': a \code{factor} reflecting a display mode, monitor or bitwise mask}
 #'   \item{The column named `code': vector of 4 \code{raw} values as used by the Amiga to reflect specific display modes}
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+#' @references \url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 #' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/AmigaMail_Vol2_guide/node00FD.html}
 #' @examples
 #' data("amiga_display_keys")
@@ -78,7 +78,7 @@ NULL
 #'   \item{The column named `CODE': A \code{list} containing a \code{vector} of 4
 #'   \code{raw} values as used by the Amiga to represent a specific monitor.}
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+#' @references \url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 #' @examples
 #' data("amiga_monitors")
 NULL
@@ -109,7 +109,7 @@ NULL
 #' print(example.iff)
 #' }
 #' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
-#' @references \url{http://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
+#' @references \url{https://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
 NULL
 
 #' 'demo.bas', 'r_logo.shp' and 'ball.shp' as example files for AmigaBasic and AmigaBasicShape objects

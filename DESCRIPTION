@@ -1,8 +1,8 @@
 Package: AmigaFFH
 Type: Package
 Title: Commodore Amiga File Format Handler
-Version: 0.3.2
-Date: TODO
+Version: 0.4.1
+Date: TODO (version No as well)
 Authors@R: c(person("Pepijn", "de Vries", role = c("aut", "cre", "dtc"),
     email = "pepijn.devries@outlook.com"))
 Author: Pepijn de Vries [aut, cre, dtc]

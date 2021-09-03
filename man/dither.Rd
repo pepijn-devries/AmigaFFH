@@ -100,7 +100,7 @@ J. F. Jarvis, C. N. Judice, and W. H. Ninke, \emph{A survey of techniques for th
 
 \url{https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering}
 
-\url{http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
+\url{https://tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
 }
 \seealso{
 Other colour.quantisation.operations: 

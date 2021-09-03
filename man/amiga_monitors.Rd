@@ -27,5 +27,5 @@ raster images.
 data("amiga_monitors")
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+\url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 }

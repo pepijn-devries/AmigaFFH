@@ -33,5 +33,5 @@ print(example.iff)
 \references{
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 
-\url{http://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
+\url{https://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
 }

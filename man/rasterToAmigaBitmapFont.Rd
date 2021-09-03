@@ -65,7 +65,7 @@ text. Note that these values can be smaller or larger than the values
 specified for \code{glyph_width}.
 They should be whole numbers greater or equal to 0.}
 
-\item{glyph_kern}{Not that in Amiga bitmap fonts not the formal
+\item{glyph_kern}{Note that in Amiga bitmap fonts not the formal
 definition from typography is used for kerning. Here, kerning is
 used as the number of pixels the cursor should be moved forward or
 backward after typesetting a character. It should be a

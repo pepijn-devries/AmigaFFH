@@ -72,9 +72,9 @@ new("IFFChunk",
 }
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/IFF_Standard}
+\url{https://wiki.amigaos.net/wiki/IFF_Standard}
 
-\url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+\url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 }

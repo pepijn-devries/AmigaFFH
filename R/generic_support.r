@@ -742,7 +742,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' @references R.W. Floyd, L. Steinberg, \emph{An adaptive algorithm for spatial grey scale}. Proceedings of the Society of Information Display 17, 75-77 (1976).
 #' @references J. F. Jarvis, C. N. Judice, and W. H. Ninke, \emph{A survey of techniques for the display of continuous tone pictures on bilevel displays}. Computer Graphics and Image Processing, 5:1:13-40 (1976).
 #' @references \url{https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering}
-#' @references \url{http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
+#' @references \url{https://tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
 #' @family colour.quantisation.operations
 #' @family raster.operations
 #' @author Pepijn de Vries
