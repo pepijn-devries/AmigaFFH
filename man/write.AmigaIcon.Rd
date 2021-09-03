@@ -13,7 +13,7 @@ write.AmigaIcon(x, file, disk = NULL)
 icon data should be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
@@ -46,18 +46,29 @@ write.AmigaIcon(icon, file.path(tempdir(), "icon.info"))
 }
 }
 \seealso{
-Other AmigaIcon.operations: \code{\link{AmigaIcon}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{simpleAmigaIcon}}
+Other AmigaIcon.operations: 
+\code{\link{AmigaIcon}},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{simpleAmigaIcon}()}
 
-Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{read.SysConfig}}, \code{\link{read.iff}},
-  \code{\link{write.AmigaBitmapFont}},
-  \code{\link{write.SysConfig}}, \code{\link{write.iff}}
+Other io.operations: 
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasicShape}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{read.SysConfig}()},
+\code{\link{read.iff}()},
+\code{\link{write.AmigaBasicShape}()},
+\code{\link{write.AmigaBasic}()},
+\code{\link{write.AmigaBitmapFont}()},
+\code{\link{write.SysConfig}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaIcon.operations}
+\concept{io.operations}

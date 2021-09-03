@@ -387,8 +387,11 @@ rawToAmigaIcon <- function(x, palette = NULL) {
 #' an index. In that case, when \code{y=1} the first icon image is shown. When \code{y=2}
 #' the selected icon image is shown.
 #' 
-#' When \code{x} is an \code{AmigaBitmapFontSet}
+#' When \code{x} is an \code{\link{AmigaBitmapFontSet}} class
 #' object, \code{y} can be used to plot the bitmap of a specific font height (\code{y}).
+#' 
+#' When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{y} can be used to select a
+#' specific layer of the shape to plot, which can be one of \code{"bitmap"}, \code{"shadow"} or \code{"collision"}.
 #' @param asp A \code{numeric} value indicating the aspect ratio for the plot. For
 #' many AmigaFFH, the aspect ratio will be based on the Amiga display mode when known.
 #' For \code{\link{AmigaIcon}} objects a default aspect ratio of \code{2} is used (tall
@@ -420,10 +423,14 @@ rawToAmigaIcon <- function(x, palette = NULL) {
 #' ## As can the cursor from a SysConfig object:
 #' plot(simpleSysConfig())
 #' 
-#' ## As can amiga fonts:
+#' ## As can Amiga fonts:
 #' data(font_example)
 #' plot(font_example)
 #' plot(font_example, text = "foo bar", style = "underlined", interpolate = F)
+#'
+#' ## As can AmigaBasicShapes:
+#' ball <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
+#' plot(ball)
 #' }
 #' @author Pepijn de Vries
 #' @export
@@ -433,6 +440,7 @@ plot.AmigaIcon <- function(x, y, asp = 2, ...) {
   plot(as.raster(x, selected = y), asp = asp, ...)
 }
 
+#' @family raster.operations
 #' @rdname as.raster
 #' @name as.raster
 #' @export
@@ -490,7 +498,7 @@ print.AmigaIcon <- function(x, ...) {
 #' @name as.raw
 #' @export
 as.raw.AmigaIcon <- function(x, ...) {
-  withCallingHandlers({ ## XXX remove calling handlers once the replace functions are fully implemented
+  withCallingHandlers({ ## TODO remove calling handlers once the replace functions are fully implemented
     x$ic_Gadget$ga_Flags <- .bitmapToRaw(rev(x$ic_Gadget$ga_Flags), T, F)
     x$ic_Gadget$ga_UserData <- .match.factor.inv(x$ic_Gadget,
                                                  "ga_UserData", 0:1,
@@ -613,7 +621,7 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' @param file A \code{character} string representing the file name to which the
 #' icon data should be written.
 #' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Returns \code{NULL} or an \code{integer} status passed on by the
@@ -656,7 +664,7 @@ write.AmigaIcon <- function(x, file, disk = NULL) {
 #' @param file A \code{character} string representing the file name from which the
 #' icon data should be read.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Arguments passed on to \code{\link{rawToAmigaIcon}}.
@@ -693,7 +701,7 @@ read.AmigaIcon <- function(file, disk = NULL, ...) {
   class(x) <- NULL
   x[[i]] <- value
   class(x) <- cl
-  ## XXX update this replacement function and remove warning
+  ## TODO update this replacement function and remove warning
   warning(paste0("Replacement operator for AmigaIcon objects ",
           "will be modified in future versions of this package. ",
           "Note that not all replacement operations may be ",

@@ -18,7 +18,7 @@ font bitmap image information. \code{file} should thus be a \code{character}
 string specifying the file location of the *.font file.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
@@ -51,24 +51,36 @@ font.restored <- rawToAmigaBitmapFontSet(fontset.raw, file.path(tempdir(), "Amig
 }
 }
 \seealso{
-Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{availableFontSizes}}, \code{\link{c}},
-  \code{\link{fontName}}, \code{\link{font_example}},
-  \code{\link{getAmigaBitmapFont}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{write.AmigaBitmapFont}}
+Other AmigaBitmapFont.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{availableFontSizes}()},
+\code{\link{c}()},
+\code{\link{fontName}()},
+\code{\link{font_example}},
+\code{\link{getAmigaBitmapFont}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{write.AmigaBitmapFont}()}
 
-Other raw.operations: \code{\link{as.raw}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBitmapFont.operations}
+\concept{raw.operations}

@@ -4,10 +4,16 @@
 \alias{index.colours}
 \title{Quantisation of colours and indexing a grDevices raster image}
 \usage{
-index.colours(x, length.out = 8, palette = NULL, background = "#FFFFFF",
+index.colours(
+  x,
+  length.out = 8,
+  palette = NULL,
+  background = "#FFFFFF",
   dither = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse",
-  "sierra", "two-row-sierra", "sierra-lite"), colour.depth = c("12 bit",
-  "24 bit"), ...)
+    "sierra", "two-row-sierra", "sierra-lite"),
+  colour.depth = c("12 bit", "24 bit"),
+  ...
+)
 }
 \arguments{
 \item{x}{A raster object (\code{\link[grDevices]{as.raster}}), or a \code{matrix}
@@ -97,15 +103,22 @@ plot(volcano.dith, interpolate = F)
 }
 }
 \seealso{
-Other colour.quantisation.operations: \code{\link{dither}}
+Other colour.quantisation.operations: 
+\code{\link{dither}()}
 
-Other raster.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
-  \code{\link{dither}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rasterToBitmap}},
-  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
+Other raster.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{bitmapToRaster}()},
+\code{\link{dither}()},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rasterToBitmap}()},
+\code{\link{rasterToHWSprite}()},
+\code{\link{rasterToIFF}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{colour.quantisation.operations}
+\concept{raster.operations}

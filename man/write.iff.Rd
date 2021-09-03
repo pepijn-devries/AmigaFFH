@@ -13,13 +13,13 @@ write.iff(x, file, disk = NULL)
 to be saved, or a connection to which the data should be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns either \code{NULL} or an \code{integer} status invisibly as passed
-by the \code{\link[base]{close}} statement used to close the file connection.
+by the \code{\link[base:connections]{close}} statement used to close the file connection.
 When \code{disk} is specified, a copy of \code{disk} is returned
 to which the file is written.
 }
@@ -47,21 +47,33 @@ write.iff(example.iff, file.path(tempdir(), "image.iff"))
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 }
 \seealso{
-Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{read.SysConfig}}, \code{\link{read.iff}},
-  \code{\link{write.AmigaBitmapFont}},
-  \code{\link{write.AmigaIcon}},
-  \code{\link{write.SysConfig}}
+Other io.operations: 
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasicShape}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{read.SysConfig}()},
+\code{\link{read.iff}()},
+\code{\link{write.AmigaBasicShape}()},
+\code{\link{write.AmigaBasic}()},
+\code{\link{write.AmigaBitmapFont}()},
+\code{\link{write.AmigaIcon}()},
+\code{\link{write.SysConfig}()}
 
-Other iff.operations: \code{\link{IFFChunk-class}},
-  \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{getIFFChunk}},
-  \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
-  \code{\link{read.iff}}
+Other iff.operations: 
+\code{\link{IFFChunk-class}},
+\code{\link{WaveToIFF}()},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{getIFFChunk}()},
+\code{\link{interpretIFFChunk}()},
+\code{\link{rasterToIFF}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{read.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{iff.operations}
+\concept{io.operations}

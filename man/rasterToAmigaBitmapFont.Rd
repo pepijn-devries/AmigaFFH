@@ -4,8 +4,17 @@
 \alias{rasterToAmigaBitmapFont}
 \title{Convert a raster image into an AmigaBitmapFont}
 \usage{
-rasterToAmigaBitmapFont(x, glyphs, default_glyph, baseline, glyph_width,
-  glyph_space, glyph_kern, palette, ...)
+rasterToAmigaBitmapFont(
+  x,
+  glyphs,
+  default_glyph,
+  baseline,
+  glyph_width,
+  glyph_space,
+  glyph_kern,
+  palette,
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{raster} (see grDevices package) object composed of
@@ -56,7 +65,7 @@ text. Note that these values can be smaller or larger than the values
 specified for \code{glyph_width}.
 They should be whole numbers greater or equal to 0.}
 
-\item{glyph_kern}{Not that in Amiga bitmap fonts not the formal
+\item{glyph_kern}{Note that in Amiga bitmap fonts not the formal
 definition from typography is used for kerning. Here, kerning is
 used as the number of pixels the cursor should be moved forward or
 backward after typesetting a character. It should be a
@@ -71,7 +80,7 @@ the second as foreground colour.
 When missing, it will be checked whether \code{x} has a palette
 as attribute, and uses that. If that attribute is also missing,
 the palette will be guessed from \code{x}, where the most
-frequently occuring colour is assumed to be the background
+frequently occurring colour is assumed to be the background
 colour.}
 
 \item{...}{Currently ignored.}
@@ -108,7 +117,7 @@ font9 <- rasterToAmigaBitmapFont(
   ## 'glyphs' are the graphical representation of the characters
   ## that we will include in our font. We will only use the
   ## first 7 characters in the raster image:
-  glyphs        = " !\\"#$\%&",
+  glyphs        = " !\"#$\%&",
   
   ## We will use the '&' glyph to represent all characters that
   ## are not specified in the font:
@@ -149,11 +158,11 @@ font9.abc <- rasterToAmigaBitmapFont(
   ## each element, you can recycle a glyph to represent different
   ## characters. So in this case, the glyph 'a' is used for
   ## all the accented variants of the character 'a'.
-  glyphs        = list("a\\xE0\\xE1\\xE2\\xE3\\xE4\\xE5",
+  glyphs        = list("a\xE0\xE1\xE2\xE3\xE4\xE5",
                        "b",
-                       "c\\xA2\\xE7",
+                       "c\xA2\xE7",
                        "d",
-                       "e\\xE8\\xE9\\xEA\\xEB"),
+                       "e\xE8\xE9\xEA\xEB"),
   default_glyph = "c", ## 'c' is used as default glyph for all other characters
   baseline      = 7,
   glyph_width   = c(4, 4, 4, 4, 4),
@@ -162,26 +171,36 @@ font9.abc <- rasterToAmigaBitmapFont(
 )
 
 ## see what happens when you format text using the font we just created:
-plot(font9.abc, text = "a\\xE0\\xE1\\xE2\\xE3\\xE4\\xE5bc\\xA2\\xE7de\\xE8\\xE9\\xEA\\xEB, foo bar")
+plot(font9.abc, text = "a\xE0\xE1\xE2\xE3\xE4\xE5bc\xA2\xE7de\xE8\xE9\xEA\xEB, foo bar")
 }
 }
 \seealso{
-Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{availableFontSizes}}, \code{\link{c}},
-  \code{\link{fontName}}, \code{\link{font_example}},
-  \code{\link{getAmigaBitmapFont}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{write.AmigaBitmapFont}}
+Other AmigaBitmapFont.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{availableFontSizes}()},
+\code{\link{c}()},
+\code{\link{fontName}()},
+\code{\link{font_example}},
+\code{\link{getAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{write.AmigaBitmapFont}()}
 
-Other raster.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
-  \code{\link{dither}}, \code{\link{index.colours}},
-  \code{\link{rasterToBitmap}},
-  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
+Other raster.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{bitmapToRaster}()},
+\code{\link{dither}()},
+\code{\link{index.colours}()},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{rasterToBitmap}()},
+\code{\link{rasterToHWSprite}()},
+\code{\link{rasterToIFF}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBitmapFont.operations}
+\concept{raster.operations}

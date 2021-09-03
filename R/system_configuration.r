@@ -46,7 +46,7 @@
 #' @family SysConfig.operations
 #' @author Pepijn de Vries
 #' @references
-#' \url{http://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
+#' \url{https://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node00D5.html}
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node063B.html}
 NULL
@@ -190,7 +190,7 @@ as.raw.SysConfig <- function(x, ...) {
 #' @param file The file name of a system-configuration file to be read.
 #' Can also be a connection that allows reading binary data.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Returns an S3 \link{SysConfig} class object based on the file that is read.
@@ -227,7 +227,7 @@ read.SysConfig <- function(file, disk = NULL) {
 #' @param x An S3 \link{SysConfig} class object.
 #' @param file A file name to which the binary file should be written.
 #' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Returns \code{NULL} or an \code{integer} status passed on by the

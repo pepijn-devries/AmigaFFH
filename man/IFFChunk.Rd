@@ -439,5 +439,5 @@ cmap <- IFFChunk("CMAP")
 }
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+\url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 }

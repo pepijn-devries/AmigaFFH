@@ -9,8 +9,8 @@
   ## an iff file...
   if (all(data.types == "raw") && length(object@chunk.data[[1]]) > (2^32 - 1)) stop("Chunk data cannot be larger than 4,294,967,295 bytes")
   if (object@chunk.type %in% c("FORM", "LIST", "CAT ", "PROP") && data.types == "raw") stop("IFF containers should contain IFF chunks, not raw data.")
-  ## XXX note that the validity of all the IFFChunk objects in the data list are not checked
-  ## XXX Doing that will make the object fool-proof, but also a lot slower...
+  ## TODO note that the validity of all the IFFChunk objects in the data list are not checked
+  ## TODO Doing that will make the object fool-proof, but also a lot slower...
   return(T)
 }
 
@@ -55,8 +55,8 @@
 #' \code{IFFChunk}s or a single \code{vector} of \code{raw} data. This data
 #' can only be interpreted in context of the specified type or in some cases
 #' information from other \code{IFFChunk}s.
-#' @references \url{http://wiki.amigaos.net/wiki/IFF_Standard}
-#' @references \url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+#' @references \url{https://wiki.amigaos.net/wiki/IFF_Standard}
+#' @references \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 #' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 #' @name IFFChunk-class
 #' @rdname IFFChunk-class
@@ -110,7 +110,7 @@ setClass("IFFChunk",
 #' @param file A filename of an IFF file to be read, or a connection from which
 #' binary data can be read.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Returns a \code{\link{IFFChunk}} object read from the specified file.
@@ -215,11 +215,11 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' @param file A filename for the IFF file to which the \code{\link{IFFChunk}} needs
 #' to be saved, or a connection to which the data should be written.
 #' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Returns either \code{NULL} or an \code{integer} status invisibly as passed
-#' by the \code{\link[base]{close}} statement used to close the file connection.
+#' by the \code{\link[base:connections]{close}} statement used to close the file connection.
 #' When \code{disk} is specified, a copy of \code{disk} is returned
 #' to which the file is written.
 #' 
@@ -1018,7 +1018,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' ## This creates a basic colour palette:
 #' cmap <- IFFChunk("CMAP")
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+#' @references \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 #' @name IFFChunk-method
 #' @rdname IFFChunk
 #' @export

@@ -4,8 +4,10 @@
 \name{ilbm8lores.iff}
 \alias{ilbm8lores.iff}
 \title{An example file of a bitmap image stored in the Interchange File Format}
-\format{See \code{\link{IFFChunk-class}} and references for more information
-about the Interchange File Format.}
+\format{
+See \code{\link{IFFChunk-class}} and references for more information
+about the Interchange File Format.
+}
 \description{
 This file is provided to demonstrate the structure of an Interchange File
 Format and is used in several examples throughout this package.
@@ -31,5 +33,5 @@ print(example.iff)
 \references{
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 
-\url{http://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
+\url{https://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
 }

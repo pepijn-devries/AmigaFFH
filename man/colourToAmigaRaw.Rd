@@ -5,11 +5,17 @@
 \alias{amigaRawToColour}
 \title{Convert colours to Amiga compatible raw data or vice versa}
 \usage{
-colourToAmigaRaw(x, colour.depth = c("12 bit", "24 bit"), n.bytes = c("2",
-  "3"))
+colourToAmigaRaw(
+  x,
+  colour.depth = c("12 bit", "24 bit"),
+  n.bytes = c("2", "3")
+)
 
-amigaRawToColour(x, colour.depth = c("12 bit", "24 bit"), n.bytes = c("2",
-  "3"))
+amigaRawToColour(
+  x,
+  colour.depth = c("12 bit", "24 bit"),
+  n.bytes = c("2", "3")
+)
 }
 \arguments{
 \item{x}{In the case \code{amigaRawToColour} is called, \code{x} should
@@ -63,15 +69,22 @@ amigaRawToColour(as.raw(c(0xf0, 0xf0, 0xf0)), n.bytes = "3")
 amigaRawToColour(as.raw(c(0xf0, 0xf0, 0x0f)), n.bytes = "3")
 }
 \seealso{
-Other raw.operations: \code{\link{as.raw}},
-  \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{raw.operations}

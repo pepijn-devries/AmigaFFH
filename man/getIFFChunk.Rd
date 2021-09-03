@@ -4,11 +4,9 @@
 \name{getIFFChunk}
 \alias{getIFFChunk}
 \alias{getIFFChunk,IFFChunk,character,integer-method}
-\alias{getIFFChunk}
 \alias{getIFFChunk,IFFChunk,character,missing-method}
 \alias{getIFFChunk<-}
 \alias{getIFFChunk<-,IFFChunk,character,missing,IFFChunk-method}
-\alias{getIFFChunk<-}
 \alias{getIFFChunk<-,IFFChunk,character,integer,IFFChunk-method}
 \title{Get a specific IFFChunk nested inside other IFFChunks}
 \usage{
@@ -16,11 +14,9 @@
 
 \S4method{getIFFChunk}{IFFChunk,character,missing}(x, chunk.path, chunk.number)
 
-\S4method{getIFFChunk}{IFFChunk,character,missing,IFFChunk}(x, chunk.path,
-  chunk.number = NULL) <- value
+\S4method{getIFFChunk}{IFFChunk,character,missing,IFFChunk}(x, chunk.path, chunk.number = NULL) <- value
 
-\S4method{getIFFChunk}{IFFChunk,character,integer,IFFChunk}(x, chunk.path,
-  chunk.number = NULL) <- value
+\S4method{getIFFChunk}{IFFChunk,character,integer,IFFChunk}(x, chunk.path, chunk.number = NULL) <- value
 }
 \arguments{
 \item{x}{An \code{\link{IFFChunk}} object from which the nested
@@ -82,12 +78,17 @@ getIFFChunk(example.iff, c("ILBM", "BMHD")) <- bmhd
 }
 }
 \seealso{
-Other iff.operations: \code{\link{IFFChunk-class}},
-  \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
-  \code{\link{read.iff}}, \code{\link{write.iff}}
+Other iff.operations: 
+\code{\link{IFFChunk-class}},
+\code{\link{WaveToIFF}()},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{interpretIFFChunk}()},
+\code{\link{rasterToIFF}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{read.iff}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{iff.operations}

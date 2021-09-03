@@ -17,13 +17,13 @@ to use bitmap images to represent the glyphs in fonts. The
 to represent Amiga bitmap fonts.
 
 The Commodore Amiga had a directory named 'FONTS' located in the
-root, where (bitmap) fonts were stored. Font sets where stored
+root, where (bitmap) fonts were stored. Font sets were stored
 under the font name with a *.font extension. Files with the *.font
 extension did not contain the bitmap images of the font. Rather
 the *.font file contained information on which font heights (in
 pixels) are available, in addition to some other meta-information.
 
-The bitmap images where stored in separate files for each individual
+The bitmap images were stored in separate files for each individual
 height. The \code{AmigaBitmapFontSet} is an S3 class that forms
 a comprehensive format (named \code{list}) to represent the *.font
 files. The \code{AmigaBitmapFont} is an S3 class is a comprehensive
@@ -144,24 +144,32 @@ plot(font_example, text = "Foo bar", style = "underlined", interpolate = F)
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node05BA.html}
 }
 \seealso{
-Other AmigaBitmapFont.operations: \code{\link{availableFontSizes}},
-  \code{\link{c}}, \code{\link{fontName}},
-  \code{\link{font_example}},
-  \code{\link{getAmigaBitmapFont}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{write.AmigaBitmapFont}}
+Other AmigaBitmapFont.operations: 
+\code{\link{availableFontSizes}()},
+\code{\link{c}()},
+\code{\link{fontName}()},
+\code{\link{font_example}},
+\code{\link{getAmigaBitmapFont}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{write.AmigaBitmapFont}()}
 
-Other raster.operations: \code{\link{as.raster}},
-  \code{\link{bitmapToRaster}}, \code{\link{dither}},
-  \code{\link{index.colours}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rasterToBitmap}},
-  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
+Other raster.operations: 
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{bitmapToRaster}()},
+\code{\link{dither}()},
+\code{\link{index.colours}()},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rasterToBitmap}()},
+\code{\link{rasterToHWSprite}()},
+\code{\link{rasterToIFF}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBitmapFont.operations}
+\concept{raster.operations}

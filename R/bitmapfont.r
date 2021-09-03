@@ -10,13 +10,13 @@
 #' to represent Amiga bitmap fonts.
 #' 
 #' The Commodore Amiga had a directory named 'FONTS' located in the
-#' root, where (bitmap) fonts were stored. Font sets where stored
+#' root, where (bitmap) fonts were stored. Font sets were stored
 #' under the font name with a *.font extension. Files with the *.font
 #' extension did not contain the bitmap images of the font. Rather
 #' the *.font file contained information on which font heights (in
 #' pixels) are available, in addition to some other meta-information.
 #' 
-#' The bitmap images where stored in separate files for each individual
+#' The bitmap images were stored in separate files for each individual
 #' height. The \code{AmigaBitmapFontSet} is an S3 class that forms
 #' a comprehensive format (named \code{list}) to represent the *.font
 #' files. The \code{AmigaBitmapFont} is an S3 class is a comprehensive
@@ -299,7 +299,7 @@ NULL
 #' @name read.AmigaBitmapFontSet
 #' @param file A \code{character} string of the filename of the *.font file to be read.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Currently ignored.
@@ -355,7 +355,7 @@ read.AmigaBitmapFontSet <- function(file, disk = NULL, ...) {
 #' font bitmap image information. \code{file} should thus be a \code{character}
 #' string specifying the file location of the *.font file.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Returns an \code{\link{AmigaBitmapFontSet}} object.
@@ -443,7 +443,7 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
 #' indicating the font height in pixels. Use \code{file} as a \code{character}
 #' string representing that file location.
 #' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Arguments passed on to \code{\link{rawToAmigaBitmapFont}}.
@@ -508,7 +508,7 @@ read.AmigaBitmapFont <- function(file, disk = NULL, ...) {
 #' already exists. In this subdirectory all the nested \code{\link{AmigaBitmapFont}}
 #' objects are stored.
 #' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @return Invisibly returns the result of the call of \code{close} to the
@@ -759,7 +759,7 @@ print.AmigaBitmapFontSet <- function(x, ...) {
 #' @name as.raw
 #' @export
 as.raw.AmigaBitmapFont <- function(x, ...) {
-  withCallingHandlers({ ## XXX remove handlers when replace functions are implemented
+  withCallingHandlers({ ## TODO remove handlers when replace functions are implemented
     ## initial checks. Throw errors when checks are unsuccessful
     if (!inherits(x, "AmigaBitmapFont")) stop("x should be of class AmigaBitmapFont.")
     max.loc <- max(x$glyph.info$glyphLocation)
@@ -847,7 +847,7 @@ as.raw.AmigaBitmapFont <- function(x, ...) {
 #' @name as.raw
 #' @export
 as.raw.AmigaBitmapFontSet <- function(x, ...) {
-  withCallingHandlers({ ## XXX remove handlers when replace functions are implemented
+  withCallingHandlers({ ## TODO remove handlers when replace functions are implemented
     if (!inherits(x, "AmigaBitmapFontSet")) stop("x should be of class AmigaBitmapFontSet.")
     if (x$fch_FileID != "FontContents") stop("Sorry, currently only 'FontContents' font sets are supported.")
     ## put list in correct order...
@@ -883,6 +883,7 @@ as.raw.AmigaBitmapFontSet <- function(x, ...) {
 #' or an \code{\link{AmigaBitmapFontSet}}. Should be a \code{vector} of
 #' two colours. The first is element is used as background colour, the
 #' second as foreground. When missing, transparent white and black are used.
+#' @family raster.operations
 #' @rdname as.raster
 #' @name as.raster
 #' @export
@@ -894,6 +895,7 @@ as.raster.AmigaBitmapFont <- function(x, text, style, palette, ...) {
   .print_to_raster(text, x, style, palette)
 }
 
+#' @family raster.operations
 #' @rdname as.raster
 #' @name as.raster
 #' @export
@@ -918,12 +920,21 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
   .print_to_raster(text, x, style, palette)
 }
 
-#' Combine AmigaBitmapFont objects into an AmigaBitmapFontSet
+#' Combine multiple AmigaFFH objects
 #'
 #' Use this function to correctly combine one or more \code{\link{AmigaBitmapFont}}
 #' class objects into a single \code{\link{AmigaBitmapFontSet}} class
-#' object.
+#' object, or to combine multiple \code{\link{AmigaBasic}} class objects.
 #'
+#' In case \code{...} are one or more \code{\link{AmigaBasic}} class objects:
+#' 
+#' \code{\link{AmigaBasic}} class objects are combined into a single
+#' \code{\link{AmigaBasic}} class object in the same order as they
+#' are given as argument to this function. for this purpose the lines of
+#' Amiga Basic codes are simply concatenated.
+#' 
+#' In case \code{...} are one or more \code{\link{AmigaBitmapFont}} class objects:
+#' 
 #' \code{\link{AmigaBitmapFontSet}} class objects can hold multiple
 #' \code{\link{AmigaBitmapFont}} class objects. Use this method to
 #' combine font bitmaps into such a font set. Make sure each bitmap
@@ -936,17 +947,22 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #'
 #' @rdname c
 #' @name c
-#' @param ... One or more \code{\link{AmigaBitmapFont}} objects that need
-#' to becombined into a single \code{\link{AmigaBitmapFontSet}} object.
+#' @param ... Either \code{\link{AmigaBasic}} or \code{\link{AmigaBitmapFont}}
+#' class objects. In case of \code{\link{AmigaBitmapFont}} objects:
 #' Each \code{\link{AmigaBitmapFont}} object should have a
 #' unique Y-size.
-#' @param name A \code{character} string specifying the name that needs to be
+#' @param name This argument is only valid when \code{...} are one or more
+#' \code{\link{AmigaBitmapFont}} class objects.
+#' 
+#' A \code{character} string specifying the name that needs to be
 #' applied to the font set. When unspecified, the default name 'font' is
 #' used. Note that this name will also be used as a file name when writing
 #' the font to a file. So make sure the name is also a valid file name. This
-#' will not be checked for you.
-#' @return Returns an \code{link{AmigaBitmapFontSet}} in which the
-#' \code{\link{AmigaBitmapFont}} objects are combined.
+#' will not be checked for you and may thus result in errors.
+#' @return Returns an \code{\link{AmigaBitmapFontSet}} in which the
+#' \code{\link{AmigaBitmapFont}} objects are combined. Or when \code{\link{AmigaBasic}}
+#' objects are combined, an \code{\link{AmigaBasic}} object is returned
+#' in which the lines of Amiga Basic code are combined.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -957,6 +973,11 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #' 
 #' ## now bind these bitmaps again in a single set
 #' font.set <- c(font8, font9, name = "my_font_name")
+#' 
+#' ## Amiga Basic codes can also be combined:
+#' bas1 <- as.AmigaBasic("LET a = 1")
+#' bas2 <- as.AmigaBasic("PRINT a")
+#' bas  <- c(bas1, bas2)
 #' }
 #' @family AmigaBitmapFont.operations
 #' @author Pepijn de Vries
@@ -1034,7 +1055,7 @@ fontName <- function(x) {
 #' @name fontName<-
 #' @export
 `fontName<-` <- function(x, value) {
-  withCallingHandlers({ ## XXX remove handlers when replace functions are implemented
+  withCallingHandlers({ ## TODO remove handlers when replace functions are implemented
     lapply(1:length(x$FontContents), function(i) {
       x$FontContents[[i]]$fc_FileName <<-
         gsub(".+?([/])", paste0(value, "/"),
@@ -1165,7 +1186,7 @@ availableFontSizes <- function(x) {
 #' text. Note that these values can be smaller or larger than the values
 #' specified for \code{glyph_width}.
 #' They should be whole numbers greater or equal to 0.
-#' @param glyph_kern Not that in Amiga bitmap fonts not the formal
+#' @param glyph_kern Note that in Amiga bitmap fonts not the formal
 #' definition from typography is used for kerning. Here, kerning is
 #' used as the number of pixels the cursor should be moved forward or
 #' backward after typesetting a character. It should be a
@@ -1179,7 +1200,7 @@ availableFontSizes <- function(x) {
 #' When missing, it will be checked whether \code{x} has a palette
 #' as attribute, and uses that. If that attribute is also missing,
 #' the palette will be guessed from \code{x}, where the most
-#' frequently occuring colour is assumed to be the background
+#' frequently occurring colour is assumed to be the background
 #' colour.
 #' @param ... Currently ignored.
 #' @return Returns a \code{\link{AmigaBitmapFont}} class object based on \code{x}.
@@ -1386,7 +1407,7 @@ rasterToAmigaBitmapFont <- function(x, glyphs, default_glyph, baseline, glyph_wi
   class(x) <- NULL
   x[[i]] <- value
   class(x) <- cl
-  ## XXX update this replacement function and remove warning
+  ## TODO update this replacement function and remove warning
   warning(paste0("Replacement operator for AmigaBitmapFont objects ",
                  "will be modified in future versions of this package. ",
                  "Note that not all replacement operations may be ",
@@ -1406,7 +1427,7 @@ rasterToAmigaBitmapFont <- function(x, glyphs, default_glyph, baseline, glyph_wi
   class(x) <- NULL
   x[[i]] <- value
   class(x) <- cl
-  ## XXX update this replacement function and remove warning
+  ## TODO update this replacement function and remove warning
   warning(paste0("Replacement operator for AmigaBitmapFontSet objects ",
                  "will be modified in future versions of this package. ",
                  "Note that not all replacement operations may be ",

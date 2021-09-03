@@ -4,12 +4,14 @@
 \name{amiga_monitors}
 \alias{amiga_monitors}
 \title{A list of Amiga monitors}
-\format{A \code{data.frame} with 2 columns:
+\format{
+A \code{data.frame} with 2 columns:
 \itemize{
   \item{The column named `MONITOR_ID': a \code{factor} representing an Amiga monitor}
   \item{The column named `CODE': A \code{list} containing a \code{vector} of 4
   \code{raw} values as used by the Amiga to represent a specific monitor.}
-}}
+}
+}
 \description{
 This table lists Amiga monitors and corresponding \code{raw} codes that represent
 these monitors.
@@ -25,5 +27,5 @@ raster images.
 data("amiga_monitors")
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+\url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 }

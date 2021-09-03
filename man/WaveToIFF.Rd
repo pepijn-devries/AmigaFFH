@@ -4,13 +4,18 @@
 \alias{WaveToIFF}
 \title{Convert WaveMC objects into an Interchange File Format object}
 \usage{
-WaveToIFF(x, loop.start = NA, octaves = 1, compress = c("sCmpNone",
-  "sCmpFibDelta"), ...)
+WaveToIFF(
+  x,
+  loop.start = NA,
+  octaves = 1,
+  compress = c("sCmpNone", "sCmpFibDelta"),
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{\link[tuneR]{WaveMC}} object that needs to be converted into an \code{\link{IFFChunk}} object. \code{x}
 can also be any other class object that can be coerced into a \code{\link[tuneR]{WaveMC}} object. \code{\link[tuneR]{Wave}}
-and \code{\link[ProTrackR]{PTSample}} objects are therefore also allowed.}
+and \code{\link[ProTrackR:PTSample-class]{PTSample}} objects are therefore also allowed.}
 
 \item{loop.start}{If the sample should be looped from a specific position to the
 end of the sample, this argument specifies the starting position in samples (with
@@ -71,12 +76,17 @@ sine.iff <- WaveToIFF(sin((0:2000)/20))
 \url{https://en.wikipedia.org/wiki/8SVX}
 }
 \seealso{
-Other iff.operations: \code{\link{IFFChunk-class}},
-  \code{\link{as.raster}}, \code{\link{getIFFChunk}},
-  \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
-  \code{\link{read.iff}}, \code{\link{write.iff}}
+Other iff.operations: 
+\code{\link{IFFChunk-class}},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{getIFFChunk}()},
+\code{\link{interpretIFFChunk}()},
+\code{\link{rasterToIFF}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{read.iff}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{iff.operations}

@@ -4,11 +4,13 @@
 \name{amiga_display_keys}
 \alias{amiga_display_keys}
 \title{A list of special display modes}
-\format{a \code{data.frame} with 2 columns:
+\format{
+a \code{data.frame} with 2 columns:
 \itemize{
   \item{The column named `mode': a \code{factor} reflecting a display mode, monitor or bitwise mask}
   \item{The column named `code': vector of 4 \code{raw} values as used by the Amiga to reflect specific display modes}
-}}
+}
+}
 \description{
 A list of special display modes on the Amiga and corresponding \code{raw} keys.
 }
@@ -23,7 +25,7 @@ interpret ILBM images and creating IFF files from raster images.
 data("amiga_display_keys")
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+\url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 
 \url{http://amigadev.elowar.com/read/ADCD_2.1/AmigaMail_Vol2_guide/node00FD.html}
 }

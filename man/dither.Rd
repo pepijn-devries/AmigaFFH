@@ -2,21 +2,29 @@
 % Please edit documentation in R/generic_support.r
 \name{dither}
 \alias{dither}
-\alias{dither}
 \alias{dither.raster}
-\alias{dither}
 \alias{dither.matrix}
 \title{Image dithering}
 \usage{
 dither(x, method, ...)
 
-\method{dither}{raster}(x, method = c("none", "floyd-steinberg", "JJN",
-  "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"),
-  palette, mode = c("none", "HAM6", "HAM8"), ...)
+\method{dither}{raster}(
+  x,
+  method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse",
+    "sierra", "two-row-sierra", "sierra-lite"),
+  palette,
+  mode = c("none", "HAM6", "HAM8"),
+  ...
+)
 
-\method{dither}{matrix}(x, method = c("none", "floyd-steinberg", "JJN",
-  "stucki", "atkinson", "burkse", "sierra", "two-row-sierra", "sierra-lite"),
-  palette, mode = c("none", "HAM6", "HAM8"), ...)
+\method{dither}{matrix}(
+  x,
+  method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse",
+    "sierra", "two-row-sierra", "sierra-lite"),
+  palette,
+  mode = c("none", "HAM6", "HAM8"),
+  ...
+)
 }
 \arguments{
 \item{x}{Original image data that needs to be dithered. Should be a raster object
@@ -92,18 +100,25 @@ J. F. Jarvis, C. N. Judice, and W. H. Ninke, \emph{A survey of techniques for th
 
 \url{https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering}
 
-\url{http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
+\url{https://tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
 }
 \seealso{
-Other colour.quantisation.operations: \code{\link{index.colours}}
+Other colour.quantisation.operations: 
+\code{\link{index.colours}()}
 
-Other raster.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
-  \code{\link{index.colours}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rasterToBitmap}},
-  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
+Other raster.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{bitmapToRaster}()},
+\code{\link{index.colours}()},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rasterToBitmap}()},
+\code{\link{rasterToHWSprite}()},
+\code{\link{rasterToIFF}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{colour.quantisation.operations}
+\concept{raster.operations}

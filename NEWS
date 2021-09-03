@@ -1,3 +1,17 @@
+AmigaFFH v0.4.1 (Release date: 2021-09-03)
+=============
+
+ * Updated URLs in manual conform CRAN policy
+
+AmigaFFH v0.4.0 (Release date: 2021-09-01)
+=============
+
+ * Fixed bug in Amiga Icon implementation
+ 
+ * Added support for Amiga Basic files
+
+ * Minor corrections and updates to the manual.
+
 AmigaFFH v0.3.1 (Release date: 2019-04-31)
 =============
 

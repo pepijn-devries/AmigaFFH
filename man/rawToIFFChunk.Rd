@@ -43,22 +43,33 @@ identical(example.iff, example.iff.new)
 }
 }
 \seealso{
-Other iff.operations: \code{\link{IFFChunk-class}},
-  \code{\link{WaveToIFF}}, \code{\link{as.raster}},
-  \code{\link{getIFFChunk}},
-  \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{read.iff}},
-  \code{\link{write.iff}}
+Other iff.operations: 
+\code{\link{IFFChunk-class}},
+\code{\link{WaveToIFF}()},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{getIFFChunk}()},
+\code{\link{interpretIFFChunk}()},
+\code{\link{rasterToIFF}()},
+\code{\link{read.iff}()},
+\code{\link{write.iff}()}
 
-Other raw.operations: \code{\link{as.raw}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{iff.operations}
+\concept{raw.operations}

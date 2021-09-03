@@ -53,14 +53,22 @@ plot(spr)
 }
 }
 \seealso{
-Other raster.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{as.raster}}, \code{\link{bitmapToRaster}},
-  \code{\link{dither}}, \code{\link{index.colours}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rasterToBitmap}}, \code{\link{rasterToIFF}}
+Other raster.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{bitmapToRaster}()},
+\code{\link{dither}()},
+\code{\link{index.colours}()},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rasterToBitmap}()},
+\code{\link{rasterToIFF}()}
 
-Other HWSprite.operations: \code{\link{rawToHWSprite}}
+Other HWSprite.operations: 
+\code{\link{rawToHWSprite}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{HWSprite.operations}
+\concept{raster.operations}

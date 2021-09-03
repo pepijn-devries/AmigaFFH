@@ -62,17 +62,26 @@ plot(spr, interpolate = FALSE)
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00B9.html}
 }
 \seealso{
-Other raw.operations: \code{\link{as.raw}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 
-Other HWSprite.operations: \code{\link{rasterToHWSprite}}
+Other HWSprite.operations: 
+\code{\link{rasterToHWSprite}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{HWSprite.operations}
+\concept{raw.operations}

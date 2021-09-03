@@ -4,8 +4,14 @@
 \alias{bitmapToRaster}
 \title{Convert an Amiga bitmap image into a raster}
 \usage{
-bitmapToRaster(x, w, h, depth, palette = grDevices::gray(seq(0, 1, length.out
-  = 2^depth)), interleaved = T)
+bitmapToRaster(
+  x,
+  w,
+  h,
+  depth,
+  palette = grDevices::gray(seq(0, 1, length.out = 2^depth)),
+  interleaved = T
+)
 }
 \arguments{
 \item{x}{a \code{vector} of \code{raw} values, representing bitmap data.}
@@ -84,13 +90,18 @@ plot(example.raster, interpolate = FALSE)
 }
 }
 \seealso{
-Other raster.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{as.raster}}, \code{\link{dither}},
-  \code{\link{index.colours}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rasterToBitmap}},
-  \code{\link{rasterToHWSprite}}, \code{\link{rasterToIFF}}
+Other raster.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{dither}()},
+\code{\link{index.colours}()},
+\code{\link{rasterToAmigaBasicShape}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rasterToBitmap}()},
+\code{\link{rasterToHWSprite}()},
+\code{\link{rasterToIFF}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{raster.operations}

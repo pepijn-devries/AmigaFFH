@@ -38,24 +38,36 @@ font <- rawToAmigaBitmapFont(font.raw)
 }
 }
 \seealso{
-Other AmigaBitmapFont.operations: \code{\link{AmigaBitmapFont}},
-  \code{\link{availableFontSizes}}, \code{\link{c}},
-  \code{\link{fontName}}, \code{\link{font_example}},
-  \code{\link{getAmigaBitmapFont}},
-  \code{\link{rasterToAmigaBitmapFont}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{write.AmigaBitmapFont}}
+Other AmigaBitmapFont.operations: 
+\code{\link{AmigaBitmapFont}},
+\code{\link{availableFontSizes}()},
+\code{\link{c}()},
+\code{\link{fontName}()},
+\code{\link{font_example}},
+\code{\link{getAmigaBitmapFont}()},
+\code{\link{rasterToAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{write.AmigaBitmapFont}()}
 
-Other raw.operations: \code{\link{as.raw}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleAmigaIcon}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleAmigaIcon}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaBitmapFont.operations}
+\concept{raw.operations}

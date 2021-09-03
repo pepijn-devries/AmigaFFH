@@ -47,16 +47,18 @@ to write system-configuration files. With \code{\link{rawToSysConfig}} and
 its raw (binary) form.
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
+\url{https://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node00D5.html}
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node063B.html}
 }
 \seealso{
-Other SysConfig.operations: \code{\link{rawToSysConfig}},
-  \code{\link{read.SysConfig}},
-  \code{\link{simpleSysConfig}},
-  \code{\link{write.SysConfig}}
+Other SysConfig.operations: 
+\code{\link{rawToSysConfig}()},
+\code{\link{read.SysConfig}()},
+\code{\link{simpleSysConfig}()},
+\code{\link{write.SysConfig}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{SysConfig.operations}

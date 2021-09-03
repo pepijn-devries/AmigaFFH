@@ -220,7 +220,7 @@ packBitmap <- function(x) {
 unPackBitmap <- function(x) {
   if (typeof(x) != "raw") stop("Argument 'x' should be raw data")
   ## Very simple packing routine for bitmap images
-  ## XXX this routine is very slow due to the while loop. See if this routine can be implemented more efficiently
+  ## TODO this routine is very slow due to the while loop. See if this routine can be implemented more efficiently
   result <- raw(0)
   offset <- 0
   while (offset < length(x)) {
@@ -583,8 +583,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
   if (colour.depth != "12 bit" && special.mode == "HAM6") stop("HAM6 required 12 bit colour depth")
   if (colour.depth != "24 bit" && special.mode == "HAM8") stop("HAM8 required 24 bit colour depth")
   dither <- match.arg(dither)
-  if (!.is.colour(background)) stop("background is not a colour!")
-  
+
   background <- grDevices::col2rgb(background)
 
   if (x.is.list) {
@@ -661,6 +660,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
     transparent <- which(palette[4,] == 0)[1]
     palette[4,palette[4,] > 0] <- 255
     palette <- grDevices::rgb(palette[1,], palette[2,], palette[3,], palette[4,], maxColorValue = 255)
+    result <- lapply(x, function(y) apply(y, 2, match, table = palette))
   }
 
   if (dither != "none" || special.mode %in% c("HAM6", "HAM8")) { ## dithering should also be called in case of HAM modes
@@ -742,7 +742,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' @references R.W. Floyd, L. Steinberg, \emph{An adaptive algorithm for spatial grey scale}. Proceedings of the Society of Information Display 17, 75-77 (1976).
 #' @references J. F. Jarvis, C. N. Judice, and W. H. Ninke, \emph{A survey of techniques for the display of continuous tone pictures on bilevel displays}. Computer Graphics and Image Processing, 5:1:13-40 (1976).
 #' @references \url{https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering}
-#' @references \url{http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
+#' @references \url{https://tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
 #' @family colour.quantisation.operations
 #' @family raster.operations
 #' @author Pepijn de Vries

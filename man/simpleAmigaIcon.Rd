@@ -4,9 +4,14 @@
 \alias{simpleAmigaIcon}
 \title{Create simple AmigaIcon objects}
 \usage{
-simpleAmigaIcon(version = c("OS1.x", "OS2.x"), type = c("WBDISK",
-  "WBDRAWER", "WBTOOL", "WBPROJECT", "WBGARBAGE", "WBDEVICE", "WBKICK",
-  "WBAPPICON"), two.images = TRUE, back.fill = FALSE, ...)
+simpleAmigaIcon(
+  version = c("OS1.x", "OS2.x"),
+  type = c("WBDISK", "WBDRAWER", "WBTOOL", "WBPROJECT", "WBGARBAGE", "WBDEVICE",
+    "WBKICK", "WBAPPICON"),
+  two.images = TRUE,
+  back.fill = FALSE,
+  ...
+)
 }
 \arguments{
 \item{version}{A \code{character} string indicating the Amiga OS version
@@ -49,19 +54,29 @@ icon <- simpleAmigaIcon()
 }
 }
 \seealso{
-Other AmigaIcon.operations: \code{\link{AmigaIcon}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{read.AmigaIcon}},
-  \code{\link{write.AmigaIcon}}
+Other AmigaIcon.operations: 
+\code{\link{AmigaIcon}},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{write.AmigaIcon}()}
 
-Other raw.operations: \code{\link{as.raw}},
-  \code{\link{colourToAmigaRaw}}, \code{\link{packBitmap}},
-  \code{\link{rawToAmigaBitmapFontSet}},
-  \code{\link{rawToAmigaBitmapFont}},
-  \code{\link{rawToAmigaIcon}},
-  \code{\link{rawToHWSprite}}, \code{\link{rawToIFFChunk}},
-  \code{\link{rawToSysConfig}}
+Other raw.operations: 
+\code{\link{as.AmigaBasic}()},
+\code{\link{as.raw.AmigaBasic}()},
+\code{\link{colourToAmigaRaw}()},
+\code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{rawToAmigaBasicShape}()},
+\code{\link{rawToAmigaBasic}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaIcon}()},
+\code{\link{rawToHWSprite}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{rawToSysConfig}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{AmigaIcon.operations}
+\concept{raw.operations}

@@ -30,7 +30,7 @@
 #'   also display OCS and ECS modes, ECS could also display OCS modes, OCS could only
 #'   display OCS modes.}
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+#' @references \url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 #' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/AmigaMail_Vol2_guide/node00FD.html}
 #' @examples
 #' data("amiga_display_modes")
@@ -53,7 +53,7 @@ NULL
 #'   \item{The column named `mode': a \code{factor} reflecting a display mode, monitor or bitwise mask}
 #'   \item{The column named `code': vector of 4 \code{raw} values as used by the Amiga to reflect specific display modes}
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+#' @references \url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 #' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/AmigaMail_Vol2_guide/node00FD.html}
 #' @examples
 #' data("amiga_display_keys")
@@ -78,7 +78,7 @@ NULL
 #'   \item{The column named `CODE': A \code{list} containing a \code{vector} of 4
 #'   \code{raw} values as used by the Amiga to represent a specific monitor.}
 #' }
-#' @references \url{http://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
+#' @references \url{https://wiki.amigaos.net/wiki/Display_Database#ModeID_Identifiers}
 #' @examples
 #' data("amiga_monitors")
 NULL
@@ -109,7 +109,33 @@ NULL
 #' print(example.iff)
 #' }
 #' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
-#' @references \url{http://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
+#' @references \url{https://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF}
+NULL
+
+#' 'demo.bas', 'r_logo.shp' and 'ball.shp' as example files for AmigaBasic and AmigaBasicShape objects
+#'
+#' `demo.bas', `r_logo.shp' and `ball.shp' as example files for \code{\link{AmigaBasic}} and
+#' \code{\link{AmigaBasicShape}} objects
+#'
+#' The `r_logo.shp' and `ball.shp' files are formatted such that they can be read with
+#' \code{\link{read.AmigaBasicShape}}. They serve as an example of the \code{\link{AmigaBasicShape}} class, where
+#' the first represents a blitter object, and the latter a sprite.
+#' 
+#' The `demo.bas' file is an example of a binary encoded \link[AmigaFFH:AmigaBasic]{Amiga Basic} script. It can be read with
+#' \code{\link{read.AmigaBasic}}. The script demonstrates how the shape files could be used in Amiga Basic.
+#'
+#' @docType data
+#' @aliases demo.bas r_logo.shp ball.shp
+#' @name AmigaBasic-files
+#' @rdname AmigaBasic-files
+#' @format See \code{\link{AmigaBasic}} and \code{\link{AmigaBasicShape}} for more information
+#' about the format.
+#' @examples
+#' \dontrun{
+#' read.AmigaBasic(system.file("demo.bas", package = "AmigaFFH"))
+#' read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
+#' read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
+#' }
 NULL
 
 #' Commonly used palettes on the Commodore Amiga
@@ -127,14 +153,14 @@ NULL
 #' @name amiga_palettes
 #' @format A named list with the following elements:
 #' \itemize{
-#'   \item{\code{wb.os1}: A \code{vector} of 4 colours that where used as the default
+#'   \item{\code{wb.os1}: A \code{vector} of 4 colours that were used as the default
 #'   palette of the Workbench on Amiga OS 1.x.}
 #'   \item{\code{wb.os2}: A \code{vector} of 8 colours. The first 4 colours are the default
 #'   colours of a standard Workbench on Amiga OS 2.x. The latter 4 are additional
 #'   colours used by the Workbench expansion MagicWB.}
-#'   \item{\code{spr.os1}: A \code{vector} of 3 colours that where used by default
+#'   \item{\code{spr.os1}: A \code{vector} of 3 colours that were used by default
 #'   for a mouse pointer sprite on Amiga OS 1.x.}
-#'   \item{\code{spr.os2}: A \code{vector} of 3 colours that where used by default
+#'   \item{\code{spr.os2}: A \code{vector} of 3 colours that were used by default
 #'   for a mouse pointer sprite on Amiga OS 2.x.}
 #' }
 #' @examples

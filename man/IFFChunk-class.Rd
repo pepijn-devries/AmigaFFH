@@ -72,19 +72,24 @@ new("IFFChunk",
 }
 }
 \references{
-\url{http://wiki.amigaos.net/wiki/IFF_Standard}
+\url{https://wiki.amigaos.net/wiki/IFF_Standard}
 
-\url{http://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+\url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
 
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
 }
 \seealso{
-Other iff.operations: \code{\link{WaveToIFF}},
-  \code{\link{as.raster}}, \code{\link{getIFFChunk}},
-  \code{\link{interpretIFFChunk}},
-  \code{\link{rasterToIFF}}, \code{\link{rawToIFFChunk}},
-  \code{\link{read.iff}}, \code{\link{write.iff}}
+Other iff.operations: 
+\code{\link{WaveToIFF}()},
+\code{\link{as.raster.AmigaBasicShape}()},
+\code{\link{getIFFChunk}()},
+\code{\link{interpretIFFChunk}()},
+\code{\link{rasterToIFF}()},
+\code{\link{rawToIFFChunk}()},
+\code{\link{read.iff}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{iff.operations}

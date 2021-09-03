@@ -11,7 +11,7 @@ read.SysConfig(file, disk = NULL)
 Can also be a connection that allows reading binary data.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
@@ -38,18 +38,29 @@ plot(sc)
 }
 }
 \seealso{
-Other SysConfig.operations: \code{\link{SysConfig}},
-  \code{\link{rawToSysConfig}},
-  \code{\link{simpleSysConfig}},
-  \code{\link{write.SysConfig}}
+Other SysConfig.operations: 
+\code{\link{SysConfig}},
+\code{\link{rawToSysConfig}()},
+\code{\link{simpleSysConfig}()},
+\code{\link{write.SysConfig}()}
 
-Other io.operations: \code{\link{read.AmigaBitmapFontSet}},
-  \code{\link{read.AmigaBitmapFont}},
-  \code{\link{read.AmigaIcon}}, \code{\link{read.iff}},
-  \code{\link{write.AmigaBitmapFont}},
-  \code{\link{write.AmigaIcon}},
-  \code{\link{write.SysConfig}}, \code{\link{write.iff}}
+Other io.operations: 
+\code{\link{read.AmigaBasicBMAP}()},
+\code{\link{read.AmigaBasicShape}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaIcon}()},
+\code{\link{read.iff}()},
+\code{\link{write.AmigaBasicShape}()},
+\code{\link{write.AmigaBasic}()},
+\code{\link{write.AmigaBitmapFont}()},
+\code{\link{write.AmigaIcon}()},
+\code{\link{write.SysConfig}()},
+\code{\link{write.iff}()}
 }
 \author{
 Pepijn de Vries
 }
+\concept{SysConfig.operations}
+\concept{io.operations}
