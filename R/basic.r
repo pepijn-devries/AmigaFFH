@@ -294,7 +294,7 @@ fb,ff,PTAB", header = T, sep = ",", quote = "", as.is = T)
 #' @param x A \code{vector} of \code{raw} data that is to be converted
 #' into an \code{\link{AmigaBasic}} class object.
 #' @param ... Currently ignored.
-#' @return An \code{\link{AmigaBasic}} class object based on \code{x}.
+#' @returns An \code{\link{AmigaBasic}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## First create an AmigaBAsic object:
@@ -382,7 +382,7 @@ as.raw.AmigaBasic <- function(x, ...) {
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Currently ignored
-#' @return Returns an \code{\link{AmigaBasic}} class object read from the \code{file}.
+#' @returns Returns an \code{\link{AmigaBasic}} class object read from the \code{file}.
 #' @examples
 #' \dontrun{
 #' ## First create an AmigaBasic file
@@ -424,7 +424,7 @@ read.AmigaBasic <- function(file, disk = NULL, ...) {
 #' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Invisibly returns the result of the call of \code{close} to the
+#' @returns Invisibly returns the result of the call of \code{close} to the
 #' file connection. Or, when \code{disk} is specified, a copy of
 #' \code{disk} is returned to which the file(s) is/are written.
 #' @examples
@@ -457,7 +457,7 @@ write.AmigaBasic <- function(x, file, disk = NULL) {
 #' @param x An \code{\link{AmigaBasic}} class object that needs to be
 #' coerced to its \code{character} representation.
 #' @param ... Currently ignored.
-#' @return A \code{vector} of \code{character} strings, where
+#' @returns A \code{vector} of \code{character} strings, where
 #' each element of the \code{vector} is a \code{character} representation
 #' of a line of Amiga Basic code stored in \code{x}.
 #' @examples
@@ -614,7 +614,7 @@ as.character.AmigaBasic <- function(x, ...) {
 #' 
 #' @rdname AmigaBasic.reserved
 #' @name AmigaBasic.reserved
-#' @return Returns a \code{vecor} of \code{character} strings of
+#' @returns Returns a \code{vecor} of \code{character} strings of
 #' reserved Amiga Basic words.
 #' @examples
 #' AmigaBasic.reserved()
@@ -646,7 +646,7 @@ AmigaBasic.reserved <- function() {
 #' Amiga Basic syntax. The syntax is only checked to a limited extent as
 #' this package does not implement an interpreter for the code.
 #' @param ... Currently ignored.
-#' @return Returns an \code{\link{AmigaBasic}} class object based on \code{x}.
+#' @returns Returns an \code{\link{AmigaBasic}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## An AmigaBasic object can be created from text.
@@ -930,7 +930,7 @@ as.AmigaBasic <- function(x, ...) {
 #' \code{\link{AmigaBasic}} class object that is used to replace
 #' the selected indices \code{i}. \code{value} should represent the
 #' same number of lines of code as the selected number of lines.
-#' @return The extraction method returns an \code{\link{AmigaBasic}} object based in the lines selected with \code{i}.
+#' @returns The extraction method returns an \code{\link{AmigaBasic}} object based in the lines selected with \code{i}.
 #' The replacement method returns an \code{\link{AmigaBasic}} object with the selected lines replaced with \code{value}.
 #' @examples
 #' \dontrun{
@@ -1012,7 +1012,7 @@ print.AmigaBasic <- function(x, ...) {
 #' @name names.AmigaBasic
 #' @param x An \code{\link{AmigaBasic}}-class object for which to obtain or change variable and/or label names
 #' @param value A (\code{vector} of) \code{character} string of desired replacement variable/label names.
-#' @return A \code{vector} of \code{character} strings with label and variable names in the basic script.
+#' @returns A \code{vector} of \code{character} strings with label and variable names in the basic script.
 #' In case of the replacement method a \code{\link{AmigaBasic}}-class with replaced names is returned.
 #' @examples
 #' ## Let's create some Basic code with labels and variables:
@@ -1078,7 +1078,7 @@ names.AmigaBasic <- function(x) {
 #' @name check.names.AmigaBasic
 #' @param x A \code{vector} of \code{character} strings that need to be checked
 #' @param ... Currently ignored.
-#' @return A \code{data.frame} with \code{logical} values with the same number of rows as the length of \code{x}.
+#' @returns A \code{data.frame} with \code{logical} values with the same number of rows as the length of \code{x}.
 #' Columns in the data.frame corresponds with the criteria listed in the details.
 #' \code{FALSE} for invalid names.
 #' @examples
@@ -1139,7 +1139,7 @@ c.AmigaBasic <- function(...) {
 #' @param palette A \code{vector} of \code{character} strings, where each element represents a colour in the palette.
 #' This palette will be used to display the graphics (note that the raw format does not store the palette, but this
 #' S3 class does). When this argument is omitted a grey scale palette will be generated.
-#' @return returns an \code{\link{AmigaBasicShape}}-class object.
+#' @returns returns an \code{\link{AmigaBasicShape}}-class object.
 #' @examples
 #' \dontrun{
 #' filename <- system.file("ball.shp", package = "AmigaFFH")
@@ -1218,7 +1218,7 @@ rawToAmigaBasicShape <- function(x, palette) {
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Arguments passed to \code{\link{rawToAmigaBasicShape}}.
-#' @return Returns an \code{\link{AmigaBasicShape}} class object read from the \code{file}.
+#' @returns Returns an \code{\link{AmigaBasicShape}} class object read from the \code{file}.
 #' @examples
 #' \dontrun{
 #' filename <- system.file("ball.shp", package = "AmigaFFH")
@@ -1265,7 +1265,7 @@ read.AmigaBasicShape <- function(file, disk = NULL, ...) {
 #' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Invisibly returns the result of the call of \code{close} to the
+#' @returns Invisibly returns the result of the call of \code{close} to the
 #' file connection. Or, when \code{disk} is specified, a copy of
 #' \code{disk} is returned to which the file(s) is/are written.
 #' @examples
@@ -1389,7 +1389,7 @@ as.raster.AmigaBasicShape <- function(x, selected = c("bitmap", "shadow", "colli
 #' object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
 #' as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).
 #' @param ... Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.
-#' @return Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
+#' @returns Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## get a raster image:
@@ -1496,7 +1496,7 @@ NULL
 #' read or written to. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file} in case of
+#' @returns Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file} in case of
 #' \code{read.AmigaBasicBMAP}. Otherwise, invisibly returns the result of the call of \code{close} to the
 #' file connection. Or, when \code{disk} is specified, a copy of
 #' \code{disk} is returned to which the file is written.
@@ -1569,7 +1569,7 @@ print.AmigaBasicBMAP <- function(x, ...) {
 #' @param x A \code{vector} of \code{raw} data that is to be converted
 #' into an \code{\link{AmigaBasicBMAP}} class object.
 #' @param ... Currently ignored.
-#' @return An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
+#' @returns An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## A small fragment of the dos.library BMAP would look like this:
@@ -1654,7 +1654,7 @@ as.list.AmigaBasicBMAP <- function(x, ...) {
 #' of a \code{list} with 2 elements: The first should be named `libraryVectorOffset' and should hold the \code{numeric}
 #' offset of the routine in the library (see details). The second element should be named `registers' and should
 #' contain a \code{vector} of \code{raw} values refering to CPU registers used by the routine (see details).
-#' @return Returns a \code{\link{AmigaBasicBMAP}} based on \code{x}
+#' @returns Returns a \code{\link{AmigaBasicBMAP}} based on \code{x}
 #' @examples
 #' \dontrun{
 #' ## For the dos.library, the start of the bmap list would look like:

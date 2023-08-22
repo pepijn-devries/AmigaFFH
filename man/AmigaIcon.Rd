@@ -47,7 +47,6 @@ and to its raw (binary) form.
 \references{
 \url{http://www.evillabs.net/wiki/index.php/Amiga_Icon_Formats}
 \url{http://fileformats.archiveteam.org/wiki/Amiga_Workbench_icon}
-\url{http://krashan.ppa.pl/articles/amigaicons/}
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node0241.html}
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node05D6.html}
 }

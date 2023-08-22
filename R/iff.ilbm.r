@@ -125,7 +125,7 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{selected} can be used to select a
 #' specific layer of the shape to plot, which can be one of \code{"bitmap"} (default), \code{"shadow"} or \code{"collision"}.
 #' @param ... Currently ignored.
-#' @return Returns a \code{grDevices} raster image (\code{\link[grDevices]{as.raster}})
+#' @returns Returns a \code{grDevices} raster image (\code{\link[grDevices]{as.raster}})
 #' based on \code{x}. If \code{x} is an animation (\code{\link{IFFChunk}} of type ANIM),
 #' a \code{list} of raster objects is returned.
 #' @examples
@@ -292,7 +292,7 @@ plot.IFF.ANIM <- function(x, y, ...) {
 #' with the "ByteVerticalCompression" in this package (when \code{x} is a list of
 #' \code{raster} objects).
 #' @param ... Arguments passed on to \code{\link{rasterToBitmap}}.
-#' @return Returns an \code{\link{IFFChunk}} object holding an Interleaved
+#' @returns Returns an \code{\link{IFFChunk}} object holding an Interleaved
 #' Bitmap (ILBM) image based on \code{x}.
 #' @examples
 #' \dontrun{

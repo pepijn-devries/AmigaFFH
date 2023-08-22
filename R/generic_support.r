@@ -34,7 +34,7 @@ dither <- function(x, method, ...) {
 #' have a 12 bit colour depth.
 #' @param n.bytes A \code{character} string: \code{"2"} or \code{"3"}. The
 #' number of bytes that is used or should be used to store each colour.
-#' @return In the case \code{amigaRawToColour} is called, a (vector of)
+#' @returns In the case \code{amigaRawToColour} is called, a (vector of)
 #' colour \code{character} string(s) is returned. When \code{colourToAmigaRaw}
 #' is called, \code{raw} representing the colour(s) specified in \code{x} is
 #' returned.
@@ -131,7 +131,7 @@ amigaRawToColour <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
 #' function, which calls this packing routine per scanline.
 #'
 #' @param x \code{raw} data, usually representing a (packed) bitmap.
-#' @return Returns packed or unpacked \code{raw} data, depending on
+#' @returns Returns packed or unpacked \code{raw} data, depending on
 #' whether \code{packBitmap} or \code{unPackBitmap} was called.
 #' 
 #' @rdname packBitmap
@@ -266,7 +266,7 @@ unPackBitmap <- function(x) {
 #' values.
 #' @param interleaved A \code{logical} value, indicating whether the bitmap is interleaved.
 #' An interleaved bitmap image stores each consecutive bitmap layer per horizontal scanline.
-#' @return Returns a raster object (\code{\link{as.raster}}) as specified in
+#' @returns Returns a raster object (\code{\link{as.raster}}) as specified in
 #' the \code{\link{grDevices}} package. Unless, \code{palette} is set to \code{NULL},
 #' in which case a \code{matrix} with \code{numeric} palette index values is returned.
 #' 
@@ -405,7 +405,7 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #' \code{NA} when no transparency is required). By default the
 #' function \code{\link{index.colours}} is used. You are free to provide
 #' a customised version of this function (see examples).
-#' @return The bitmap is returned as a \code{vector} of \code{logical} values.
+#' @returns The bitmap is returned as a \code{vector} of \code{logical} values.
 #' The \code{logical} values reflect the bits for each bitplane. The palette used
 #' for the bitmap is returned as attribute to the \code{vector}. There will also be
 #' an attribute called `transparent'. This will hold a numeric index corresponding
@@ -460,7 +460,7 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
   if (depth < 1) stop("Bitmap depth should be at least 1.")
   interleaved <- interleaved[[1]]
   if (!is.logical(interleaved)) stop("Interleaved should be a logical value.")
-  if (class(indexing) != "function") stop("'indexing' should be a function")
+  if (!"function" %in% class(indexing)) stop("'indexing' should be a function")
   if (!all(c("x", "length.out") %in% names(formals(indexing)))) stop("Function 'indexing' should require arguments 'x' and 'length.out'.")
   x <- as.matrix(x)
   x <- indexing(x = x, length.out = ifelse(special.mode %in% c("HAM6", "HAM8"),
@@ -521,7 +521,7 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 #' is used (12 bit for HAM6, 24 bit for HAM8).
 #' @param ... Arguments that are passed onto \code{\link[stats]{kmeans}} (see
 #' \code{palette} argument).
-#' @return Returns a \code{matrix} with the same dimensions as \code{x} containing
+#' @returns Returns a \code{matrix} with the same dimensions as \code{x} containing
 #' \code{numeric} index values. The corresponding palette is returned as attribute,
 #' as well as the index value for the fully transparent colour in the palette.
 #' When \code{x} is a \code{list} a \code{list} of matrices is returned.
@@ -712,7 +712,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
 #' See \code{\link{rasterToBitmap}} for more details.
 #' @param ... Currently ignored.
-#' @return Returns a \code{matrix} with the same dimensions as \code{x} containing
+#' @returns Returns a \code{matrix} with the same dimensions as \code{x} containing
 #' \code{numeric} index values. The corresponding palette is returned as attribute,
 #' as well as the index value for the fully transparent colour in the palette.
 #' 
@@ -909,7 +909,7 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' for 16-bit data the quality loss will be more considerable.
 #' @param x A \code{vector} of \code{raw} data that needs to be (de)compressed.
 #' @param ... Currently ignored.
-#' @return Returns a \code{vector} of the resulting (de)compressed \code{raw} data.
+#' @returns Returns a \code{vector} of the resulting (de)compressed \code{raw} data.
 #' @rdname deltaFibonacciCompress
 #' @name deltaFibonacciCompress
 #' @examples
@@ -1194,7 +1194,7 @@ deltaFibonacciDecompress <- function(x, ...) {
 #' @name timeval
 #' @param x a \code{vector} of \code{raw} data that need to be converted into
 #' Amiga timeval structs.
-#' @return Returns a \code{numeric} \code{vector} of a timespan in seconds. It is
+#' @returns Returns a \code{numeric} \code{vector} of a timespan in seconds. It is
 #' represented as an S3 AmigaTimeVal class.
 #' @examples
 #' ## First four raw values represent seconds, the latter four microseconds:
@@ -1221,7 +1221,7 @@ timeval <- function(x) {
 #' @export
 as.raw.AmigaTimeVal <- function(x, ...) {
   ## convert a timval (time interval in seconds) to raw timeval struct
-  if (class(x) != "AmigaTimeVal") stop("x should be of S3 class AmigaTimeVal.")
+  if (!"AmigaTimeVal" %in% class(x)) stop("x should be of S3 class AmigaTimeVal.")
   secs   <- floor(x)
   micros <- round((x - secs)*1e6)
   secs[secs >= 2^32] <-  (2^32) - 1
@@ -1311,7 +1311,7 @@ print.AmigaTimeVal <- function(x, ...) {
   function(raw_dat)
     ## function that gets the value [0,16] of the 4 low bits of a raw byte
   {
-    if (class(raw_dat) != "raw") stop ("Only raw data is accepted as input")
+    if (!"raw" %in% class(raw_dat)) stop ("Only raw data is accepted as input")
     return(as.integer(raw_dat)%%16)
   }
 
@@ -1319,7 +1319,7 @@ print.AmigaTimeVal <- function(x, ...) {
   function(raw_dat)
     ## function that gets the value [0,16] of the 4 high bits of a raw byte
   {
-    if (class(raw_dat) != "raw") stop ("Only raw data is accepted as input")
+    if (!"raw" %in% class(raw_dat)) stop ("Only raw data is accepted as input")
     return(as.integer(as.integer(raw_dat)/16))
   }
 
@@ -1338,7 +1338,7 @@ print.AmigaTimeVal <- function(x, ...) {
       result <- result[result != raw(1)]
     }
     try(result <- rawToChar(result), silent = T)
-    if (class(result) == "raw") result <- ""
+    if ("raw" %in% class(result)) result <- ""
   }
   return(result)
 }
@@ -1378,14 +1378,14 @@ print.AmigaTimeVal <- function(x, ...) {
 .write.generic <- function(x, file, disk = NULL, ...) {
   raw.dat <- as.raw(x, ...)
   if (is.null(disk)) {
-    if (class(file) == "character") con <- file(file, "wb")
+    if ("character" %in% class(file)) con <- file(file, "wb")
     if ("connection" %in% class(file)) {
       con_info <- summary(con)
       if (con_info$`can write` != "yes" || con_info$text != "binary") stop("file is not a connection to which binary data can be written...")
       con <- file
     }
     writeBin(raw.dat, con, endian = "big")
-    if (class(file) == "character") return(close(con))
+    if ("character" %in% class(file)) return(close(con))
   } else {
     if ("adfExplorer" %in% rownames(utils::installed.packages())) {
       return(adfExplorer::put.adf.file(disk, raw.dat, file))

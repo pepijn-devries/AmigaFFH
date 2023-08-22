@@ -112,7 +112,7 @@ setGeneric("rawToHWSprite", function(x, col) standardGeneric("rawToHWSprite"))
 #' sprite. When missing some default colours (grayscale) will be used.
 #' The colours have to be provided separately as they are usually not stored
 #' together with the hardware sprite data.
-#' @return Returns a \code{\link{hardwareSprite}} object based on the provided raw data
+#' @returns Returns a \code{\link{hardwareSprite}} object based on the provided raw data
 #' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00B9.html}
 #' @examples
 #' ## Let's generate a 16x16 sprite with a random bitmap:
@@ -241,7 +241,7 @@ setMethod("show", "hardwareSprite", function(object){
 #' representing which colour in the palette should be treated as transparent (or
 #' \code{NA} when no transparency is required). By default the
 #' function \code{\link{index.colours}} is used.
-#' @return Returns a \code{\link{hardwareSprite}} class object based on \code{x}
+#' @returns Returns a \code{\link{hardwareSprite}} class object based on \code{x}
 #' @examples
 #' \dontrun{
 #' ## first create a raster object that can be used as input
@@ -260,7 +260,7 @@ setMethod("show", "hardwareSprite", function(object){
 #' @export
 rasterToHWSprite <- function(x, indexing = index.colours) {
   if (!("raster" %in% class(x))) stop ("x should be of class raster")
-  if (class(indexing) != "function") stop("'indexing' should be a function")
+  if (!"function" %in% class(indexing)) stop("'indexing' should be a function")
   if (!all(c("x", "length.out") %in% names(formals(indexing)))) stop("Function 'indexing' should require arguments 'x' and 'length.out'.")
   if (dim(x)[2] > 16) {
     warning("Raster is more then 16 pixels wide. It will be cropped.")

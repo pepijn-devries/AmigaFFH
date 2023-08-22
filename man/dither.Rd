@@ -10,8 +10,8 @@ dither(x, method, ...)
 
 \method{dither}{raster}(
   x,
-  method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse",
-    "sierra", "two-row-sierra", "sierra-lite"),
+  method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra",
+    "two-row-sierra", "sierra-lite"),
   palette,
   mode = c("none", "HAM6", "HAM8"),
   ...
@@ -19,8 +19,8 @@ dither(x, method, ...)
 
 \method{dither}{matrix}(
   x,
-  method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse",
-    "sierra", "two-row-sierra", "sierra-lite"),
+  method = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra",
+    "two-row-sierra", "sierra-lite"),
   palette,
   mode = c("none", "HAM6", "HAM8"),
   ...

@@ -74,10 +74,9 @@
 #' techniques that will help in converting modern files into classic file formats and vice versa.
 #' Such as for instance the function to \code{\link{dither}} full colour images to a limited
 #' colour palette.
-#' @docType package
-#' @name AmigaFFH
-#' @author Pepijn de Vries
 #' @references
 #' Documentation on several Amiga File types:
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/}
+#' @keywords internal
+"_PACKAGE"
 NULL
