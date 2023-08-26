@@ -1,8 +1,8 @@
 Package: AmigaFFH
 Type: Package
 Title: Commodore Amiga File Format Handler
-Version: 0.4.2
-Date: 2023-08-22
+Version: 0.4.3
+Date: 2023-08-26
 Authors@R: c(person("Pepijn", "de Vries", role = c("aut", "cre", "dtc"),
     email = "pepijn.devries@outlook.com"))
 Author: Pepijn de Vries [aut, cre, dtc]

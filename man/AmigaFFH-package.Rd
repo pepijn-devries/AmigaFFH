@@ -20,7 +20,7 @@ very fast.
 \section{Supported File Formats}{
 
 This package supports a number of file formats. The ProTracker module file format requires sophisticated interpretation
-and a dedicated package (\link[ProTrackR]{ProTrackR}) is developed for that purpose.
+and a dedicated package (\link[ProTrackR:ProTrackR-package]{ProTrackR}) is developed for that purpose.
 
 The following formats are supported by this package (to some extend):
 

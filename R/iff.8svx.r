@@ -84,7 +84,7 @@ plot.IFF.8SVX <- function(x, y, ...) {
 #' When a FORM container contains multiple 8SVX samples, they are also played successively.
 #' 
 #' Note that a separate package is developed to interpret and play ProTracker modules and samples
-#' (\code{\link[ProTrackR]{ProTrackR}}).
+#' (\code{\link[ProTrackR:ProTrackR-package]{ProTrackR}}).
 #' @rdname play
 #' @name play
 #' @aliases play,ANY-method
