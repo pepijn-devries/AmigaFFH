@@ -1,9 +1,14 @@
-AmigaFFH v0.TODO (Release date: TODO)
+AmigaFFH v0.4.3 (Release date: 2023-08-26)
 =============
 
- * TODO
+ * Fixed link in documentation in order to pass CRAN
+   checks
 
-=======
+AmigaFFH v0.4.2 (Release date: 2023-08-22)
+=============
+
+ * Updates in order to compy with latest CRAN policies
+   and Roxyen2 standards
 
 AmigaFFH v0.4.1 (Release date: 2021-09-03)
 =============

@@ -9,8 +9,8 @@ index.colours(
   length.out = 8,
   palette = NULL,
   background = "#FFFFFF",
-  dither = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse",
-    "sierra", "two-row-sierra", "sierra-lite"),
+  dither = c("none", "floyd-steinberg", "JJN", "stucki", "atkinson", "burkse", "sierra",
+    "two-row-sierra", "sierra-lite"),
   colour.depth = c("12 bit", "24 bit"),
   ...
 )

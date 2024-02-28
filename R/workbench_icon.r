@@ -45,7 +45,6 @@
 #' @references
 #' \url{http://www.evillabs.net/wiki/index.php/Amiga_Icon_Formats}
 #' \url{http://fileformats.archiveteam.org/wiki/Amiga_Workbench_icon}
-#' \url{http://krashan.ppa.pl/articles/amigaicons/}
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node0241.html}
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node05D6.html}
 NULL
@@ -121,7 +120,7 @@ NULL
 #' `complement' mode, the image colours are inverted when selected.
 #' In the `back fill' exterior first colour is not inverted.
 #' @param ... Reserverd for additional arguments. Currently ignored.
-#' @return Returns a simple S3 object of class \code{\link{AmigaIcon}}.
+#' @returns Returns a simple S3 object of class \code{\link{AmigaIcon}}.
 #' @examples
 #' \dontrun{
 #' ## Create an AmigaIcon object using the default arguments:
@@ -243,7 +242,7 @@ simpleAmigaIcon <- function(version    = c("OS1.x", "OS2.x"),
 #' \code{\link{AmigaIcon}} class object.
 #' @param palette Provide a palette (\code{vector} of colours) for the icon bitmap image.
 #' When set to \code{NULL} (default) the standard Amiga Workbench palette will be used.
-#' @return Returns an \code{\link{AmigaIcon}} class object based on \code{x}.
+#' @returns Returns an \code{\link{AmigaIcon}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## generate a simple AmigaIcon object:
@@ -408,7 +407,7 @@ rawToAmigaIcon <- function(x, palette = NULL) {
 #' When \code{x} is an \code{\link{AmigaBitmapFont}} or an \code{\link{AmigaBitmapFontSet}}
 #' object, '\code{...}' can also be used for arguments that need to be
 #' passed onto the \code{\link[AmigaFFH]{as.raster}} function.
-#' @return Returns \code{NULL} silently.
+#' @returns Returns \code{NULL} silently.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -624,7 +623,7 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Returns \code{NULL} or an \code{integer} status passed on by the
+#' @returns Returns \code{NULL} or an \code{integer} status passed on by the
 #' \code{\link{close}} function, that is used to close the file connection.
 #' It is returned invisibly. Or, when \code{disk} is specified, a copy of
 #' \code{disk} is returned to which the file is written.
@@ -642,7 +641,7 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' @author Pepijn de Vries
 #' @export
 write.AmigaIcon <- function(x, file, disk = NULL) {
-  if (class(x) != "AmigaIcon") stop("x should be of S3 class AmigaIcon.")
+  if (!"AmigaIcon" %in% class(x)) stop("x should be of S3 class AmigaIcon.")
   .write.generic(x, file, disk)
 }
 
@@ -668,7 +667,7 @@ write.AmigaIcon <- function(x, file, disk = NULL) {
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Arguments passed on to \code{\link{rawToAmigaIcon}}.
-#' @return Returns an \code{\link{AmigaIcon}} class object as read from the \code{file}.
+#' @returns Returns an \code{\link{AmigaIcon}} class object as read from the \code{file}.
 #' @examples
 #' \dontrun{
 #' ## create a simple AmigaIcon:

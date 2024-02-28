@@ -303,7 +303,7 @@ NULL
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Currently ignored.
-#' @return Returns an \code{\link{AmigaBitmapFontSet}} object read from the specified file.
+#' @returns Returns an \code{\link{AmigaBitmapFontSet}} object read from the specified file.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -358,7 +358,7 @@ read.AmigaBitmapFontSet <- function(file, disk = NULL, ...) {
 #' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Returns an \code{\link{AmigaBitmapFontSet}} object.
+#' @returns Returns an \code{\link{AmigaBitmapFontSet}} object.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -447,7 +447,7 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
 #' @param ... Arguments passed on to \code{\link{rawToAmigaBitmapFont}}.
-#' @return Returns an \code{\link{AmigaBitmapFont}} object read from the specified file.
+#' @returns Returns an \code{\link{AmigaBitmapFont}} object read from the specified file.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -511,7 +511,7 @@ read.AmigaBitmapFont <- function(file, disk = NULL, ...) {
 #' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Invisibly returns the result of the call of \code{close} to the
+#' @returns Invisibly returns the result of the call of \code{close} to the
 #' file connection. Or, when \code{disk} is specified, a copy of
 #' \code{disk} is returned to which the file(s) is/are written.
 #' @examples
@@ -601,7 +601,7 @@ write.AmigaBitmapFontSet <- function(x, path = getwd(), disk = NULL) {
 #' @param x An \code{\link{AmigaBitmapFont}} object which needs to be converted
 #' into \code{raw} data.
 #' @param ... Currently ignored.
-#' @return A \code{vector} of \code{raw} data representing \code{x}.
+#' @returns A \code{vector} of \code{raw} data representing \code{x}.
 #' @examples
 #' \dontrun{
 #' ## first create raw data that can be converted into a AmigaBitmapFont
@@ -959,7 +959,7 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #' used. Note that this name will also be used as a file name when writing
 #' the font to a file. So make sure the name is also a valid file name. This
 #' will not be checked for you and may thus result in errors.
-#' @return Returns an \code{\link{AmigaBitmapFontSet}} in which the
+#' @returns Returns an \code{\link{AmigaBitmapFontSet}} in which the
 #' \code{\link{AmigaBitmapFont}} objects are combined. Or when \code{\link{AmigaBasic}}
 #' objects are combined, an \code{\link{AmigaBasic}} object is returned
 #' in which the lines of Amiga Basic code are combined.
@@ -1024,7 +1024,7 @@ c.AmigaBitmapFont <- function(..., name = "font") {
 #' needs to be changed.
 #' @param value A \code{character} string specifying the name you
 #' wish to use for the font.
-#' @return Returns the font name. In case of the replace function, a copy
+#' @returns Returns the font name. In case of the replace function, a copy
 #' of \code{x} is returned with the name replaced by '\code{value}'.
 #' @examples
 #' \dontrun{
@@ -1084,7 +1084,7 @@ fontName <- function(x) {
 #' @param size A single \code{numeric} value specifying the desired font
 #' size in pixels. Use \code{\link{availableFontSizes}} to get available
 #' sizes.
-#' @return Returns an \code{\link{AmigaBitmapFont}} of the requested size.
+#' @returns Returns an \code{\link{AmigaBitmapFont}} of the requested size.
 #' An error is thrown when the requested size is not available.
 #' @examples
 #' \dontrun{
@@ -1117,7 +1117,7 @@ getAmigaBitmapFont <- function(x, size) {
 #' @name availableFontSizes
 #' @param x An \code{\link{AmigaBitmapFontSet}} for which the available
 #' font sizes (height) in number of pixels need to be obtained.
-#' @return Returns a \code{vector} of \code{numeric} values specifying
+#' @returns Returns a \code{vector} of \code{numeric} values specifying
 #' the available font sizes (height in pixels) for \code{x}.
 #' @examples
 #' \dontrun{
@@ -1203,7 +1203,7 @@ availableFontSizes <- function(x) {
 #' frequently occurring colour is assumed to be the background
 #' colour.
 #' @param ... Currently ignored.
-#' @return Returns a \code{\link{AmigaBitmapFont}} class object based on \code{x}.
+#' @returns Returns a \code{\link{AmigaBitmapFont}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' data("font_example")

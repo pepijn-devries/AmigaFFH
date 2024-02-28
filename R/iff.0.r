@@ -113,7 +113,7 @@ setClass("IFFChunk",
 #' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Returns a \code{\link{IFFChunk}} object read from the specified file.
+#' @returns Returns a \code{\link{IFFChunk}} object read from the specified file.
 #' @examples
 #' \dontrun{
 #' ## let's read a bitmap image stored in IFF as provided with this package:
@@ -154,7 +154,7 @@ read.iff <- function(file, disk = NULL) {
 #' @aliases as.raw,IFFChunk-method
 #' @param x An AmigaFFH object that needs to be converted into raw data.
 #' See usage section for all supported objects.
-#' @return Returns a \code{vector} of \code{raw} data based on \code{x}.
+#' @returns Returns a \code{vector} of \code{raw} data based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## read an IFF file as an IFFChunk object:
@@ -169,7 +169,7 @@ read.iff <- function(file, disk = NULL) {
 setMethod("as.raw", "IFFChunk", function(x) {
   get.data <- function(y, parent.is.container = F) {
     result <- charToRaw(y@chunk.type)
-    if (class(y@chunk.data[[1]]) == "raw") {
+    if ("raw" %in% class(y@chunk.data[[1]])) {
       ## only store chunk size if parent is not a container (i.e., FORM, LIST or CAT)
       if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(y@chunk.data[[1]]), 32, F))
       result <- c(result, y@chunk.data[[1]])
@@ -177,7 +177,7 @@ setMethod("as.raw", "IFFChunk", function(x) {
       ## it is not):
       if ((length(y@chunk.data[[1]]) %% 2) != 0) result <- c(result, raw(1))
       return(result)
-    } else if (class(y@chunk.data[[1]]) == "IFFChunk") {
+    } else if ("IFFChunk" %in% class(y@chunk.data[[1]])) {
       container <- y@chunk.type %in% c("FORM", "LIST", "CAT ", "PROP")
       dat <- unlist(lapply(y@chunk.data, get.data,
                            parent.is.container = container))
@@ -218,7 +218,7 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
 #' this argument requires the adfExplorer package.
 #' When set to \code{NULL}, this argument is ignored.
-#' @return Returns either \code{NULL} or an \code{integer} status invisibly as passed
+#' @returns Returns either \code{NULL} or an \code{integer} status invisibly as passed
 #' by the \code{\link[base:connections]{close}} statement used to close the file connection.
 #' When \code{disk} is specified, a copy of \code{disk} is returned
 #' to which the file is written.
@@ -239,7 +239,7 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' @author Pepijn de Vries
 #' @export
 write.iff <- function(x, file, disk = NULL) {
-  if (class(x) != "IFFChunk") stop("x should be of class IFFChunk.")
+  if (!"IFFChunk" %in% class(x)) stop("x should be of class IFFChunk.")
   .write.generic(x, file, disk)
 }
 
@@ -272,7 +272,7 @@ setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric(
 #' chunks with the same label. With this argument you can specify which element
 #' should be returned. By default (when missing), the first element is always
 #' returned.
-#' @return Returns an \code{\link{IFFChunk}} object nested inside \code{x} at the
+#' @returns Returns an \code{\link{IFFChunk}} object nested inside \code{x} at the
 #' specified path. Or in case of the replace method the original chunk \code{x} is
 #' returned with the target chunk replaced by \code{value}.
 #' @examples
@@ -387,7 +387,7 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' @aliases interpretIFFChunk,IFFChunk-method
 #' @param x An \code{\link{IFFChunk}} object which needs to be interpreted.
 #' @param ... Currently ignored.
-#' @return If \code{x} is interpretable by this package an S3 class object of
+#' @returns If \code{x} is interpretable by this package an S3 class object of
 #' \code{IFF.ANY} is returned. The content of the returned object will depend
 #' on the type of \code{\link{IFFChunk}} provided for \code{x}. The result can
 #' for instance be a \code{raster} image (\code{\link[grDevices]{as.raster}}),
@@ -420,7 +420,7 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' @export
 setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
   type <- x@chunk.type
-  if (class(x@chunk.data[[1]]) != "raw") sub.types <- unlist(lapply(x@chunk.data, function(x) x@chunk.type))
+  if (!"raw" %in% class(x@chunk.data[[1]])) sub.types <- unlist(lapply(x@chunk.data, function(x) x@chunk.type))
   dat  <- x@chunk.data[[1]]
   if (type == "FORM") {
     ## FORM can hold multiple objects, return the interpreation of these objects
@@ -985,7 +985,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' @param ... Arguments passed onto methods underlying the interpretation of the
 #' specific IFF chunks. Allowed arguments depend on the specific type of IFF chunk that
 #' \code{x} represents.
-#' @return Returns an \code{\link{IFFChunk-class}} representation of \code{x}.
+#' @returns Returns an \code{\link{IFFChunk-class}} representation of \code{x}.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -1243,7 +1243,7 @@ print.IFFChunk <- function(x, ...) {
   ctypes <- function(z) {
     result <- paste0("- ", z@chunk.type)
     temp <- unlist(lapply(z@chunk.data, function(a) {
-      if (class(a) == "IFFChunk") return(ctypes(a)) else return(NULL)
+      if ("IFFChunk" %in% class(a)) return(ctypes(a)) else return(NULL)
     }))
     if (length(temp) > 0) result <- c(result, paste0("  ", temp))
     return(result)
@@ -1254,7 +1254,7 @@ print.IFFChunk <- function(x, ...) {
 
 as.list.IFFChunk <- function(x, ...) {
   slotList <- function(x) {
-    if (class(x@chunk.data[[1]]) == "raw") {
+    if ("raw" %in% class(x@chunk.data[[1]])) {
       return(x@chunk.data[[1]])
     } else {
       result <- lapply(x@chunk.data, slotList)
@@ -1289,7 +1289,7 @@ as.list.IFFChunk <- function(x, ...) {
     } else if (chunk.type %in% c("ILBM", "8SVX", "ANIM")) {
       chunk.data <- .rawToIFFChunk(chunk.data, skip.size = F)
     }
-    if (class(chunk.data) == "raw") chunk.data <- list(chunk.data)
+    if ("raw" %in% class(chunk.data)) chunk.data <- list(chunk.data)
     chunks[[length(chunks) + 1]] <- methods::new("IFFChunk",
                                                  chunk.type = chunk.type,
                                                  chunk.data = chunk.data)
@@ -1321,7 +1321,7 @@ setGeneric("rawToIFFChunk", function(x) standardGeneric("rawToIFFChunk"))
 #' @aliases rawToIFFChunk,raw-method
 #' @param x A vector of raw data that needs to be converted into a \code{\link{IFFChunk}}
 #' class object.
-#' @return Returns an \code{\link{IFFChunk}} class object based on \code{x}.
+#' @returns Returns an \code{\link{IFFChunk}} class object based on \code{x}.
 #' @examples
 #' \dontrun{
 #' ## Get an IFFChunk object:

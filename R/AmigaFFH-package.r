@@ -12,7 +12,7 @@
 #' 
 #' @section Supported File Formats:
 #' This package supports a number of file formats. The ProTracker module file format requires sophisticated interpretation
-#' and a dedicated package (\link[ProTrackR]{ProTrackR}) is developed for that purpose.
+#' and a dedicated package (\link[ProTrackR:ProTrackR-package]{ProTrackR}) is developed for that purpose.
 #' 
 #' The following formats are supported by this package (to some extend):
 #' 
@@ -74,10 +74,9 @@
 #' techniques that will help in converting modern files into classic file formats and vice versa.
 #' Such as for instance the function to \code{\link{dither}} full colour images to a limited
 #' colour palette.
-#' @docType package
-#' @name AmigaFFH
-#' @author Pepijn de Vries
 #' @references
 #' Documentation on several Amiga File types:
 #' \url{http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/}
+#' @keywords internal
+"_PACKAGE"
 NULL

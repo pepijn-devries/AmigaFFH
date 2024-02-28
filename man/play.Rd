@@ -33,7 +33,7 @@ audio using an external audio player. When 8SVX audio is played, each octave is 
 When a FORM container contains multiple 8SVX samples, they are also played successively.
 
 Note that a separate package is developed to interpret and play ProTracker modules and samples
-(\code{\link[ProTrackR]{ProTrackR}}).
+(\code{\link[ProTrackR:ProTrackR-package]{ProTrackR}}).
 }
 \examples{
 \dontrun{
