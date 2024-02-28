@@ -8,18 +8,18 @@ rawToAmigaBasicBMAP(x, ...)
 }
 \arguments{
 \item{x}{A \code{vector} of \code{raw} data that is to be converted
-into an \code{\link{AmigaBasicBMAP}} class object.}
+into an \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} class object.}
 
 \item{...}{Currently ignored.}
 }
 \value{
-An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
+An \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} class object based on \code{x}.
 }
 \description{
-Coerce raw data into an \code{\link{AmigaBasicBMAP}} class object
+Coerce raw data into an \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} class object
 }
 \details{
-An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+An \link[=AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
 function converts the raw format in which it would be stored as a file into a comprehensive S3 class object.
 }
 \examples{

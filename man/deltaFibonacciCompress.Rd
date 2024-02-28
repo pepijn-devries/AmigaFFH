@@ -29,7 +29,7 @@ difference between two time intervals (delta) as a 4-bit index. This index in tu
 represents a value from the Fibonacci series (hence the algorithm name). The compression
 stores small delta values accurately, but large delta values less accurately.
 As each sample is stored as a 4-bit value instead of an 8-bit value, the amount of
-data is reduced with almost 50\% (the exact compression ratio is (4 + n)/(2n)).
+data is reduced with almost 50\\% (the exact compression ratio is (4 + n)/(2n)).
 
 The algorithm was first described by Steve Hayes and was used in 8SVX audio stored in
 the Interchange File Format (IFF). The quality loss is considerable (especially

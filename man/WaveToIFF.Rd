@@ -13,9 +13,9 @@ WaveToIFF(
 )
 }
 \arguments{
-\item{x}{A \code{\link[tuneR]{WaveMC}} object that needs to be converted into an \code{\link{IFFChunk}} object. \code{x}
-can also be any other class object that can be coerced into a \code{\link[tuneR]{WaveMC}} object. \code{\link[tuneR]{Wave}}
-and \code{\link[ProTrackR:PTSample-class]{PTSample}} objects are therefore also allowed.}
+\item{x}{A \code{\link[tuneR:WaveMC]{tuneR::WaveMC()}} object that needs to be converted into an \code{\link[=IFFChunk]{IFFChunk()}} object. \code{x}
+can also be any other class object that can be coerced into a \code{\link[tuneR:WaveMC]{tuneR::WaveMC()}} object. \code{\link[tuneR:Wave]{tuneR::Wave()}}
+and \code{\link[ProTrackR:PTSample-class]{PTSample()}} objects are therefore also allowed.}
 
 \item{loop.start}{If the sample should be looped from a specific position to the
 end of the sample, this argument specifies the starting position in samples (with
@@ -28,28 +28,28 @@ for each value larger than 1. Each subsequent octave will contain precisely twic
 as many samples as the previous octave.}
 
 \item{compress}{A \code{character} string indicating whether compression should be applied to the waveform. "\code{sCmpNone}"
-(default) applies no compression, "\code{sCmpFibDelta}" applies the lossy \code{\link{deltaFibonacciCompress}}ion.}
+(default) applies no compression, "\code{sCmpFibDelta}" applies the lossy \code{\link[=deltaFibonacciCompress]{deltaFibonacciCompress()}}ion.}
 
 \item{...}{Currently ignored.}
 }
 \value{
-Returns an \code{\link{IFFChunk-class}} object with a FORM container that
+Returns an \code{\link[=IFFChunk-class]{IFFChunk-class()}} object with a FORM container that
 contains an 8SVX waveform based on \code{x}.
 }
 \description{
-Convert \code{\link[tuneR]{WaveMC}} objects (or objects that can be coerced to
-\code{WaveMC} objects) into an \code{\link{IFFChunk-class}} object which
-can be stored as a valid Iterchange File Format (\code{\link{write.iff}}).
+Convert \code{\link[tuneR:WaveMC]{tuneR::WaveMC()}} objects (or objects that can be coerced to
+\code{WaveMC} objects) into an \code{\link[=IFFChunk-class]{IFFChunk-class()}} object which
+can be stored as a valid Iterchange File Format (\code{\link[=write.iff]{write.iff()}}).
 }
 \details{
-\code{\link[tuneR]{WaveMC}} objects can be read from contemporary file containers
-with \code{\link[tuneR]{readWave}} or \code{\link[tuneR]{readMP3}}. With this
-function such objects can be converted into an \code{\link{IFFChunk-class}} object
-which can be stored conform the Interchange File Format (\code{\link{write.iff}}).
+\code{\link[tuneR:WaveMC]{tuneR::WaveMC()}} objects can be read from contemporary file containers
+with \code{\link[tuneR:readWave]{tuneR::readWave()}} or \code{\link[tuneR:readMP3]{tuneR::readMP3()}}. With this
+function such objects can be converted into an \code{\link[=IFFChunk-class]{IFFChunk-class()}} object
+which can be stored conform the Interchange File Format (\code{\link[=write.iff]{write.iff()}}).
 
 When \code{x} is not a pcm formatted 8-bit sample, \code{x} will first be
 normalised and scaled to a pcm-formatted 8-bit sample using
-\code{\link[tuneR]{normalize}}. If you don't like the result you need to convert
+\code{\link[tuneR:normalize]{tuneR::normalize()}}. If you don't like the result you need to convert
 the sample to 8-bit pcm yourself before calling this function.
 }
 \examples{

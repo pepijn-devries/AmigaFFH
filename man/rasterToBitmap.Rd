@@ -7,7 +7,7 @@
 rasterToBitmap(x, depth = 3, interleaved = T, indexing = index.colours)
 }
 \arguments{
-\item{x}{A raster object created with \code{\link[grDevices]{as.raster}} which
+\item{x}{A raster object created with \code{\link[grDevices:as.raster]{grDevices::as.raster()}} which
 needs to be converted into bitmap data. It is also possible to let \code{x} be
 a matrix of \code{character}s, representing colours.}
 
@@ -25,21 +25,17 @@ horizontal scanline.}
 \code{raster} object); \code{length.out}, a numeric value indicating the
 desired size of the palette (i.e., the number of colours). It should return
 a matrix with numeric palette indices (ranging from 1 up to the number of
-colours in the palette). The result should have an attribute named `palette' that
-contains the colours that correspond with the index numbers. The result should
-also carry an attribute with the name `transparent', with a single numeric value
+colours in the palette). The result should have an attribute named \verb{palette' that contains the colours that correspond with the index numbers. The result should also carry an attribute with the name }transparent', with a single numeric value
 representing which colour in the palette should be treated as transparent (or
 \code{NA} when no transparency is required). By default the
-function \code{\link{index.colours}} is used. You are free to provide
+function \code{\link[=index.colours]{index.colours()}} is used. You are free to provide
 a customised version of this function (see examples).}
 }
 \value{
 The bitmap is returned as a \code{vector} of \code{logical} values.
 The \code{logical} values reflect the bits for each bitplane. The palette used
 for the bitmap is returned as attribute to the \code{vector}. There will also be
-an attribute called `transparent'. This will hold a numeric index corresponding
-with the colour in the palette that will be treated as transparent. It will be
-\code{NA} when transparency is not used.
+an attribute called \verb{transparent'. This will hold a numeric index corresponding with the colour in the palette that will be treated as transparent. It will be }NA` when transparency is not used.
 }
 \description{
 Converts an image represented by a grDevices \code{raster} object into binary

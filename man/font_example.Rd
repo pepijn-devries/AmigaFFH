@@ -5,13 +5,14 @@
 \alias{font_example}
 \title{An example object for the AmigaBitmapFontSet class}
 \format{
-\code{font_example} is an \code{\link{AmigaBitmapFontSet}}
-object. For details see the object class documentation.
+{
+\code{font_example} is an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
+object. For details see the object class documentation.}
 }
 \description{
-An example object for the \code{\link{AmigaBitmapFontSet}} class used in
+An example object for the \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} class used in
 examples throughout this package. It also contains a nested
-\code{\link{AmigaBitmapFont}} class objects, which can be obtain by
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class objects, which can be obtain by
 using \code{getAmigaBitmapFont(font_example, 9)}.
 }
 \details{

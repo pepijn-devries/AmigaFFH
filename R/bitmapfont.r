@@ -6,7 +6,7 @@
 #' On the original Commodore Amiga, the screen resolution, system memory
 #' and cpu speed were limited. On those systems, it was more efficient
 #' to use bitmap images to represent the glyphs in fonts. The
-#' \code{AmigaBitmapFontSet} and \code{AmigaBitmapFont} classes can be used
+#' `AmigaBitmapFontSet` and `AmigaBitmapFont` classes can be used
 #' to represent Amiga bitmap fonts.
 #' 
 #' The Commodore Amiga had a directory named 'FONTS' located in the
@@ -17,94 +17,74 @@
 #' pixels) are available, in addition to some other meta-information.
 #' 
 #' The bitmap images were stored in separate files for each individual
-#' height. The \code{AmigaBitmapFontSet} is an S3 class that forms
-#' a comprehensive format (named \code{list}) to represent the *.font
-#' files. The \code{AmigaBitmapFont} is an S3 class is a comprehensive
-#' format (named \code{list}) that represent each font bitmap and glyph
-#' information. The \code{AmigaBitmapFontSet} objects will hold one or more
-#' \code{AmigaBitmapFont} objects.
+#' height. The `AmigaBitmapFontSet` is an S3 class that forms
+#' a comprehensive format (named `list`) to represent the *.font
+#' files. The `AmigaBitmapFont` is an S3 class is a comprehensive
+#' format (named `list`) that represent each font bitmap and glyph
+#' information. The `AmigaBitmapFontSet` objects will hold one or more
+#' `AmigaBitmapFont` objects.
 #' 
-#' The \code{AmigaBitmapFont} and \code{AmigaBitmapFontSet} objects are
-#' essentially named \code{list}s. Their structure and most important
+#' The `AmigaBitmapFont` and `AmigaBitmapFontSet` objects are
+#' essentially named `list`s. Their structure and most important
 #' elements are described below. Although it is possible to replace
 #' elements manually, it is only advisable when you know what you
 #' are doing as it may break the validity of the font.
 #' 
 #' @section AmigaBitmapFontSet:
-#' \describe{
-#'   \item{\code{fch_FileID}}{
-#'     A \code{factor} with levels 'FontContents', 'TFontContents' and
-#'     'ScalableOutline'. It specifies the type of font.
-#'     Currently only the first level is supported.
-#'   }
-#'   \item{\code{fch_NumEntries}}{
-#'     number of font heights available for this font. It should
-#'     match with the length of \code{FontContents}. Do not change
-#'     this value manually.
-#'   }
-#'   \item{\code{FontContents}}{
-#'     This is a \code{list} with bitmap entries for each specific font
-#'     height (in pixels). The name of each element in this list is
-#'     'pt' followed by the height. Each element in this list holds
-#'     the elements:
-#'     \describe{
-#'       \item{Miscellaneous}{Miscellaneous information from the *.font file}
-#'       \item{\code{fc_FileName}}{
-#'         This element represents the filename of the
-#'         nested font bitmap images. Note that it should be a valid
-#'         Commodore Amiga filename. It is best to modify this name
-#'         using \code{\link{fontName}}. Note that this field could cause
-#'         problems as Commodore Amiga filenames can contain characters
-#'         that most modern platforms would not allow (such as the
-#'         question mark).
-#'       }
-#'       \item{\code{BitmapFont}}{
-#'         This element is of type \code{AmigaBitmapFont} and is structured
-#'         as described in the following section. The information in this
-#'         element is no longer part of the *.font file.
-#'       }
-#'     }
-#'   }
-#' }
+#'  * `fch_FileID`: A `factor` with levels 'FontContents', 'TFontContents' and
+#'    'ScalableOutline'. It specifies the type of font.
+#'    Currently only the first level is supported.
+#'  * `fch_NumEntries`: number of font heights available for this font. It should
+#'    match with the length of `FontContents`. Do not change
+#'    this value manually.
+#'  * `FontContents`: This is a `list` with bitmap entries for each specific font
+#'    height (in pixels). The name of each element in this list is
+#'    'pt' followed by the height. Each element in this list holds
+#'    the elements:
+#'     * Miscellaneous: Miscellaneous information from the \*.font file
+#'        * `fc_FileName`: This element represents the filename of the
+#'          nested font bitmap images. Note that it should be a valid
+#'          Commodore Amiga filename. It is best to modify this name
+#'          using [fontName()]. Note that this field could cause
+#'          problems as Commodore Amiga filenames can contain characters
+#'          that most modern platforms would not allow (such as the
+#'          question mark).
+#'        * `BitmapFont`: This element is of type `AmigaBitmapFont` and is structured
+#'          as described in the following section. The information in this
+#'          element is no longer part of the *.font file.
 #' 
 #' @section AmigaBitmapFont:
-#' Information represented by a \code{AmigaBitmapFont} is not stored
+#' Information represented by a `AmigaBitmapFont` is not stored
 #' in *.font files. Rather it is stored in sub-directories of the font
 #' in separate files. It has the following structure:
-#' \describe{
-#'   \item{Miscellaneous}{Elements with information on the font
-#'   properties and style, and also relative file pointers.}
-#'   \item{\code{glyph.info}}{
-#'     A \code{data.frame} containing glyph info with information
+#'  * Miscellaneous: Elements with information on the font
+#'    properties and style, and also relative file pointers.
+#'  * `glyph.info`: A `data.frame` containing glyph info with information
 #'     for specific glyphs on each row. Each row matches with a specific
-#'     ASCII code, ranging from \code{tf_LoChar} up to \code{tf_HiChar}. There is an additional
+#'     ASCII code, ranging from `tf_LoChar` up to `tf_HiChar`. There is an additional
 #'     row that contains information for the default glyph that is
-#'     out of the range of the \code{tf_LoChar} and \code{tf_HiChar}. The \code{data.frame}
-#'     thus has \code{2 + tf_HiChar - tf_LoChar} rows. This
+#'     out of the range of the `tf_LoChar` and `tf_HiChar`. The `data.frame`
+#'     thus has `2 + tf_HiChar - tf_LoChar` rows. This
 #'     table is used to extract and plot a glyph from the
-#'     \code{bitmap} image correctly.
-#'   }
-#'   \item{\code{bitmap}}{
-#'     Is a monochromous bitmap image of all the font's glyphs in a
-#'     single line. It is a simple \code{raster} object
-#'     (see \code{\link[grDevices]{as.raster}}) with an additional
+#'     `bitmap` image correctly.
+#'   * `bitmap`: Is a monochromous bitmap image of all the font's glyphs in a
+#'     single line. It is a simple `raster` object
+#'     (see [grDevices::as.raster()]) with an additional
 #'     attribute 'palette', which lists the two colours in the image. In
 #'     this palette, the first colour is the background colour and the
 #'     second colour is interpreted as the foregroundcolour.
-#'   }
-#' }
 #' 
 #' @section Useful functions:
 #' For importing and exporting the following functions are useful:
-#' \code{\link{read.AmigaBitmapFont}}, \code{\link{read.AmigaBitmapFontSet}},
-#' \code{\link{write.AmigaBitmapFont}} and \code{\link{write.AmigaBitmapFontSet}}.
+#' [read.AmigaBitmapFont()], [read.AmigaBitmapFontSet()],
+#' [write.AmigaBitmapFont()] and [write.AmigaBitmapFontSet()].
 #' 
 #' The following generic functions are implemented for these objects:
-#' \code{\link[AmigaFFH]{plot}}, \code{print},
-#' \code{\link[AmigaFFH]{as.raster}} and \code{\link[AmigaFFH]{as.raw}}.
+#' [AmigaFFH::plot()], `print`,
+#' [AmigaFFH::as.raster()] and [AmigaFFH::as.raw()].
 #' 
-#' Use \code{\link[AmigaFFH]{c}} to combine one or more
-#' \code{AmigaBitmapFont} objects into a \code{AmigaBitmapFontSet}.
+#' Use [AmigaFFH::c()] to combine one or more
+#' `AmigaBitmapFont` objects into a `AmigaBitmapFontSet`.
 #' 
 #' @docType class
 #' @aliases AmigaBitmapFontSet
@@ -114,9 +94,9 @@
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @references
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node03E0.html}
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node03DE.html}
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node05BA.html}
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node03E0.html>
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node03DE.html>
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node05BA.html>
 #' @examples
 #' \dontrun{
 #' ## 'font_example' is an example of the AmigaBitmapFontSet object:
@@ -283,27 +263,27 @@ NULL
 
 #' Read AmigaBitmapFontSet from *.font file
 #'
-#' Reads \code{\link{AmigaBitmapFontSet}} from *.font file including
+#' Reads [AmigaBitmapFontSet()] from *.font file including
 #' all nested bitmap images for all font heights.
 #'
 #' The *.font file only holds meta-information. The bitmap images for
 #' each font height are stored in separate files, which are listed
 #' in the *.font file. The function reads the *.font file, including
 #' all nested bitmap files and returns it as a
-#' \code{\link{AmigaBitmapFontSet}}.
+#' [AmigaBitmapFontSet()].
 #'
 #' It can also read *.font files
-#' from \code{\link[adfExplorer]{amigaDisk-class}} objects,
+#' from [adfExplorer::amigaDisk-class()] objects,
 #' but that requires the adfExplorer package to be installed.
 #' @rdname read.AmigaBitmapFontSet
 #' @name read.AmigaBitmapFontSet
-#' @param file A \code{character} string of the filename of the *.font file to be read.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param file A `character` string of the filename of the *.font file to be read.
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
+#' When set to `NULL`, this argument is ignored.
 #' @param ... Currently ignored.
-#' @returns Returns an \code{\link{AmigaBitmapFontSet}} object read from the specified file.
+#' @returns Returns an [AmigaBitmapFontSet()] object read from the specified file.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -335,30 +315,30 @@ read.AmigaBitmapFontSet <- function(file, disk = NULL, ...) {
 
 #' Coerce raw data into an AmigaBitmapFontSet class object
 #'
-#' \code{\link{AmigaBitmapFontSet}} objects are comprehensive representations of binary Amiga
-#' font files (*.font). Use this function to convert \code{raw} data from
-#' such a file to an \link{AmigaBitmapFontSet} object.
+#' [AmigaBitmapFontSet()] objects are comprehensive representations of binary Amiga
+#' font files (*.font). Use this function to convert `raw` data from
+#' such a file to an [AmigaBitmapFontSet] object.
 #'
-#' This function converts \code{raw} data as stored in *.font
+#' This function converts `raw` data as stored in *.font
 #' files. The function also needs the file location, in order
 #' to load the nested bitmap images for each font height.
-#' This function is effectively the inverse of \code{\link[AmigaFFH]{as.raw}}.
+#' This function is effectively the inverse of [AmigaFFH::as.raw()].
 #'
 #' @rdname rawToAmigaBitmapFontSet
 #' @name rawToAmigaBitmapFontSet
-#' @param x A \code{vector} of \code{raw} data that needs to be
-#' converted into an \code{\link{AmigaBitmapFontSet}}.
-#' @param file The \code{raw} version of the \code{\link{AmigaBitmapFontSet}}
+#' @param x A `vector` of `raw` data that needs to be
+#' converted into an [AmigaBitmapFontSet()].
+#' @param file The `raw` version of the [AmigaBitmapFontSet()]
 #' does not contain the nested font bitmap images. In order to correctly
-#' construct an \code{\link{AmigaBitmapFontSet}} the file location of the
+#' construct an [AmigaBitmapFontSet()] the file location of the
 #' original *.font file is required in order to read and include the
-#' font bitmap image information. \code{file} should thus be a \code{character}
+#' font bitmap image information. `file` should thus be a `character`
 #' string specifying the file location of the *.font file.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Returns an \code{\link{AmigaBitmapFontSet}} object.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Returns an [AmigaBitmapFontSet()] object.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -428,26 +408,26 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
 #' Amiga Font Bitmaps of distinctive font heights are stored in separate
 #' files, which in combination form a font collection or set. This
 #' function can be used to read a specific bitmap from a set and returns
-#' it as an \code{\link{AmigaBitmapFont}} class object.
+#' it as an [AmigaBitmapFont()] class object.
 #'
 #' Individual font bitmaps are stored in a font's subdirectory where
 #' the file name is usually equal to the font height in pixels. This
 #' function will read such a font bitmap file and return it as an
-#' \code{\link{AmigaBitmapFont}} class object. It can also read such
-#' files from \code{\link[adfExplorer]{amigaDisk-class}} objects,
+#' [AmigaBitmapFont()] class object. It can also read such
+#' files from [adfExplorer::amigaDisk-class()] objects,
 #' but that requires the adfExplorer package to be installed.
 #'
 #' @rdname read.AmigaBitmapFont
 #' @name read.AmigaBitmapFont
 #' @param file The file name of a font subset is usually simply a numeric number
-#' indicating the font height in pixels. Use \code{file} as a \code{character}
+#' indicating the font height in pixels. Use `file` as a `character`
 #' string representing that file location.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @param ... Arguments passed on to \code{\link{rawToAmigaBitmapFont}}.
-#' @returns Returns an \code{\link{AmigaBitmapFont}} object read from the specified file.
+#' When set to `NULL`, this argument is ignored.
+#' @param ... Arguments passed on to [rawToAmigaBitmapFont()].
+#' @returns Returns an [AmigaBitmapFont()] object read from the specified file.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -476,44 +456,44 @@ read.AmigaBitmapFont <- function(file, disk = NULL, ...) {
 
 #' Write an AmigaBitmapFont(set) file
 #'
-#' Functions to write \code{\link{AmigaBitmapFont}} and \code{\link{AmigaBitmapFontSet}}
+#' Functions to write [AmigaBitmapFont()] and [AmigaBitmapFontSet()]
 #' class objects to files.
 #'
-#' \code{\link{AmigaBitmapFontSet}} class objects are written to a *.font
+#' [AmigaBitmapFontSet()] class objects are written to a *.font
 #' file. The filename used for this purpose is obtained from the object
-#' itself using \code{\link{fontName}}. In addition, a subdirectory is
+#' itself using [fontName()]. In addition, a subdirectory is
 #' created automatically (when it doesn't already exist)
 #' to which al the separate bitmap images for each font height are written
 #' to individual files.
 #'
-#' \code{\link{AmigaBitmapFont}} class objects can also be written to a
+#' [AmigaBitmapFont()] class objects can also be written to a
 #' file. In order to use it on a Commodore Amiga or emulator, it is better
-#' to embed the font bitmap in a font set (using \code{\link[AmigaFFH]{c}})
+#' to embed the font bitmap in a font set (using [AmigaFFH::c()])
 #' and write the set to corresponding files.
 #' @rdname write.AmigaBitmapFont
 #' @name write.AmigaBitmapFont
-#' @param x Respectively an \code{\link{AmigaBitmapFont}} or a
-#' \code{\link{AmigaBitmapFontSet}} object depending on which of the
+#' @param x Respectively an [AmigaBitmapFont()] or a
+#' [AmigaBitmapFontSet()] object depending on which of the
 #' write-functions is called. This is the object that will be written
 #' to the specified file.
-#' @param file A \code{character} string specifying the file location
-#' to which \code{x} (an \code{\link{AmigaBitmapFont}} object) needs to be written.
+#' @param file A `character` string specifying the file location
+#' to which `x` (an [AmigaBitmapFont()] object) needs to be written.
 #' It is common practice on the Amiga to use the font height in pixels as
 #' file name.
-#' @param path A \code{character} string specifying the path where
-#' \code{x} (an \code{\link{AmigaBitmapFontSet}} object) needs to be stored.
-#' The filename for the font set will be extracted from \code{x} using
-#' \code{\link{fontName}} followed by the *.font extension. A subdirectory
+#' @param path A `character` string specifying the path where
+#' `x` (an [AmigaBitmapFontSet()] object) needs to be stored.
+#' The filename for the font set will be extracted from `x` using
+#' [fontName()] followed by the *.font extension. A subdirectory
 #' will be created with the same name (without the extension) if it doesn't
-#' already exists. In this subdirectory all the nested \code{\link{AmigaBitmapFont}}
+#' already exists. In this subdirectory all the nested [AmigaBitmapFont()]
 #' objects are stored.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk to which the `file` should be
+#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Invisibly returns the result of the call of \code{close} to the
-#' file connection. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file(s) is/are written.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Invisibly returns the result of the call of `close` to the
+#' file connection. Or, when `disk` is specified, a copy of
+#' `disk` is returned to which the file(s) is/are written.
 #' @examples
 #' \dontrun{
 #' ## obtain a bitmap font set:
@@ -586,22 +566,22 @@ write.AmigaBitmapFontSet <- function(x, path = getwd(), disk = NULL) {
 
 #' Coerce raw data into an AmigaBitmapFont class object
 #'
-#' \code{\link{AmigaBitmapFont}} objects are comprehensive representations of binary Amiga
+#' [AmigaBitmapFont()] objects are comprehensive representations of binary Amiga
 #' font subset files. The file name is usually simply a numeric number
 #' indicating the font height in pixels. Use this function to convert
-#' \code{raw} content from such a file to an \code{\link{AmigaBitmapFont}} object.
+#' `raw` content from such a file to an [AmigaBitmapFont()] object.
 #'
-#' This function converts \code{raw} data as stored in font bitmap
+#' This function converts `raw` data as stored in font bitmap
 #' files. These files are stored in subdirectories with the font's
 #' name and usually have the font height in pixels as file name.
-#' This function is effectively the inverse of \code{\link[AmigaFFH]{as.raw}}.
+#' This function is effectively the inverse of [AmigaFFH::as.raw()].
 #'
 #' @rdname rawToAmigaBitmapFont
 #' @name rawToAmigaBitmapFont
-#' @param x An \code{\link{AmigaBitmapFont}} object which needs to be converted
-#' into \code{raw} data.
+#' @param x An [AmigaBitmapFont()] object which needs to be converted
+#' into `raw` data.
 #' @param ... Currently ignored.
-#' @returns A \code{vector} of \code{raw} data representing \code{x}.
+#' @returns A `vector` of `raw` data representing `x`.
 #' @examples
 #' \dontrun{
 #' ## first create raw data that can be converted into a AmigaBitmapFont
@@ -872,15 +852,15 @@ as.raw.AmigaBitmapFontSet <- function(x, ...) {
   })
 }
 
-#' @param text Text (a \code{character} string) to be formated
-#' with \code{x} (when \code{x} is an \code{\link{AmigaBitmapFont}}
-#' or an \code{\link{AmigaBitmapFontSet}}.
-#' @param style Argument is only valid when \code{x} is an \code{\link{AmigaBitmapFont}}
-#' or an \code{\link{AmigaBitmapFontSet}}. No styling is applied
-#' when missing or \code{NULL}. One or more of the following styles
-#' can be used '\code{bold}', '\code{italic} or '\code{underlined}'.
-#' @param palette Argument is only valid when \code{x} is an \code{\link{AmigaBitmapFont}}
-#' or an \code{\link{AmigaBitmapFontSet}}. Should be a \code{vector} of
+#' @param text Text (a `character` string) to be formated
+#' with `x` (when `x` is an [AmigaBitmapFont()]
+#' or an [AmigaBitmapFontSet()].
+#' @param style Argument is only valid when `x` is an [AmigaBitmapFont()]
+#' or an [AmigaBitmapFontSet()]. No styling is applied
+#' when missing or `NULL`. One or more of the following styles
+#' can be used '`bold`', '`italic` or '`underlined`'.
+#' @param palette Argument is only valid when `x` is an [AmigaBitmapFont()]
+#' or an [AmigaBitmapFontSet()]. Should be a `vector` of
 #' two colours. The first is element is used as background colour, the
 #' second as foreground. When missing, transparent white and black are used.
 #' @family raster.operations
@@ -922,46 +902,46 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 
 #' Combine multiple AmigaFFH objects
 #'
-#' Use this function to correctly combine one or more \code{\link{AmigaBitmapFont}}
-#' class objects into a single \code{\link{AmigaBitmapFontSet}} class
-#' object, or to combine multiple \code{\link{AmigaBasic}} class objects.
+#' Use this function to correctly combine one or more [AmigaBitmapFont()]
+#' class objects into a single [AmigaBitmapFontSet()] class
+#' object, or to combine multiple [AmigaBasic()] class objects.
 #'
-#' In case \code{...} are one or more \code{\link{AmigaBasic}} class objects:
+#' In case `...` are one or more [AmigaBasic()] class objects:
 #' 
-#' \code{\link{AmigaBasic}} class objects are combined into a single
-#' \code{\link{AmigaBasic}} class object in the same order as they
+#' [AmigaBasic()] class objects are combined into a single
+#' [AmigaBasic()] class object in the same order as they
 #' are given as argument to this function. for this purpose the lines of
 #' Amiga Basic codes are simply concatenated.
 #' 
-#' In case \code{...} are one or more \code{\link{AmigaBitmapFont}} class objects:
+#' In case `...` are one or more [AmigaBitmapFont()] class objects:
 #' 
-#' \code{\link{AmigaBitmapFontSet}} class objects can hold multiple
-#' \code{\link{AmigaBitmapFont}} class objects. Use this method to
+#' [AmigaBitmapFontSet()] class objects can hold multiple
+#' [AmigaBitmapFont()] class objects. Use this method to
 #' combine font bitmaps into such a font set. Make sure each bitmap
 #' represents a unique font height (in pixels). When heights are duplicated
 #' an error will be thrown.
 #' 
-#' You can also specify a \code{name} for the font, that will be embeded
+#' You can also specify a `name` for the font, that will be embeded
 #' in the object. As this name will also be used as a file name when
 #' writing the font to a file, make sure that it is a valid filename.
 #'
 #' @rdname c
 #' @name c
-#' @param ... Either \code{\link{AmigaBasic}} or \code{\link{AmigaBitmapFont}}
-#' class objects. In case of \code{\link{AmigaBitmapFont}} objects:
-#' Each \code{\link{AmigaBitmapFont}} object should have a
+#' @param ... Either [AmigaBasic()] or [AmigaBitmapFont()]
+#' class objects. In case of [AmigaBitmapFont()] objects:
+#' Each [AmigaBitmapFont()] object should have a
 #' unique Y-size.
-#' @param name This argument is only valid when \code{...} are one or more
-#' \code{\link{AmigaBitmapFont}} class objects.
+#' @param name This argument is only valid when `...` are one or more
+#' [AmigaBitmapFont()] class objects.
 #' 
-#' A \code{character} string specifying the name that needs to be
+#' A `character` string specifying the name that needs to be
 #' applied to the font set. When unspecified, the default name 'font' is
 #' used. Note that this name will also be used as a file name when writing
 #' the font to a file. So make sure the name is also a valid file name. This
 #' will not be checked for you and may thus result in errors.
-#' @returns Returns an \code{\link{AmigaBitmapFontSet}} in which the
-#' \code{\link{AmigaBitmapFont}} objects are combined. Or when \code{\link{AmigaBasic}}
-#' objects are combined, an \code{\link{AmigaBasic}} object is returned
+#' @returns Returns an [AmigaBitmapFontSet()] in which the
+#' [AmigaBitmapFont()] objects are combined. Or when [AmigaBasic()]
+#' objects are combined, an [AmigaBasic()] object is returned
 #' in which the lines of Amiga Basic code are combined.
 #' @examples
 #' \dontrun{
@@ -1011,21 +991,21 @@ c.AmigaBitmapFont <- function(..., name = "font") {
 
 #' Extract or replace a font name
 #'
-#' Extract or replace a font name from an \code{\link{AmigaBitmapFontSet}}
+#' Extract or replace a font name from an [AmigaBitmapFontSet()]
 #' object.
 #'
-#' The name of a font is embeded at multiple locations of an \code{\link{AmigaBitmapFontSet}}
+#' The name of a font is embeded at multiple locations of an [AmigaBitmapFontSet()]
 #' object. This function can be used to extract or replace the font name
 #' correctly. This is also the name that will be used when writing the
-#' font to a file with \code{\link{write.AmigaBitmapFontSet}}.
+#' font to a file with [write.AmigaBitmapFontSet()].
 #' @rdname fontName
 #' @name fontName
-#' @param x An \code{\link{AmigaBitmapFontSet}} for which the font name
+#' @param x An [AmigaBitmapFontSet()] for which the font name
 #' needs to be changed.
-#' @param value A \code{character} string specifying the name you
+#' @param value A `character` string specifying the name you
 #' wish to use for the font.
 #' @returns Returns the font name. In case of the replace function, a copy
-#' of \code{x} is returned with the name replaced by '\code{value}'.
+#' of `x` is returned with the name replaced by '`value`'.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -1071,20 +1051,20 @@ fontName <- function(x) {
 
 #' Extract a specific AmigaBitmapFont from a AmigaBitmapFontSet
 #'
-#' Extract a specific \code{\link{AmigaBitmapFont}} from a
-#' \code{\link{AmigaBitmapFontSet}}.
+#' Extract a specific [AmigaBitmapFont()] from a
+#' [AmigaBitmapFontSet()].
 #'
-#' An \code{\link{AmigaBitmapFontSet}} object can hold one or more
+#' An [AmigaBitmapFontSet()] object can hold one or more
 #' bitmaps for specific font sizes (heights). Use this function to
-#' obtain such a specific \code{\link{AmigaBitmapFont}}.
+#' obtain such a specific [AmigaBitmapFont()].
 #' @rdname getAmigaBitmapFont
 #' @name getAmigaBitmapFont
-#' @param x An \code{\link{AmigaBitmapFontSet}} object, from which the
-#' specific \code{\link{AmigaBitmapFont}} object needs to be extracted.
-#' @param size A single \code{numeric} value specifying the desired font
-#' size in pixels. Use \code{\link{availableFontSizes}} to get available
+#' @param x An [AmigaBitmapFontSet()] object, from which the
+#' specific [AmigaBitmapFont()] object needs to be extracted.
+#' @param size A single `numeric` value specifying the desired font
+#' size in pixels. Use [availableFontSizes()] to get available
 #' sizes.
-#' @returns Returns an \code{\link{AmigaBitmapFont}} of the requested size.
+#' @returns Returns an [AmigaBitmapFont()] of the requested size.
 #' An error is thrown when the requested size is not available.
 #' @examples
 #' \dontrun{
@@ -1109,16 +1089,16 @@ getAmigaBitmapFont <- function(x, size) {
 
 #' Get available font sizes from an AmigaBitmapFontSet
 #'
-#' Get available font sizes (height) from an \code{\link{AmigaBitmapFontSet}} in pixels.
+#' Get available font sizes (height) from an [AmigaBitmapFontSet()] in pixels.
 #'
-#' An \code{\link{AmigaBitmapFontSet}} can hold bitmaps of multiple font
+#' An [AmigaBitmapFontSet()] can hold bitmaps of multiple font
 #' sizes. Use this function to obtain the available size from such a set.
 #' @rdname availableFontSizes
 #' @name availableFontSizes
-#' @param x An \code{\link{AmigaBitmapFontSet}} for which the available
+#' @param x An [AmigaBitmapFontSet()] for which the available
 #' font sizes (height) in number of pixels need to be obtained.
-#' @returns Returns a \code{vector} of \code{numeric} values specifying
-#' the available font sizes (height in pixels) for \code{x}.
+#' @returns Returns a `vector` of `numeric` values specifying
+#' the available font sizes (height in pixels) for `x`.
 #' @examples
 #' \dontrun{
 #' data(font_example)
@@ -1136,74 +1116,74 @@ availableFontSizes <- function(x) {
 
 #' Convert a raster image into an AmigaBitmapFont
 #'
-#' Convert a two-coloured \code{\link[grDevices]{as.raster}} image into
-#' an \code{\link{AmigaBitmapFont}} class object.
+#' Convert a two-coloured [grDevices::as.raster()] image into
+#' an [AmigaBitmapFont()] class object.
 #'
-#' Create an \code{\link{AmigaBitmapFont}} class object by providing
+#' Create an [AmigaBitmapFont()] class object by providing
 #' a two-coloured raster image and specifying which characters are
 #' depicted by the image.
 #' @rdname rasterToAmigaBitmapFont
 #' @name rasterToAmigaBitmapFont
-#' @param x A \code{raster} (see grDevices package) object composed of
+#' @param x A `raster` (see grDevices package) object composed of
 #' two colours only. Make sure that all glyphs (graphical representation
 #' of characters) are next to eachother on a single line. The height
 #' of this raster (in pixels) is taken automatically as font height.
 #' @param glyphs Specify which glyphs are included in the image
-#' \code{x} from left to right. It can be specified in one of the
+#' `x` from left to right. It can be specified in one of the
 #' following ways:
 #' 
-#' A single \code{character} string, where the length of the string
-#' (\code{nchar}) equals the number of displayed glyphs in \code{x}.
+#' A single `character` string, where the length of the string
+#' (`nchar`) equals the number of displayed glyphs in `x`.
 #' 
-#' A \code{vector} of \code{numeric} ASCII codes. The length of
-#' the \code{vector} should equal the number of displayed glyphs
-#' in \code{x}.
+#' A `vector` of `numeric` ASCII codes. The length of
+#' the `vector` should equal the number of displayed glyphs
+#' in `x`.
 #' 
-#' A \code{list} of either \code{character} strings or \code{vector} of
-#' \code{numeric}s.  The length of the \code{list} should equal the
-#' number of displayed glyphs in \code{x}. Each element can represent
+#' A `list` of either `character` strings or `vector` of
+#' `numeric`s.  The length of the `list` should equal the
+#' number of displayed glyphs in `x`. Each element can represent
 #' multiple characters, meaning that the nth element of the list
-#' uses the nth glyph shown in \code{x} to represent all the characters
+#' uses the nth glyph shown in `x` to represent all the characters
 #' included in that element.
 #' 
 #' Note that Amiga bitmap fonts represent ASCII characters and may
 #' not include all special characters or symbols.
 #' @param baseline The baseline of the font, specified in number of
-#' pixels from the top (\code{numeric}). Should be a whole number
-#' between 0 and the font height (height of \code{x}) minus 1.
-#' @param default_glyph A single \code{character} or ASCII code
-#' (\code{numeric}) that should be used by default. This means
-#' that all characters that are not specified by \code{glyphs} will
-#' be represented by this \code{default_glyph}. \code{default_glyph} should
-#' be included in \code{glyphs}.
-#' @param glyph_width A \code{numeric} \code{vector} with the same number
-#' of elements or characters as used for \code{glyphs}. It specifies
-#' the width in pixels for each glyph reserved in the raster image \code{x}.
+#' pixels from the top (`numeric`). Should be a whole number
+#' between 0 and the font height (height of `x`) minus 1.
+#' @param default_glyph A single `character` or ASCII code
+#' (`numeric`) that should be used by default. This means
+#' that all characters that are not specified by `glyphs` will
+#' be represented by this `default_glyph`. `default_glyph` should
+#' be included in `glyphs`.
+#' @param glyph_width A `numeric` `vector` with the same number
+#' of elements or characters as used for `glyphs`. It specifies
+#' the width in pixels for each glyph reserved in the raster image `x`.
 #' They should be whole numbers greater or equal to 0.
-#' @param glyph_space A \code{numeric} \code{vector} with the same number
-#' of elements or characters as used for \code{glyphs}. It specifies
+#' @param glyph_space A `numeric` `vector` with the same number
+#' of elements or characters as used for `glyphs`. It specifies
 #' the width in pixels for each glyph that should be used when formatting.
 #' text. Note that these values can be smaller or larger than the values
-#' specified for \code{glyph_width}.
+#' specified for `glyph_width`.
 #' They should be whole numbers greater or equal to 0.
 #' @param glyph_kern Note that in Amiga bitmap fonts not the formal
 #' definition from typography is used for kerning. Here, kerning is
 #' used as the number of pixels the cursor should be moved forward or
 #' backward after typesetting a character. It should be a
-#' \code{numeric} \code{vector} with the same number of elements or
-#' characters as used for \code{glyphs}. It can hold both positive
+#' `numeric` `vector` with the same number of elements or
+#' characters as used for `glyphs`. It can hold both positive
 #' and negative values.
-#' @param palette A \code{vector} of two colours. Both colours should
-#' be in \code{x}. The first colour is used as background colour,
+#' @param palette A `vector` of two colours. Both colours should
+#' be in `x`. The first colour is used as background colour,
 #' the second as foreground colour.
 #' 
-#' When missing, it will be checked whether \code{x} has a palette
+#' When missing, it will be checked whether `x` has a palette
 #' as attribute, and uses that. If that attribute is also missing,
-#' the palette will be guessed from \code{x}, where the most
+#' the palette will be guessed from `x`, where the most
 #' frequently occurring colour is assumed to be the background
 #' colour.
 #' @param ... Currently ignored.
-#' @returns Returns a \code{\link{AmigaBitmapFont}} class object based on \code{x}.
+#' @returns Returns a [AmigaBitmapFont()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' data("font_example")

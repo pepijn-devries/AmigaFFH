@@ -5,8 +5,9 @@
 \alias{ilbm8lores.iff}
 \title{An example file of a bitmap image stored in the Interchange File Format}
 \format{
-See \code{\link{IFFChunk-class}} and references for more information
-about the Interchange File Format.
+{
+See \code{\link[=IFFChunk-class]{IFFChunk-class()}} and references for more information
+about the Interchange File Format.}
 }
 \description{
 This file is provided to demonstrate the structure of an Interchange File
@@ -14,12 +15,12 @@ Format and is used in several examples throughout this package.
 }
 \details{
 The Interchange File Format stores information compartmentally in separate
-containers called `chunks'. This file demonstrates how a bitmap image
+containers called 'chunks'. This file demonstrates how a bitmap image
 is stored in this format. In addition to the raw bitmap data, the file
 also contains meta-information on the bitmap dimensions, its colour palette and
 the display mode that should be used on an Amiga. See also
-\code{\link{interpretIFFChunk}}, \code{\link{IFFChunk-class}}
-and the example for \code{\link{bitmapToRaster}}.
+\code{\link[=interpretIFFChunk]{interpretIFFChunk()}}, \code{\link[=IFFChunk-class]{IFFChunk-class()}}
+and the example for \code{\link[=bitmapToRaster]{bitmapToRaster()}}.
 }
 \examples{
 \dontrun{

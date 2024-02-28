@@ -25,16 +25,16 @@ audio clips or (formatted) texts.
 The \code{IFFChunk} class is designed such that it theoretically can hold
 any type of IFF data. This package will mostly focus on the early IFF file types
 (i.e., IFF chunks as originally registered by Electronic Arts). IFF files are
-read by this package in a none lossy way (\code{\link{read.iff}}), such that all
+read by this package in a none lossy way (\code{\link[=read.iff]{read.iff()}}), such that all
 information is preserved (even if it is of an unknown type, as long as the chunk
 identifier is 4 characters long).
 
 This means that the object needs to be interpreted in order to make sense out of
-it (\code{\link{interpretIFFChunk}}). This interpretation returns simplified
+it (\code{\link[=interpretIFFChunk]{interpretIFFChunk()}}). This interpretation returns simplified
 interpretations of class \code{IFF.ANY} when it is supported (see
-\code{\link{IFFChunk-method}} for supported chunk types). Note that in the
+\code{\link[=IFFChunk-method]{IFFChunk-method()}} for supported chunk types). Note that in the
 interpretation process (meta-)information may get lost. converting
-\code{IFF.ANY} objects back into \code{\link{IFFChunk}} objects (if possible)
+\code{IFF.ANY} objects back into \code{\link[=IFFChunk]{IFFChunk()}} objects (if possible)
 could therefore result in an object that is different from then one stored in the
 original file and could even destroy the correct interpretation of IFF objects.
 IFF files should thus be handled with care.

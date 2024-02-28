@@ -8,22 +8,21 @@ as.AmigaBasicBMAP(x)
 }
 \arguments{
 \item{x}{When \code{x} is a \code{vector} of \code{raw} data, it needs to be structured as it would be
-when stored in a binary file (see \code{\link{read.AmigaBasicBMAP}}). \code{x} can also be a named \code{list},
+when stored in a binary file (see \code{\link[=read.AmigaBasicBMAP]{read.AmigaBasicBMAP()}}). \code{x} can also be a named \code{list},
 where the name of each element corresponds with a routine in the library. Each element should than consist
-of a \code{list} with 2 elements: The first should be named `libraryVectorOffset' and should hold the \code{numeric}
-offset of the routine in the library (see details). The second element should be named `registers' and should
+of a \code{list} with 2 elements: The first should be named \verb{libraryVectorOffset' and should hold the }numeric\verb{offset of the routine in the library (see details). The second element should be named}registers' and should
 contain a \code{vector} of \code{raw} values refering to CPU registers used by the routine (see details).}
 }
 \value{
-Returns a \code{\link{AmigaBasicBMAP}} based on \code{x}
+Returns a \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} based on \code{x}
 }
 \description{
-Coerce \code{raw} or named \code{list} to an \code{\link{AmigaBasicBMAP}} class object
+Coerce \code{raw} or named \code{list} to an \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} class object
 }
 \details{
-An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+An \link[=AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
 function converts the raw format in which it would be stored as a file into a comprehensive S3 class object. It
-can also convert a named list into an S3 class object. See `Arguments' and `Examples' sections on how to format
+can also convert a named list into an S3 class object. See \verb{Arguments' and }Examples' sections on how to format
 this list.
 }
 \examples{

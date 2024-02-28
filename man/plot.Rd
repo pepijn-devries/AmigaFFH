@@ -41,31 +41,31 @@
 }
 \arguments{
 \item{x}{An AmigaFFH object to be plotted. See usage section for supported object
-classes. If \code{x} is an \code{\link{AmigaBitmapFont}} or \code{\link{AmigaBitmapFontSet}}
+classes. If \code{x} is an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} or \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
 class object, it will plot the full bitmap that is used to extract the font glyphs.}
 
-\item{y}{When \code{x} is an \code{\link{AmigaIcon}} class object, \code{y} can be used as
+\item{y}{When \code{x} is an \code{\link[=AmigaIcon]{AmigaIcon()}} class object, \code{y} can be used as
 an index. In that case, when \code{y=1} the first icon image is shown. When \code{y=2}
 the selected icon image is shown.
 
-When \code{x} is an \code{\link{AmigaBitmapFontSet}} class
+When \code{x} is an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} class
 object, \code{y} can be used to plot the bitmap of a specific font height (\code{y}).
 
-When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{y} can be used to select a
+When \code{x} is an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object, \code{y} can be used to select a
 specific layer of the shape to plot, which can be one of \code{"bitmap"}, \code{"shadow"} or \code{"collision"}.}
 
 \item{...}{Parameters passed onto the generic \code{graphics} plotting routine.
 
-When \code{x} is an \code{\link{AmigaBitmapFont}} or an \code{\link{AmigaBitmapFontSet}}
+When \code{x} is an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} or an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
 object, '\code{...}' can also be used for arguments that need to be
-passed onto the \code{\link[AmigaFFH]{as.raster}} function.}
+passed onto the \code{\link[=as.raster]{as.raster()}} function.}
 
 \item{asp}{A \code{numeric} value indicating the aspect ratio for the plot. For
 many AmigaFFH, the aspect ratio will be based on the Amiga display mode when known.
-For \code{\link{AmigaIcon}} objects a default aspect ratio of \code{2} is used (tall
+For \code{\link[=AmigaIcon]{AmigaIcon()}} objects a default aspect ratio of \code{2} is used (tall
 pixels).
 
-When \code{x} is an \code{\link{AmigaBitmapFont}} or \code{\link{AmigaBitmapFontSet}} object,
+When \code{x} is an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} or \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object,
 an aspect ratio of 1 is used by default. When the \code{TALLDOT} flag
 is set for that font, the aspect ratio s multiplied by 2. When the
 \code{WIDEDOT} flag is set, it will be divided by 2.

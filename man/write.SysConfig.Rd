@@ -12,13 +12,13 @@ write.SysConfig(x, file, disk = NULL)
 \item{file}{A file name to which the binary file should be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns \code{NULL} or an \code{integer} status passed on by the
-\code{\link{close}} function, that is used to close the file connection.
+\code{\link[=close]{close()}} function, that is used to close the file connection.
 It is returned invisibly. Or, when \code{disk} is specified, a copy of
 \code{disk} is returned to which the file is written.
 }

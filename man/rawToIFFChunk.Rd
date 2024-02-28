@@ -9,22 +9,22 @@
 \S4method{rawToIFFChunk}{raw}(x)
 }
 \arguments{
-\item{x}{A vector of raw data that needs to be converted into a \code{\link{IFFChunk}}
+\item{x}{A vector of raw data that needs to be converted into a \code{\link[=IFFChunk]{IFFChunk()}}
 class object.}
 }
 \value{
-Returns an \code{\link{IFFChunk}} class object based on \code{x}.
+Returns an \code{\link[=IFFChunk]{IFFChunk()}} class object based on \code{x}.
 }
 \description{
 Coerce raw data, as it would be stored in the Interchange File Format (IFF), and
-convert it into an \code{\link{IFFChunk}} class object.
+convert it into an \code{\link[=IFFChunk]{IFFChunk()}} class object.
 }
 \details{
 This method should work for all IFF chunk types that are implemented in this package
-(see \code{\link{IFFChunk-method}} for details). For non-implemented chunks this method
+(see \code{\link[=IFFChunk-method]{IFFChunk-method()}} for details). For non-implemented chunks this method
 may work properly as long as the chunks are nested inside a FORM type container chunk.
 This method is provided for your convenience, but it is recommended to import IFFChunk
-methods using the \code{\link{read.iff}} function. Use \code{\link[AmigaFFH]{as.raw}}
+methods using the \code{\link[=read.iff]{read.iff()}} function. Use \code{\link[=as.raw]{as.raw()}}
 to achieve the inverse of this method.
 }
 \examples{

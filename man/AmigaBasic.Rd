@@ -16,7 +16,7 @@ of ASCII text files in order to save (at the time precious) memory and disk spac
 
 Amiga Basic binary files start with a file header (as an identifier) and is followed by each line of the script
 as binary data. The \code{AmigaBasic}-class object stores each line of the script as a \code{list} item as a \code{vector}
-of \code{raw} data. Use \code{\link{as.character}} and \code{\link{as.AmigaBasic}} to switch between
+of \code{raw} data. Use \code{\link[=as.character]{as.character()}} and \code{\link[=as.AmigaBasic]{as.AmigaBasic()}} to switch between
 \code{character} data and \code{AmigaBasic}-class objects.
 }
 \note{

@@ -2,16 +2,16 @@
 #' 
 #' A class that represents the content of Amiga Basic files.
 #' 
-#' Amiga Basic is a \href{https://en.wikipedia.org/wiki/BASIC}{BASIC}-style programming language that was shipped
+#' Amiga Basic is a [BASIC](https://en.wikipedia.org/wiki/BASIC)-style programming language that was shipped
 #' with early Commodore Amiga machines. It requires an interpreter to run an Amiga Basic script. The AmigaFFH
 #' package does not interpret Amiga Basic scripts. It does allow for encoding and decoding scripts in the binary
 #' format in which it was originally stored on the Amiga. Amiga Basic scripts were stored as encoded binaries instead
 #' of ASCII text files in order to save (at the time precious) memory and disk space.
 #' 
 #' Amiga Basic binary files start with a file header (as an identifier) and is followed by each line of the script
-#' as binary data. The \code{AmigaBasic}-class object stores each line of the script as a \code{list} item as a \code{vector}
-#' of \code{raw} data. Use \code{\link{as.character}} and \code{\link{as.AmigaBasic}} to switch between
-#' \code{character} data and \code{AmigaBasic}-class objects.
+#' as binary data. The `AmigaBasic`-class object stores each line of the script as a `list` item as a `vector`
+#' of `raw` data. Use [as.character()] and [as.AmigaBasic()] to switch between
+#' `character` data and `AmigaBasic`-class objects.
 #' 
 #' @note Although there is ample reference material on the Amiga BASIC language, there is no documentation
 #' available on the script file storage format. The implementation in the AmigaFFH package is all the result of
@@ -30,7 +30,7 @@
 #' ## This will decode the object as plain text:
 #' as.character(bas)
 #' }
-#' @references \url{https://en.wikipedia.org/wiki/AmigaBASIC}
+#' @references <https://en.wikipedia.org/wiki/AmigaBASIC>
 NULL
 
 #' The S3 AmigaBasicShape class
@@ -282,19 +282,19 @@ fb,ff,PTAB", header = T, sep = ",", quote = "", as.is = T)
 
 #' Coerce raw data into an AmigaBasic class object
 #'
-#' \code{\link{AmigaBasic}} objects are comprehensive representations of binary-encode Amiga Basic scripts.
-#' Use this function to convert raw content from encoded Amiga Basic scripts to an \code{\link{AmigaBasic}}
+#' [AmigaBasic()] objects are comprehensive representations of binary-encode Amiga Basic scripts.
+#' Use this function to convert raw content from encoded Amiga Basic scripts to an [AmigaBasic()]
 #' object.
 #'
 #' This function will convert raw data as stored in Amiga Basic files into its corresponding S3
-#' \code{\link{AmigaBasic}}-class object.
+#' [AmigaBasic()]-class object.
 #' 
 #' @rdname rawToAmigaBasic
 #' @name rawToAmigaBasic
-#' @param x A \code{vector} of \code{raw} data that is to be converted
-#' into an \code{\link{AmigaBasic}} class object.
+#' @param x A `vector` of `raw` data that is to be converted
+#' into an [AmigaBasic()] class object.
 #' @param ... Currently ignored.
-#' @returns An \code{\link{AmigaBasic}} class object based on \code{x}.
+#' @returns An [AmigaBasic()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## First create an AmigaBAsic object:
@@ -367,22 +367,22 @@ as.raw.AmigaBasic <- function(x, ...) {
 
 #' Read Amiga Basic files
 #'
-#' Read an \code{\link{AmigaBasic}} script from its binary format.
+#' Read an [AmigaBasic()] script from its binary format.
 #'
 #' Normally Amiga Basic code is stored encoded in a binary format
-#' (\code{\link{rawToAmigaBasic}}).
+#' ([rawToAmigaBasic()]).
 #' This function reads the binary data from a file (which can be
-#' stored on a virtual disk (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}))
-#' and converts in into an \code{\link{AmigaBasic}} class objec.
+#' stored on a virtual disk ([`amigaDisk()`][adfExplorer::amigaDisk-class]))
+#' and converts in into an [AmigaBasic()] class objec.
 #' @rdname read.AmigaBasic
 #' @name read.AmigaBasic
-#' @param file A \code{character} string of the filename of the Amiga Basic file to be read.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param file A `character` string of the filename of the Amiga Basic file to be read.
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
+#' When set to `NULL`, this argument is ignored.
 #' @param ... Currently ignored
-#' @returns Returns an \code{\link{AmigaBasic}} class object read from the \code{file}.
+#' @returns Returns an [AmigaBasic()] class object read from the `file`.
 #' @examples
 #' \dontrun{
 #' ## First create an AmigaBasic file
@@ -407,26 +407,26 @@ read.AmigaBasic <- function(file, disk = NULL, ...) {
 
 #' Write an AmigaBasic object to a file
 #'
-#' Write an \code{\link{AmigaBasic}} class object to a file in its binary format.
+#' Write an [AmigaBasic()] class object to a file in its binary format.
 #'
 #' This function encodes the Amiga Basic code in its binary format
-#' (using \code{\link{as.raw}}) and writes it to a file. The file
+#' (using [as.raw()]) and writes it to a file. The file
 #' can also be stored onto a virtual Amiga disk
-#' (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
+#' ([`amigaDisk()`][adfExplorer::amigaDisk-class]).
 #' 
 #' @rdname write.AmigaBasic
 #' @name write.AmigaBasic
-#' @param x The \code{\link{AmigaBasic}} class object that needs to be
+#' @param x The [AmigaBasic()] class object that needs to be
 #' stored.
-#' @param file A \code{character} string specifying the file location
-#' to which \code{x} (an \code{\link{AmigaBasic}} object) needs to be written.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param file A `character` string specifying the file location
+#' to which `x` (an [AmigaBasic()] object) needs to be written.
+#' @param disk A virtual Commodore Amiga disk to which the `file` should be
+#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Invisibly returns the result of the call of \code{close} to the
-#' file connection. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file(s) is/are written.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Invisibly returns the result of the call of `close` to the
+#' file connection. Or, when `disk` is specified, a copy of
+#' `disk` is returned to which the file(s) is/are written.
 #' @examples
 #' \dontrun{
 #' ## First create an AmigaBasic object:
@@ -446,20 +446,20 @@ write.AmigaBasic <- function(x, file, disk = NULL) {
 
 #' Coerce an AmigaBasic class object to its character representation
 #'
-#' Coerce an \code{\link{AmigaBasic}}-class object to its character representation
+#' Coerce an [AmigaBasic()]-class object to its character representation
 #'
 #' Amiga Basic files are encoded in a binary format and are also stored as such
-#' in \code{\link{AmigaBasic}}-class objects. Use this function to convert
-#' these objects into legible \code{character} data.
+#' in [AmigaBasic()]-class objects. Use this function to convert
+#' these objects into legible `character` data.
 #' 
 #' @rdname as.character
 #' @name as.character
-#' @param x An \code{\link{AmigaBasic}} class object that needs to be
-#' coerced to its \code{character} representation.
+#' @param x An [AmigaBasic()] class object that needs to be
+#' coerced to its `character` representation.
 #' @param ... Currently ignored.
-#' @returns A \code{vector} of \code{character} strings, where
-#' each element of the \code{vector} is a \code{character} representation
-#' of a line of Amiga Basic code stored in \code{x}.
+#' @returns A `vector` of `character` strings, where
+#' each element of the `vector` is a `character` representation
+#' of a line of Amiga Basic code stored in `x`.
 #' @examples
 #' \dontrun{
 #' ## First create an Amiga Basic object:
@@ -614,7 +614,7 @@ as.character.AmigaBasic <- function(x, ...) {
 #' 
 #' @rdname AmigaBasic.reserved
 #' @name AmigaBasic.reserved
-#' @returns Returns a \code{vecor} of \code{character} strings of
+#' @returns Returns a `vecor` of `character` strings of
 #' reserved Amiga Basic words.
 #' @examples
 #' AmigaBasic.reserved()
@@ -627,26 +627,26 @@ AmigaBasic.reserved <- function() {
 
 #' Coerce raw or character data to an AmigaBasic class object
 #'
-#' Coerce raw or character data to an \code{\link{AmigaBasic}} S3 class object
+#' Coerce raw or character data to an [AmigaBasic()] S3 class object
 #'
-#' Convert text to an \code{\link{AmigaBasic}} S3 class object. The text should
+#' Convert text to an [AmigaBasic()] S3 class object. The text should
 #' consist of valid Amiga BASIC syntaxis. This function does not perform a
 #' full check of the syntaxis, but will break on some fundamental syntaxis malformations
 #' 
 #' @rdname as.AmigaBasic
 #' @name as.AmigaBasic
-#' @param x \code{x} should be a \code{vector} of \code{raw} data or
-#' \code{character} strings. When \code{x} is \code{raw} data, it
+#' @param x `x` should be a `vector` of `raw` data or
+#' `character` strings. When `x` is `raw` data, it
 #' is interpreted as if it where from an Amiga Basic binary encoded file.
 #' 
-#' When \code{x} is a \code{vector} of \code{character} strings,
+#' When `x` is a `vector` of `character` strings,
 #' each element of the vector should represent one line of Basic code.
 #' Each line should not contain line break or other special characters,
 #' as this will result in errors. The text should represent valid
 #' Amiga Basic syntax. The syntax is only checked to a limited extent as
 #' this package does not implement an interpreter for the code.
 #' @param ... Currently ignored.
-#' @returns Returns an \code{\link{AmigaBasic}} class object based on \code{x}.
+#' @returns Returns an [AmigaBasic()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## An AmigaBasic object can be created from text.
@@ -664,7 +664,7 @@ AmigaBasic.reserved <- function() {
 #' ## Note that this effectively the same as calling 'rawToAmigaBasic'
 #' bas <- as.AmigaBasic(bas.raw)
 #' }
-#' @references \url{https://en.wikipedia.org/wiki/AmigaBASIC}
+#' @references <https://en.wikipedia.org/wiki/AmigaBASIC>
 #' @family AmigaBasic.operations
 #' @family raw.operations
 #' @author Pepijn de Vries
@@ -917,21 +917,21 @@ as.AmigaBasic <- function(x, ...) {
 #'
 #' Extract or replace lines of Amiga Basic code
 #'
-#' Extract or replace specific lines in an \code{\link{AmigaBasic}}-class object.
+#' Extract or replace specific lines in an [AmigaBasic()]-class object.
 #' 
 #' @rdname ExtractBasic
 #' @name [.AmigaBasic
-#' @param x An \code{AmigaBasic} class object from which specific lines
+#' @param x An `AmigaBasic` class object from which specific lines
 #' need to be extracted or replaced.
 #' @param i In case of `[[', an integer index, representing the line-number of basic code to be selected.
-#' In case of `[': a \code{vector} of \code{numeric} indices. This index
+#' In case of `[': a `vector` of `numeric` indices. This index
 #' is used to select specific lines. Negative values will deselect lines.
-#' @param value A \code{vector} of \code{character} strings or an
-#' \code{\link{AmigaBasic}} class object that is used to replace
-#' the selected indices \code{i}. \code{value} should represent the
+#' @param value A `vector` of `character` strings or an
+#' [AmigaBasic()] class object that is used to replace
+#' the selected indices `i`. `value` should represent the
 #' same number of lines of code as the selected number of lines.
-#' @returns The extraction method returns an \code{\link{AmigaBasic}} object based in the lines selected with \code{i}.
-#' The replacement method returns an \code{\link{AmigaBasic}} object with the selected lines replaced with \code{value}.
+#' @returns The extraction method returns an [AmigaBasic()] object based in the lines selected with `i`.
+#' The replacement method returns an [AmigaBasic()] object with the selected lines replaced with `value`.
 #' @examples
 #' \dontrun{
 #' ## First generate a few lines of Basic code:
@@ -1006,14 +1006,14 @@ print.AmigaBasic <- function(x, ...) {
 #' there is only a pointer to the index of the name in that list. Use
 #' this function to list, select or replace names included in the code
 #' 
-#' Make sure that variable and label names are valid for the basic script (see \link{check.names.AmigaBasic}).
+#' Make sure that variable and label names are valid for the basic script (see [check.names.AmigaBasic]).
 #' 
 #' @rdname names.AmigaBasic
 #' @name names.AmigaBasic
-#' @param x An \code{\link{AmigaBasic}}-class object for which to obtain or change variable and/or label names
-#' @param value A (\code{vector} of) \code{character} string of desired replacement variable/label names.
-#' @returns A \code{vector} of \code{character} strings with label and variable names in the basic script.
-#' In case of the replacement method a \code{\link{AmigaBasic}}-class with replaced names is returned.
+#' @param x An [AmigaBasic()]-class object for which to obtain or change variable and/or label names
+#' @param value A (`vector` of) `character` string of desired replacement variable/label names.
+#' @returns A `vector` of `character` strings with label and variable names in the basic script.
+#' In case of the replacement method a [AmigaBasic()]-class with replaced names is returned.
 #' @examples
 #' ## Let's create some Basic code with labels and variables:
 #' bas <- as.AmigaBasic(c(
@@ -1063,24 +1063,22 @@ names.AmigaBasic <- function(x) {
 #' 
 #' Names for variables and labels should adhere to the following rules in Amiga Basic:
 #' 
-#' \itemize{
-#'   \item{Length of the names should be in the range of 1 up to 255 character}
-#'   \item{Names cannot be \code{\link{AmigaBasic.reserved}} words}
-#'   \item{Names should only contain alphanumeric characters or periods and
-#'   should not contain special characters (i.e., reserved for type definition,
-#'   such as dollar- or percentage sign)}
-#'   \item{Names should not start with a numeric character}
-#' }
+#'  * Length of the names should be in the range of 1 up to 255 character
+#'  * Names cannot be [AmigaBasic.reserved()] words
+#'  * Names should only contain alphanumeric characters or periods and
+#'    should not contain special characters (i.e., reserved for type definition,
+#'    such as dollar- or percentage sign)
+#'  * Names should not start with a numeric character
 #' 
 #' This function tests names against each of these criteria.
 #' 
 #' @rdname check.names.AmigaBasic
 #' @name check.names.AmigaBasic
-#' @param x A \code{vector} of \code{character} strings that need to be checked
+#' @param x A `vector` of `character` strings that need to be checked
 #' @param ... Currently ignored.
-#' @returns A \code{data.frame} with \code{logical} values with the same number of rows as the length of \code{x}.
+#' @returns A `data.frame` with `logical` values with the same number of rows as the length of `x`.
 #' Columns in the data.frame corresponds with the criteria listed in the details.
-#' \code{FALSE} for invalid names.
+#' `FALSE` for invalid names.
 #' @examples
 #' \dontrun{
 #' ## These are valid names in Amiga Basic:
@@ -1126,20 +1124,20 @@ c.AmigaBasic <- function(...) {
 
 #' Coerce raw data into an AmigaBasicShape class object
 #'
-#' Coerce raw data into an \code{\link{AmigaBasicShape}}-class object
+#' Coerce raw data into an [AmigaBasicShape()]-class object
 #'
-#' \code{\link{AmigaBasicShape}} objects are comprehensive representations of blitter
-#' and sprite graphics that can be used in \code{\link{AmigaBasic}} scripts. Use this function
-#' to convert \code{raw} content to an \code{\link{AmigaBasicShape}} object.
+#' [AmigaBasicShape()] objects are comprehensive representations of blitter
+#' and sprite graphics that can be used in [AmigaBasic()] scripts. Use this function
+#' to convert `raw` content to an [AmigaBasicShape()] object.
 #'
 #' @rdname rawToAmigaBasicShape
 #' @name rawToAmigaBasicShape
-#' @param x A \code{vector} of \code{raw} data that is to be converted
-#' into an \code{\link{AmigaBasicShape}} class object.
-#' @param palette A \code{vector} of \code{character} strings, where each element represents a colour in the palette.
+#' @param x A `vector` of `raw` data that is to be converted
+#' into an [AmigaBasicShape()] class object.
+#' @param palette A `vector` of `character` strings, where each element represents a colour in the palette.
 #' This palette will be used to display the graphics (note that the raw format does not store the palette, but this
 #' S3 class does). When this argument is omitted a grey scale palette will be generated.
-#' @returns returns an \code{\link{AmigaBasicShape}}-class object.
+#' @returns returns an [AmigaBasicShape()]-class object.
 #' @examples
 #' \dontrun{
 #' filename <- system.file("ball.shp", package = "AmigaFFH")
@@ -1208,17 +1206,17 @@ rawToAmigaBasicShape <- function(x, palette) {
 #'
 #' AmigaBasic used the term 'shapes' for graphics (sprites and blitter objects) which it could display.
 #' These graphics were stored in a specific binary format, which can be read with this function. See
-#' \code{\link{AmigaBasicShape}} for more details. The file can also be read from a virtual Amiga disk
-#' (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
+#' [AmigaBasicShape()] for more details. The file can also be read from a virtual Amiga disk
+#' ([`amigaDisk()`][adfExplorer::amigaDisk-class]).
 #' @rdname read.AmigaBasicShape
 #' @name read.AmigaBasicShape
-#' @param file A \code{character} string of the filename of the Amiga Basic Shape file to be read.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param file A `character` string of the filename of the Amiga Basic Shape file to be read.
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @param ... Arguments passed to \code{\link{rawToAmigaBasicShape}}.
-#' @returns Returns an \code{\link{AmigaBasicShape}} class object read from the \code{file}.
+#' When set to `NULL`, this argument is ignored.
+#' @param ... Arguments passed to [rawToAmigaBasicShape()].
+#' @returns Returns an [AmigaBasicShape()] class object read from the `file`.
 #' @examples
 #' \dontrun{
 #' filename <- system.file("ball.shp", package = "AmigaFFH")
@@ -1248,26 +1246,26 @@ read.AmigaBasicShape <- function(file, disk = NULL, ...) {
 
 #' Write an AmigaBasicShape object to a file
 #'
-#' Write an \code{\link{AmigaBasicShape}} class object to a file in its binary format.
+#' Write an [AmigaBasicShape()] class object to a file in its binary format.
 #'
 #' This function coerces the Amiga Basic Shape into its binary format
-#' (using \code{\link[AmigaFFH]{as.raw}}) and writes it to a file. The file
+#' (using [AmigaFFH::as.raw()]) and writes it to a file. The file
 #' can also be stored onto a virtual Amiga disk
-#' (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
+#' ([`amigaDisk()`][adfExplorer::amigaDisk-class]).
 #' 
 #' @rdname write.AmigaBasicShape
 #' @name write.AmigaBasicShape
-#' @param x The \code{\link{AmigaBasicShape}} class object that needs to be
+#' @param x The [AmigaBasicShape()] class object that needs to be
 #' stored.
-#' @param file A \code{character} string specifying the file location
-#' to which \code{x} (an \code{\link{AmigaBasicShape}} object) needs to be written.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param file A `character` string specifying the file location
+#' to which `x` (an [AmigaBasicShape()] object) needs to be written.
+#' @param disk A virtual Commodore Amiga disk to which the `file` should be
+#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Invisibly returns the result of the call of \code{close} to the
-#' file connection. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file(s) is/are written.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Invisibly returns the result of the call of `close` to the
+#' file connection. Or, when `disk` is specified, a copy of
+#' `disk` is returned to which the file(s) is/are written.
 #' @examples
 #' \dontrun{
 #' filename <- system.file("ball.shp", package = "AmigaFFH")
@@ -1367,29 +1365,29 @@ as.raster.AmigaBasicShape <- function(x, selected = c("bitmap", "shadow", "colli
 
 #' Convert a grDevices raster object into an AmigaBasicShape class object.
 #'
-#' Convert a \code{\link[grDevices:as.raster]{raster}} object into an \code{\link{AmigaBasicShape}} class object.
+#' Convert a [`raster()`][grDevices::as.raster] object into an [AmigaBasicShape()] class object.
 #'
-#' This method can be used to turn any graphics into an \code{\link{AmigaBasicShape}} class object. In order to do
-#' so, the colours of the input image (a \code{\link[grDevices:as.raster]{raster}} object) will be quantized to a
+#' This method can be used to turn any graphics into an [AmigaBasicShape()] class object. In order to do
+#' so, the colours of the input image (a [`raster()`][grDevices::as.raster] object) will be quantized to a
 #' limited palette. This palette can be forced as an argument to this function. Otherwise, it will be based on
 #' the input image.
 #' 
 #' @rdname rasterToAmigaBasicShape
 #' @name rasterToAmigaBasicShape
-#' @param x A \code{\link[grDevices:as.raster]{raster}} class object to convert into a \code{\link{AmigaBasicShape}} class obejct.
-#' @param type A \code{character} string indicating what type of graphic needs to be created: "\code{blitter object}" (default) or "\code{sprite}".
-#' @param palette A \code{vector} of \code{character} strings, where each element represents a colour. This palette is used to quantize the
-#' colours that occur in the \code{raster} \code{x}.
+#' @param x A [`raster()`][grDevices::as.raster] class object to convert into a [AmigaBasicShape()] class obejct.
+#' @param type A `character` string indicating what type of graphic needs to be created: "`blitter object`" (default) or "`sprite`".
+#' @param palette A `vector` of `character` strings, where each element represents a colour. This palette is used to quantize the
+#' colours that occur in the `raster` `x`.
 #' @param shadow An optional layer that could be stored with the graphics. This layer could be used for specific
-#' shadow effects when blitting the graphics to the screen. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+#' shadow effects when blitting the graphics to the screen. It needs to be a [`raster()`][grDevices::as.raster]
 #' object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
-#' as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).
+#' as `x`. This layer will be omitted when this argument is omitted (or set to `NULL`).
 #' @param collision An optional layer that could be stored with the graphics. This layer could be used for collision
-#' detection between graphical objects. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+#' detection between graphical objects. It needs to be a [`raster()`][grDevices::as.raster]
 #' object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
-#' as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).
-#' @param ... Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.
-#' @returns Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
+#' as `x`. This layer will be omitted when this argument is omitted (or set to `NULL`).
+#' @param ... Arguments passed onto [index.colours()]. Can be used, for instance, to achieve specific dithering effects.
+#' @returns Returns an [AmigaBasicShape()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## get a raster image:
@@ -1478,28 +1476,28 @@ rasterToAmigaBasicShape <- function(x, type = c("blitter object", "sprite"), pal
 #' @rdname AmigaBasicBMAP
 #' @family AmigaBasic.operations
 #' @author Pepijn de Vries
-#' @references \url{https://en.wikipedia.org/wiki/AmigaOS#Libraries_and_devices}
+#' @references <https://en.wikipedia.org/wiki/AmigaOS#Libraries_and_devices>
 NULL
 
 #' Read and write Amiga Basic BMAP files
 #'
-#' Read and write \code{\link{AmigaBasicBMAP}} binary file format.
+#' Read and write [AmigaBasicBMAP()] binary file format.
 #'
-#' An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries and can be
+#' An [Amiga Basic BMAP][AmigaFFH::AmigaBasicBMAP] file maps the offset of routines in Amiga libraries and can be
 #' read as a comprehensive list and written back to a binary file using these functions.
 #' @rdname AmigaBasicBMAP-io
 #' @name read.AmigaBasicBMAP
-#' @param x A \code{\link{AmigaBasicBMAP}} class object that needs to be
+#' @param x A [AmigaBasicBMAP()] class object that needs to be
 #' stored.
-#' @param file A \code{character} string of the filename of the Amiga Basic BMAP file to be read or written.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read or written to. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param file A `character` string of the filename of the Amiga Basic BMAP file to be read or written.
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read or written to. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Returns an \code{\link{AmigaBasicBMAP}} class object read from the \code{file} in case of
-#' \code{read.AmigaBasicBMAP}. Otherwise, invisibly returns the result of the call of \code{close} to the
-#' file connection. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file is written.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Returns an [AmigaBasicBMAP()] class object read from the `file` in case of
+#' `read.AmigaBasicBMAP`. Otherwise, invisibly returns the result of the call of `close` to the
+#' file connection. Or, when `disk` is specified, a copy of
+#' `disk` is returned to which the file is written.
 #' @examples
 #' \dontrun{
 #' ## A small fragment of the dos.library BMAP would look like this:
@@ -1559,17 +1557,17 @@ print.AmigaBasicBMAP <- function(x, ...) {
 
 #' Coerce raw data into an AmigaBasicBMAP class object
 #'
-#' Coerce raw data into an \code{\link{AmigaBasicBMAP}} class object
+#' Coerce raw data into an [AmigaBasicBMAP()] class object
 #'
-#' An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+#' An [Amiga Basic BMAP][AmigaFFH::AmigaBasicBMAP] file maps the offset of routines in Amiga libraries. This
 #' function converts the raw format in which it would be stored as a file into a comprehensive S3 class object.
 #'  
 #' @rdname rawToAmigaBasicBMAP
 #' @name rawToAmigaBasicBMAP
-#' @param x A \code{vector} of \code{raw} data that is to be converted
-#' into an \code{\link{AmigaBasicBMAP}} class object.
+#' @param x A `vector` of `raw` data that is to be converted
+#' into an [AmigaBasicBMAP()] class object.
 #' @param ... Currently ignored.
-#' @returns An \code{\link{AmigaBasicBMAP}} class object based on \code{x}.
+#' @returns An [AmigaBasicBMAP()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## A small fragment of the dos.library BMAP would look like this:
@@ -1639,22 +1637,22 @@ as.list.AmigaBasicBMAP <- function(x, ...) {
 
 #' Coerce raw or named list to an AmigaBasicBMAP class object
 #'
-#' Coerce \code{raw} or named \code{list} to an \code{\link{AmigaBasicBMAP}} class object
+#' Coerce `raw` or named `list` to an [AmigaBasicBMAP()] class object
 #'
-#' An \link[AmigaFFH:AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in Amiga libraries. This
+#' An [Amiga Basic BMAP][AmigaFFH::AmigaBasicBMAP] file maps the offset of routines in Amiga libraries. This
 #' function converts the raw format in which it would be stored as a file into a comprehensive S3 class object. It
 #' can also convert a named list into an S3 class object. See `Arguments' and `Examples' sections on how to format
 #' this list.
 #' 
 #' @rdname as.AmigaBasicBMAP
 #' @name as.AmigaBasicBMAP
-#' @param x When \code{x} is a \code{vector} of \code{raw} data, it needs to be structured as it would be
-#' when stored in a binary file (see \code{\link{read.AmigaBasicBMAP}}). \code{x} can also be a named \code{list},
+#' @param x When `x` is a `vector` of `raw` data, it needs to be structured as it would be
+#' when stored in a binary file (see [read.AmigaBasicBMAP()]). `x` can also be a named `list`,
 #' where the name of each element corresponds with a routine in the library. Each element should than consist
-#' of a \code{list} with 2 elements: The first should be named `libraryVectorOffset' and should hold the \code{numeric}
+#' of a `list` with 2 elements: The first should be named `libraryVectorOffset' and should hold the `numeric`
 #' offset of the routine in the library (see details). The second element should be named `registers' and should
-#' contain a \code{vector} of \code{raw} values refering to CPU registers used by the routine (see details).
-#' @returns Returns a \code{\link{AmigaBasicBMAP}} based on \code{x}
+#' contain a `vector` of `raw` values refering to CPU registers used by the routine (see details).
+#' @returns Returns a [AmigaBasicBMAP()] based on `x`
 #' @examples
 #' \dontrun{
 #' ## For the dos.library, the start of the bmap list would look like:

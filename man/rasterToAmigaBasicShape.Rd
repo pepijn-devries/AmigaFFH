@@ -14,34 +14,34 @@ rasterToAmigaBasicShape(
 )
 }
 \arguments{
-\item{x}{A \code{\link[grDevices:as.raster]{raster}} class object to convert into a \code{\link{AmigaBasicShape}} class obejct.}
+\item{x}{A \code{\link[grDevices:as.raster]{raster()}} class object to convert into a \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class obejct.}
 
-\item{type}{A \code{character} string indicating what type of graphic needs to be created: "\code{blitter object}" (default) or "\code{sprite}".}
+\item{type}{A \code{character} string indicating what type of graphic needs to be created: "\verb{blitter object}" (default) or "\code{sprite}".}
 
 \item{palette}{A \code{vector} of \code{character} strings, where each element represents a colour. This palette is used to quantize the
 colours that occur in the \code{raster} \code{x}.}
 
 \item{shadow}{An optional layer that could be stored with the graphics. This layer could be used for specific
-shadow effects when blitting the graphics to the screen. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+shadow effects when blitting the graphics to the screen. It needs to be a \code{\link[grDevices:as.raster]{raster()}}
 object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
 as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).}
 
 \item{collision}{An optional layer that could be stored with the graphics. This layer could be used for collision
-detection between graphical objects. It needs to be a \code{\link[grDevices:as.raster]{raster}}
+detection between graphical objects. It needs to be a \code{\link[grDevices:as.raster]{raster()}}
 object consisting of the colours black (bit unset) and white (bit set). The raster needs to have the same dimensions
 as \code{x}. This layer will be omitted when this argument is omitted (or set to \code{NULL}).}
 
-\item{...}{Arguments passed onto \code{\link{index.colours}}. Can be used, for instance, to achieve specific dithering effects.}
+\item{...}{Arguments passed onto \code{\link[=index.colours]{index.colours()}}. Can be used, for instance, to achieve specific dithering effects.}
 }
 \value{
-Returns an \code{\link{AmigaBasicShape}} class object based on \code{x}.
+Returns an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object based on \code{x}.
 }
 \description{
-Convert a \code{\link[grDevices:as.raster]{raster}} object into an \code{\link{AmigaBasicShape}} class object.
+Convert a \code{\link[grDevices:as.raster]{raster()}} object into an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object.
 }
 \details{
-This method can be used to turn any graphics into an \code{\link{AmigaBasicShape}} class object. In order to do
-so, the colours of the input image (a \code{\link[grDevices:as.raster]{raster}} object) will be quantized to a
+This method can be used to turn any graphics into an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object. In order to do
+so, the colours of the input image (a \code{\link[grDevices:as.raster]{raster()}} object) will be quantized to a
 limited palette. This palette can be forced as an argument to this function. Otherwise, it will be based on
 the input image.
 }

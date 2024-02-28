@@ -10,17 +10,17 @@ read.AmigaBitmapFontSet(file, disk = NULL, ...)
 \item{file}{A \code{character} string of the filename of the *.font file to be read.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Currently ignored.}
 }
 \value{
-Returns an \code{\link{AmigaBitmapFontSet}} object read from the specified file.
+Returns an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object read from the specified file.
 }
 \description{
-Reads \code{\link{AmigaBitmapFontSet}} from *.font file including
+Reads \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} from *.font file including
 all nested bitmap images for all font heights.
 }
 \details{
@@ -28,10 +28,10 @@ The *.font file only holds meta-information. The bitmap images for
 each font height are stored in separate files, which are listed
 in the *.font file. The function reads the *.font file, including
 all nested bitmap files and returns it as a
-\code{\link{AmigaBitmapFontSet}}.
+\code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}.
 
 It can also read *.font files
-from \code{\link[adfExplorer]{amigaDisk-class}} objects,
+from \code{\link[adfExplorer:amigaDisk-class]{adfExplorer::amigaDisk-class()}} objects,
 but that requires the adfExplorer package to be installed.
 }
 \examples{

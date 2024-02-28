@@ -86,14 +86,14 @@ colour.}
 \item{...}{Currently ignored.}
 }
 \value{
-Returns a \code{\link{AmigaBitmapFont}} class object based on \code{x}.
+Returns a \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class object based on \code{x}.
 }
 \description{
-Convert a two-coloured \code{\link[grDevices]{as.raster}} image into
-an \code{\link{AmigaBitmapFont}} class object.
+Convert a two-coloured \code{\link[grDevices:as.raster]{grDevices::as.raster()}} image into
+an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class object.
 }
 \details{
-Create an \code{\link{AmigaBitmapFont}} class object by providing
+Create an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class object by providing
 a two-coloured raster image and specifying which characters are
 depicted by the image.
 }

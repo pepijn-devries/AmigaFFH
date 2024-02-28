@@ -21,13 +21,13 @@ this package does not implement an interpreter for the code.}
 \item{...}{Currently ignored.}
 }
 \value{
-Returns an \code{\link{AmigaBasic}} class object based on \code{x}.
+Returns an \code{\link[=AmigaBasic]{AmigaBasic()}} class object based on \code{x}.
 }
 \description{
-Coerce raw or character data to an \code{\link{AmigaBasic}} S3 class object
+Coerce raw or character data to an \code{\link[=AmigaBasic]{AmigaBasic()}} S3 class object
 }
 \details{
-Convert text to an \code{\link{AmigaBasic}} S3 class object. The text should
+Convert text to an \code{\link[=AmigaBasic]{AmigaBasic()}} S3 class object. The text should
 consist of valid Amiga BASIC syntaxis. This function does not perform a
 full check of the syntaxis, but will break on some fundamental syntaxis malformations
 }

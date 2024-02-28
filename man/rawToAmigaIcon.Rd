@@ -8,24 +8,24 @@ rawToAmigaIcon(x, palette = NULL)
 }
 \arguments{
 \item{x}{A vector of \code{raw} data that needs to be converted into an S3
-\code{\link{AmigaIcon}} class object.}
+\code{\link[=AmigaIcon]{AmigaIcon()}} class object.}
 
 \item{palette}{Provide a palette (\code{vector} of colours) for the icon bitmap image.
 When set to \code{NULL} (default) the standard Amiga Workbench palette will be used.}
 }
 \value{
-Returns an \code{\link{AmigaIcon}} class object based on \code{x}.
+Returns an \code{\link[=AmigaIcon]{AmigaIcon()}} class object based on \code{x}.
 }
 \description{
-\code{\link{AmigaIcon}} objects are comprehensive representations of binary Amiga
+\code{\link[=AmigaIcon]{AmigaIcon()}} objects are comprehensive representations of binary Amiga
 Workbench icon files (*.info). Use this function to convert \code{raw} data from
-such a file to an \code{\link{AmigaIcon}} object.
+such a file to an \code{\link[=AmigaIcon]{AmigaIcon()}} object.
 }
 \details{
 Icons files (*.info) were used as a graphical representations of files and
 directories on the Commodore Amiga. This function will convert the raw data from such files
-into a more comprehensive names list (see \code{\link{AmigaIcon}}). Use
-\code{\link[AmigaFFH]{as.raw}} to achieve the inverse.
+into a more comprehensive names list (see \code{\link[=AmigaIcon]{AmigaIcon()}}). Use
+\code{\link[=as.raw]{as.raw()}} to achieve the inverse.
 }
 \examples{
 \dontrun{

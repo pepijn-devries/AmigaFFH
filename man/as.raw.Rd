@@ -43,7 +43,7 @@
 \item{x}{An AmigaFFH object that needs to be converted into raw data.
 See usage section for all supported objects.}
 
-\item{...}{Arguments passed on to \code{\link{IFFChunk-method}} when \code{x} is
+\item{...}{Arguments passed on to \code{\link[=IFFChunk-method]{IFFChunk-method()}} when \code{x} is
 of class \code{IFF.ANY}.}
 }
 \value{

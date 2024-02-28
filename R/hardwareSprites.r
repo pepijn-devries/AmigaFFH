@@ -38,23 +38,23 @@
 #' the mouse pointer.
 #' 
 #' This object simply holds the basic information belonging to
-#' hardware sprite. Use \code{\link{as.raster}} to convert it to
+#' hardware sprite. Use [as.raster()] to convert it to
 #' a raster which is a more useful graphical element in R.
 #'
 #' @slot VStart The vertical starting position of a sprite.
 #' @slot HStart The horizontal starting position of a sprite.
 #' @slot VStop The vertical stopping position of a sprite. The
-#' height of a sprite should be given by \code{VStart} - \code{VStop}.
-#' @slot control.bits 8 \code{logical} values used for extending
+#' height of a sprite should be given by `VStart` - `VStop`.
+#' @slot control.bits 8 `logical` values used for extending
 #' sprites. The values are stored in this objects but extending
 #' sprites is not (yet) supported.
 #' @slot bitmap Interleaved bitmap data containing information on
 #' the pixel colour numbers of the sprite.
 #' @slot colours A vector of the 3 colours used for the sprite.
 #' @slot end.of.data Sprite data can be followed by another sprite. It is terminated
-#' with two WORDS equalling zero (\code{raw(4)}). Repeated sprite data is currently not
+#' with two WORDS equalling zero (`raw(4)`). Repeated sprite data is currently not
 #' supported.
-#' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00AE.html}
+#' @references <http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00AE.html>
 #' @name hardwareSprite-class
 #' @rdname hardwareSprite-class
 #' @aliases hardwareSprite
@@ -93,27 +93,27 @@ setGeneric("rawToHWSprite", function(x, col) standardGeneric("rawToHWSprite"))
 
 #' Convert raw data into an Amiga hardware sprite
 #'
-#' Convert \code{raw} data structured conform a Commodore Amiga hardware
-#' sprite (see references) into a \code{\link{hardwareSprite}} object.
+#' Convert `raw` data structured conform a Commodore Amiga hardware
+#' sprite (see references) into a [hardwareSprite()] object.
 #'
-#' Information to set up a hardware sprite is stored as \code{raw} data
+#' Information to set up a hardware sprite is stored as `raw` data
 #' on Commodore Amigas. This method can be used to convert this data
-#' into a \code{\link{hardwareSprite}} object. This object can in turn
-#' be converted with \code{\link{as.raster}} such that it can be plotted in R.
+#' into a [hardwareSprite()] object. This object can in turn
+#' be converted with [as.raster()] such that it can be plotted in R.
 #'
 #' @docType methods
 #' @rdname rawToHWSprite
 #' @name rawToHWSprite
 #' @aliases rawToHWSprite,raw,missing-method
-#' @param x \code{raw} data structured as an Amiga hardware sprite
+#' @param x `raw` data structured as an Amiga hardware sprite
 #' (see references).
-#' @param col A \code{vector} of colours (\code{character}) to be used
+#' @param col A `vector` of colours (`character`) to be used
 #' for the hardware sprite. Specify the three visible colours for the
 #' sprite. When missing some default colours (grayscale) will be used.
 #' The colours have to be provided separately as they are usually not stored
 #' together with the hardware sprite data.
-#' @returns Returns a \code{\link{hardwareSprite}} object based on the provided raw data
-#' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00B9.html}
+#' @returns Returns a [hardwareSprite()] object based on the provided raw data
+#' @references <http://amigadev.elowar.com/read/ADCD_2.1/Hardware_Manual_guide/node00B9.html>
 #' @examples
 #' ## Let's generate a 16x16 sprite with a random bitmap:
 #' dat <- as.raw(c(0x00, 0x00, 0x10, 0x00,
@@ -216,32 +216,32 @@ setMethod("show", "hardwareSprite", function(object){
 #'
 #' Convert a grDevices raster object into an Amiga hardwareSprite class object.
 #'
-#' A \code{\link{grDevices}} raster image can be converted into a
-#' \code{\link{hardwareSprite}} class object with this function. For this purpose
+#' A [grDevices()] raster image can be converted into a
+#' [hardwareSprite()] class object with this function. For this purpose
 #' the any true-colour image will be converted to an indexed palette with 4 colours.
 #' The Amiga hardware sprite will reserve one of the colours as transparent. Thos function
 #' will use fully transparent colours in the original image (i.e., the alpha level equals 0)
 #' for this purpose. Or when the image has no fully transparent colours, it will use the
-#' most frequently occuring colour (at least when the default \code{indexing} function
+#' most frequently occuring colour (at least when the default `indexing` function
 #' is used).
 #'
 #' @rdname rasterToHWSprite
 #' @name rasterToHWSprite
-#' @param x A \code{\link{grDevices}} raster object (\code{\link[grDevices]{as.raster}})
-#' that needs to be converted into a \code{\link{hardwareSprite}} class object.
-#' Note that a \code{\link{hardwareSprite}} has a maximum width of 16 pixels.
-#' When \code{x} is wider, it will be cropped.
-#' @param indexing A function that accepts two arguments: \code{x} (a grDevices
-#' \code{raster} object); \code{length.out}, a numeric value indicating the
+#' @param x A [grDevices()] raster object ([grDevices::as.raster()])
+#' that needs to be converted into a [hardwareSprite()] class object.
+#' Note that a [hardwareSprite()] has a maximum width of 16 pixels.
+#' When `x` is wider, it will be cropped.
+#' @param indexing A function that accepts two arguments: `x` (a grDevices
+#' `raster` object); `length.out`, a numeric value indicating the
 #' desired size of the palette (i.e., the number of colours). It should return
 #' a matrix with numeric palette indices (ranging from 1 up to the number of
 #' colours in the palette). The result should have an attribute named `palette' that
 #' contains the colours that correspond with the index numbers. The result should
 #' also carry an attribute with the name `transparent', with a single numeric value
 #' representing which colour in the palette should be treated as transparent (or
-#' \code{NA} when no transparency is required). By default the
-#' function \code{\link{index.colours}} is used.
-#' @returns Returns a \code{\link{hardwareSprite}} class object based on \code{x}
+#' `NA` when no transparency is required). By default the
+#' function [index.colours()] is used.
+#' @returns Returns a [hardwareSprite()] class object based on `x`
 #' @examples
 #' \dontrun{
 #' ## first create a raster object that can be used as input
@@ -259,8 +259,8 @@ setMethod("show", "hardwareSprite", function(object){
 #' @author Pepijn de Vries
 #' @export
 rasterToHWSprite <- function(x, indexing = index.colours) {
-  if (!("raster" %in% class(x))) stop ("x should be of class raster")
-  if (!"function" %in% class(indexing)) stop("'indexing' should be a function")
+  if (!inherits(x, "raster")) stop ("x should be of class raster")
+  if (!inherits(indexing, "function")) stop("'indexing' should be a function")
   if (!all(c("x", "length.out") %in% names(formals(indexing)))) stop("Function 'indexing' should require arguments 'x' and 'length.out'.")
   if (dim(x)[2] > 16) {
     warning("Raster is more then 16 pixels wide. It will be cropped.")

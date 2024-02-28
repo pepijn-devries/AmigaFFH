@@ -2,7 +2,7 @@
 #' @method IFFChunk IFF.ILBM
 #' @export
 IFFChunk.IFF.ILBM <- function(x, ...) {
-  if ("matrix" %in% class(x)) stop(paste("This IFF chunk interpretation is probably based on",
+  if (inherits(x, "matrix")) stop(paste("This IFF chunk interpretation is probably based on",
                                          "an ANIM DLTA chunk. It can't be converted back into an IFFChunk object."))
   rasterToIFF(x, ...)@chunk.data[[1]]
 }
@@ -107,27 +107,27 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' palettes. This was mainly due to hardware and memory limitations.
 #' Bitmap images could also be embedded in several file types. This method
 #' can be used to convert AmigaFFH objects read from such files into
-#' grDevices raster images (\code{\link[grDevices]{as.raster}}).
+#' grDevices raster images ([grDevices::as.raster()]).
 #'
 #' @rdname as.raster
 #' @name as.raster
-#' @param x Object that needs to be converted into a \code{grDevices} raster. It
-#' can be an \code{\link{IFFChunk}} containing an interleaved bitmap image
-#' (ILBM) or animation (ANIM), a \code{\link{hardwareSprite}}, an
-#' \code{\link{AmigaBitmapFont}} object or an \code{\link{AmigaBitmapFontSet}} object.
-#' @param background Use the argument \code{background} to
-#' specify a background colour in case \code{x} is a \code{\link{hardwareSprite}}.
-#' @param selected When \code{x} is an object of class \code{\link{AmigaIcon}}, \code{selected} can be
-#' used to select a specific state. When set to \code{TRUE}, the raster of the \code{\link{AmigaIcon}}
+#' @param x Object that needs to be converted into a `grDevices` raster. It
+#' can be an [IFFChunk()] containing an interleaved bitmap image
+#' (ILBM) or animation (ANIM), a [hardwareSprite()], an
+#' [AmigaBitmapFont()] object or an [AmigaBitmapFontSet()] object.
+#' @param background Use the argument `background` to
+#' specify a background colour in case `x` is a [hardwareSprite()].
+#' @param selected When `x` is an object of class [AmigaIcon()], `selected` can be
+#' used to select a specific state. When set to `TRUE`, the raster of the [AmigaIcon()]
 #' will be based on the `selected' state of the icon. Otherwise it will be based on the
 #' deselected state (default).
 #' 
-#' When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{selected} can be used to select a
-#' specific layer of the shape to plot, which can be one of \code{"bitmap"} (default), \code{"shadow"} or \code{"collision"}.
+#' When `x` is an [AmigaBasicShape()] class object, `selected` can be used to select a
+#' specific layer of the shape to plot, which can be one of `"bitmap"` (default), `"shadow"` or `"collision"`.
 #' @param ... Currently ignored.
-#' @returns Returns a \code{grDevices} raster image (\code{\link[grDevices]{as.raster}})
-#' based on \code{x}. If \code{x} is an animation (\code{\link{IFFChunk}} of type ANIM),
-#' a \code{list} of raster objects is returned.
+#' @returns Returns a `grDevices` raster image ([grDevices::as.raster()])
+#' based on `x`. If `x` is an animation ([IFFChunk()] of type ANIM),
+#' a `list` of raster objects is returned.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -245,7 +245,7 @@ as.raster.IFFChunk <- function(x, ...) {
 plot.IFF.ILBM <- function(x, y, ...) {
   ## For ANIM frames, a matrix of palette indices is returned
   ## turn that into a raster object with a grayscale palette
-  if ("matrix" %in% class(x)) {
+  if (inherits(x, "matrix")) {
     pal <- grDevices::gray(seq(0, 1, length.out = max(round(abs(x)))))
     asp <- attributes(x)$asp
     x <- as.raster(apply(x, 2, function(z) pal[round(abs(z)) + 1]))
@@ -266,8 +266,8 @@ plot.IFF.ANIM <- function(x, y, ...) {
 
 #' Convert a grDevices raster image into an IFF formated bitmap image
 #'
-#' Convert grDevices raster images (\code{\link[grDevices]{as.raster}})
-#' into a formal \code{\link{IFFChunk}} object, as an interleaved bitmap (ILBM)
+#' Convert grDevices raster images ([grDevices::as.raster()])
+#' into a formal [IFFChunk()] object, as an interleaved bitmap (ILBM)
 #' image.
 #'
 #' Convert any modern image into a interleaved bitmap (image) conform
@@ -277,23 +277,23 @@ plot.IFF.ANIM <- function(x, y, ...) {
 #'
 #' @rdname rasterToIFF
 #' @name rasterToIFF
-#' @param x A raster object created with \code{\link[grDevices]{as.raster}} which
-#' needs to be converted into an IFF formated bitmap image. It is also possible to let \code{x} be
-#' a matrix of \code{character}s, representing colours.
+#' @param x A raster object created with [grDevices::as.raster()] which
+#' needs to be converted into an IFF formated bitmap image. It is also possible to let `x` be
+#' a matrix of `character`s, representing colours.
 #' @param display.mode Specify the Amiga display mode that should be used.
-#' See \code{\link{amiga_display_modes}} for all possible options.
-#' "\code{LORES_KEY}" is used by default, this is the lowest resolution
+#' See [amiga_display_modes()] for all possible options.
+#' "`LORES_KEY`" is used by default, this is the lowest resolution
 #' possible on the Amiga.
 #' @param monitor The Amiga monitor on which the needs to be displayed.
-#' See \code{\link{amiga_monitors}} for more details and posible options.
-#' By default "\code{DEFAULT_MONITOR_ID}" is used.
+#' See [amiga_monitors()] for more details and posible options.
+#' By default "`DEFAULT_MONITOR_ID`" is used.
 #' @param anim.options Currently ignored. This argument will potentitally be implemented
 #' in future versions of this package. Currently, animations are always encoded
-#' with the "ByteVerticalCompression" in this package (when \code{x} is a list of
-#' \code{raster} objects).
-#' @param ... Arguments passed on to \code{\link{rasterToBitmap}}.
-#' @returns Returns an \code{\link{IFFChunk}} object holding an Interleaved
-#' Bitmap (ILBM) image based on \code{x}.
+#' with the "ByteVerticalCompression" in this package (when `x` is a list of
+#' `raster` objects).
+#' @param ... Arguments passed on to [rasterToBitmap()].
+#' @returns Returns an [IFFChunk()] object holding an Interleaved
+#' Bitmap (ILBM) image based on `x`.
 #' @examples
 #' \dontrun{
 #' ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
@@ -347,7 +347,7 @@ rasterToIFF <- function(x,
   }
   if (is.list(x)) {
     if (length(x) < 2) stop("When x is a list of rasters, it will be converted to an anim. x should have a length of at least 2.")
-    if (any(unlist(lapply(x, function(y) !any(c("raster", "matrix") %in% class(y)) || !all(.is.colour(y))))))
+    if (any(unlist(lapply(x, function(y) !inherits(y, c("raster", "matrix")) || !all(.is.colour(y))))))
       stop("All elements of x should be a grDevices raster or a matrix of colours")
     if ("indexing" %in% names(list(...))) {
       x <- list(...)$indexing(x = x, length.out = ifelse(special.mode %in% c("HAM6", "HAM8"),
@@ -405,7 +405,7 @@ rasterToIFF <- function(x,
     x <- new("IFFChunk", chunk.type = "FORM", chunk.data = list(x))
     return(x)
   }
-  if (!any(c("raster", "matrix") %in% class(x)) || !all(.is.colour(x))) stop("x should be a raster object or a matrix of colours.")
+  if (!inherits(x, c("raster", "matrix")) || !all(.is.colour(x))) stop("x should be a raster object or a matrix of colours.")
   if ("depth" %in% names(list(...))) {
     bm <- rasterToBitmap(x, ...)
   } else {

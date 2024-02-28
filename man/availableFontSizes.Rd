@@ -7,7 +7,7 @@
 availableFontSizes(x)
 }
 \arguments{
-\item{x}{An \code{\link{AmigaBitmapFontSet}} for which the available
+\item{x}{An \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} for which the available
 font sizes (height) in number of pixels need to be obtained.}
 }
 \value{
@@ -15,10 +15,10 @@ Returns a \code{vector} of \code{numeric} values specifying
 the available font sizes (height in pixels) for \code{x}.
 }
 \description{
-Get available font sizes (height) from an \code{\link{AmigaBitmapFontSet}} in pixels.
+Get available font sizes (height) from an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} in pixels.
 }
 \details{
-An \code{\link{AmigaBitmapFontSet}} can hold bitmaps of multiple font
+An \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} can hold bitmaps of multiple font
 sizes. Use this function to obtain the available size from such a set.
 }
 \examples{

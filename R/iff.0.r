@@ -32,32 +32,32 @@
 #' contain any kind of information. It could contain bitmap images, but also
 #' audio clips or (formatted) texts.
 #' 
-#' The \code{IFFChunk} class is designed such that it theoretically can hold
+#' The `IFFChunk` class is designed such that it theoretically can hold
 #' any type of IFF data. This package will mostly focus on the early IFF file types
 #' (i.e., IFF chunks as originally registered by Electronic Arts). IFF files are
-#' read by this package in a none lossy way (\code{\link{read.iff}}), such that all
+#' read by this package in a none lossy way ([read.iff()]), such that all
 #' information is preserved (even if it is of an unknown type, as long as the chunk
 #' identifier is 4 characters long).
 #' 
 #' This means that the object needs to be interpreted in order to make sense out of
-#' it (\code{\link{interpretIFFChunk}}). This interpretation returns simplified
-#' interpretations of class \code{IFF.ANY} when it is supported (see
-#' \code{\link{IFFChunk-method}} for supported chunk types). Note that in the
+#' it ([interpretIFFChunk()]). This interpretation returns simplified
+#' interpretations of class `IFF.ANY` when it is supported (see
+#' [IFFChunk-method()] for supported chunk types). Note that in the
 #' interpretation process (meta-)information may get lost. converting
-#' \code{IFF.ANY} objects back into \code{\link{IFFChunk}} objects (if possible)
+#' `IFF.ANY` objects back into [IFFChunk()] objects (if possible)
 #' could therefore result in an object that is different from then one stored in the
 #' original file and could even destroy the correct interpretation of IFF objects.
 #' IFF files should thus be handled with care.
 #'
-#' @slot chunk.type A four \code{character} long code reflecting the type of
+#' @slot chunk.type A four `character` long code reflecting the type of
 #' information represented by this chunk.
-#' @slot chunk.data A \code{list} that holds either one or more valid
-#' \code{IFFChunk}s or a single \code{vector} of \code{raw} data. This data
+#' @slot chunk.data A `list` that holds either one or more valid
+#' `IFFChunk`s or a single `vector` of `raw` data. This data
 #' can only be interpreted in context of the specified type or in some cases
-#' information from other \code{IFFChunk}s.
-#' @references \url{https://wiki.amigaos.net/wiki/IFF_Standard}
-#' @references \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
-#' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
+#' information from other `IFFChunk`s.
+#' @references <https://wiki.amigaos.net/wiki/IFF_Standard>
+#' @references <https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry>
+#' @references <https://en.wikipedia.org/wiki/Interchange_File_Format>
 #' @name IFFChunk-class
 #' @rdname IFFChunk-class
 #' @examples
@@ -95,25 +95,25 @@ setClass("IFFChunk",
 
 #' Read Interchange File Format (IFF)
 #'
-#' Read the Interchange File Format (IFF) as an \code{\link{IFFChunk}} object.
+#' Read the Interchange File Format (IFF) as an [IFFChunk()] object.
 #'
-#' Information is stored as `chunks' in IFF files (see \code{\link{IFFChunk}}).
+#' Information is stored as `chunks' in IFF files (see [IFFChunk()]).
 #' Each chunk should at least contain a label of the type of chunk and the data
 #' for that chunk. This function reads all chunks from a valid IFF file, including
-#' all nested chunks and stores them in an \code{\link{IFFChunk}} object. IFF
+#' all nested chunks and stores them in an [IFFChunk()] object. IFF
 #' files can hold any kind of data (e.g. images or audio), this read function
-#' does not interpret the file. Use \code{\link{interpretIFFChunk}} for that
+#' does not interpret the file. Use [interpretIFFChunk()] for that
 #' purpose.
 #'
 #' @rdname read.iff
 #' @name read.iff
 #' @param file A filename of an IFF file to be read, or a connection from which
 #' binary data can be read.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Returns a \code{\link{IFFChunk}} object read from the specified file.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Returns a [IFFChunk()] object read from the specified file.
 #' @examples
 #' \dontrun{
 #' ## let's read a bitmap image stored in IFF as provided with this package:
@@ -143,7 +143,7 @@ read.iff <- function(file, disk = NULL) {
 #' raw data, as they would be stored on an original Amiga. See the usage section
 #' for the currently supported objects.
 #' 
-#' Not all information from \code{x} may be included in the \code{raw}
+#' Not all information from `x` may be included in the `raw`
 #' data that is returned, so handle with care.
 #' 
 #' As this package grows additional objects can be converted with this method.
@@ -154,7 +154,7 @@ read.iff <- function(file, disk = NULL) {
 #' @aliases as.raw,IFFChunk-method
 #' @param x An AmigaFFH object that needs to be converted into raw data.
 #' See usage section for all supported objects.
-#' @returns Returns a \code{vector} of \code{raw} data based on \code{x}.
+#' @returns Returns a `vector` of `raw` data based on `x`.
 #' @examples
 #' \dontrun{
 #' ## read an IFF file as an IFFChunk object:
@@ -169,7 +169,7 @@ read.iff <- function(file, disk = NULL) {
 setMethod("as.raw", "IFFChunk", function(x) {
   get.data <- function(y, parent.is.container = F) {
     result <- charToRaw(y@chunk.type)
-    if ("raw" %in% class(y@chunk.data[[1]])) {
+    if (inherits(y@chunk.data[[1]], "raw")) {
       ## only store chunk size if parent is not a container (i.e., FORM, LIST or CAT)
       if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(y@chunk.data[[1]]), 32, F))
       result <- c(result, y@chunk.data[[1]])
@@ -177,7 +177,7 @@ setMethod("as.raw", "IFFChunk", function(x) {
       ## it is not):
       if ((length(y@chunk.data[[1]]) %% 2) != 0) result <- c(result, raw(1))
       return(result)
-    } else if ("IFFChunk" %in% class(y@chunk.data[[1]])) {
+    } else if (inherits(y@chunk.data[[1]], "IFFChunk")) {
       container <- y@chunk.type %in% c("FORM", "LIST", "CAT ", "PROP")
       dat <- unlist(lapply(y@chunk.data, get.data,
                            parent.is.container = container))
@@ -193,8 +193,8 @@ setMethod("as.raw", "IFFChunk", function(x) {
 
 #' @rdname as.raw
 #' @method as.raw IFF.ANY
-#' @param ... Arguments passed on to \code{\link{IFFChunk-method}} when \code{x} is
-#' of class \code{IFF.ANY}.
+#' @param ... Arguments passed on to [IFFChunk-method()] when `x` is
+#' of class `IFF.ANY`.
 #' @export
 as.raw.IFF.ANY <- function(x, ...) {
   as.raw(IFFChunk(x, ...))
@@ -202,28 +202,28 @@ as.raw.IFF.ANY <- function(x, ...) {
 
 #' Write Interchange File Format (IFF)
 #'
-#' Write an \code{\link{IFFChunk}} object conform the Interchange File Format (IFF).
+#' Write an [IFFChunk()] object conform the Interchange File Format (IFF).
 #'
-#' Writes an \code{\link{IFFChunk}} object (including all nested chunks) to the
+#' Writes an [IFFChunk()] object (including all nested chunks) to the
 #' specified file. Only the structure of the object needs to be valid, however,
 #' a correctly structured file does not necessarily result in an interpretable file
 #' (see examples).
 #'
 #' @rdname write.iff
 #' @name write.iff
-#' @param x An \code{\link{IFFChunk}} object that needs to be written to a file.
-#' @param file A filename for the IFF file to which the \code{\link{IFFChunk}} needs
+#' @param x An [IFFChunk()] object that needs to be written to a file.
+#' @param file A filename for the IFF file to which the [IFFChunk()] needs
 #' to be saved, or a connection to which the data should be written.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk to which the `file` should be
+#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Returns either \code{NULL} or an \code{integer} status invisibly as passed
-#' by the \code{\link[base:connections]{close}} statement used to close the file connection.
-#' When \code{disk} is specified, a copy of \code{disk} is returned
+#' When set to `NULL`, this argument is ignored.
+#' @returns Returns either `NULL` or an `integer` status invisibly as passed
+#' by the [`close()`][base::connections] statement used to close the file connection.
+#' When `disk` is specified, a copy of `disk` is returned
 #' to which the file is written.
 #' 
-#' @references \url{https://en.wikipedia.org/wiki/Interchange_File_Format}
+#' @references <https://en.wikipedia.org/wiki/Interchange_File_Format>
 #' @examples
 #' \dontrun{
 #' ## read an IFF file as an IFFChunk object:
@@ -239,7 +239,7 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' @author Pepijn de Vries
 #' @export
 write.iff <- function(x, file, disk = NULL) {
-  if (!"IFFChunk" %in% class(x)) stop("x should be of class IFFChunk.")
+  if (!inherits(x, "IFFChunk")) stop("x should be of class IFFChunk.")
   .write.generic(x, file, disk)
 }
 
@@ -247,34 +247,34 @@ setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric(
 
 #' Get a specific IFFChunk nested inside other IFFChunks
 #'
-#' \code{\link{IFFChunk}}s can be nested in a tree-like structure. Use this method
+#' [IFFChunk()]s can be nested in a tree-like structure. Use this method
 #' to get a specific chunk with a specific label.
 #'
-#' \code{IFFChunk} objects have 4 \code{character} identifiers, indicating what type
+#' `IFFChunk` objects have 4 `character` identifiers, indicating what type
 #' of chunk you are dealing with. These chunks can be nested inside of each other.
 #' Use this method to extract specific chunks by referring to there respective
-#' identifiers. The identifiers are shown when calling \code{print} on an
-#' \code{\link{IFFChunk}}. If a specified path doesn't exist, this method throws a
+#' identifiers. The identifiers are shown when calling `print` on an
+#' [IFFChunk()]. If a specified path doesn't exist, this method throws a
 #' `subscript out of range' error.
 #'
 #' @docType methods
 #' @rdname getIFFChunk
 #' @name getIFFChunk
 #' @aliases getIFFChunk,IFFChunk,character,integer-method
-#' @param x An \code{\link{IFFChunk}} object from which the nested
-#' \code{\link{IFFChunk}} should be extracted an returned.
-#' @param chunk.path A \code{vector} of 4 \code{character} long strings
+#' @param x An [IFFChunk()] object from which the nested
+#' [IFFChunk()] should be extracted an returned.
+#' @param chunk.path A `vector` of 4 `character` long strings
 #' of IFF chunk labels, specifying the path of the target IFF chunk.
-#' For example: \code{c("ILBM", "BODY")} means, get the "BODY" chunk
+#' For example: `c("ILBM", "BODY")` means, get the "BODY" chunk
 #' from inside the "ILBM" chunk.
-#' @param chunk.number A \code{vector} of the same length as \code{chunk.path},
-#' with \code{integer} index numbers. Sometimes a chunk can contain a list of
+#' @param chunk.number A `vector` of the same length as `chunk.path`,
+#' with `integer` index numbers. Sometimes a chunk can contain a list of
 #' chunks with the same label. With this argument you can specify which element
 #' should be returned. By default (when missing), the first element is always
 #' returned.
-#' @returns Returns an \code{\link{IFFChunk}} object nested inside \code{x} at the
-#' specified path. Or in case of the replace method the original chunk \code{x} is
-#' returned with the target chunk replaced by \code{value}.
+#' @returns Returns an [IFFChunk()] object nested inside `x` at the
+#' specified path. Or in case of the replace method the original chunk `x` is
+#' returned with the target chunk replaced by `value`.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -323,9 +323,9 @@ setGeneric("getIFFChunk<-", function(x, chunk.path, chunk.number, value) standar
 #' @rdname getIFFChunk
 #' @name getIFFChunk<-
 #' @aliases getIFFChunk<-,IFFChunk,character,missing,IFFChunk-method
-#' @param value An \code{\link{IFFChunk}} with which the target chunk should be
-#' replaced. Make sure that \code{value} is of the same \code{chunk.type} as the last
-#' chunk specified in the \code{chunk.path}.
+#' @param value An [IFFChunk()] with which the target chunk should be
+#' replaced. Make sure that `value` is of the same `chunk.type` as the last
+#' chunk specified in the `chunk.path`.
 #' @export
 setReplaceMethod("getIFFChunk", c("IFFChunk", "character", "missing", "IFFChunk"), function(x, chunk.path, chunk.number = NULL, value) {
   getIFFChunk(x, chunk.path, rep(1L, length(chunk.path))) <- value
@@ -366,18 +366,18 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 
 #' Interpret an IFFChunk object
 #'
-#' \code{\link{IFFChunk}}s represent the structure of the Interchange File Format well,
-#' but the iformation is stored as \code{raw} data. This method tries to interpret and
+#' [IFFChunk()]s represent the structure of the Interchange File Format well,
+#' but the iformation is stored as `raw` data. This method tries to interpret and
 #' translate the information into a more comprehensive format.
 #'
 #' Interchange File Format chunks can hold any kind of information (images, audio,
 #' (formatted) text, etc.). This method will try to convert this information into
 #' something useful. Information may get lost in the translation, so be careful when
-#' converting back to an \code{\link{IFFChunk-class}} object using
-#' \code{\link{IFFChunk-method}}.
+#' converting back to an [IFFChunk-class()] object using
+#' [IFFChunk-method()].
 #' 
-#' An error is thrown when the \code{\link{IFFChunk}} object is currently not
-#' interpretable by this package. See \code{\link{IFFChunk-method}} for an overview
+#' An error is thrown when the [IFFChunk()] object is currently not
+#' interpretable by this package. See [IFFChunk-method()] for an overview
 #' of currently supported IFF chunks. This list may increase while this package
 #' matures.
 #'
@@ -385,14 +385,14 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' @rdname interpretIFFChunk
 #' @name interpretIFFChunk
 #' @aliases interpretIFFChunk,IFFChunk-method
-#' @param x An \code{\link{IFFChunk}} object which needs to be interpreted.
+#' @param x An [IFFChunk()] object which needs to be interpreted.
 #' @param ... Currently ignored.
-#' @returns If \code{x} is interpretable by this package an S3 class object of
-#' \code{IFF.ANY} is returned. The content of the returned object will depend
-#' on the type of \code{\link{IFFChunk}} provided for \code{x}. The result can
-#' for instance be a \code{raster} image (\code{\link[grDevices]{as.raster}}),
-#' a list of audio \code{\link[tuneR]{Wave}}s, a \code{character} string or a named
-#' \code{list}.
+#' @returns If `x` is interpretable by this package an S3 class object of
+#' `IFF.ANY` is returned. The content of the returned object will depend
+#' on the type of [IFFChunk()] provided for `x`. The result can
+#' for instance be a `raster` image ([grDevices::as.raster()]),
+#' a list of audio [tuneR::Wave()]s, a `character` string or a named
+#' `list`.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -420,7 +420,7 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' @export
 setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
   type <- x@chunk.type
-  if (!"raw" %in% class(x@chunk.data[[1]])) sub.types <- unlist(lapply(x@chunk.data, function(x) x@chunk.type))
+  if (!inherits(x@chunk.data[[1]], "raw")) sub.types <- unlist(lapply(x@chunk.data, function(x) x@chunk.type))
   dat  <- x@chunk.data[[1]]
   if (type == "FORM") {
     ## FORM can hold multiple objects, return the interpreation of these objects
@@ -659,333 +659,218 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 
 #' Coerce to and create IFFChunk objects
 #' 
-#' Convert \code{IFF.ANY} objects (created with \code{\link{interpretIFFChunk}}) into
-#' \code{\link{IFFChunk}} objects. A basic \code{\link{IFFChunk}} can also be
+#' Convert `IFF.ANY` objects (created with [interpretIFFChunk()]) into
+#' [IFFChunk()] objects. A basic [IFFChunk()] can also be
 #' created with this method by providing the chunk type name.
 #'
-#' IFF data is stored in a \code{\link{IFFChunk-class}} object when read from an
-#' IFF file (\code{\link{read.iff}}). These objects reflect the file structure
-#' well, but the data is stored as \code{raw} information. IFF files can contain
+#' IFF data is stored in a [IFFChunk-class()] object when read from an
+#' IFF file ([read.iff()]). These objects reflect the file structure
+#' well, but the data is stored as `raw` information. IFF files can contain
 #' a wide variety of information types, ranging from bitmap images to audio
-#' clips. The raw information stored in \code{\link{IFFChunk}} objects can
+#' clips. The raw information stored in [IFFChunk()] objects can
 #' be interpreted into more meaningful representations that can be handled in
-#' R. This is achieved with the \code{\link{interpretIFFChunk}} method, which
-#' returns \code{IFF.ANY} objects.
+#' R. This is achieved with the [interpretIFFChunk()] method, which
+#' returns `IFF.ANY` objects.
 #' 
-#' These \code{IFF.ANY} objects are a less strict representation of the
+#' These `IFF.ANY` objects are a less strict representation of the
 #' IFF Chunk, but are easier to handle in R. The interpretation method is lossy
-#' and may not preserve all information in the \code{IFF.ANY} object.
-#' The \code{\link{IFFChunk-method}} can coerce \code{IFF.ANY} back
-#' to the more strictly defined \code{\link{IFFChunk-class}} objects.
-#' Be careful with conversions between \code{\link{IFFChunk-class}} and
-#' \code{IFF.ANY} objects and vice versa, as information may get lost.
+#' and may not preserve all information in the `IFF.ANY` object.
+#' The [IFFChunk-method()] can coerce `IFF.ANY` back
+#' to the more strictly defined [IFFChunk-class()] objects.
+#' Be careful with conversions between [IFFChunk-class()] and
+#' `IFF.ANY` objects and vice versa, as information may get lost.
 #' 
 #' More detailed information about IFF chunks can be found in the IFF chunk registry
 #' (see references).
 #' 
-#' \itemize{
-#'   \item{
-#'     \code{IFF.FORM} represents a FORM chunk, which is a container that can hold any kind of chunk.
-#'     When interpreted, it is represented as a \code{list}, where each element is an interpreted chunk
-#'     nested inside the FORM.
-#'   }
-#'   \item{
-#'     \code{IFF.BODY} represents the actual data in an IFF file. However, without context
-#'     this chunk cannot be interpreted and is therefore interpreted as a vector of \code{raw} data.
-#'   }
-#'   \item{
-#'     \code{IFF.ANIM} represents an animation (ANIM) chunk. When interpreted, it will return a \code{list} where each element
-#'     is an animation frame represented as an \code{IFF.ILBM} object. Each animation frame should be nested inside
-#'     an ILBM chunk nested inside a FORM chunk, nested inside an ANIM chunk.
-#'     \itemize{
-#'       \item{
-#'         \code{IFF.ANHD} represents an ANimation HeaDer (ANHD) chunk. When interpreted,
-#'         it returns a named \code{list} containing the
-#'         following information:
-#'         \itemize{
-#'           \item{
-#'             \code{operation} is a \code{character} string indicating how the bitmap
-#'             data for the animation frame is encoded. Can be one of the following:
-#'             "\code{standard}", "\code{XOR}", "\code{LongDeltaMode}",
-#'             "\code{ShortDeltaMode}", "\code{GeneralDeltamode}",
-#'             "\code{ByteVerticalCompression}", "\code{StereoOp5}", or
-#'             "\code{ShortLongVerticalDeltaMode}". Currently, only the
-#'             ByteVerticalCompression is implemented in this package.
-#'           }
-#'           \item{
-#'             \code{mask} is a \code{vector} of 8 \code{logical} values. It is currently
-#'             ignored.
-#'           }
-#'           \item{
-#'             \code{w} and \code{h} are positive \code{numeric} values, specifying
-#'             the width and height of the frame (should be identical for all frames).
-#'           }
-#'           \item{
-#'             \code{x} and \code{y} are \code{numeric} values, specifying the plotting
-#'             position for the frame.
-#'           }
-#'           \item{
-#'             \code{abstime} is a positive \code{numeric} value - currently unused - used for
-#'             timing the frame relative to the time the first frame was displayed. In
-#'             jiffies (1/60 sec).
-#'           }
-#'           \item{
-#'             \code{reltime} is a positive \code{numeric} value for timing the frame
-#'             relative to time previous frame was displayed. In jiffies (1/60 sec).
-#'           }
-#'           \item{
-#'             \code{interleave} is currently unused. It should be set to 0.
-#'           }
-#'           \item{
-#'             \code{pad0} is a padding byte (\code{raw}) for future use.
-#'           }
-#'           \item{
-#'             \code{flags} is a \code{vector} of 32 \code{logical} values. They contain
-#'             information on how the bitmap data is stored.
-#'           }
-#'           \item{
-#'             \code{pad1} are 16 padding bytes (\code{raw}) for future use.
-#'           }
-#'         }
-#'       }
-#'       \item{
-#'         \code{IFF.DPAN} represents an DPaint ANimation (DPAN) chunk. Some software will
-#'         require this chunk to correctly derive the total number of frames in the animation.
-#'         When interpreted, it will return a named \code{list} with the following elements:
-#'         \itemize{
-#'           \item{
-#'             \code{version} a \code{numeric} version number.
-#'           }
-#'           \item{
-#'             \code{nframes} a positive \code{numeric} value, indicating the number
-#'             of frames in the animation.
-#'           }
-#'           \item{
-#'             \code{flags} a \code{vector} of 32 \code{logical} values. Ignored in
-#'             this package as it was intended for future implementations.
-#'           }
-#'         }
-#'       }
-#'       \item{
-#'         \code{IFF.DLTA} represents a delta mode data chunk (DLTA). The first animation
-#'         frame is stored as a normal InterLeaved BitMap (ILBM) image as described below.
-#'         The following frames only store differences in bitmap data compared to the
-#'         previous frames but is not interleaved. They are thus incorrectly embedded in
-#'         an ILBM chunk (but is kept so for backward compatibility). When interpreted,
-#'         a \code{grDevices} raster object is returned only showing the differences. It
-#'         is not very meaningful to interpret these chunks on their own, but rather the
-#'         entire parent ANIM chunk.
-#'       }
-#'     }
-#'   }
-#'   \item{
-#'     \code{IFF.ILBM} represents InterLeaved BitMap (ILBM) chunks. It is interpreted here as a
-#'     raster image (see \code{\link[grDevices]{as.raster}}). ILBM chunks are usually nested inside
-#'     a FORM container.
-#'     \itemize{
-#'       \item{
-#'         \code{IFF.BMHD} represents the header chunk of a bitmap (BMHD), and should always be present (nested inside)
-#'         an ILBM chunk. It is interpreted as a named list containing the following elements:
-#'         \itemize{
-#'           \item{
-#'             \code{w} and \code{h} are positive \code{numeric} values specifying
-#'             the bitmap width and height in pixels. Note that the width
-#'             can be any positive whole number, whereas the bitmap data always
-#'             has a width divisible by 16.
-#'           }
-#'           \item{
-#'             \code{x} and \code{y} are \code{numeric} values specifying the plotting
-#'             position relative to the top left position of the screen.
-#'             Although required in the bitmap header. It is ignored in the
-#'             interpretation of bitmap images.
-#'           }
-#'           \item{
-#'             \code{nPlanes} is a positive value indicating the number of
-#'             bitplanes in the image. The number of colours in an image
-#'             can be calculated as \code{2^nPlanes}.
-#'           }
-#'           \item{
-#'             \code{Masking} indicates whether there are bitplanes that should
-#'             be masked (i.e. are treated as transparent). It is a \code{character}
-#'             string equalling any of the following: "\code{mskNone}",
-#'             "\code{mskHasMask}", "\code{mskHasTransparentColour}",
-#'             "\code{mskLasso}" or "\code{mskUnknown}". Only the first (no transparency)
-#'             and third (one of the colours should be treated as transparent)
-#'             id is currently interpreted correctly. The others are ignored.
-#'             "\code{mskUnknown}" means that an undocumented mask is applied
-#'             to the image.
-#'           }
-#'           \item{
-#'             \code{Compression} indicates whether the bitmap data is
-#'             compressed. It is a \code{character} string that can equal any
-#'             of the following: "\code{cmpNone}", "\code{cmpByteRun1}" or
-#'             "\code{cmpUnknown}". The latter means an undocumented form of
-#'             compression is applied and is currently ignored. In most cases
-#'             bitmap data is compressed with the \code{cmpByteRun1} algorithm
-#'             (\code{\link{packBitmap}}). In some cases, bitmap data is not
-#'             compressed (\code{cmpNone}).
-#'           }
-#'           \item{
-#'             \code{pad} is a \code{raw} byte that is only used to
-#'             align data. It is ignored in the interpretation.
-#'           }
-#'           \item{
-#'             \code{transparentColour} is a \code{numeric} value that indicates
-#'             which colour number in the palette should be treated as fully
-#'             transparent (when \code{Masking} equals
-#'             "\code{mskHasTransparentColour}").
-#'           }
-#'           \item{
-#'             \code{xAspect} and \code{yAspect} or positive \code{numeric}
-#'             values that indicate the aspect ratio of
-#'             the pixels in the image. Amiga screen modes allowed for some
-#'             extreme pixel aspect ratios. These values are used to stretch
-#'             the image to their intended display mode.
-#'           }
-#'           \item{
-#'             \code{pageWidth} and \code{pageHeight} are positive
-#'             \code{numeric} values indicating the size of the screen in which
-#'             the image should be displayed. They are ignored in the
-#'             interpretation of the image.
-#'           }
-#'         }
-#'       }
-#'       \item{
-#'         \code{IFF.CMAP} represents the colour map (CMAP) or palette of a bitmap image. Although common,
-#'         the chunk is optional and can be omitted from the parent ILBM chunk. It is interpreted as a
-#'         vector of colours (i.e., a \code{character} string formatted as `#RRGGBB' or named colours such as `blue').
-#'       }
-#'       \item{
-#'         \code{IFF.CAMG} represents a chunk with information with respect
-#'         to the display mode in which the bitmap image should be displayed.
-#'         This information can be used to determine the correct pixel aspect
-#'         ratio, or is sometimes required to correctly interpret the bitmap
-#'         information. The \code{IFF.CAMG} chunk is interpreted as a named list
-#'         containing the following elements:
-#'         \itemize{
-#'           \item{
-#'             \code{monitor}: a \code{factor} indicating the hardware monitor
-#'             on which the image was created and should be displayed (see 
-#'             \code{\link{amiga_monitors}}).
-#'           }
-#'           \item{
-#'             \code{display.mode}: a \code{factor} indicating the display
-#'             mode in which the image should be displayed (see
-#'             \code{\link{amiga_display_modes}}).
-#'           }
-#'         }
-#'       }
-#'       \item{
-#'         \code{IFF.CRNG} is an optional chunk nested in an ILBM chunk.
-#'         It represents a `colour range' and is used to cycle through
-#'         colours in the bitmap's palette in order to achieve
-#'         animation effects. It is interpreted as a named list with the
-#'         following elements. This chunk is currently not used with
-#'         the interpretation of ILBM images.
-#'         \itemize{
-#'           \item{
-#'             \code{padding} are two \code{raw} padding bytes and are
-#'             ignored when interpreted.
-#'           }
-#'           \item{
-#'             \code{rate} is a \code{numeric} value specifying the rate
-#'             at which the colours are cycled. The rate is in steps per
-#'             second.
-#'           }
-#'           \item{
-#'             \code{flags} is a flag that indicates how colours should
-#'             be cycled. It is a \code{character} string that can equal
-#'             any of the following: "\code{RNG_OFF}", "\code{RNG_ACTIVE}",
-#'             "\code{RNG_REVERSE}" or "\code{RNG_UNKNOWN}". When equal to the
-#'             first, colours are not cycled. When equal to the second, colours
-#'             are cycled. When equal to the third, colours are cycled in
-#'             reverse direction. When equal to the latter, an undocumented
-#'             form of cycling is applied.
-#'           }
-#'           \item{
-#'             \code{low} and \code{high} are \code{numeric} indices of
-#'             colours between which should be cycled. Only colour from
-#'             index \code{low} up to index \code{high} are affected.
-#'           }
-#'         }
-#'       }
-#'     }
-#'   }
-#'   \item{
-#'     \code{IFF.8SVX} represents 8-bit sampled voice chunks (8SVX). The original
-#'     Amiga supported 8-bit audio which could be stored using the IFF. 8SVX chunks
-#'     can contain separate audio samples for each octave. 8SVX chunks are usually
-#'     stored inside a FORM container. Its body chunk contains 8-bit PCM wave data that
-#'     could be compressed. When the 8SVX chunk is
-#'     interpreted with this package, a \code{list} is returned where each element
-#'     represents an octave given as a \code{\link[tuneR]{Wave}} object. Possible
-#'     chunks nested in 8SVX chunks and currently supported by this package are
-#'     as follows.
-#'     \itemize{
-#'       \item{
-#'         \code{IFF.VHDR} represents voice header chunks (VHDR). It contains (meta-)information about
-#'         the audio stored in the body of the parent 8SVX chunk. When interpreted, a named \code{list} is
-#'         returned with the following elements:
-#'         \itemize{
-#'           \item{
-#'             \code{oneShotHiSamples} is a \code{numeric} value indicating how many samples there are in the
-#'             audio wave of the first octave in the file, that should not be looped (repeated).
-#'           }
-#'           \item{
-#'             \code{repeatHiSamples} is a \code{numeric} value indicating how many samples there are in the
-#'             audio wave of the first octave in the file, that should be looped (repeated).
-#'           }
-#'           \item{
-#'             \code{samplesPerHiCycle} is a \code{numeric} value specifying the
-#'             number of samples per repeat cycle in the first octave, or 0 when unknown.
-#'             The number of \code{repeatHiSamples} should be an exact multiple of
-#'             \code{samplesPerHiCycle}.
-#'           }
-#'           \item{
-#'             \code{samplesPerSec} is a \code{numeric} value specifying the data
-#'             sampling rate.
-#'           }
-#'           \item{
-#'             \code{ctOctave} a positive whole \code{numeric} value indicating how many octaves are included.
-#'             In 8SVX files the audio wave is resampled for each octave. The wave data in the body starts with
-#'             the audio sample in the highest octave (least number of samples). The data is then followed by
-#'             each subsequent octave, where the number of samples increase by a factor of 2 for each octave.
-#'           }
-#'           \item{
-#'             \code{sCompression} is a \code{character} string indicating whether and how the wave data in the body
-#'             is compressed. It can have one of the following values: "\code{sCmpNone}" (no compression),
-#'             "\code{sCmpFibDelta}" (\code{\link{deltaFibonacciCompress}}ion is applied), "\code{sCmpUnknown}" (an
-#'             undocumented and unknown form of compression is applied).
-#'           }
-#'           \item{
-#'             \code{volume} is a numeric value between \code{0} (minimum) and \code{0x10000} (maximum) playback volume.
-#'           }
-#'         }
-#'       }
-#'       \item{
-#'         \code{IFF.CHAN} represents the channel chunk (CHAN). When interpreted it returns a named list with 1 named element:
-#'         "\code{channel}". It's value can be one of the following \code{character} strings "\code{LEFT}", "\code{RIGHT}" or
-#'         "\code{STEREO}". This indicates for how many (one or two) audio channels data is available in the body of the parent
-#'         8SVX chunk. It also indicates two which channels the audio should be played back.
-#'       }
-#'     }
-#'   }
-#'   \item{
-#'     \code{IFF.ANNO}, \code{IFF.AUTH}, \code{IFF.CHRS}, \code{IFF.NAME}, \code{IFF.TEXT} and \code{IFF.copyright}
-#'     are all unformatted text chunks that can be included optionally in any of the chunk types. Respectively, they
-#'     represent an annotation, the author's name, a generic character string, the name of the work, generic unformatted text,
-#'     and copyright text. They are interpreted as a \code{character} string.
-#'   }
-#' }
-#' @param x An S3 class \code{IFF.ANY} object that needs to be coerced into an
-#' \code{\link{IFFChunk-class}} object. \code{IFF.ANY} objects are created with the
-#' \code{\link{interpretIFFChunk}} method. \code{x} can also be a \code{character} string
-#' of a IFF chunk type (e.g., "\code{FORM}" or "\code{BMHD}"). In that case an
-#' \code{\link{IFFChunk}} object of that type is created with some basic content.
+#'  * `IFF.FORM` represents a FORM chunk, which is a container that can hold any kind of chunk.
+#'    When interpreted, it is represented as a `list`, where each element is an interpreted chunk
+#'    nested inside the FORM.
+#'  * `IFF.BODY` represents the actual data in an IFF file. However, without context
+#'    this chunk cannot be interpreted and is therefore interpreted as a vector of `raw` data.
+#'  * `IFF.ANIM` represents an animation (ANIM) chunk. When interpreted, it will return a `list` where each
+#'    element is an animation frame represented as an `IFF.ILBM` object. Each animation frame should be
+#'    nested inside an ILBM chunk nested inside a FORM chunk, nested inside an ANIM chunk.
+#'     * `IFF.ANHD` represents an ANimation HeaDer (ANHD) chunk. When interpreted,
+#'       it returns a named `list` containing the
+#'       following information:
+#'        * `operation` is a `character` string indicating how the bitmap
+#'          data for the animation frame is encoded. Can be one of the following:
+#'          "`standard`", "`XOR`", "`LongDeltaMode`",
+#'          "`ShortDeltaMode`", "`GeneralDeltamode`",
+#'          "`ByteVerticalCompression`", "`StereoOp5`", or
+#'          "`ShortLongVerticalDeltaMode`". Currently, only the
+#'          ByteVerticalCompression is implemented in this package.
+#'        * `mask` is a `vector` of 8 `logical` values. It is currently
+#'          ignored.
+#'        * `w` and `h` are positive `numeric` values, specifying
+#'          the width and height of the frame (should be identical for all frames).
+#'        * `x` and `y` are `numeric` values, specifying the plotting
+#'          position for the frame.
+#'        * `abstime` is a positive `numeric` value - currently unused - used for
+#'          timing the frame relative to the time the first frame was displayed. In
+#'          jiffies (1/60 sec).
+#'        * `reltime` is a positive `numeric` value for timing the frame
+#'          relative to time previous frame was displayed. In jiffies (1/60 sec).
+#'        * `interleave` is currently unused. It should be set to 0.
+#'        * `pad0` is a padding byte (`raw`) for future use.
+#'        * `flags` is a `vector` of 32 `logical` values. They contain
+#'          information on how the bitmap data is stored.
+#'        * `pad1` are 16 padding bytes (`raw`) for future use.
+#'     * `IFF.DPAN` represents an DPaint ANimation (DPAN) chunk. Some software will
+#'       require this chunk to correctly derive the total number of frames in the animation.
+#'       When interpreted, it will return a named `list` with the following elements:
+#'        * `version` a `numeric` version number.
+#'        * `nframes` a positive `numeric` value, indicating the number
+#'          of frames in the animation.
+#'        * `flags` a `vector` of 32 `logical` values. Ignored in
+#'          this package as it was intended for future implementations.
+#'     * `IFF.DLTA` represents a delta mode data chunk (DLTA). The first animation
+#'       frame is stored as a normal InterLeaved BitMap (ILBM) image as described below.
+#'       The following frames only store differences in bitmap data compared to the
+#'       previous frames but is not interleaved. They are thus incorrectly embedded in
+#'       an ILBM chunk (but is kept so for backward compatibility). When interpreted,
+#'       a `grDevices` raster object is returned only showing the differences. It
+#'       is not very meaningful to interpret these chunks on their own, but rather the
+#'       entire parent ANIM chunk.
+#'  * `IFF.ILBM` represents InterLeaved BitMap (ILBM) chunks. It is interpreted here as a
+#'    raster image (see [grDevices::as.raster()]). ILBM chunks are usually nested inside
+#'    a FORM container.
+#'     * `IFF.BMHD` represents the header chunk of a bitmap (BMHD), and should always be present
+#'       (nested inside) an ILBM chunk. It is interpreted as a named list containing the following elements:
+#'        * `w` and `h` are positive `numeric` values specifying
+#'          the bitmap width and height in pixels. Note that the width
+#'          can be any positive whole number, whereas the bitmap data always
+#'          has a width divisible by 16.
+#'        * `x` and `y` are `numeric` values specifying the plotting
+#'          position relative to the top left position of the screen.
+#'          Although required in the bitmap header. It is ignored in the
+#'          interpretation of bitmap images.
+#'        * `nPlanes` is a positive value indicating the number of
+#'          bitplanes in the image. The number of colours in an image
+#'          can be calculated as `2^nPlanes`.
+#'        * `Masking` indicates whether there are bitplanes that should
+#'          be masked (i.e. are treated as transparent). It is a `character`
+#'          string equalling any of the following: "`mskNone`",
+#'          "`mskHasMask`", "`mskHasTransparentColour`",
+#'          "`mskLasso`" or "`mskUnknown`". Only the first (no transparency)
+#'          and third (one of the colours should be treated as transparent)
+#'          id is currently interpreted correctly. The others are ignored.
+#'          "`mskUnknown`" means that an undocumented mask is applied
+#'          to the image.
+#'        * `Compression` indicates whether the bitmap data is
+#'          compressed. It is a `character` string that can equal any
+#'          of the following: "`cmpNone`", "`cmpByteRun1`" or
+#'          "`cmpUnknown`". The latter means an undocumented form of
+#'          compression is applied and is currently ignored. In most cases
+#'          bitmap data is compressed with the `cmpByteRun1` algorithm
+#'          ([packBitmap()]). In some cases, bitmap data is not
+#'          compressed (`cmpNone`).
+#'        * `pad` is a `raw` byte that is only used to
+#'          align data. It is ignored in the interpretation.
+#'        * `transparentColour` is a `numeric` value that indicates
+#'          which colour number in the palette should be treated as fully
+#'          transparent (when `Masking` equals
+#'          "`mskHasTransparentColour`").
+#'        * `xAspect` and `yAspect` or positive `numeric`
+#'          values that indicate the aspect ratio of
+#'          the pixels in the image. Amiga screen modes allowed for some
+#'          extreme pixel aspect ratios. These values are used to stretch
+#'          the image to their intended display mode.
+#'        * `pageWidth` and `pageHeight` are positive
+#'          `numeric` values indicating the size of the screen in which
+#'          the image should be displayed. They are ignored in the
+#'          interpretation of the image.
+#'     * `IFF.CMAP` represents the colour map (CMAP) or palette of a bitmap image. Although common,
+#'       the chunk is optional and can be omitted from the parent ILBM chunk. It is interpreted as a
+#'       vector of colours (i.e., a `character` string formatted as '#RRGGBB' or named colours such as
+#'       'blue').
+#'     * `IFF.CAMG` represents a chunk with information with respect
+#'       to the display mode in which the bitmap image should be displayed.
+#'       This information can be used to determine the correct pixel aspect
+#'       ratio, or is sometimes required to correctly interpret the bitmap
+#'       information. The `IFF.CAMG` chunk is interpreted as a named list
+#'       containing the following elements:
+#'        * `monitor`: a `factor` indicating the hardware monitor
+#'          on which the image was created and should be displayed (see 
+#'          [amiga_monitors()]).
+#'        * `display.mode`: a `factor` indicating the display
+#'          mode in which the image should be displayed (see
+#'          [amiga_display_modes()]).
+#'     * `IFF.CRNG` is an optional chunk nested in an ILBM chunk.
+#'       It represents a `colour range' and is used to cycle through
+#'       colours in the bitmap's palette in order to achieve
+#'       animation effects. It is interpreted as a named list with the
+#'       following elements. This chunk is currently not used with
+#'       the interpretation of ILBM images.
+#'        * `padding` are two `raw` padding bytes and are
+#'          ignored when interpreted.
+#'        * `rate` is a `numeric` value specifying the rate
+#'          at which the colours are cycled. The rate is in steps per
+#'          second.
+#'        * `flags` is a flag that indicates how colours should
+#'          be cycled. It is a `character` string that can equal
+#'          any of the following: "`RNG_OFF`", "`RNG_ACTIVE`",
+#'          "`RNG_REVERSE`" or "`RNG_UNKNOWN`". When equal to the
+#'          first, colours are not cycled. When equal to the second, colours
+#'          are cycled. When equal to the third, colours are cycled in
+#'          reverse direction. When equal to the latter, an undocumented
+#'          form of cycling is applied.
+#'        * `low` and `high` are `numeric` indices of
+#'          colours between which should be cycled. Only colour from
+#'          index `low` up to index `high` are affected.
+#'  * `IFF.8SVX` represents 8-bit sampled voice chunks (8SVX). The original
+#'    Amiga supported 8-bit audio which could be stored using the IFF. 8SVX chunks
+#'    can contain separate audio samples for each octave. 8SVX chunks are usually
+#'    stored inside a FORM container. Its body chunk contains 8-bit PCM wave data that
+#'    could be compressed. When the 8SVX chunk is
+#'    interpreted with this package, a `list` is returned where each element
+#'    represents an octave given as a [tuneR::Wave()] object. Possible
+#'    chunks nested in 8SVX chunks and currently supported by this package are
+#'    as follows.
+#'     * `IFF.VHDR` represents voice header chunks (VHDR). It contains (meta-)information about
+#'       the audio stored in the body of the parent 8SVX chunk. When interpreted, a named `list` is
+#'       returned with the following elements:
+#'        * `oneShotHiSamples` is a `numeric` value indicating how many samples there are in the
+#'          audio wave of the first octave in the file, that should not be looped (repeated).
+#'        * `repeatHiSamples` is a `numeric` value indicating how many samples there are in the
+#'          audio wave of the first octave in the file, that should be looped (repeated).
+#'        * `samplesPerHiCycle` is a `numeric` value specifying the
+#'          number of samples per repeat cycle in the first octave, or 0 when unknown.
+#'          The number of `repeatHiSamples` should be an exact multiple of
+#'          `samplesPerHiCycle`.
+#'        * `samplesPerSec` is a `numeric` value specifying the data
+#'          sampling rate.
+#'        * `ctOctave` a positive whole `numeric` value indicating how many octaves are included.
+#'          In 8SVX files the audio wave is resampled for each octave. The wave data in the body starts with
+#'          the audio sample in the highest octave (least number of samples). The data is then followed by
+#'          each subsequent octave, where the number of samples increase by a factor of 2 for each octave.
+#'        * `sCompression` is a `character` string indicating whether and how the wave data in the body
+#'          is compressed. It can have one of the following values: "`sCmpNone`" (no compression),
+#'          "`sCmpFibDelta`" ([deltaFibonacciCompress()]ion is applied), "`sCmpUnknown`" (an
+#'          undocumented and unknown form of compression is applied).
+#'        * `volume` is a numeric value between `0` (minimum) and `0x10000` (maximum) playback volume.
+#'     * `IFF.CHAN` represents the channel chunk (CHAN). When interpreted it returns a named list
+#'       with 1 named element:
+#'       "`channel`". It's value can be one of the following `character` strings "`LEFT`", "`RIGHT`" or
+#'       "`STEREO`". This indicates for how many (one or two) audio channels data is available in the
+#'       body of the parent
+#'       8SVX chunk. It also indicates two which channels the audio should be played back.
+#'  * `IFF.ANNO`, `IFF.AUTH`, `IFF.CHRS`, `IFF.NAME`, `IFF.TEXT` and `IFF.copyright`
+#'    are all unformatted text chunks that can be included optionally in any of the chunk types.
+#'    Respectively, they
+#'    represent an annotation, the author's name, a generic character string, the name of the work,
+#'    generic unformatted text,
+#'    and copyright text. They are interpreted as a `character` string.
+#' @param x An S3 class `IFF.ANY` object that needs to be coerced into an
+#' [IFFChunk-class()] object. `IFF.ANY` objects are created with the
+#' [interpretIFFChunk()] method. `x` can also be a `character` string
+#' of a IFF chunk type (e.g., "`FORM`" or "`BMHD`"). In that case an
+#' [IFFChunk()] object of that type is created with some basic content.
 #' @param ... Arguments passed onto methods underlying the interpretation of the
 #' specific IFF chunks. Allowed arguments depend on the specific type of IFF chunk that
-#' \code{x} represents.
-#' @returns Returns an \code{\link{IFFChunk-class}} representation of \code{x}.
+#' `x` represents.
+#' @returns Returns an [IFFChunk-class()] representation of `x`.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -1018,7 +903,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' ## This creates a basic colour palette:
 #' cmap <- IFFChunk("CMAP")
 #' }
-#' @references \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}
+#' @references <https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry>
 #' @name IFFChunk-method
 #' @rdname IFFChunk
 #' @export
@@ -1243,7 +1128,7 @@ print.IFFChunk <- function(x, ...) {
   ctypes <- function(z) {
     result <- paste0("- ", z@chunk.type)
     temp <- unlist(lapply(z@chunk.data, function(a) {
-      if ("IFFChunk" %in% class(a)) return(ctypes(a)) else return(NULL)
+      if (inherits(a, "IFFChunk")) return(ctypes(a)) else return(NULL)
     }))
     if (length(temp) > 0) result <- c(result, paste0("  ", temp))
     return(result)
@@ -1254,7 +1139,7 @@ print.IFFChunk <- function(x, ...) {
 
 as.list.IFFChunk <- function(x, ...) {
   slotList <- function(x) {
-    if ("raw" %in% class(x@chunk.data[[1]])) {
+    if (inherits(x@chunk.data[[1]], "raw")) {
       return(x@chunk.data[[1]])
     } else {
       result <- lapply(x@chunk.data, slotList)
@@ -1289,7 +1174,7 @@ as.list.IFFChunk <- function(x, ...) {
     } else if (chunk.type %in% c("ILBM", "8SVX", "ANIM")) {
       chunk.data <- .rawToIFFChunk(chunk.data, skip.size = F)
     }
-    if ("raw" %in% class(chunk.data)) chunk.data <- list(chunk.data)
+    if (inherits(chunk.data, "raw")) chunk.data <- list(chunk.data)
     chunks[[length(chunks) + 1]] <- methods::new("IFFChunk",
                                                  chunk.type = chunk.type,
                                                  chunk.data = chunk.data)
@@ -1306,22 +1191,22 @@ setGeneric("rawToIFFChunk", function(x) standardGeneric("rawToIFFChunk"))
 #' Coerce raw data to an IFFChunk class object
 #'
 #' Coerce raw data, as it would be stored in the Interchange File Format (IFF), and
-#' convert it into an \code{\link{IFFChunk}} class object.
+#' convert it into an [IFFChunk()] class object.
 #'
 #' This method should work for all IFF chunk types that are implemented in this package
-#' (see \code{\link{IFFChunk-method}} for details). For non-implemented chunks this method
+#' (see [IFFChunk-method()] for details). For non-implemented chunks this method
 #' may work properly as long as the chunks are nested inside a FORM type container chunk.
 #' This method is provided for your convenience, but it is recommended to import IFFChunk
-#' methods using the \code{\link{read.iff}} function. Use \code{\link[AmigaFFH]{as.raw}}
+#' methods using the [read.iff()] function. Use [AmigaFFH::as.raw()]
 #' to achieve the inverse of this method.
 #'
 #' @docType methods
 #' @rdname rawToIFFChunk
 #' @name rawToIFFChunk
 #' @aliases rawToIFFChunk,raw-method
-#' @param x A vector of raw data that needs to be converted into a \code{\link{IFFChunk}}
+#' @param x A vector of raw data that needs to be converted into a [IFFChunk()]
 #' class object.
-#' @returns Returns an \code{\link{IFFChunk}} class object based on \code{x}.
+#' @returns Returns an [IFFChunk()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## Get an IFFChunk object:

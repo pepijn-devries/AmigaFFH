@@ -8,21 +8,21 @@ rawToAmigaBasic(x, ...)
 }
 \arguments{
 \item{x}{A \code{vector} of \code{raw} data that is to be converted
-into an \code{\link{AmigaBasic}} class object.}
+into an \code{\link[=AmigaBasic]{AmigaBasic()}} class object.}
 
 \item{...}{Currently ignored.}
 }
 \value{
-An \code{\link{AmigaBasic}} class object based on \code{x}.
+An \code{\link[=AmigaBasic]{AmigaBasic()}} class object based on \code{x}.
 }
 \description{
-\code{\link{AmigaBasic}} objects are comprehensive representations of binary-encode Amiga Basic scripts.
-Use this function to convert raw content from encoded Amiga Basic scripts to an \code{\link{AmigaBasic}}
+\code{\link[=AmigaBasic]{AmigaBasic()}} objects are comprehensive representations of binary-encode Amiga Basic scripts.
+Use this function to convert raw content from encoded Amiga Basic scripts to an \code{\link[=AmigaBasic]{AmigaBasic()}}
 object.
 }
 \details{
 This function will convert raw data as stored in Amiga Basic files into its corresponding S3
-\code{\link{AmigaBasic}}-class object.
+\code{\link[=AmigaBasic]{AmigaBasic()}}-class object.
 }
 \examples{
 \dontrun{

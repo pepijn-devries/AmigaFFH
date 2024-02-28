@@ -10,27 +10,27 @@ write.AmigaBitmapFont(x, file, disk = NULL)
 write.AmigaBitmapFontSet(x, path = getwd(), disk = NULL)
 }
 \arguments{
-\item{x}{Respectively an \code{\link{AmigaBitmapFont}} or a
-\code{\link{AmigaBitmapFontSet}} object depending on which of the
+\item{x}{Respectively an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} or a
+\code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object depending on which of the
 write-functions is called. This is the object that will be written
 to the specified file.}
 
 \item{file}{A \code{character} string specifying the file location
-to which \code{x} (an \code{\link{AmigaBitmapFont}} object) needs to be written.
+to which \code{x} (an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object) needs to be written.
 It is common practice on the Amiga to use the font height in pixels as
 file name.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 
 \item{path}{A \code{character} string specifying the path where
-\code{x} (an \code{\link{AmigaBitmapFontSet}} object) needs to be stored.
+\code{x} (an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object) needs to be stored.
 The filename for the font set will be extracted from \code{x} using
-\code{\link{fontName}} followed by the *.font extension. A subdirectory
+\code{\link[=fontName]{fontName()}} followed by the *.font extension. A subdirectory
 will be created with the same name (without the extension) if it doesn't
-already exists. In this subdirectory all the nested \code{\link{AmigaBitmapFont}}
+already exists. In this subdirectory all the nested \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}
 objects are stored.}
 }
 \value{
@@ -39,20 +39,20 @@ file connection. Or, when \code{disk} is specified, a copy of
 \code{disk} is returned to which the file(s) is/are written.
 }
 \description{
-Functions to write \code{\link{AmigaBitmapFont}} and \code{\link{AmigaBitmapFontSet}}
+Functions to write \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} and \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
 class objects to files.
 }
 \details{
-\code{\link{AmigaBitmapFontSet}} class objects are written to a *.font
+\code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} class objects are written to a *.font
 file. The filename used for this purpose is obtained from the object
-itself using \code{\link{fontName}}. In addition, a subdirectory is
+itself using \code{\link[=fontName]{fontName()}}. In addition, a subdirectory is
 created automatically (when it doesn't already exist)
 to which al the separate bitmap images for each font height are written
 to individual files.
 
-\code{\link{AmigaBitmapFont}} class objects can also be written to a
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class objects can also be written to a
 file. In order to use it on a Commodore Amiga or emulator, it is better
-to embed the font bitmap in a font set (using \code{\link[AmigaFFH]{c}})
+to embed the font bitmap in a font set (using \code{\link[=c]{c()}})
 and write the set to corresponding files.
 }
 \examples{

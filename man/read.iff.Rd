@@ -11,23 +11,23 @@ read.iff(file, disk = NULL)
 binary data can be read.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
 \value{
-Returns a \code{\link{IFFChunk}} object read from the specified file.
+Returns a \code{\link[=IFFChunk]{IFFChunk()}} object read from the specified file.
 }
 \description{
-Read the Interchange File Format (IFF) as an \code{\link{IFFChunk}} object.
+Read the Interchange File Format (IFF) as an \code{\link[=IFFChunk]{IFFChunk()}} object.
 }
 \details{
-Information is stored as `chunks' in IFF files (see \code{\link{IFFChunk}}).
+Information is stored as `chunks' in IFF files (see \code{\link[=IFFChunk]{IFFChunk()}}).
 Each chunk should at least contain a label of the type of chunk and the data
 for that chunk. This function reads all chunks from a valid IFF file, including
-all nested chunks and stores them in an \code{\link{IFFChunk}} object. IFF
+all nested chunks and stores them in an \code{\link[=IFFChunk]{IFFChunk()}} object. IFF
 files can hold any kind of data (e.g. images or audio), this read function
-does not interpret the file. Use \code{\link{interpretIFFChunk}} for that
+does not interpret the file. Use \code{\link[=interpretIFFChunk]{interpretIFFChunk()}} for that
 purpose.
 }
 \examples{

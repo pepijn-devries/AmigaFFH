@@ -8,7 +8,7 @@
 \method{as.character}{AmigaBasic}(x, ...)
 }
 \arguments{
-\item{x}{An \code{\link{AmigaBasic}} class object that needs to be
+\item{x}{An \code{\link[=AmigaBasic]{AmigaBasic()}} class object that needs to be
 coerced to its \code{character} representation.}
 
 \item{...}{Currently ignored.}
@@ -19,11 +19,11 @@ each element of the \code{vector} is a \code{character} representation
 of a line of Amiga Basic code stored in \code{x}.
 }
 \description{
-Coerce an \code{\link{AmigaBasic}}-class object to its character representation
+Coerce an \code{\link[=AmigaBasic]{AmigaBasic()}}-class object to its character representation
 }
 \details{
 Amiga Basic files are encoded in a binary format and are also stored as such
-in \code{\link{AmigaBasic}}-class objects. Use this function to convert
+in \code{\link[=AmigaBasic]{AmigaBasic()}}-class objects. Use this function to convert
 these objects into legible \code{character} data.
 }
 \examples{

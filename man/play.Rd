@@ -11,29 +11,29 @@
 \S4method{play}{IFFChunk}(object, player = NULL, ...)
 }
 \arguments{
-\item{object}{An \code{\link{IFFChunk-class}} object that needs to be played. The \code{\link{IFFChunk}}
+\item{object}{An \code{\link[=IFFChunk-class]{IFFChunk-class()}} object that needs to be played. The \code{\link[=IFFChunk]{IFFChunk()}}
 should be of type FORM, containing an 8SVX chunk, or an 8SVX itself. \code{object} can also be of class
-\code{IFF.FORM} or \code{IFF.8SVX}. See \code{\link[tuneR]{play}} for other objects that can be played.}
+\code{IFF.FORM} or \code{IFF.8SVX}. See \code{\link[tuneR:play]{tuneR::play()}} for other objects that can be played.}
 
-\item{player}{Path to the external audio player. See \code{\link[tuneR]{play}} for more details.}
+\item{player}{Path to the external audio player. See \code{\link[tuneR:play]{tuneR::play()}} for more details.}
 
-\item{...}{Arguments passed onto the tuneR \code{\link{play}} routine.}
+\item{...}{Arguments passed onto the tuneR \code{\link[=play]{play()}} routine.}
 }
 \value{
-Returns a list of data returned by tuneR's \code{\link[tuneR]{play}}, for which the output
+Returns a list of data returned by tuneR's \code{\link[tuneR:play]{tuneR::play()}}, for which the output
 is undocumented.
 }
 \description{
-A wrapper for \code{\link{tuneR}}-package's \code{\link[tuneR]{play}} routine. Allowing it to play
+A wrapper for \code{\link[=tuneR]{tuneR()}}-package's \code{\link[tuneR:play]{tuneR::play()}} routine. Allowing it to play
 Amiga audio (for instance stored in an 8SVX Interchange File Format).
 }
 \details{
-A wrapper for \code{\link{tuneR}}-package's \code{\link[tuneR]{play}} routine. It will try to play
+A wrapper for \code{\link[=tuneR]{tuneR()}}-package's \code{\link[tuneR:play]{tuneR::play()}} routine. It will try to play
 audio using an external audio player. When 8SVX audio is played, each octave is played separately.
 When a FORM container contains multiple 8SVX samples, they are also played successively.
 
 Note that a separate package is developed to interpret and play ProTracker modules and samples
-(\code{\link[ProTrackR:ProTrackR-package]{ProTrackR}}).
+(\code{\link[ProTrackR:ProTrackR-package]{ProTrackR()}}).
 }
 \examples{
 \dontrun{

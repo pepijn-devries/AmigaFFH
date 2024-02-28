@@ -11,7 +11,7 @@ read.SysConfig(file, disk = NULL)
 Can also be a connection that allows reading binary data.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
