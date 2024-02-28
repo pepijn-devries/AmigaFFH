@@ -1,4 +1,4 @@
-AmigaFFH v0.4.4 (Release date: 2024-02-28)
+AmigaFFH v0.4.5 (Release date: 2024-02-28)
 =============
 
  * Added README
