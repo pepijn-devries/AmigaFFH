@@ -28,7 +28,7 @@ dither(x, method, ...)
 }
 \arguments{
 \item{x}{Original image data that needs to be dithered. Should be a raster object
-(\code{\link[grDevices]{as.raster}}), or a matrix of \code{character} string
+(\code{\link[grDevices:as.raster]{grDevices::as.raster()}}), or a matrix of \code{character} string
 representing colours.}
 
 \item{method}{A \code{character} string indicating which dithering method should
@@ -45,7 +45,7 @@ no dithering is applied.}
 Amiga display mode should be used when dithering. By default
 \sQuote{\code{none}} is used (no special mode). In addition,
 \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
-See \code{\link{rasterToBitmap}} for more details.}
+See \code{\link[=rasterToBitmap]{rasterToBitmap()}} for more details.}
 }
 \value{
 Returns a \code{matrix} with the same dimensions as \code{x} containing

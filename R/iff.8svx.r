@@ -76,24 +76,24 @@ plot.IFF.8SVX <- function(x, y, ...) {
 
 #' Playing Amiga audio data
 #' 
-#' A wrapper for \code{\link{tuneR}}-package's \code{\link[tuneR]{play}} routine. Allowing it to play
+#' A wrapper for [tuneR()]-package's [tuneR::play()] routine. Allowing it to play
 #' Amiga audio (for instance stored in an 8SVX Interchange File Format).
 #' 
-#' A wrapper for \code{\link{tuneR}}-package's \code{\link[tuneR]{play}} routine. It will try to play
+#' A wrapper for [tuneR()]-package's [tuneR::play()] routine. It will try to play
 #' audio using an external audio player. When 8SVX audio is played, each octave is played separately.
 #' When a FORM container contains multiple 8SVX samples, they are also played successively.
 #' 
 #' Note that a separate package is developed to interpret and play ProTracker modules and samples
-#' (\code{\link[ProTrackR:ProTrackR-package]{ProTrackR}}).
+#' ([`ProTrackR()`][ProTrackR::ProTrackR-package]).
 #' @rdname play
 #' @name play
 #' @aliases play,ANY-method
-#' @param object An \code{\link{IFFChunk-class}} object that needs to be played. The \code{\link{IFFChunk}}
-#' should be of type FORM, containing an 8SVX chunk, or an 8SVX itself. \code{object} can also be of class
-#' \code{IFF.FORM} or \code{IFF.8SVX}. See \code{\link[tuneR]{play}} for other objects that can be played.
-#' @param player Path to the external audio player. See \code{\link[tuneR]{play}} for more details.
-#' @param ... Arguments passed onto the tuneR \code{\link{play}} routine.
-#' @return Returns a list of data returned by tuneR's \code{\link[tuneR]{play}}, for which the output
+#' @param object An [IFFChunk-class()] object that needs to be played. The [IFFChunk()]
+#' should be of type FORM, containing an 8SVX chunk, or an 8SVX itself. `object` can also be of class
+#' `IFF.FORM` or `IFF.8SVX`. See [tuneR::play()] for other objects that can be played.
+#' @param player Path to the external audio player. See [tuneR::play()] for more details.
+#' @param ... Arguments passed onto the tuneR [play()] routine.
+#' @return Returns a list of data returned by tuneR's [tuneR::play()], for which the output
 #' is undocumented.
 #' @examples
 #' \dontrun{
@@ -109,13 +109,13 @@ plot.IFF.8SVX <- function(x, y, ...) {
 #' @author Pepijn de Vries
 #' @export
 setMethod("play", "ANY", function(object, player = NULL, ...) {
-  if ("IFF.FORM" %in% class(object)) {
+  if (inherits(object, "IFF.FORM")) {
     invisible(lapply(object, function(x) {
       lapply(x, function(y) {
         tuneR::play(y, ...)
       })
     }))
-  } else if ("IFF.8SVX" %in% class(object)) {
+  } else if (inherits(object, "IFF.8SVX")) {
     invisible(lapply(object, function(x) {
       tuneR::play(x, ...)
     }))
@@ -134,38 +134,38 @@ setMethod("play", "IFFChunk", function(object, player = NULL, ...) {
 
 #' Convert WaveMC objects into an Interchange File Format object
 #'
-#' Convert \code{\link[tuneR]{WaveMC}} objects (or objects that can be coerced to
-#' \code{WaveMC} objects) into an \code{\link{IFFChunk-class}} object which
-#' can be stored as a valid Iterchange File Format (\code{\link{write.iff}}).
+#' Convert [tuneR::WaveMC()] objects (or objects that can be coerced to
+#' `WaveMC` objects) into an [IFFChunk-class()] object which
+#' can be stored as a valid Iterchange File Format ([write.iff()]).
 #'
-#' \code{\link[tuneR]{WaveMC}} objects can be read from contemporary file containers
-#' with \code{\link[tuneR]{readWave}} or \code{\link[tuneR]{readMP3}}. With this
-#' function such objects can be converted into an \code{\link{IFFChunk-class}} object
-#' which can be stored conform the Interchange File Format (\code{\link{write.iff}}).
+#' [tuneR::WaveMC()] objects can be read from contemporary file containers
+#' with [tuneR::readWave()] or [tuneR::readMP3()]. With this
+#' function such objects can be converted into an [IFFChunk-class()] object
+#' which can be stored conform the Interchange File Format ([write.iff()]).
 #' 
-#' When \code{x} is not a pcm formatted 8-bit sample, \code{x} will first be
+#' When `x` is not a pcm formatted 8-bit sample, `x` will first be
 #' normalised and scaled to a pcm-formatted 8-bit sample using
-#' \code{\link[tuneR]{normalize}}. If you don't like the result you need to convert
+#' [tuneR::normalize()]. If you don't like the result you need to convert
 #' the sample to 8-bit pcm yourself before calling this function.
 #'
 #' @rdname WaveToIFF
 #' @name WaveToIFF
-#' @param x A \code{\link[tuneR]{WaveMC}} object that needs to be converted into an \code{\link{IFFChunk}} object. \code{x}
-#' can also be any other class object that can be coerced into a \code{\link[tuneR]{WaveMC}} object. \code{\link[tuneR]{Wave}}
-#' and \code{\link[ProTrackR:PTSample-class]{PTSample}} objects are therefore also allowed.
+#' @param x A [tuneR::WaveMC()] object that needs to be converted into an [IFFChunk()] object. `x`
+#' can also be any other class object that can be coerced into a [tuneR::WaveMC()] object. [tuneR::Wave()]
+#' and [`PTSample()`][ProTrackR::PTSample-class] objects are therefore also allowed.
 #' @param loop.start If the sample should be looped from a specific position to the
 #' end of the sample, this argument specifies the starting position in samples (with
-#' a base of 0) for looping. \code{loop.start} therefore should be a whole non-negative
-#' number. When set to \code{NA} or negative values, the sample will not be looped.
-#' @param octaves A whole positive \code{numeric} value indicating the number of octaves
+#' a base of 0) for looping. `loop.start` therefore should be a whole non-negative
+#' number. When set to `NA` or negative values, the sample will not be looped.
+#' @param octaves A whole positive `numeric` value indicating the number of octaves
 #' that should be stored in the resulting IFF chunk. The original wave will be resampled
 #' for each value larger than 1. Each subsequent octave will contain precisely twice
 #' as many samples as the previous octave.
-#' @param compress A \code{character} string indicating whether compression should be applied to the waveform. "\code{sCmpNone}"
-#' (default) applies no compression, "\code{sCmpFibDelta}" applies the lossy \code{\link{deltaFibonacciCompress}}ion.
+#' @param compress A `character` string indicating whether compression should be applied to the waveform. "`sCmpNone`"
+#' (default) applies no compression, "`sCmpFibDelta`" applies the lossy [deltaFibonacciCompress()]ion.
 #' @param ... Currently ignored.
-#' @return Returns an \code{\link{IFFChunk-class}} object with a FORM container that
-#' contains an 8SVX waveform based on \code{x}.
+#' @return Returns an [IFFChunk-class()] object with a FORM container that
+#' contains an 8SVX waveform based on `x`.
 #' @examples
 #' \dontrun{
 #' ## First get an audio sample from the ProTrackR package
@@ -186,7 +186,7 @@ setMethod("play", "IFFChunk", function(object, player = NULL, ...) {
 #' sine.iff <- WaveToIFF(sin((0:2000)/20))
 #' }
 #' @family iff.operations
-#' @references \url{https://en.wikipedia.org/wiki/8SVX}
+#' @references <https://en.wikipedia.org/wiki/8SVX>
 #' @author Pepijn de Vries
 #' @export
 WaveToIFF <- function(x, loop.start = NA, octaves = 1, compress = c("sCmpNone", "sCmpFibDelta"), ...) {

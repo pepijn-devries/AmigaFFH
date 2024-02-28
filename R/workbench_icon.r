@@ -16,7 +16,7 @@
 #' memory pointers that are really not necassary to store in a file.
 #' 
 #' The S3 AmigaIcon class is used to represent these complex files as a named
-#' \code{list}. The elements in that \code{list} have mostly identical
+#' `list`. The elements in that `list` have mostly identical
 #' names as listed in the document at the top referenced below. The names are usually
 #' self-explanatory, but the referred documents can also be
 #' consulted to obtain more detailed information with respect to each of
@@ -25,17 +25,17 @@
 #' 
 #' It is possible to change the values of the list, but not all values may be valid.
 #' Note that they will not be fully checked for validity. Invalid values may result in errors
-#' when writing to a binary file using \code{\link{write.AmigaIcon}}, or may simply not
+#' when writing to a binary file using [write.AmigaIcon()], or may simply not
 #' work properly on an Amiga or in an emulator.
 #' 
 #' The original `.info' file could be extended with NewIcon or with an OS3.5
-#' \code{\link{IFFChunk}} data, that allowed for icons with larger colour depths.
+#' [IFFChunk()] data, that allowed for icons with larger colour depths.
 #' These extensions are currently not implemented.
 #' 
-#' Use \code{\link{simpleAmigaIcon}} for creating a simple \code{AmigaIcon} object which can
-#' be modified. Use \code{\link{read.AmigaIcon}} to read, and \code{\link{write.AmigaIcon}}
-#' to write workbench icon files (*.info). With \code{\link{rawToAmigaIcon}} and
-#' \code{\link[AmigaFFH]{as.raw}} \code{AmigaIcon} can be coerced back and forth from
+#' Use [simpleAmigaIcon()] for creating a simple `AmigaIcon` object which can
+#' be modified. Use [read.AmigaIcon()] to read, and [write.AmigaIcon()]
+#' to write workbench icon files (*.info). With [rawToAmigaIcon()] and
+#' [AmigaFFH::as.raw()] `AmigaIcon` can be coerced back and forth from
 #' and to its raw (binary) form.
 #' @docType class
 #' @name AmigaIcon
@@ -43,10 +43,10 @@
 #' @family AmigaIcon.operations
 #' @author Pepijn de Vries
 #' @references
-#' \url{http://www.evillabs.net/wiki/index.php/Amiga_Icon_Formats}
-#' \url{http://fileformats.archiveteam.org/wiki/Amiga_Workbench_icon}
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node0241.html}
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node05D6.html}
+#' <http://www.evillabs.net/wiki/index.php/Amiga_Icon_Formats>
+#' <http://fileformats.archiveteam.org/wiki/Amiga_Workbench_icon>
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node0241.html>
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node05D6.html>
 NULL
 
 .icon.data.head <- data.frame(
@@ -97,30 +97,30 @@ NULL
 #'
 #' Graphical representation of files and directories (icons) are stored as
 #' separate files (with the .info extension) on the Amiga. This function writes
-#' \code{\link{AmigaIcon}} class objects to such files.
+#' [AmigaIcon()] class objects to such files.
 #'
-#' This function creates basic \code{\link{AmigaIcon}} objects which
+#' This function creates basic [AmigaIcon()] objects which
 #' can be modified afterwards. It uses simple generic images to represent
 #' different types of files or directories.
 #'
 #' @rdname simpleAmigaIcon
 #' @name simpleAmigaIcon
-#' @param version A \code{character} string indicating the Amiga OS version
-#' with which the icon should be compatible. "\code{OS2.x}" indicates
-#' >=OS2.0 and "\code{OS1.x}" indicates <OS2.0.
-#' @param type A \code{character} string indicating the type of object (file, disk, directory, etc.)
+#' @param version A `character` string indicating the Amiga OS version
+#' with which the icon should be compatible. "`OS2.x`" indicates \>=OS2.0
+#' and "`OS1.x`" indicates <OS2.0.
+#' @param type A `character` string indicating the type of object (file, disk, directory, etc.)
 #' the icon should represent. See the `Usage' section for all posible options.
-#' @param two.images A single \code{logical} value, indicating whether
+#' @param two.images A single `logical` value, indicating whether
 #' the selected icon is depicted as a second image (in which case the
-#' icon contains two images). The default value is \code{TRUE}.
-#' @param back.fill A single \code{logical} value, indicating whether
+#' icon contains two images). The default value is `TRUE`.
+#' @param back.fill A single `logical` value, indicating whether
 #' the selected image of the icon should use the `back fill' mode (default).
-#' If set to \code{FALSE} `complement' mode is used. Note that
+#' If set to `FALSE` `complement' mode is used. Note that
 #' back fill is not compatible when the icon holds two images. In the
 #' `complement' mode, the image colours are inverted when selected.
 #' In the `back fill' exterior first colour is not inverted.
-#' @param ... Reserverd for additional arguments. Currently ignored.
-#' @returns Returns a simple S3 object of class \code{\link{AmigaIcon}}.
+#' @param ... Reserved for additional arguments. Currently ignored.
+#' @returns Returns a simple S3 object of class [AmigaIcon()].
 #' @examples
 #' \dontrun{
 #' ## Create an AmigaIcon object using the default arguments:
@@ -227,22 +227,22 @@ simpleAmigaIcon <- function(version    = c("OS1.x", "OS2.x"),
 
 #' Coerce raw data into an AmigaIcon class object
 #'
-#' \code{\link{AmigaIcon}} objects are comprehensive representations of binary Amiga
-#' Workbench icon files (*.info). Use this function to convert \code{raw} data from
-#' such a file to an \code{\link{AmigaIcon}} object.
+#' [AmigaIcon()] objects are comprehensive representations of binary Amiga
+#' Workbench icon files (*.info). Use this function to convert `raw` data from
+#' such a file to an [AmigaIcon()] object.
 #'
 #' Icons files (*.info) were used as a graphical representations of files and
 #' directories on the Commodore Amiga. This function will convert the raw data from such files
-#' into a more comprehensive names list (see \code{\link{AmigaIcon}}). Use
-#' \code{\link[AmigaFFH]{as.raw}} to achieve the inverse.
+#' into a more comprehensive names list (see [AmigaIcon()]). Use
+#' [AmigaFFH::as.raw()] to achieve the inverse.
 #'
 #' @rdname rawToAmigaIcon
 #' @name rawToAmigaIcon
-#' @param x A vector of \code{raw} data that needs to be converted into an S3
-#' \code{\link{AmigaIcon}} class object.
-#' @param palette Provide a palette (\code{vector} of colours) for the icon bitmap image.
-#' When set to \code{NULL} (default) the standard Amiga Workbench palette will be used.
-#' @returns Returns an \code{\link{AmigaIcon}} class object based on \code{x}.
+#' @param x A vector of `raw` data that needs to be converted into an S3
+#' [AmigaIcon()] class object.
+#' @param palette Provide a palette (`vector` of colours) for the icon bitmap image.
+#' When set to `NULL` (default) the standard Amiga Workbench palette will be used.
+#' @returns Returns an [AmigaIcon()] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## generate a simple AmigaIcon object:
@@ -373,41 +373,41 @@ rawToAmigaIcon <- function(x, palette = NULL) {
 
 #' Plot AmigaFFH objects
 #' 
-#' Plot AmigaFFH objects using \code{base} plotting routines.
+#' Plot AmigaFFH objects using `base` plotting routines.
 #' 
 #' A plotting routine is implemented for most AmigaFFH objects. See the usage section
 #' for all supported objects.
 #' @rdname plot
 #' @name plot
 #' @param x An AmigaFFH object to be plotted. See usage section for supported object
-#' classes. If \code{x} is an \code{\link{AmigaBitmapFont}} or \code{\link{AmigaBitmapFontSet}}
+#' classes. If `x` is an [AmigaBitmapFont()] or [AmigaBitmapFontSet()]
 #' class object, it will plot the full bitmap that is used to extract the font glyphs.
-#' @param y When \code{x} is an \code{\link{AmigaIcon}} class object, \code{y} can be used as
-#' an index. In that case, when \code{y=1} the first icon image is shown. When \code{y=2}
+#' @param y When `x` is an [AmigaIcon()] class object, `y` can be used as
+#' an index. In that case, when `y=1` the first icon image is shown. When `y=2`
 #' the selected icon image is shown.
 #' 
-#' When \code{x} is an \code{\link{AmigaBitmapFontSet}} class
-#' object, \code{y} can be used to plot the bitmap of a specific font height (\code{y}).
+#' When `x` is an [AmigaBitmapFontSet()] class
+#' object, `y` can be used to plot the bitmap of a specific font height (`y`).
 #' 
-#' When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{y} can be used to select a
-#' specific layer of the shape to plot, which can be one of \code{"bitmap"}, \code{"shadow"} or \code{"collision"}.
-#' @param asp A \code{numeric} value indicating the aspect ratio for the plot. For
+#' When `x` is an [AmigaBasicShape()] class object, `y` can be used to select a
+#' specific layer of the shape to plot, which can be one of `"bitmap"`, `"shadow"` or `"collision"`.
+#' @param asp A `numeric` value indicating the aspect ratio for the plot. For
 #' many AmigaFFH, the aspect ratio will be based on the Amiga display mode when known.
-#' For \code{\link{AmigaIcon}} objects a default aspect ratio of \code{2} is used (tall
+#' For [AmigaIcon()] objects a default aspect ratio of `2` is used (tall
 #' pixels).
 #' 
-#' When \code{x} is an \code{\link{AmigaBitmapFont}} or \code{\link{AmigaBitmapFontSet}} object,
-#' an aspect ratio of 1 is used by default. When the \code{TALLDOT} flag
+#' When `x` is an [AmigaBitmapFont()] or [AmigaBitmapFontSet()] object,
+#' an aspect ratio of 1 is used by default. When the `TALLDOT` flag
 #' is set for that font, the aspect ratio s multiplied by 2. When the
-#' \code{WIDEDOT} flag is set, it will be divided by 2.
+#' `WIDEDOT` flag is set, it will be divided by 2.
 #' 
 #' A custom aspect ratio can also be used and will override the ratios specified above.
-#' @param ... Parameters passed onto the generic \code{graphics} plotting routine.
+#' @param ... Parameters passed onto the generic `graphics` plotting routine.
 #' 
-#' When \code{x} is an \code{\link{AmigaBitmapFont}} or an \code{\link{AmigaBitmapFontSet}}
-#' object, '\code{...}' can also be used for arguments that need to be
-#' passed onto the \code{\link[AmigaFFH]{as.raster}} function.
-#' @returns Returns \code{NULL} silently.
+#' When `x` is an [AmigaBitmapFont()] or an [AmigaBitmapFontSet()]
+#' object, '`...`' can also be used for arguments that need to be
+#' passed onto the [AmigaFFH::as.raster()] function.
+#' @returns Returns `NULL` silently.
 #' @examples
 #' \dontrun{
 #' ## load an IFF file
@@ -605,28 +605,28 @@ as.raw.AmigaIcon <- function(x, ...) {
 #'
 #' Graphical representation of files and directories (icons) are stored as
 #' separate files (with the .info extension) on the Amiga. This function writes
-#' \code{\link{AmigaIcon}} class objects to such files.
+#' [AmigaIcon()] class objects to such files.
 #'
-#' The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
+#' The [AmigaIcon()] S3 object provides a comprehensive format
 #' for Amiga icons, which are used as a graphical representation of files
-#' and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
+#' and directories on the Amiga. The [AmigaIcon()] is a named
 #' list containing all information of an icon. Use this function to
 #' write this object to a file which can be used on the Commodore Amiga
 #' or emulator.
 #'
 #' @rdname write.AmigaIcon
 #' @name write.AmigaIcon
-#' @param x An \code{\link{AmigaIcon}} class object.
-#' @param file A \code{character} string representing the file name to which the
+#' @param x An [AmigaIcon()] class object.
+#' @param file A `character` string representing the file name to which the
 #' icon data should be written.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk to which the `file` should be
+#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @returns Returns \code{NULL} or an \code{integer} status passed on by the
-#' \code{\link{close}} function, that is used to close the file connection.
-#' It is returned invisibly. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file is written.
+#' When set to `NULL`, this argument is ignored.
+#' @returns Returns `NULL` or an `integer` status passed on by the
+#' [close()] function, that is used to close the file connection.
+#' It is returned invisibly. Or, when `disk` is specified, a copy of
+#' `disk` is returned to which the file is written.
 #' 
 #' @examples
 #' \dontrun{
@@ -641,7 +641,7 @@ as.raw.AmigaIcon <- function(x, ...) {
 #' @author Pepijn de Vries
 #' @export
 write.AmigaIcon <- function(x, file, disk = NULL) {
-  if (!"AmigaIcon" %in% class(x)) stop("x should be of S3 class AmigaIcon.")
+  if (!inherits(x, "AmigaIcon")) stop("x should be of S3 class AmigaIcon.")
   .write.generic(x, file, disk)
 }
 
@@ -649,25 +649,25 @@ write.AmigaIcon <- function(x, file, disk = NULL) {
 #'
 #' Graphical representation of files and directories (icons) are stored as
 #' separate files (with the .info extension) on the Amiga. This function reads such files
-#' and imports them as \code{\link{AmigaIcon}} class objects.
+#' and imports them as [AmigaIcon()] class objects.
 #'
-#' The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
+#' The [AmigaIcon()] S3 object provides a comprehensive format
 #' for Amiga icons, which are used as a graphical representation of files
-#' and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
+#' and directories on the Amiga. The [AmigaIcon()] is a named
 #' list containing all information of an icon. Use this function to
 #' read an Amiga icon (with the .info extension) from a file and convert
-#' it into an \code{\link{AmigaIcon}} object.
+#' it into an [AmigaIcon()] object.
 #'
 #' @rdname read.AmigaIcon
 #' @name read.AmigaIcon
-#' @param file A \code{character} string representing the file name from which the
+#' @param file A `character` string representing the file name from which the
 #' icon data should be read.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @param ... Arguments passed on to \code{\link{rawToAmigaIcon}}.
-#' @returns Returns an \code{\link{AmigaIcon}} class object as read from the \code{file}.
+#' When set to `NULL`, this argument is ignored.
+#' @param ... Arguments passed on to [rawToAmigaIcon()].
+#' @returns Returns an [AmigaIcon()] class object as read from the `file`.
 #' @examples
 #' \dontrun{
 #' ## create a simple AmigaIcon:

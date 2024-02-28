@@ -21,23 +21,23 @@
 #' of the file.
 #' 
 #' The SysConfig object is a comprehensive representation of the binary
-#' system-configuration file. It is a a \code{list} where the elements have identical
+#' system-configuration file. It is a a `list` where the elements have identical
 #' names as listed in the documents provided the references. The names are usually
 #' self-explanatory, but the referred documents can also be
 #' consulted to obtain more detailed information with respect to each of
-#' these elements. The mouse pointer is included as a \code{\link{hardwareSprite}} object
-#' in the list. The pointer image can be replaced by a different \code{\link{hardwareSprite}},
+#' these elements. The mouse pointer is included as a [hardwareSprite()] object
+#' in the list. The pointer image can be replaced by a different [hardwareSprite()],
 #' but make sure it has an height of 16 pixels.
 #' 
 #' It is possible to change the values of the list, but not all values may be valid.
 #' Note that they will not be fully checked for validity. Invalid values may result in errors
-#' when writing to a binary file using \code{\link{write.SysConfig}}, or may simply not
+#' when writing to a binary file using [write.SysConfig()], or may simply not
 #' work properly on an Amiga or in an emulator.
 #' 
-#' Use \code{\link{simpleSysConfig}} for creating a simple SysConfig object which can
-#' be modified. Use \code{\link{read.SysConfig}} to read, and \code{\link{write.SysConfig}}
-#' to write system-configuration files. With \code{\link{rawToSysConfig}} and
-#' \code{\link[AmigaFFH]{as.raw}} SysConfig can be coerced back and forth from and to
+#' Use [simpleSysConfig()] for creating a simple SysConfig object which can
+#' be modified. Use [read.SysConfig()] to read, and [write.SysConfig()]
+#' to write system-configuration files. With [rawToSysConfig()] and
+#' [AmigaFFH::as.raw()] SysConfig can be coerced back and forth from and to
 #' its raw (binary) form.
 #' 
 #' @docType class
@@ -46,9 +46,9 @@
 #' @family SysConfig.operations
 #' @author Pepijn de Vries
 #' @references
-#' \url{https://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS}
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node00D5.html}
-#' \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node063B.html}
+#' <https://wiki.amigaos.net/wiki/Preferences#Preferences_in_1.3_and_Older_Versions_of_the_OS>
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node00D5.html>
+#' <http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_3._guide/node063B.html>
 NULL
 
 #' @rdname plot
@@ -180,20 +180,20 @@ as.raw.SysConfig <- function(x, ...) {
 
 #' Read an Amiga system-configuration file
 #'
-#' Read a binary Amiga system-configuration file and return as \link{SysConfig} object.
+#' Read a binary Amiga system-configuration file and return as [SysConfig] object.
 #'
 #' Amiga OS 1.x stored system preferences in a binary system-configuration file. This
-#' function returns the file in a comprehensive format (a \link{SysConfig} object).
+#' function returns the file in a comprehensive format (a [SysConfig] object).
 #'
 #' @rdname read.SysConfig
 #' @name read.SysConfig
 #' @param file The file name of a system-configuration file to be read.
 #' Can also be a connection that allows reading binary data.
-#' @param disk A virtual Commodore Amiga disk from which the \code{file} should be
-#' read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk from which the `file` should be
+#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @return Returns an S3 \link{SysConfig} class object based on the file that is read.
+#' When set to `NULL`, this argument is ignored.
+#' @return Returns an S3 [SysConfig] class object based on the file that is read.
 #' @examples
 #' \dontrun{
 #' ## Put a simple SysConfig object into the tempdir:
@@ -216,24 +216,24 @@ read.SysConfig <- function(file, disk = NULL) {
 
 #' Write an Amiga system-configuration file
 #'
-#' Write a \link{SysConfig} class object to an Amiga binary system-configuration file.
+#' Write a [SysConfig] class object to an Amiga binary system-configuration file.
 #'
 #' Amiga OS 1.x stored system preferences in a binary system-configuration file. This
-#' function writes a \link{SysConfig} class object as such a binary file. This file
+#' function writes a [SysConfig] class object as such a binary file. This file
 #' can be used on an Amiga or in an emulator.
 #'
 #' @rdname write.SysConfig
 #' @name write.SysConfig
-#' @param x An S3 \link{SysConfig} class object.
+#' @param x An S3 [SysConfig] class object.
 #' @param file A file name to which the binary file should be written.
-#' @param disk A virtual Commodore Amiga disk to which the \code{file} should be
-#' written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+#' @param disk A virtual Commodore Amiga disk to which the `file` should be
+#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
 #' this argument requires the adfExplorer package.
-#' When set to \code{NULL}, this argument is ignored.
-#' @return Returns \code{NULL} or an \code{integer} status passed on by the
-#' \code{\link{close}} function, that is used to close the file connection.
-#' It is returned invisibly. Or, when \code{disk} is specified, a copy of
-#' \code{disk} is returned to which the file is written.
+#' When set to `NULL`, this argument is ignored.
+#' @return Returns `NULL` or an `integer` status passed on by the
+#' [close()] function, that is used to close the file connection.
+#' It is returned invisibly. Or, when `disk` is specified, a copy of
+#' `disk` is returned to which the file is written.
 #' 
 #' @examples
 #' \dontrun{
@@ -248,27 +248,27 @@ read.SysConfig <- function(file, disk = NULL) {
 #' @author Pepijn de Vries
 #' @export
 write.SysConfig <- function(x, file, disk = NULL) {
-  if (!("SysConfig" %in% class(x))) stop("x should be of class SysConfig.")
+  if (!inherits(x, "SysConfig")) stop("x should be of class SysConfig.")
   .write.generic(x, file, disk)
 }
 
 #' Coerce raw data into a SysConfig class object
 #'
-#' \link{SysConfig} objects are comprehensive representations of binary Amiga
-#' system-configuration files. Use this function to convert \code{raw} data from
-#' such a file to a \link{SysConfig} object.
+#' [SysConfig] objects are comprehensive representations of binary Amiga
+#' system-configuration files. Use this function to convert `raw` data from
+#' such a file to a [SysConfig] object.
 #'
 #' The Amiga used the system-configuration file to store certain system preferences
-#' in a binary file. With this function such \code{raw} data can be converted into
-#' a more comprehensive \link{SysConfig} object. Use \code{\link[AmigaFFH]{as.raw}}
+#' in a binary file. With this function such `raw` data can be converted into
+#' a more comprehensive [SysConfig] object. Use [AmigaFFH::as.raw()]
 #' to achieve the inverse.
 #'
 #' @rdname rawToSysConfig
 #' @name rawToSysConfig
-#' @param x A vector of \code{raw} data that needs to be converted into an S3
-#' \link{SysConfig} class object. It should have a length of at least 232. Although
+#' @param x A vector of `raw` data that needs to be converted into an S3
+#' [SysConfig] class object. It should have a length of at least 232. Although
 #' system-configurations can be extended, such extended files are not supported here.
-#' @return Returns a \link{SysConfig} class object based on \code{x}.
+#' @return Returns a [SysConfig] class object based on `x`.
 #' @examples
 #' \dontrun{
 #' ## get the system-configuration from the adfExplorer example disk:
@@ -332,20 +332,20 @@ rawToSysConfig <- function(x) {
 
 #' Function to generate a simple Amiga system-configuration representation
 #'
-#' \link{SysConfig} objects are comprehensive representations of binary Amiga
-#' system-configuration files. Use this function to create a simple \link{SysConfig} object.
+#' [SysConfig] objects are comprehensive representations of binary Amiga
+#' system-configuration files. Use this function to create a simple [SysConfig] object.
 #'
 #' The Amiga used the system-configuration file to store certain system preferences
 #' in a binary file. In the AmigaFFH package such files can be represented by the more
-#' comprehensive \link{SysConfig} class object. Use this function to create such an object
+#' comprehensive [SysConfig] class object. Use this function to create such an object
 #' with basic settings (which can be modified).
 #'
 #' @rdname simpleSysConfig
 #' @name simpleSysConfig
-#' @param options A named \code{list} with elements of the target
-#' \code{\link{SysConfig}} object that need to be modified.
+#' @param options A named `list` with elements of the target
+#' [SysConfig()] object that need to be modified.
 #' @return Returns a comprehensive representation of a system-configuration file in the
-#' for of a \link{SysConfig} class object.
+#' for of a [SysConfig] class object.
 #' @examples
 #' \dontrun{
 #' ## Create a simple system-configuration (S3 SysConfigClass)
@@ -391,7 +391,7 @@ simpleSysConfig <- function(options) {
 
 #' @export
 `[[<-.SysConfig` <- function(x, i, value) {
-  if (!("character" %in% class(i))) stop("Refer to elements by name, not by index number, when replacing them.")
+  if (!inherits(i, "character")) stop("Refer to elements by name, not by index number, when replacing them.")
   # make sure that x is in the correct order:
   cl <- class(x)
   x <- x[.SysConfigData$par.names]
@@ -447,11 +447,11 @@ simpleSysConfig <- function(options) {
       if (value < 0) stop(sprintf("Negative numbers are not allowed for %s", i))
       class(value) <- "AmigaTimeVal"
     }
-    if (!"AmigaTimeVal" %in% class(value)) stop("Value cannot be cast to 'timeval' class object.")
+    if (!inherits(value, "AmigaTimeVal")) stop("Value cannot be cast to 'timeval' class object.")
   }
   if (i == "PointerMatrix") {
-    if ("raster" %in% class(value)) value <- rasterToHWSprite(value)
-    if (!("hardwareSprite" %in% class(value)))
+    if (inherits(value, "raster")) value <- rasterToHWSprite(value)
+    if (!inherits(value, "hardwareSprite"))
       stop ("PointerMatrix element and its replacement should be an S4 class hardwareSprite object.")
     if (!all(dim(value) == 16)) stop("The pointer sprite should be 16 pixels wide and 16 pixels high.")
     x[["spriteColours"]] <- value@colours

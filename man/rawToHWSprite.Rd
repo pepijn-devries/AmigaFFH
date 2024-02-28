@@ -22,17 +22,17 @@ The colours have to be provided separately as they are usually not stored
 together with the hardware sprite data.}
 }
 \value{
-Returns a \code{\link{hardwareSprite}} object based on the provided raw data
+Returns a \code{\link[=hardwareSprite]{hardwareSprite()}} object based on the provided raw data
 }
 \description{
 Convert \code{raw} data structured conform a Commodore Amiga hardware
-sprite (see references) into a \code{\link{hardwareSprite}} object.
+sprite (see references) into a \code{\link[=hardwareSprite]{hardwareSprite()}} object.
 }
 \details{
 Information to set up a hardware sprite is stored as \code{raw} data
 on Commodore Amigas. This method can be used to convert this data
-into a \code{\link{hardwareSprite}} object. This object can in turn
-be converted with \code{\link{as.raster}} such that it can be plotted in R.
+into a \code{\link[=hardwareSprite]{hardwareSprite()}} object. This object can in turn
+be converted with \code{\link[=as.raster]{as.raster()}} such that it can be plotted in R.
 }
 \examples{
 ## Let's generate a 16x16 sprite with a random bitmap:

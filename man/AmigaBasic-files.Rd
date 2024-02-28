@@ -8,20 +8,21 @@
 \alias{ball.shp}
 \title{'demo.bas', 'r_logo.shp' and 'ball.shp' as example files for AmigaBasic and AmigaBasicShape objects}
 \format{
-See \code{\link{AmigaBasic}} and \code{\link{AmigaBasicShape}} for more information
-about the format.
+{
+See \code{\link[=AmigaBasic]{AmigaBasic()}} and \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} for more information
+about the format.}
 }
 \description{
-`demo.bas', `r_logo.shp' and `ball.shp' as example files for \code{\link{AmigaBasic}} and
-\code{\link{AmigaBasicShape}} objects
+'demo.bas', 'r_logo.shp' and 'ball.shp' as example files for \code{\link[=AmigaBasic]{AmigaBasic()}} and
+\code{\link[=AmigaBasicShape]{AmigaBasicShape()}} objects
 }
 \details{
-The `r_logo.shp' and `ball.shp' files are formatted such that they can be read with
-\code{\link{read.AmigaBasicShape}}. They serve as an example of the \code{\link{AmigaBasicShape}} class, where
+The 'r_logo.shp' and 'ball.shp' files are formatted such that they can be read with
+\code{\link[=read.AmigaBasicShape]{read.AmigaBasicShape()}}. They serve as an example of the \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class, where
 the first represents a blitter object, and the latter a sprite.
 
-The `demo.bas' file is an example of a binary encoded \link[AmigaFFH:AmigaBasic]{Amiga Basic} script. It can be read with
-\code{\link{read.AmigaBasic}}. The script demonstrates how the shape files could be used in Amiga Basic.
+The 'demo.bas' file is an example of a binary encoded \link[=AmigaBasic]{Amiga Basic} script. It can be read with
+\code{\link[=read.AmigaBasic]{read.AmigaBasic()}}. The script demonstrates how the shape files could be used in Amiga Basic.
 }
 \examples{
 \dontrun{

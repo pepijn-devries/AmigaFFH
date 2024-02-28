@@ -15,8 +15,8 @@ simpleAmigaIcon(
 }
 \arguments{
 \item{version}{A \code{character} string indicating the Amiga OS version
-with which the icon should be compatible. "\code{OS2.x}" indicates
->=OS2.0 and "\code{OS1.x}" indicates <OS2.0.}
+with which the icon should be compatible. "\code{OS2.x}" indicates \>=OS2.0
+and "\code{OS1.x}" indicates <OS2.0.}
 
 \item{type}{A \code{character} string indicating the type of object (file, disk, directory, etc.)
 the icon should represent. See the `Usage' section for all posible options.}
@@ -26,24 +26,22 @@ the selected icon is depicted as a second image (in which case the
 icon contains two images). The default value is \code{TRUE}.}
 
 \item{back.fill}{A single \code{logical} value, indicating whether
-the selected image of the icon should use the `back fill' mode (default).
-If set to \code{FALSE} `complement' mode is used. Note that
+the selected image of the icon should use the \verb{back fill' mode (default). If set to }FALSE\verb{ }complement' mode is used. Note that
 back fill is not compatible when the icon holds two images. In the
-`complement' mode, the image colours are inverted when selected.
-In the `back fill' exterior first colour is not inverted.}
+\verb{complement' mode, the image colours are inverted when selected. In the }back fill' exterior first colour is not inverted.}
 
-\item{...}{Reserverd for additional arguments. Currently ignored.}
+\item{...}{Reserved for additional arguments. Currently ignored.}
 }
 \value{
-Returns a simple S3 object of class \code{\link{AmigaIcon}}.
+Returns a simple S3 object of class \code{\link[=AmigaIcon]{AmigaIcon()}}.
 }
 \description{
 Graphical representation of files and directories (icons) are stored as
 separate files (with the .info extension) on the Amiga. This function writes
-\code{\link{AmigaIcon}} class objects to such files.
+\code{\link[=AmigaIcon]{AmigaIcon()}} class objects to such files.
 }
 \details{
-This function creates basic \code{\link{AmigaIcon}} objects which
+This function creates basic \code{\link[=AmigaIcon]{AmigaIcon()}} objects which
 can be modified afterwards. It uses simple generic images to represent
 different types of files or directories.
 }

@@ -26,40 +26,40 @@
 }
 \arguments{
 \item{x}{Object that needs to be converted into a \code{grDevices} raster. It
-can be an \code{\link{IFFChunk}} containing an interleaved bitmap image
-(ILBM) or animation (ANIM), a \code{\link{hardwareSprite}}, an
-\code{\link{AmigaBitmapFont}} object or an \code{\link{AmigaBitmapFontSet}} object.}
+can be an \code{\link[=IFFChunk]{IFFChunk()}} containing an interleaved bitmap image
+(ILBM) or animation (ANIM), a \code{\link[=hardwareSprite]{hardwareSprite()}}, an
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object or an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object.}
 
-\item{selected}{When \code{x} is an object of class \code{\link{AmigaIcon}}, \code{selected} can be
-used to select a specific state. When set to \code{TRUE}, the raster of the \code{\link{AmigaIcon}}
+\item{selected}{When \code{x} is an object of class \code{\link[=AmigaIcon]{AmigaIcon()}}, \code{selected} can be
+used to select a specific state. When set to \code{TRUE}, the raster of the \code{\link[=AmigaIcon]{AmigaIcon()}}
 will be based on the `selected' state of the icon. Otherwise it will be based on the
 deselected state (default).
 
-When \code{x} is an \code{\link{AmigaBasicShape}} class object, \code{selected} can be used to select a
+When \code{x} is an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object, \code{selected} can be used to select a
 specific layer of the shape to plot, which can be one of \code{"bitmap"} (default), \code{"shadow"} or \code{"collision"}.}
 
 \item{...}{Currently ignored.}
 
 \item{text}{Text (a \code{character} string) to be formated
-with \code{x} (when \code{x} is an \code{\link{AmigaBitmapFont}}
-or an \code{\link{AmigaBitmapFontSet}}.}
+with \code{x} (when \code{x} is an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}
+or an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}.}
 
-\item{style}{Argument is only valid when \code{x} is an \code{\link{AmigaBitmapFont}}
-or an \code{\link{AmigaBitmapFontSet}}. No styling is applied
+\item{style}{Argument is only valid when \code{x} is an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}
+or an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}. No styling is applied
 when missing or \code{NULL}. One or more of the following styles
 can be used '\code{bold}', '\code{italic} or '\code{underlined}'.}
 
-\item{palette}{Argument is only valid when \code{x} is an \code{\link{AmigaBitmapFont}}
-or an \code{\link{AmigaBitmapFontSet}}. Should be a \code{vector} of
+\item{palette}{Argument is only valid when \code{x} is an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}
+or an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}. Should be a \code{vector} of
 two colours. The first is element is used as background colour, the
 second as foreground. When missing, transparent white and black are used.}
 
 \item{background}{Use the argument \code{background} to
-specify a background colour in case \code{x} is a \code{\link{hardwareSprite}}.}
+specify a background colour in case \code{x} is a \code{\link[=hardwareSprite]{hardwareSprite()}}.}
 }
 \value{
-Returns a \code{grDevices} raster image (\code{\link[grDevices]{as.raster}})
-based on \code{x}. If \code{x} is an animation (\code{\link{IFFChunk}} of type ANIM),
+Returns a \code{grDevices} raster image (\code{\link[grDevices:as.raster]{grDevices::as.raster()}})
+based on \code{x}. If \code{x} is an animation (\code{\link[=IFFChunk]{IFFChunk()}} of type ANIM),
 a \code{list} of raster objects is returned.
 }
 \description{
@@ -71,7 +71,7 @@ Images on the Amiga were stored as bitmap images with indexed colour
 palettes. This was mainly due to hardware and memory limitations.
 Bitmap images could also be embedded in several file types. This method
 can be used to convert AmigaFFH objects read from such files into
-grDevices raster images (\code{\link[grDevices]{as.raster}}).
+grDevices raster images (\code{\link[grDevices:as.raster]{grDevices::as.raster()}}).
 }
 \examples{
 \dontrun{

@@ -21,14 +21,13 @@ Check Amiga Basic label/variable names for validity
 }
 \details{
 Names for variables and labels should adhere to the following rules in Amiga Basic:
-
 \itemize{
-  \item{Length of the names should be in the range of 1 up to 255 character}
-  \item{Names cannot be \code{\link{AmigaBasic.reserved}} words}
-  \item{Names should only contain alphanumeric characters or periods and
-  should not contain special characters (i.e., reserved for type definition,
-  such as dollar- or percentage sign)}
-  \item{Names should not start with a numeric character}
+\item Length of the names should be in the range of 1 up to 255 character
+\item Names cannot be \code{\link[=AmigaBasic.reserved]{AmigaBasic.reserved()}} words
+\item Names should only contain alphanumeric characters or periods and
+should not contain special characters (i.e., reserved for type definition,
+such as dollar- or percentage sign)
+\item Names should not start with a numeric character
 }
 
 This function tests names against each of these criteria.

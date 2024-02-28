@@ -13,17 +13,17 @@ rasterToIFF(
 )
 }
 \arguments{
-\item{x}{A raster object created with \code{\link[grDevices]{as.raster}} which
+\item{x}{A raster object created with \code{\link[grDevices:as.raster]{grDevices::as.raster()}} which
 needs to be converted into an IFF formated bitmap image. It is also possible to let \code{x} be
 a matrix of \code{character}s, representing colours.}
 
 \item{display.mode}{Specify the Amiga display mode that should be used.
-See \code{\link{amiga_display_modes}} for all possible options.
+See \code{\link[=amiga_display_modes]{amiga_display_modes()}} for all possible options.
 "\code{LORES_KEY}" is used by default, this is the lowest resolution
 possible on the Amiga.}
 
 \item{monitor}{The Amiga monitor on which the needs to be displayed.
-See \code{\link{amiga_monitors}} for more details and posible options.
+See \code{\link[=amiga_monitors]{amiga_monitors()}} for more details and posible options.
 By default "\code{DEFAULT_MONITOR_ID}" is used.}
 
 \item{anim.options}{Currently ignored. This argument will potentitally be implemented
@@ -31,15 +31,15 @@ in future versions of this package. Currently, animations are always encoded
 with the "ByteVerticalCompression" in this package (when \code{x} is a list of
 \code{raster} objects).}
 
-\item{...}{Arguments passed on to \code{\link{rasterToBitmap}}.}
+\item{...}{Arguments passed on to \code{\link[=rasterToBitmap]{rasterToBitmap()}}.}
 }
 \value{
-Returns an \code{\link{IFFChunk}} object holding an Interleaved
+Returns an \code{\link[=IFFChunk]{IFFChunk()}} object holding an Interleaved
 Bitmap (ILBM) image based on \code{x}.
 }
 \description{
-Convert grDevices raster images (\code{\link[grDevices]{as.raster}})
-into a formal \code{\link{IFFChunk}} object, as an interleaved bitmap (ILBM)
+Convert grDevices raster images (\code{\link[grDevices:as.raster]{grDevices::as.raster()}})
+into a formal \code{\link[=IFFChunk]{IFFChunk()}} object, as an interleaved bitmap (ILBM)
 image.
 }
 \details{

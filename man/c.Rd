@@ -11,13 +11,13 @@
 \method{c}{AmigaBitmapFont}(..., name = "font")
 }
 \arguments{
-\item{...}{Either \code{\link{AmigaBasic}} or \code{\link{AmigaBitmapFont}}
-class objects. In case of \code{\link{AmigaBitmapFont}} objects:
-Each \code{\link{AmigaBitmapFont}} object should have a
+\item{...}{Either \code{\link[=AmigaBasic]{AmigaBasic()}} or \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}
+class objects. In case of \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} objects:
+Each \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object should have a
 unique Y-size.}
 
 \item{name}{This argument is only valid when \code{...} are one or more
-\code{\link{AmigaBitmapFont}} class objects.
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class objects.
 
 A \code{character} string specifying the name that needs to be
 applied to the font set. When unspecified, the default name 'font' is
@@ -26,28 +26,28 @@ the font to a file. So make sure the name is also a valid file name. This
 will not be checked for you and may thus result in errors.}
 }
 \value{
-Returns an \code{\link{AmigaBitmapFontSet}} in which the
-\code{\link{AmigaBitmapFont}} objects are combined. Or when \code{\link{AmigaBasic}}
-objects are combined, an \code{\link{AmigaBasic}} object is returned
+Returns an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} in which the
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} objects are combined. Or when \code{\link[=AmigaBasic]{AmigaBasic()}}
+objects are combined, an \code{\link[=AmigaBasic]{AmigaBasic()}} object is returned
 in which the lines of Amiga Basic code are combined.
 }
 \description{
-Use this function to correctly combine one or more \code{\link{AmigaBitmapFont}}
-class objects into a single \code{\link{AmigaBitmapFontSet}} class
-object, or to combine multiple \code{\link{AmigaBasic}} class objects.
+Use this function to correctly combine one or more \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}
+class objects into a single \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} class
+object, or to combine multiple \code{\link[=AmigaBasic]{AmigaBasic()}} class objects.
 }
 \details{
-In case \code{...} are one or more \code{\link{AmigaBasic}} class objects:
+In case \code{...} are one or more \code{\link[=AmigaBasic]{AmigaBasic()}} class objects:
 
-\code{\link{AmigaBasic}} class objects are combined into a single
-\code{\link{AmigaBasic}} class object in the same order as they
+\code{\link[=AmigaBasic]{AmigaBasic()}} class objects are combined into a single
+\code{\link[=AmigaBasic]{AmigaBasic()}} class object in the same order as they
 are given as argument to this function. for this purpose the lines of
 Amiga Basic codes are simply concatenated.
 
-In case \code{...} are one or more \code{\link{AmigaBitmapFont}} class objects:
+In case \code{...} are one or more \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class objects:
 
-\code{\link{AmigaBitmapFontSet}} class objects can hold multiple
-\code{\link{AmigaBitmapFont}} class objects. Use this method to
+\code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} class objects can hold multiple
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class objects. Use this method to
 combine font bitmaps into such a font set. Make sure each bitmap
 represents a unique font height (in pixels). When heights are duplicated
 an error will be thrown.

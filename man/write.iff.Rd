@@ -7,27 +7,27 @@
 write.iff(x, file, disk = NULL)
 }
 \arguments{
-\item{x}{An \code{\link{IFFChunk}} object that needs to be written to a file.}
+\item{x}{An \code{\link[=IFFChunk]{IFFChunk()}} object that needs to be written to a file.}
 
-\item{file}{A filename for the IFF file to which the \code{\link{IFFChunk}} needs
+\item{file}{A filename for the IFF file to which the \code{\link[=IFFChunk]{IFFChunk()}} needs
 to be saved, or a connection to which the data should be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns either \code{NULL} or an \code{integer} status invisibly as passed
-by the \code{\link[base:connections]{close}} statement used to close the file connection.
+by the \code{\link[base:connections]{close()}} statement used to close the file connection.
 When \code{disk} is specified, a copy of \code{disk} is returned
 to which the file is written.
 }
 \description{
-Write an \code{\link{IFFChunk}} object conform the Interchange File Format (IFF).
+Write an \code{\link[=IFFChunk]{IFFChunk()}} object conform the Interchange File Format (IFF).
 }
 \details{
-Writes an \code{\link{IFFChunk}} object (including all nested chunks) to the
+Writes an \code{\link[=IFFChunk]{IFFChunk()}} object (including all nested chunks) to the
 specified file. Only the structure of the object needs to be valid, however,
 a correctly structured file does not necessarily result in an interpretable file
 (see examples).

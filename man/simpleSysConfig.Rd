@@ -8,7 +8,7 @@ simpleSysConfig(options)
 }
 \arguments{
 \item{options}{A named \code{list} with elements of the target
-\code{\link{SysConfig}} object that need to be modified.}
+\code{\link[=SysConfig]{SysConfig()}} object that need to be modified.}
 }
 \value{
 Returns a comprehensive representation of a system-configuration file in the

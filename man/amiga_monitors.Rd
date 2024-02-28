@@ -5,11 +5,12 @@
 \alias{amiga_monitors}
 \title{A list of Amiga monitors}
 \format{
+{
 A \code{data.frame} with 2 columns:
 \itemize{
-  \item{The column named `MONITOR_ID': a \code{factor} representing an Amiga monitor}
-  \item{The column named `CODE': A \code{list} containing a \code{vector} of 4
-  \code{raw} values as used by the Amiga to represent a specific monitor.}
+\item The column named 'MONITOR_ID': a \code{factor} representing an Amiga monitor
+\item The column named 'CODE': A \code{list} containing a \code{vector} of 4
+\code{raw} values as used by the Amiga to represent a specific monitor.}
 }
 }
 \description{
@@ -19,8 +20,8 @@ these monitors.
 \details{
 This table contains monitors that were compatible with the Amiga.
 It also contains \code{raw} codes that were used to represent them.
-This data is used to interpret \code{\link{IFFChunk}} objects of type
-`CAMG'. It is also used to interpret ILBM images and creating IFF files from
+This data is used to interpret \code{\link[=IFFChunk]{IFFChunk()}} objects of type
+'CAMG'. It is also used to interpret ILBM images and creating IFF files from
 raster images.
 }
 \examples{

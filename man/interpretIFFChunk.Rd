@@ -9,20 +9,20 @@
 \S4method{interpretIFFChunk}{IFFChunk}(x, ...)
 }
 \arguments{
-\item{x}{An \code{\link{IFFChunk}} object which needs to be interpreted.}
+\item{x}{An \code{\link[=IFFChunk]{IFFChunk()}} object which needs to be interpreted.}
 
 \item{...}{Currently ignored.}
 }
 \value{
 If \code{x} is interpretable by this package an S3 class object of
 \code{IFF.ANY} is returned. The content of the returned object will depend
-on the type of \code{\link{IFFChunk}} provided for \code{x}. The result can
-for instance be a \code{raster} image (\code{\link[grDevices]{as.raster}}),
-a list of audio \code{\link[tuneR]{Wave}}s, a \code{character} string or a named
+on the type of \code{\link[=IFFChunk]{IFFChunk()}} provided for \code{x}. The result can
+for instance be a \code{raster} image (\code{\link[grDevices:as.raster]{grDevices::as.raster()}}),
+a list of audio \code{\link[tuneR:Wave]{tuneR::Wave()}}s, a \code{character} string or a named
 \code{list}.
 }
 \description{
-\code{\link{IFFChunk}}s represent the structure of the Interchange File Format well,
+\code{\link[=IFFChunk]{IFFChunk()}}s represent the structure of the Interchange File Format well,
 but the iformation is stored as \code{raw} data. This method tries to interpret and
 translate the information into a more comprehensive format.
 }
@@ -30,11 +30,11 @@ translate the information into a more comprehensive format.
 Interchange File Format chunks can hold any kind of information (images, audio,
 (formatted) text, etc.). This method will try to convert this information into
 something useful. Information may get lost in the translation, so be careful when
-converting back to an \code{\link{IFFChunk-class}} object using
-\code{\link{IFFChunk-method}}.
+converting back to an \code{\link[=IFFChunk-class]{IFFChunk-class()}} object using
+\code{\link[=IFFChunk-method]{IFFChunk-method()}}.
 
-An error is thrown when the \code{\link{IFFChunk}} object is currently not
-interpretable by this package. See \code{\link{IFFChunk-method}} for an overview
+An error is thrown when the \code{\link[=IFFChunk]{IFFChunk()}} object is currently not
+interpretable by this package. See \code{\link[=IFFChunk-method]{IFFChunk-method()}} for an overview
 of currently supported IFF chunks. This list may increase while this package
 matures.
 }

@@ -1,8 +1,8 @@
 Package: AmigaFFH
 Type: Package
 Title: Commodore Amiga File Format Handler
-Version: 0.4.3
-Date: 2023-08-26
+Version: 0.4.4
+Date: 2024-02-28
 Authors@R: c(person("Pepijn", "de Vries", role = c("aut", "cre", "dtc"),
     email = "pepijn.devries@outlook.com"))
 Author: Pepijn de Vries [aut, cre, dtc]
@@ -20,3 +20,6 @@ LazyData: True
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 NeedsCompilation: no
+Roxygen: list(markdown = TRUE)
+URL: https://pepijn-devries.github.io/AmigaFFH/, https://github.com/pepijn-devries/AmigaFFH/
+BugReports: https://github.com/pepijn-devries/AmigaFFH/issues

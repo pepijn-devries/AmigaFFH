@@ -7,31 +7,31 @@
 write.AmigaIcon(x, file, disk = NULL)
 }
 \arguments{
-\item{x}{An \code{\link{AmigaIcon}} class object.}
+\item{x}{An \code{\link[=AmigaIcon]{AmigaIcon()}} class object.}
 
 \item{file}{A \code{character} string representing the file name to which the
 icon data should be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns \code{NULL} or an \code{integer} status passed on by the
-\code{\link{close}} function, that is used to close the file connection.
+\code{\link[=close]{close()}} function, that is used to close the file connection.
 It is returned invisibly. Or, when \code{disk} is specified, a copy of
 \code{disk} is returned to which the file is written.
 }
 \description{
 Graphical representation of files and directories (icons) are stored as
 separate files (with the .info extension) on the Amiga. This function writes
-\code{\link{AmigaIcon}} class objects to such files.
+\code{\link[=AmigaIcon]{AmigaIcon()}} class objects to such files.
 }
 \details{
-The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
+The \code{\link[=AmigaIcon]{AmigaIcon()}} S3 object provides a comprehensive format
 for Amiga icons, which are used as a graphical representation of files
-and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
+and directories on the Amiga. The \code{\link[=AmigaIcon]{AmigaIcon()}} is a named
 list containing all information of an icon. Use this function to
 write this object to a file which can be used on the Commodore Amiga
 or emulator.

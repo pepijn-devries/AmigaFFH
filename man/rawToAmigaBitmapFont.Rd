@@ -7,7 +7,7 @@
 rawToAmigaBitmapFont(x, ...)
 }
 \arguments{
-\item{x}{An \code{\link{AmigaBitmapFont}} object which needs to be converted
+\item{x}{An \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object which needs to be converted
 into \code{raw} data.}
 
 \item{...}{Currently ignored.}
@@ -16,16 +16,16 @@ into \code{raw} data.}
 A \code{vector} of \code{raw} data representing \code{x}.
 }
 \description{
-\code{\link{AmigaBitmapFont}} objects are comprehensive representations of binary Amiga
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} objects are comprehensive representations of binary Amiga
 font subset files. The file name is usually simply a numeric number
 indicating the font height in pixels. Use this function to convert
-\code{raw} content from such a file to an \code{\link{AmigaBitmapFont}} object.
+\code{raw} content from such a file to an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object.
 }
 \details{
 This function converts \code{raw} data as stored in font bitmap
 files. These files are stored in subdirectories with the font's
 name and usually have the font height in pixels as file name.
-This function is effectively the inverse of \code{\link[AmigaFFH]{as.raw}}.
+This function is effectively the inverse of \code{\link[=as.raw]{as.raw()}}.
 }
 \examples{
 \dontrun{

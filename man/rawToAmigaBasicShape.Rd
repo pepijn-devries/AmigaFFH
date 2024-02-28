@@ -8,22 +8,22 @@ rawToAmigaBasicShape(x, palette)
 }
 \arguments{
 \item{x}{A \code{vector} of \code{raw} data that is to be converted
-into an \code{\link{AmigaBasicShape}} class object.}
+into an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object.}
 
 \item{palette}{A \code{vector} of \code{character} strings, where each element represents a colour in the palette.
 This palette will be used to display the graphics (note that the raw format does not store the palette, but this
 S3 class does). When this argument is omitted a grey scale palette will be generated.}
 }
 \value{
-returns an \code{\link{AmigaBasicShape}}-class object.
+returns an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}}-class object.
 }
 \description{
-Coerce raw data into an \code{\link{AmigaBasicShape}}-class object
+Coerce raw data into an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}}-class object
 }
 \details{
-\code{\link{AmigaBasicShape}} objects are comprehensive representations of blitter
-and sprite graphics that can be used in \code{\link{AmigaBasic}} scripts. Use this function
-to convert \code{raw} content to an \code{\link{AmigaBasicShape}} object.
+\code{\link[=AmigaBasicShape]{AmigaBasicShape()}} objects are comprehensive representations of blitter
+and sprite graphics that can be used in \code{\link[=AmigaBasic]{AmigaBasic()}} scripts. Use this function
+to convert \code{raw} content to an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} object.
 }
 \examples{
 \dontrun{

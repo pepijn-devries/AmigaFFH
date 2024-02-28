@@ -10,14 +10,14 @@ read.AmigaBasicShape(file, disk = NULL, ...)
 \item{file}{A \code{character} string of the filename of the Amiga Basic Shape file to be read.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 
-\item{...}{Arguments passed to \code{\link{rawToAmigaBasicShape}}.}
+\item{...}{Arguments passed to \code{\link[=rawToAmigaBasicShape]{rawToAmigaBasicShape()}}.}
 }
 \value{
-Returns an \code{\link{AmigaBasicShape}} class object read from the \code{file}.
+Returns an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} class object read from the \code{file}.
 }
 \description{
 Read Amiga Basic Shape files
@@ -25,8 +25,8 @@ Read Amiga Basic Shape files
 \details{
 AmigaBasic used the term 'shapes' for graphics (sprites and blitter objects) which it could display.
 These graphics were stored in a specific binary format, which can be read with this function. See
-\code{\link{AmigaBasicShape}} for more details. The file can also be read from a virtual Amiga disk
-(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
+\code{\link[=AmigaBasicShape]{AmigaBasicShape()}} for more details. The file can also be read from a virtual Amiga disk
+(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}}).
 }
 \examples{
 \dontrun{

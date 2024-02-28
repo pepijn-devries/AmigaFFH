@@ -8,25 +8,25 @@ rawToAmigaBitmapFontSet(x, file, disk = NULL)
 }
 \arguments{
 \item{x}{A \code{vector} of \code{raw} data that needs to be
-converted into an \code{\link{AmigaBitmapFontSet}}.}
+converted into an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}.}
 
-\item{file}{The \code{raw} version of the \code{\link{AmigaBitmapFontSet}}
+\item{file}{The \code{raw} version of the \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
 does not contain the nested font bitmap images. In order to correctly
-construct an \code{\link{AmigaBitmapFontSet}} the file location of the
+construct an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} the file location of the
 original *.font file is required in order to read and include the
 font bitmap image information. \code{file} should thus be a \code{character}
 string specifying the file location of the *.font file.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
 \value{
-Returns an \code{\link{AmigaBitmapFontSet}} object.
+Returns an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object.
 }
 \description{
-\code{\link{AmigaBitmapFontSet}} objects are comprehensive representations of binary Amiga
+\code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} objects are comprehensive representations of binary Amiga
 font files (*.font). Use this function to convert \code{raw} data from
 such a file to an \link{AmigaBitmapFontSet} object.
 }
@@ -34,7 +34,7 @@ such a file to an \link{AmigaBitmapFontSet} object.
 This function converts \code{raw} data as stored in *.font
 files. The function also needs the file location, in order
 to load the nested bitmap images for each font height.
-This function is effectively the inverse of \code{\link[AmigaFFH]{as.raw}}.
+This function is effectively the inverse of \code{\link[=as.raw]{as.raw()}}.
 }
 \examples{
 \dontrun{

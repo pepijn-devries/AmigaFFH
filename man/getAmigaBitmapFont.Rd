@@ -7,25 +7,25 @@
 getAmigaBitmapFont(x, size)
 }
 \arguments{
-\item{x}{An \code{\link{AmigaBitmapFontSet}} object, from which the
-specific \code{\link{AmigaBitmapFont}} object needs to be extracted.}
+\item{x}{An \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object, from which the
+specific \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object needs to be extracted.}
 
 \item{size}{A single \code{numeric} value specifying the desired font
-size in pixels. Use \code{\link{availableFontSizes}} to get available
+size in pixels. Use \code{\link[=availableFontSizes]{availableFontSizes()}} to get available
 sizes.}
 }
 \value{
-Returns an \code{\link{AmigaBitmapFont}} of the requested size.
+Returns an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} of the requested size.
 An error is thrown when the requested size is not available.
 }
 \description{
-Extract a specific \code{\link{AmigaBitmapFont}} from a
-\code{\link{AmigaBitmapFontSet}}.
+Extract a specific \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} from a
+\code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}.
 }
 \details{
-An \code{\link{AmigaBitmapFontSet}} object can hold one or more
+An \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object can hold one or more
 bitmaps for specific font sizes (heights). Use this function to
-obtain such a specific \code{\link{AmigaBitmapFont}}.
+obtain such a specific \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}.
 }
 \examples{
 \dontrun{

@@ -11,27 +11,27 @@ read.AmigaIcon(file, disk = NULL, ...)
 icon data should be read.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 
-\item{...}{Arguments passed on to \code{\link{rawToAmigaIcon}}.}
+\item{...}{Arguments passed on to \code{\link[=rawToAmigaIcon]{rawToAmigaIcon()}}.}
 }
 \value{
-Returns an \code{\link{AmigaIcon}} class object as read from the \code{file}.
+Returns an \code{\link[=AmigaIcon]{AmigaIcon()}} class object as read from the \code{file}.
 }
 \description{
 Graphical representation of files and directories (icons) are stored as
 separate files (with the .info extension) on the Amiga. This function reads such files
-and imports them as \code{\link{AmigaIcon}} class objects.
+and imports them as \code{\link[=AmigaIcon]{AmigaIcon()}} class objects.
 }
 \details{
-The \code{\link{AmigaIcon}} S3 object provides a comprehensive format
+The \code{\link[=AmigaIcon]{AmigaIcon()}} S3 object provides a comprehensive format
 for Amiga icons, which are used as a graphical representation of files
-and directories on the Amiga. The \code{\link{AmigaIcon}} is a named
+and directories on the Amiga. The \code{\link[=AmigaIcon]{AmigaIcon()}} is a named
 list containing all information of an icon. Use this function to
 read an Amiga icon (with the .info extension) from a file and convert
-it into an \code{\link{AmigaIcon}} object.
+it into an \code{\link[=AmigaIcon]{AmigaIcon()}} object.
 }
 \examples{
 \dontrun{

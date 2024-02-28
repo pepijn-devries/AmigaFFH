@@ -1,3 +1,10 @@
+AmigaFFH v0.4.4 (Release date: 2024-02-28)
+=============
+
+ * Added README
+ * Switched to markdown documentation with `roxygen2`
+ * Added `pkgdown` website
+
 AmigaFFH v0.4.3 (Release date: 2023-08-26)
 =============
 
@@ -8,7 +15,7 @@ AmigaFFH v0.4.2 (Release date: 2023-08-22)
 =============
 
  * Updates in order to compy with latest CRAN policies
-   and Roxyen2 standards
+   and `roxygen2` standards
 
 AmigaFFH v0.4.1 (Release date: 2021-09-03)
 =============

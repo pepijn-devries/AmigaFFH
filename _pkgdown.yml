@@ -1,0 +1,10 @@
+url: https://pepijn-devries.github.io/AmigaFFH/
+template:
+  bootstrap: 5
+navbar:
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: Package documentation
+        href: reference/AmigaFFH-package.html

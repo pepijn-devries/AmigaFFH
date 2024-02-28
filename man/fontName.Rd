@@ -10,7 +10,7 @@ fontName(x)
 fontName(x) <- value
 }
 \arguments{
-\item{x}{An \code{\link{AmigaBitmapFontSet}} for which the font name
+\item{x}{An \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} for which the font name
 needs to be changed.}
 
 \item{value}{A \code{character} string specifying the name you
@@ -21,14 +21,14 @@ Returns the font name. In case of the replace function, a copy
 of \code{x} is returned with the name replaced by '\code{value}'.
 }
 \description{
-Extract or replace a font name from an \code{\link{AmigaBitmapFontSet}}
+Extract or replace a font name from an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
 object.
 }
 \details{
-The name of a font is embeded at multiple locations of an \code{\link{AmigaBitmapFontSet}}
+The name of a font is embeded at multiple locations of an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
 object. This function can be used to extract or replace the font name
 correctly. This is also the name that will be used when writing the
-font to a file with \code{\link{write.AmigaBitmapFontSet}}.
+font to a file with \code{\link[=write.AmigaBitmapFontSet]{write.AmigaBitmapFontSet()}}.
 }
 \examples{
 \dontrun{

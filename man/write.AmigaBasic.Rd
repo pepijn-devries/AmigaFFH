@@ -7,14 +7,14 @@
 write.AmigaBasic(x, file, disk = NULL)
 }
 \arguments{
-\item{x}{The \code{\link{AmigaBasic}} class object that needs to be
+\item{x}{The \code{\link[=AmigaBasic]{AmigaBasic()}} class object that needs to be
 stored.}
 
 \item{file}{A \code{character} string specifying the file location
-to which \code{x} (an \code{\link{AmigaBasic}} object) needs to be written.}
+to which \code{x} (an \code{\link[=AmigaBasic]{AmigaBasic()}} object) needs to be written.}
 
 \item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 }
@@ -24,13 +24,13 @@ file connection. Or, when \code{disk} is specified, a copy of
 \code{disk} is returned to which the file(s) is/are written.
 }
 \description{
-Write an \code{\link{AmigaBasic}} class object to a file in its binary format.
+Write an \code{\link[=AmigaBasic]{AmigaBasic()}} class object to a file in its binary format.
 }
 \details{
 This function encodes the Amiga Basic code in its binary format
-(using \code{\link{as.raw}}) and writes it to a file. The file
+(using \code{\link[=as.raw]{as.raw()}}) and writes it to a file. The file
 can also be stored onto a virtual Amiga disk
-(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk}}).
+(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}}).
 }
 \examples{
 \dontrun{

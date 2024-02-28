@@ -20,23 +20,23 @@ dither <- function(x, method, ...) {
 #' first four bits) or 3 bytes (one byte for each value).
 #' 
 #' These functions can be used to convert R colours into the closest matching
-#' Amiga colour in a \code{raw} format, or vice versa. Note that later Amiga
+#' Amiga colour in a `raw` format, or vice versa. Note that later Amiga
 #' models with the advanced (graphics) architecture (known as AA or AGA) allowed
 #' for 24 bit colours.
 #'
-#' @param x In the case \code{amigaRawToColour} is called, \code{x} should
-#' be a \code{vector} of \code{raw} data. The length of this vector should
-#' be a multiple of 2 (when \code{n.bytes = "2"}) or 3 (when
-#' \code{n.bytes = "3"}). When \code{colourToAmigaRaw} is called, \code{x}
-#' should be a \code{character} strings representing a colour.
-#' @param colour.depth A \code{character} string: \code{"12 bit"} (default) or
-#' \code{"24 bit"}. The first should be used in most cases, as old Amigas
+#' @param x In the case `amigaRawToColour` is called, `x` should
+#' be a `vector` of `raw` data. The length of this vector should
+#' be a multiple of 2 (when `n.bytes = "2"`) or 3 (when
+#' `n.bytes = "3"`). When `colourToAmigaRaw` is called, `x`
+#' should be a `character` strings representing a colour.
+#' @param colour.depth A `character` string: `"12 bit"` (default) or
+#' `"24 bit"`. The first should be used in most cases, as old Amigas
 #' have a 12 bit colour depth.
-#' @param n.bytes A \code{character} string: \code{"2"} or \code{"3"}. The
+#' @param n.bytes A `character` string: `"2"` or `"3"`. The
 #' number of bytes that is used or should be used to store each colour.
-#' @returns In the case \code{amigaRawToColour} is called, a (vector of)
-#' colour \code{character} string(s) is returned. When \code{colourToAmigaRaw}
-#' is called, \code{raw} representing the colour(s) specified in \code{x} is
+#' @returns In the case `amigaRawToColour` is called, a (vector of)
+#' colour `character` string(s) is returned. When `colourToAmigaRaw`
+#' is called, `raw` representing the colour(s) specified in `x` is
 #' returned.
 #' 
 #' @rdname colourToAmigaRaw
@@ -108,7 +108,7 @@ amigaRawToColour <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
 #' A routine to (un)pack bitmap data
 #'
 #' A very simplistic lossless routine to (un)pack repetitive bitmap data. Often
-#' used in InterLeaved BitMap (ILBM) images in IFF containers (\code{\link{IFFChunk}}).
+#' used in InterLeaved BitMap (ILBM) images in IFF containers ([IFFChunk()]).
 #'
 #' InterLeaved BitMap (ILBM) images on the Amiga often use a packing algorithm
 #' referred to as `ByteRun1'. This routine was introduced first on
@@ -125,14 +125,14 @@ amigaRawToColour <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
 #' on 880 kilobyte floppy disks with little CPU time to spare. Note
 #' that the file size can also increase for (noisy) images.
 #' 
-#' This packing routine will pack the entire bitmap (\code{x})
+#' This packing routine will pack the entire bitmap (`x`)
 #' at once. The IFF file format requires packing of bitmap data per
-#' scanline. This is done automatically by the \code{\link{rasterToIFF}}
+#' scanline. This is done automatically by the [rasterToIFF()]
 #' function, which calls this packing routine per scanline.
 #'
-#' @param x \code{raw} data, usually representing a (packed) bitmap.
-#' @returns Returns packed or unpacked \code{raw} data, depending on
-#' whether \code{packBitmap} or \code{unPackBitmap} was called.
+#' @param x `raw` data, usually representing a (packed) bitmap.
+#' @returns Returns packed or unpacked `raw` data, depending on
+#' whether `packBitmap` or `unPackBitmap` was called.
 #' 
 #' @rdname packBitmap
 #' @name packBitmap
@@ -161,8 +161,8 @@ amigaRawToColour <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
 #' ## from the packed data:
 #' all(dat.rnd == unPackBitmap(pack.rnd))
 #' all(dat.srt == unPackBitmap(pack.srt))
-#' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node01C0.html}
-#' @references \url{https://en.wikipedia.org/wiki/PackBits}
+#' @references <http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node01C0.html>
+#' @references <https://en.wikipedia.org/wiki/PackBits>
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
@@ -242,33 +242,33 @@ unPackBitmap <- function(x) {
 #'
 #' Amiga images are usually stored as bitmap images with indexed colours. This
 #' function converts raw Amiga bitmap data into raster data
-#' (\code{\link[grDevices]{as.raster}}).
+#' ([grDevices::as.raster()]).
 #'
 #' Bitmap images stored as raw data, representing palette index colours, can
-#' be converted into raster data (\code{\link[grDevices]{as.raster}}). The latter
+#' be converted into raster data ([grDevices::as.raster()]). The latter
 #' data can easily be plotted in R. It is usually not necessary to call this function
 #' directly, as there are several more convenient wrappers for this function. Those
 #' wrappers can convert specific file formats (such as IFF ILBM and Hardware Sprites,
-#' see \code{\link[AmigaFFH]{as.raster}}) into raster objects. This function is
+#' see [AmigaFFH::as.raster()]) into raster objects. This function is
 #' provided for completeness sake (or for when you want to search for images in an
 #' amiga memory dump).
 #'
-#' @param x a \code{vector} of \code{raw} values, representing bitmap data.
+#' @param x a `vector` of `raw` values, representing bitmap data.
 #' @param w Width in pixels of the bitmap image. Can be any positive value. However,
 #' bitmap data is `word' aligned on the amiga. This means that the width of the stored
 #' bitmap data is a multiple of 16 pixels. The image is cropped to the width specified here.
 #' @param h Height in pixels of the bitmap image.
 #' @param depth The colour depth of the bitmap image (i.e., the number of bit planes).
-#' The image will be composed of \code{2^depth} indexed colours.
-#' @param palette A \code{vector} of \code{2^depth} colours, to be used for the indexed
+#' The image will be composed of `2^depth` indexed colours.
+#' @param palette A `vector` of `2^depth` colours, to be used for the indexed
 #' colours of the bitmap image. By default, a grayscale palette is used.
-#' When explicitly set to \code{NULL}, this function returns a matrix with palette index
+#' When explicitly set to `NULL`, this function returns a matrix with palette index
 #' values.
-#' @param interleaved A \code{logical} value, indicating whether the bitmap is interleaved.
+#' @param interleaved A `logical` value, indicating whether the bitmap is interleaved.
 #' An interleaved bitmap image stores each consecutive bitmap layer per horizontal scanline.
-#' @returns Returns a raster object (\code{\link{as.raster}}) as specified in
-#' the \code{\link{grDevices}} package. Unless, \code{palette} is set to \code{NULL},
-#' in which case a \code{matrix} with \code{numeric} palette index values is returned.
+#' @returns Returns a raster object ([as.raster()]) as specified in
+#' the [grDevices()] package. Unless, `palette` is set to `NULL`,
+#' in which case a `matrix` with `numeric` palette index values is returned.
 #' 
 #' @rdname bitmapToRaster
 #' @name bitmapToRaster
@@ -345,22 +345,22 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
   }
 }
 
-#' Convert a grDevices \code{raster} object into binary bitmap data
+#' Convert a grDevices `raster` object into binary bitmap data
 #'
-#' Converts an image represented by a grDevices \code{raster} object into binary
+#' Converts an image represented by a grDevices `raster` object into binary
 #' (Amiga) bitmap data.
 #'
-#' Images represented by grDevices \code{raster} objects are virtually true colour (24 bit
+#' Images represented by grDevices `raster` objects are virtually true colour (24 bit
 #' colour depth) and an alpha layer (transparency). On the early Amiga's the chipset
 #' (in combination with memory restrictions) only allowed images with indexed
 #' palettes. The colour depth was 12 bit with the original chipset and the number
 #' of colours allowed in a palette also depended on the chipset. This function
-#' will allow you to convert a \code{raster} object into binary bitmap data with
+#' will allow you to convert a `raster` object into binary bitmap data with
 #' an indexed palette. This means that the image is converted in a lossy way
 #' (information will be lost). So don't expect the result to have the same quality as
 #' the original image.
 #'
-#' With the \code{depth} argument, the raster can also be converted
+#' With the `depth` argument, the raster can also be converted
 #' to special mode bitmap images. One of these modes is the
 #' \sQuote{hold and modify} (HAM). In this mode two of the bitplanes
 #' are reserved as modifier switches. If the this switch equals
@@ -383,34 +383,34 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #' to change the palette at specific scanlines, increasing the number
 #' of available colours even further. The SHAM mode is currently not
 #' supported by this package.
-#' @param x A raster object created with \code{\link[grDevices]{as.raster}} which
-#' needs to be converted into bitmap data. It is also possible to let \code{x} be
-#' a matrix of \code{character}s, representing colours.
+#' @param x A raster object created with [grDevices::as.raster()] which
+#' needs to be converted into bitmap data. It is also possible to let `x` be
+#' a matrix of `character`s, representing colours.
 #' @param depth The colour depth of the bitmap image. The image will be composed
-#' of \code{2^depth} indexed colours.
+#' of `2^depth` indexed colours.
 #' 
-#' \code{depth} can also be a \code{character} string "HAM6" or "HAM8"
+#' `depth` can also be a `character` string "HAM6" or "HAM8"
 #' representing special Amiga display modes (see details).
-#' @param interleaved A \code{logical} value, indicating whether the bitmap needs to be
+#' @param interleaved A `logical` value, indicating whether the bitmap needs to be
 #' interleaved. An interleaved bitmap image stores each consecutive bitmap layer per
 #' horizontal scanline.
-#' @param indexing A function that accepts two arguments: \code{x} (a grDevices
-#' \code{raster} object); \code{length.out}, a numeric value indicating the
+#' @param indexing A function that accepts two arguments: `x` (a grDevices
+#' `raster` object); `length.out`, a numeric value indicating the
 #' desired size of the palette (i.e., the number of colours). It should return
 #' a matrix with numeric palette indices (ranging from 1 up to the number of
 #' colours in the palette). The result should have an attribute named `palette' that
 #' contains the colours that correspond with the index numbers. The result should
 #' also carry an attribute with the name `transparent', with a single numeric value
 #' representing which colour in the palette should be treated as transparent (or
-#' \code{NA} when no transparency is required). By default the
-#' function \code{\link{index.colours}} is used. You are free to provide
+#' `NA` when no transparency is required). By default the
+#' function [index.colours()] is used. You are free to provide
 #' a customised version of this function (see examples).
-#' @returns The bitmap is returned as a \code{vector} of \code{logical} values.
-#' The \code{logical} values reflect the bits for each bitplane. The palette used
-#' for the bitmap is returned as attribute to the \code{vector}. There will also be
+#' @returns The bitmap is returned as a `vector` of `logical` values.
+#' The `logical` values reflect the bits for each bitplane. The palette used
+#' for the bitmap is returned as attribute to the `vector`. There will also be
 #' an attribute called `transparent'. This will hold a numeric index corresponding
 #' with the colour in the palette that will be treated as transparent. It will be
-#' \code{NA} when transparency is not used.
+#' `NA` when transparency is not used.
 #' 
 #' @rdname rasterToBitmap
 #' @name rasterToBitmap
@@ -460,7 +460,7 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
   if (depth < 1) stop("Bitmap depth should be at least 1.")
   interleaved <- interleaved[[1]]
   if (!is.logical(interleaved)) stop("Interleaved should be a logical value.")
-  if (!"function" %in% class(indexing)) stop("'indexing' should be a function")
+  if (!inherits(indexing, "function")) stop("'indexing' should be a function")
   if (!all(c("x", "length.out") %in% names(formals(indexing)))) stop("Function 'indexing' should require arguments 'x' and 'length.out'.")
   x <- as.matrix(x)
   x <- indexing(x = x, length.out = ifelse(special.mode %in% c("HAM6", "HAM8"),
@@ -475,56 +475,56 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 
 #' Quantisation of colours and indexing a grDevices raster image
 #'
-#' Converts an image represented by a grDevices \code{raster} object into a
+#' Converts an image represented by a grDevices `raster` object into a
 #' matrix containing numeric indices of a quantised colour palette.
 #'
 #' Determines the optimal limited palette by clustering colours in an image
-#' with \code{\link[stats]{kmeans}}. The result of the optimisation routine
+#' with [stats::kmeans()]. The result of the optimisation routine
 #' will depend on the randomly chosen cluster centres by this algorithm. This
 #' means that the result may slightly differ for each call to this function. If
 #' you want reproducible results, you may want to reset the random seed
-#' (\code{\link{set.seed}}) before each call to this function.
+#' ([set.seed()]) before each call to this function.
 #' 
-#' @param x A raster object (\code{\link[grDevices]{as.raster}}), or a \code{matrix}
-#' containing \code{character} strings representing colours. \code{x} can also
-#' be a \code{list} of such matrices or rasters. All elements of this list should
+#' @param x A raster object ([grDevices::as.raster()]), or a `matrix`
+#' containing `character` strings representing colours. `x` can also
+#' be a `list` of such matrices or rasters. All elements of this list should
 #' have identical dimensions. An overall palette will be generated for elements in the
 #' list.
-#' @param length.out A \code{numeric} value indicating the number of desired
+#' @param length.out A `numeric` value indicating the number of desired
 #' colours in the indexed palette.
 #' 
-#' It can also be a \code{character} string indicating which special
+#' It can also be a `character` string indicating which special
 #' Amiga display mode should be used when indexing colours.
-#' \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
-#' See \code{\link{rasterToBitmap}} for more details on these
+#' \sQuote{`HAM6`} and \sQuote{`HAM8`} are supported.
+#' See [rasterToBitmap()] for more details on these
 #' special modes.
-#' @param palette A vector of no more than \code{length.out} colours, to be used
-#' for the bitmap image. When missing or set to \code{NULL}, a palette will be
-#' generated based on the provided colours in raster \code{x}. In that case,
-#' \code{\link[stats]{kmeans}} is used on the hue, saturation, brightness and
-#' alpha values of the colours in \code{x} for clustering the colours. The cluster
+#' @param palette A vector of no more than `length.out` colours, to be used
+#' for the bitmap image. When missing or set to `NULL`, a palette will be
+#' generated based on the provided colours in raster `x`. In that case,
+#' [stats::kmeans()] is used on the hue, saturation, brightness and
+#' alpha values of the colours in `x` for clustering the colours. The cluster
 #' centres will be used as palette colours.
 #' @param background On the Amiga, indexed images could not be semi-transparent.
 #' Only a single colour could be designated as being fully transparent. The
-#' `\code{background}' argument should contain a background colour with which
+#' ``background`' argument should contain a background colour with which
 #' semi-transparent colours should be mixed, before colour quantisation. It is
 #' white by default.
 #' @param dither Dither the output image using the algorithm specified here.
-#' See the usage section for possible options. By default no dithering ("\code{none}")
-#' is applied. See \code{\link{dither}} for more details.
-#' @param colour.depth A \code{character} string indicating the colour depth to be used.
-#' Can be either "\code{12 bit}" (default, standard on an Amiga with original chipset),
-#' or "\code{24 bit}".
+#' See the usage section for possible options. By default no dithering ("`none`")
+#' is applied. See [dither()] for more details.
+#' @param colour.depth A `character` string indicating the colour depth to be used.
+#' Can be either "`12 bit`" (default, standard on an Amiga with original chipset),
+#' or "`24 bit`".
 #' 
-#' This argument is overruled when \code{length.out} is set to \dQuote{\code{HAM6}}
-#' or \dQuote{\code{HAM8}}. In that case the colour depth linked to that special mode
+#' This argument is overruled when `length.out` is set to \dQuote{`HAM6`}
+#' or \dQuote{`HAM8`}. In that case the colour depth linked to that special mode
 #' is used (12 bit for HAM6, 24 bit for HAM8).
-#' @param ... Arguments that are passed onto \code{\link[stats]{kmeans}} (see
-#' \code{palette} argument).
-#' @returns Returns a \code{matrix} with the same dimensions as \code{x} containing
-#' \code{numeric} index values. The corresponding palette is returned as attribute,
+#' @param ... Arguments that are passed onto [stats::kmeans()] (see
+#' `palette` argument).
+#' @returns Returns a `matrix` with the same dimensions as `x` containing
+#' `numeric` index values. The corresponding palette is returned as attribute,
 #' as well as the index value for the fully transparent colour in the palette.
-#' When \code{x} is a \code{list} a \code{list} of matrices is returned.
+#' When `x` is a `list` a `list` of matrices is returned.
 #' 
 #' @rdname index.colours
 #' @name index.colours
@@ -682,7 +682,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #'
 #' Dither is an intentional form of noise applied to an image to avoid colour
 #' banding when reducing the amount of colours in that image. This function
-#' applies dithering to a grDevices \code{raster} image.
+#' applies dithering to a grDevices `raster` image.
 #'
 #' The approaches implemented here all use error diffusion to achieve dithering.
 #' Each pixel is scanned (from top to bottom, from left to right), where the actual
@@ -698,22 +698,22 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' for your convenience. As it is not in the main scope of this package you should
 #' use dedicated software for faster/better results.
 #' @param x Original image data that needs to be dithered. Should be a raster object
-#' (\code{\link[grDevices]{as.raster}}), or a matrix of \code{character} string
+#' ([grDevices::as.raster()]), or a matrix of `character` string
 #' representing colours.
-#' @param method A \code{character} string indicating which dithering method should
+#' @param method A `character` string indicating which dithering method should
 #' be applied. See usage section for all possible options (Note that the "JJN" is
-#' the Jarvis, Judice, and Ninke algorithm). Default is "\code{none}", meaning that
+#' the Jarvis, Judice, and Ninke algorithm). Default is "`none`", meaning that
 #' no dithering is applied.
 #' @param palette A palette to which the image should be dithered. It should be a
-#' \code{vector} of \code{character} strings representing colours.
-#' @param mode A \code{character} string indicating whether a special
+#' `vector` of `character` strings representing colours.
+#' @param mode A `character` string indicating whether a special
 #' Amiga display mode should be used when dithering. By default
-#' \sQuote{\code{none}} is used (no special mode). In addition,
-#' \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
-#' See \code{\link{rasterToBitmap}} for more details.
+#' \sQuote{`none`} is used (no special mode). In addition,
+#' \sQuote{`HAM6`} and \sQuote{`HAM8`} are supported.
+#' See [rasterToBitmap()] for more details.
 #' @param ... Currently ignored.
-#' @returns Returns a \code{matrix} with the same dimensions as \code{x} containing
-#' \code{numeric} index values. The corresponding palette is returned as attribute,
+#' @returns Returns a `matrix` with the same dimensions as `x` containing
+#' `numeric` index values. The corresponding palette is returned as attribute,
 #' as well as the index value for the fully transparent colour in the palette.
 #' 
 #' @rdname dither
@@ -739,10 +739,10 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' ## results will get better when a better matching colour palette is used.
 #' ## for that purpose use the function 'index.colours'.
 #' }
-#' @references R.W. Floyd, L. Steinberg, \emph{An adaptive algorithm for spatial grey scale}. Proceedings of the Society of Information Display 17, 75-77 (1976).
-#' @references J. F. Jarvis, C. N. Judice, and W. H. Ninke, \emph{A survey of techniques for the display of continuous tone pictures on bilevel displays}. Computer Graphics and Image Processing, 5:1:13-40 (1976).
-#' @references \url{https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering}
-#' @references \url{https://tannerhelland.com/4660/dithering-eleven-algorithms-source-code/}
+#' @references R.W. Floyd, L. Steinberg, *An adaptive algorithm for spatial grey scale*. Proceedings of the Society of Information Display 17, 75-77 (1976).
+#' @references J. F. Jarvis, C. N. Judice, and W. H. Ninke, *A survey of techniques for the display of continuous tone pictures on bilevel displays*. Computer Graphics and Image Processing, 5:1:13-40 (1976).
+#' @references <https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering>
+#' @references <https://tannerhelland.com/4660/dithering-eleven-algorithms-source-code/>
 #' @family colour.quantisation.operations
 #' @family raster.operations
 #' @author Pepijn de Vries
@@ -907,9 +907,9 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' the time it was developed (1985) not used much. The function is provided here for
 #' the sake of completeness. The implementation here only compresses 8-bit data, as
 #' for 16-bit data the quality loss will be more considerable.
-#' @param x A \code{vector} of \code{raw} data that needs to be (de)compressed.
+#' @param x A `vector` of `raw` data that needs to be (de)compressed.
 #' @param ... Currently ignored.
-#' @returns Returns a \code{vector} of the resulting (de)compressed \code{raw} data.
+#' @returns Returns a `vector` of the resulting (de)compressed `raw` data.
 #' @rdname deltaFibonacciCompress
 #' @name deltaFibonacciCompress
 #' @examples
@@ -974,8 +974,8 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' ## the decompressed data (and observe a nice but not perfect correlation):
 #' plot(ProTrackR::waveform(snare.drum) - 128, snare.decompress)
 #' }
-#' @references \url{https://en.wikipedia.org/wiki/Delta_encoding}
-#' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node02D6.html}
+#' @references <https://en.wikipedia.org/wiki/Delta_encoding>
+#' @references <http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node02D6.html>
 #' @author Pepijn de Vries
 #' @export
 deltaFibonacciCompress <- function(x, ...) {
@@ -1035,7 +1035,7 @@ deltaFibonacciDecompress <- function(x, ...) {
 {
   unlist(lapply(x, function(y) {
     res <- try(col2rgb(y), silent = TRUE)
-    return(!"try-error" %in% class(res))
+    return(!inherits(res, "try-error"))
   }))
 }
 
@@ -1186,15 +1186,15 @@ deltaFibonacciDecompress <- function(x, ...) {
 #'
 #' Timeval is a structure (struct) as specified in device/timer.h on the Amiga (see
 #' references). It represents a timespan in seconds. This function retrieves the
-#' numeric value from \code{raw} data. Amongst others, the timeval struct was used
-#' in the system-configuration file (see \link{SysConfig}) to specify key repeat speed,
-#' key repeat delay and mouse double click speed. Use \code{as.raw} for the inverse
+#' numeric value from `raw` data. Amongst others, the timeval struct was used
+#' in the system-configuration file (see [SysConfig]) to specify key repeat speed,
+#' key repeat delay and mouse double click speed. Use `as.raw` for the inverse
 #' of this function and get the original raw data.
 #' @rdname timeval
 #' @name timeval
-#' @param x a \code{vector} of \code{raw} data that need to be converted into
+#' @param x a `vector` of `raw` data that need to be converted into
 #' Amiga timeval structs.
-#' @returns Returns a \code{numeric} \code{vector} of a timespan in seconds. It is
+#' @returns Returns a `numeric` `vector` of a timespan in seconds. It is
 #' represented as an S3 AmigaTimeVal class.
 #' @examples
 #' ## First four raw values represent seconds, the latter four microseconds:
@@ -1204,7 +1204,7 @@ deltaFibonacciDecompress <- function(x, ...) {
 #' ## You can use 'as.raw' to get the original raw data again:
 #' as.raw(temp)
 #' @author Pepijn de Vries
-#' @references \url{http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node0053.html}
+#' @references <http://amigadev.elowar.com/read/ADCD_2.1/Includes_and_Autodocs_2._guide/node0053.html>
 #' @export
 timeval <- function(x) {
   ## get timeval struct from raw data
@@ -1221,7 +1221,7 @@ timeval <- function(x) {
 #' @export
 as.raw.AmigaTimeVal <- function(x, ...) {
   ## convert a timval (time interval in seconds) to raw timeval struct
-  if (!"AmigaTimeVal" %in% class(x)) stop("x should be of S3 class AmigaTimeVal.")
+  if (!inherits(x, "AmigaTimeVal")) stop("x should be of S3 class AmigaTimeVal.")
   secs   <- floor(x)
   micros <- round((x - secs)*1e6)
   secs[secs >= 2^32] <-  (2^32) - 1
@@ -1311,7 +1311,7 @@ print.AmigaTimeVal <- function(x, ...) {
   function(raw_dat)
     ## function that gets the value [0,16] of the 4 low bits of a raw byte
   {
-    if (!"raw" %in% class(raw_dat)) stop ("Only raw data is accepted as input")
+    if (!inherits(raw_dat, "raw")) stop ("Only raw data is accepted as input")
     return(as.integer(raw_dat)%%16)
   }
 
@@ -1319,7 +1319,7 @@ print.AmigaTimeVal <- function(x, ...) {
   function(raw_dat)
     ## function that gets the value [0,16] of the 4 high bits of a raw byte
   {
-    if (!"raw" %in% class(raw_dat)) stop ("Only raw data is accepted as input")
+    if (!inherits(raw_dat, "raw")) stop ("Only raw data is accepted as input")
     return(as.integer(as.integer(raw_dat)/16))
   }
 
@@ -1338,7 +1338,7 @@ print.AmigaTimeVal <- function(x, ...) {
       result <- result[result != raw(1)]
     }
     try(result <- rawToChar(result), silent = T)
-    if ("raw" %in% class(result)) result <- ""
+    if (inherits(result, "raw")) result <- ""
   }
   return(result)
 }
@@ -1356,11 +1356,11 @@ print.AmigaTimeVal <- function(x, ...) {
       stop("When specifying 'disk', the 'adfExplorer' package needs to be installed.")
     }
   }
-  if ("character" %in% class(file)) {
+  if (inherits(file, "character")) {
     size <- file.size(file)
     file <- file(file, "rb")
   }
-  if ("connection" %in% class(file)) {
+  if (inherits(file, "connection")) {
     con_info <- summary(file)
     if (con_info$`can read` != "yes" || con_info$text != "binary") stop("file is not a connection from which binary data can be read...")
   }
@@ -1378,14 +1378,14 @@ print.AmigaTimeVal <- function(x, ...) {
 .write.generic <- function(x, file, disk = NULL, ...) {
   raw.dat <- as.raw(x, ...)
   if (is.null(disk)) {
-    if ("character" %in% class(file)) con <- file(file, "wb")
-    if ("connection" %in% class(file)) {
+    if (inherits(file, "character")) con <- file(file, "wb")
+    if (inherits(file, "connection")) {
       con_info <- summary(con)
       if (con_info$`can write` != "yes" || con_info$text != "binary") stop("file is not a connection to which binary data can be written...")
       con <- file
     }
     writeBin(raw.dat, con, endian = "big")
-    if ("character" %in% class(file)) return(close(con))
+    if (inherits(file, "character")) return(close(con))
   } else {
     if ("adfExplorer" %in% rownames(utils::installed.packages())) {
       return(adfExplorer::put.adf.file(disk, raw.dat, file))

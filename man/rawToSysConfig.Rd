@@ -22,7 +22,7 @@ such a file to a \link{SysConfig} object.
 \details{
 The Amiga used the system-configuration file to store certain system preferences
 in a binary file. With this function such \code{raw} data can be converted into
-a more comprehensive \link{SysConfig} object. Use \code{\link[AmigaFFH]{as.raw}}
+a more comprehensive \link{SysConfig} object. Use \code{\link[=as.raw]{as.raw()}}
 to achieve the inverse.
 }
 \examples{

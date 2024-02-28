@@ -39,40 +39,32 @@ are doing as it may break the validity of the font.
 }
 \section{AmigaBitmapFontSet}{
 
-\describe{
-  \item{\code{fch_FileID}}{
-    A \code{factor} with levels 'FontContents', 'TFontContents' and
-    'ScalableOutline'. It specifies the type of font.
-    Currently only the first level is supported.
-  }
-  \item{\code{fch_NumEntries}}{
-    number of font heights available for this font. It should
-    match with the length of \code{FontContents}. Do not change
-    this value manually.
-  }
-  \item{\code{FontContents}}{
-    This is a \code{list} with bitmap entries for each specific font
-    height (in pixels). The name of each element in this list is
-    'pt' followed by the height. Each element in this list holds
-    the elements:
-    \describe{
-      \item{Miscellaneous}{Miscellaneous information from the *.font file}
-      \item{\code{fc_FileName}}{
-        This element represents the filename of the
-        nested font bitmap images. Note that it should be a valid
-        Commodore Amiga filename. It is best to modify this name
-        using \code{\link{fontName}}. Note that this field could cause
-        problems as Commodore Amiga filenames can contain characters
-        that most modern platforms would not allow (such as the
-        question mark).
-      }
-      \item{\code{BitmapFont}}{
-        This element is of type \code{AmigaBitmapFont} and is structured
-        as described in the following section. The information in this
-        element is no longer part of the *.font file.
-      }
-    }
-  }
+\itemize{
+\item \code{fch_FileID}: A \code{factor} with levels 'FontContents', 'TFontContents' and
+'ScalableOutline'. It specifies the type of font.
+Currently only the first level is supported.
+\item \code{fch_NumEntries}: number of font heights available for this font. It should
+match with the length of \code{FontContents}. Do not change
+this value manually.
+\item \code{FontContents}: This is a \code{list} with bitmap entries for each specific font
+height (in pixels). The name of each element in this list is
+'pt' followed by the height. Each element in this list holds
+the elements:
+\itemize{
+\item Miscellaneous: Miscellaneous information from the \*.font file
+\itemize{
+\item \code{fc_FileName}: This element represents the filename of the
+nested font bitmap images. Note that it should be a valid
+Commodore Amiga filename. It is best to modify this name
+using \code{\link[=fontName]{fontName()}}. Note that this field could cause
+problems as Commodore Amiga filenames can contain characters
+that most modern platforms would not allow (such as the
+question mark).
+\item \code{BitmapFont}: This element is of type \code{AmigaBitmapFont} and is structured
+as described in the following section. The information in this
+element is no longer part of the *.font file.
+}
+}
 }
 }
 
@@ -81,41 +73,37 @@ are doing as it may break the validity of the font.
 Information represented by a \code{AmigaBitmapFont} is not stored
 in *.font files. Rather it is stored in sub-directories of the font
 in separate files. It has the following structure:
-\describe{
-  \item{Miscellaneous}{Elements with information on the font
-  properties and style, and also relative file pointers.}
-  \item{\code{glyph.info}}{
-    A \code{data.frame} containing glyph info with information
-    for specific glyphs on each row. Each row matches with a specific
-    ASCII code, ranging from \code{tf_LoChar} up to \code{tf_HiChar}. There is an additional
-    row that contains information for the default glyph that is
-    out of the range of the \code{tf_LoChar} and \code{tf_HiChar}. The \code{data.frame}
-    thus has \code{2 + tf_HiChar - tf_LoChar} rows. This
-    table is used to extract and plot a glyph from the
-    \code{bitmap} image correctly.
-  }
-  \item{\code{bitmap}}{
-    Is a monochromous bitmap image of all the font's glyphs in a
-    single line. It is a simple \code{raster} object
-    (see \code{\link[grDevices]{as.raster}}) with an additional
-    attribute 'palette', which lists the two colours in the image. In
-    this palette, the first colour is the background colour and the
-    second colour is interpreted as the foregroundcolour.
-  }
+\itemize{
+\item Miscellaneous: Elements with information on the font
+properties and style, and also relative file pointers.
+\item \code{glyph.info}: A \code{data.frame} containing glyph info with information
+for specific glyphs on each row. Each row matches with a specific
+ASCII code, ranging from \code{tf_LoChar} up to \code{tf_HiChar}. There is an additional
+row that contains information for the default glyph that is
+out of the range of the \code{tf_LoChar} and \code{tf_HiChar}. The \code{data.frame}
+thus has \code{2 + tf_HiChar - tf_LoChar} rows. This
+table is used to extract and plot a glyph from the
+\code{bitmap} image correctly.
+\item \code{bitmap}: Is a monochromous bitmap image of all the font's glyphs in a
+single line. It is a simple \code{raster} object
+(see \code{\link[grDevices:as.raster]{grDevices::as.raster()}}) with an additional
+attribute 'palette', which lists the two colours in the image. In
+this palette, the first colour is the background colour and the
+second colour is interpreted as the foregroundcolour.
 }
 }
 
 \section{Useful functions}{
 
 For importing and exporting the following functions are useful:
-\code{\link{read.AmigaBitmapFont}}, \code{\link{read.AmigaBitmapFontSet}},
-\code{\link{write.AmigaBitmapFont}} and \code{\link{write.AmigaBitmapFontSet}}.
+\code{\link[=read.AmigaBitmapFont]{read.AmigaBitmapFont()}}, \code{\link[=read.AmigaBitmapFontSet]{read.AmigaBitmapFontSet()}},
+\code{\link[=write.AmigaBitmapFont]{write.AmigaBitmapFont()}} and \code{\link[=write.AmigaBitmapFontSet]{write.AmigaBitmapFontSet()}}.
 
 The following generic functions are implemented for these objects:
-\code{\link[AmigaFFH]{plot}}, \code{print},
-\code{\link[AmigaFFH]{as.raster}} and \code{\link[AmigaFFH]{as.raw}}.
+\code{\link[=plot]{plot()}}, \code{print},
+\code{\link[=as.raster]{as.raster()}} and \code{\link[=as.raw]{as.raw()}}.
 
-Use \code{\link[AmigaFFH]{c}} to combine one or more
+Use \code{\link[=c]{c()}} to combine one or more
 \code{AmigaBitmapFont} objects into a \code{AmigaBitmapFontSet}.
 }
 

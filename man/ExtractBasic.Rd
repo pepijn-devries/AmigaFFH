@@ -21,24 +21,23 @@
 \item{x}{An \code{AmigaBasic} class object from which specific lines
 need to be extracted or replaced.}
 
-\item{i}{In case of `[[', an integer index, representing the line-number of basic code to be selected.
-In case of `[': a \code{vector} of \code{numeric} indices. This index
+\item{i}{In case of \verb{[[', an integer index, representing the line-number of basic code to be selected. In case of }[': a \code{vector} of \code{numeric} indices. This index
 is used to select specific lines. Negative values will deselect lines.}
 
 \item{value}{A \code{vector} of \code{character} strings or an
-\code{\link{AmigaBasic}} class object that is used to replace
+\code{\link[=AmigaBasic]{AmigaBasic()}} class object that is used to replace
 the selected indices \code{i}. \code{value} should represent the
 same number of lines of code as the selected number of lines.}
 }
 \value{
-The extraction method returns an \code{\link{AmigaBasic}} object based in the lines selected with \code{i}.
-The replacement method returns an \code{\link{AmigaBasic}} object with the selected lines replaced with \code{value}.
+The extraction method returns an \code{\link[=AmigaBasic]{AmigaBasic()}} object based in the lines selected with \code{i}.
+The replacement method returns an \code{\link[=AmigaBasic]{AmigaBasic()}} object with the selected lines replaced with \code{value}.
 }
 \description{
 Extract or replace lines of Amiga Basic code
 }
 \details{
-Extract or replace specific lines in an \code{\link{AmigaBasic}}-class object.
+Extract or replace specific lines in an \code{\link[=AmigaBasic]{AmigaBasic()}}-class object.
 }
 \examples{
 \dontrun{

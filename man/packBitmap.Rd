@@ -18,7 +18,7 @@ whether \code{packBitmap} or \code{unPackBitmap} was called.
 }
 \description{
 A very simplistic lossless routine to (un)pack repetitive bitmap data. Often
-used in InterLeaved BitMap (ILBM) images in IFF containers (\code{\link{IFFChunk}}).
+used in InterLeaved BitMap (ILBM) images in IFF containers (\code{\link[=IFFChunk]{IFFChunk()}}).
 }
 \details{
 InterLeaved BitMap (ILBM) images on the Amiga often use a packing algorithm
@@ -38,7 +38,7 @@ that the file size can also increase for (noisy) images.
 
 This packing routine will pack the entire bitmap (\code{x})
 at once. The IFF file format requires packing of bitmap data per
-scanline. This is done automatically by the \code{\link{rasterToIFF}}
+scanline. This is done automatically by the \code{\link[=rasterToIFF]{rasterToIFF()}}
 function, which calls this packing routine per scanline.
 }
 \examples{

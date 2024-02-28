@@ -31,17 +31,17 @@ use.
 
 It is possible to change the values of the list, but not all values may be valid.
 Note that they will not be fully checked for validity. Invalid values may result in errors
-when writing to a binary file using \code{\link{write.AmigaIcon}}, or may simply not
+when writing to a binary file using \code{\link[=write.AmigaIcon]{write.AmigaIcon()}}, or may simply not
 work properly on an Amiga or in an emulator.
 
 The original `.info' file could be extended with NewIcon or with an OS3.5
-\code{\link{IFFChunk}} data, that allowed for icons with larger colour depths.
+\code{\link[=IFFChunk]{IFFChunk()}} data, that allowed for icons with larger colour depths.
 These extensions are currently not implemented.
 
-Use \code{\link{simpleAmigaIcon}} for creating a simple \code{AmigaIcon} object which can
-be modified. Use \code{\link{read.AmigaIcon}} to read, and \code{\link{write.AmigaIcon}}
-to write workbench icon files (*.info). With \code{\link{rawToAmigaIcon}} and
-\code{\link[AmigaFFH]{as.raw}} \code{AmigaIcon} can be coerced back and forth from
+Use \code{\link[=simpleAmigaIcon]{simpleAmigaIcon()}} for creating a simple \code{AmigaIcon} object which can
+be modified. Use \code{\link[=read.AmigaIcon]{read.AmigaIcon()}} to read, and \code{\link[=write.AmigaIcon]{write.AmigaIcon()}}
+to write workbench icon files (*.info). With \code{\link[=rawToAmigaIcon]{rawToAmigaIcon()}} and
+\code{\link[=as.raw]{as.raw()}} \code{AmigaIcon} can be coerced back and forth from
 and to its raw (binary) form.
 }
 \references{

@@ -10,13 +10,13 @@
 \method{names}{AmigaBasic}(x) <- value
 }
 \arguments{
-\item{x}{An \code{\link{AmigaBasic}}-class object for which to obtain or change variable and/or label names}
+\item{x}{An \code{\link[=AmigaBasic]{AmigaBasic()}}-class object for which to obtain or change variable and/or label names}
 
 \item{value}{A (\code{vector} of) \code{character} string of desired replacement variable/label names.}
 }
 \value{
 A \code{vector} of \code{character} strings with label and variable names in the basic script.
-In case of the replacement method a \code{\link{AmigaBasic}}-class with replaced names is returned.
+In case of the replacement method a \code{\link[=AmigaBasic]{AmigaBasic()}}-class with replaced names is returned.
 }
 \description{
 In the binary Amiga Basic files, names for labels and variables

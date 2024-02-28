@@ -72,337 +72,241 @@ IFFChunk(x, ...)
 }
 \arguments{
 \item{x}{An S3 class \code{IFF.ANY} object that needs to be coerced into an
-\code{\link{IFFChunk-class}} object. \code{IFF.ANY} objects are created with the
-\code{\link{interpretIFFChunk}} method. \code{x} can also be a \code{character} string
+\code{\link[=IFFChunk-class]{IFFChunk-class()}} object. \code{IFF.ANY} objects are created with the
+\code{\link[=interpretIFFChunk]{interpretIFFChunk()}} method. \code{x} can also be a \code{character} string
 of a IFF chunk type (e.g., "\code{FORM}" or "\code{BMHD}"). In that case an
-\code{\link{IFFChunk}} object of that type is created with some basic content.}
+\code{\link[=IFFChunk]{IFFChunk()}} object of that type is created with some basic content.}
 
 \item{...}{Arguments passed onto methods underlying the interpretation of the
 specific IFF chunks. Allowed arguments depend on the specific type of IFF chunk that
 \code{x} represents.}
 }
 \value{
-Returns an \code{\link{IFFChunk-class}} representation of \code{x}.
+Returns an \code{\link[=IFFChunk-class]{IFFChunk-class()}} representation of \code{x}.
 }
 \description{
-Convert \code{IFF.ANY} objects (created with \code{\link{interpretIFFChunk}}) into
-\code{\link{IFFChunk}} objects. A basic \code{\link{IFFChunk}} can also be
+Convert \code{IFF.ANY} objects (created with \code{\link[=interpretIFFChunk]{interpretIFFChunk()}}) into
+\code{\link[=IFFChunk]{IFFChunk()}} objects. A basic \code{\link[=IFFChunk]{IFFChunk()}} can also be
 created with this method by providing the chunk type name.
 }
 \details{
-IFF data is stored in a \code{\link{IFFChunk-class}} object when read from an
-IFF file (\code{\link{read.iff}}). These objects reflect the file structure
+IFF data is stored in a \code{\link[=IFFChunk-class]{IFFChunk-class()}} object when read from an
+IFF file (\code{\link[=read.iff]{read.iff()}}). These objects reflect the file structure
 well, but the data is stored as \code{raw} information. IFF files can contain
 a wide variety of information types, ranging from bitmap images to audio
-clips. The raw information stored in \code{\link{IFFChunk}} objects can
+clips. The raw information stored in \code{\link[=IFFChunk]{IFFChunk()}} objects can
 be interpreted into more meaningful representations that can be handled in
-R. This is achieved with the \code{\link{interpretIFFChunk}} method, which
+R. This is achieved with the \code{\link[=interpretIFFChunk]{interpretIFFChunk()}} method, which
 returns \code{IFF.ANY} objects.
 
 These \code{IFF.ANY} objects are a less strict representation of the
 IFF Chunk, but are easier to handle in R. The interpretation method is lossy
 and may not preserve all information in the \code{IFF.ANY} object.
-The \code{\link{IFFChunk-method}} can coerce \code{IFF.ANY} back
-to the more strictly defined \code{\link{IFFChunk-class}} objects.
-Be careful with conversions between \code{\link{IFFChunk-class}} and
+The \code{\link[=IFFChunk-method]{IFFChunk-method()}} can coerce \code{IFF.ANY} back
+to the more strictly defined \code{\link[=IFFChunk-class]{IFFChunk-class()}} objects.
+Be careful with conversions between \code{\link[=IFFChunk-class]{IFFChunk-class()}} and
 \code{IFF.ANY} objects and vice versa, as information may get lost.
 
 More detailed information about IFF chunks can be found in the IFF chunk registry
 (see references).
-
 \itemize{
-  \item{
-    \code{IFF.FORM} represents a FORM chunk, which is a container that can hold any kind of chunk.
-    When interpreted, it is represented as a \code{list}, where each element is an interpreted chunk
-    nested inside the FORM.
-  }
-  \item{
-    \code{IFF.BODY} represents the actual data in an IFF file. However, without context
-    this chunk cannot be interpreted and is therefore interpreted as a vector of \code{raw} data.
-  }
-  \item{
-    \code{IFF.ANIM} represents an animation (ANIM) chunk. When interpreted, it will return a \code{list} where each element
-    is an animation frame represented as an \code{IFF.ILBM} object. Each animation frame should be nested inside
-    an ILBM chunk nested inside a FORM chunk, nested inside an ANIM chunk.
-    \itemize{
-      \item{
-        \code{IFF.ANHD} represents an ANimation HeaDer (ANHD) chunk. When interpreted,
-        it returns a named \code{list} containing the
-        following information:
-        \itemize{
-          \item{
-            \code{operation} is a \code{character} string indicating how the bitmap
-            data for the animation frame is encoded. Can be one of the following:
-            "\code{standard}", "\code{XOR}", "\code{LongDeltaMode}",
-            "\code{ShortDeltaMode}", "\code{GeneralDeltamode}",
-            "\code{ByteVerticalCompression}", "\code{StereoOp5}", or
-            "\code{ShortLongVerticalDeltaMode}". Currently, only the
-            ByteVerticalCompression is implemented in this package.
-          }
-          \item{
-            \code{mask} is a \code{vector} of 8 \code{logical} values. It is currently
-            ignored.
-          }
-          \item{
-            \code{w} and \code{h} are positive \code{numeric} values, specifying
-            the width and height of the frame (should be identical for all frames).
-          }
-          \item{
-            \code{x} and \code{y} are \code{numeric} values, specifying the plotting
-            position for the frame.
-          }
-          \item{
-            \code{abstime} is a positive \code{numeric} value - currently unused - used for
-            timing the frame relative to the time the first frame was displayed. In
-            jiffies (1/60 sec).
-          }
-          \item{
-            \code{reltime} is a positive \code{numeric} value for timing the frame
-            relative to time previous frame was displayed. In jiffies (1/60 sec).
-          }
-          \item{
-            \code{interleave} is currently unused. It should be set to 0.
-          }
-          \item{
-            \code{pad0} is a padding byte (\code{raw}) for future use.
-          }
-          \item{
-            \code{flags} is a \code{vector} of 32 \code{logical} values. They contain
-            information on how the bitmap data is stored.
-          }
-          \item{
-            \code{pad1} are 16 padding bytes (\code{raw}) for future use.
-          }
-        }
-      }
-      \item{
-        \code{IFF.DPAN} represents an DPaint ANimation (DPAN) chunk. Some software will
-        require this chunk to correctly derive the total number of frames in the animation.
-        When interpreted, it will return a named \code{list} with the following elements:
-        \itemize{
-          \item{
-            \code{version} a \code{numeric} version number.
-          }
-          \item{
-            \code{nframes} a positive \code{numeric} value, indicating the number
-            of frames in the animation.
-          }
-          \item{
-            \code{flags} a \code{vector} of 32 \code{logical} values. Ignored in
-            this package as it was intended for future implementations.
-          }
-        }
-      }
-      \item{
-        \code{IFF.DLTA} represents a delta mode data chunk (DLTA). The first animation
-        frame is stored as a normal InterLeaved BitMap (ILBM) image as described below.
-        The following frames only store differences in bitmap data compared to the
-        previous frames but is not interleaved. They are thus incorrectly embedded in
-        an ILBM chunk (but is kept so for backward compatibility). When interpreted,
-        a \code{grDevices} raster object is returned only showing the differences. It
-        is not very meaningful to interpret these chunks on their own, but rather the
-        entire parent ANIM chunk.
-      }
-    }
-  }
-  \item{
-    \code{IFF.ILBM} represents InterLeaved BitMap (ILBM) chunks. It is interpreted here as a
-    raster image (see \code{\link[grDevices]{as.raster}}). ILBM chunks are usually nested inside
-    a FORM container.
-    \itemize{
-      \item{
-        \code{IFF.BMHD} represents the header chunk of a bitmap (BMHD), and should always be present (nested inside)
-        an ILBM chunk. It is interpreted as a named list containing the following elements:
-        \itemize{
-          \item{
-            \code{w} and \code{h} are positive \code{numeric} values specifying
-            the bitmap width and height in pixels. Note that the width
-            can be any positive whole number, whereas the bitmap data always
-            has a width divisible by 16.
-          }
-          \item{
-            \code{x} and \code{y} are \code{numeric} values specifying the plotting
-            position relative to the top left position of the screen.
-            Although required in the bitmap header. It is ignored in the
-            interpretation of bitmap images.
-          }
-          \item{
-            \code{nPlanes} is a positive value indicating the number of
-            bitplanes in the image. The number of colours in an image
-            can be calculated as \code{2^nPlanes}.
-          }
-          \item{
-            \code{Masking} indicates whether there are bitplanes that should
-            be masked (i.e. are treated as transparent). It is a \code{character}
-            string equalling any of the following: "\code{mskNone}",
-            "\code{mskHasMask}", "\code{mskHasTransparentColour}",
-            "\code{mskLasso}" or "\code{mskUnknown}". Only the first (no transparency)
-            and third (one of the colours should be treated as transparent)
-            id is currently interpreted correctly. The others are ignored.
-            "\code{mskUnknown}" means that an undocumented mask is applied
-            to the image.
-          }
-          \item{
-            \code{Compression} indicates whether the bitmap data is
-            compressed. It is a \code{character} string that can equal any
-            of the following: "\code{cmpNone}", "\code{cmpByteRun1}" or
-            "\code{cmpUnknown}". The latter means an undocumented form of
-            compression is applied and is currently ignored. In most cases
-            bitmap data is compressed with the \code{cmpByteRun1} algorithm
-            (\code{\link{packBitmap}}). In some cases, bitmap data is not
-            compressed (\code{cmpNone}).
-          }
-          \item{
-            \code{pad} is a \code{raw} byte that is only used to
-            align data. It is ignored in the interpretation.
-          }
-          \item{
-            \code{transparentColour} is a \code{numeric} value that indicates
-            which colour number in the palette should be treated as fully
-            transparent (when \code{Masking} equals
-            "\code{mskHasTransparentColour}").
-          }
-          \item{
-            \code{xAspect} and \code{yAspect} or positive \code{numeric}
-            values that indicate the aspect ratio of
-            the pixels in the image. Amiga screen modes allowed for some
-            extreme pixel aspect ratios. These values are used to stretch
-            the image to their intended display mode.
-          }
-          \item{
-            \code{pageWidth} and \code{pageHeight} are positive
-            \code{numeric} values indicating the size of the screen in which
-            the image should be displayed. They are ignored in the
-            interpretation of the image.
-          }
-        }
-      }
-      \item{
-        \code{IFF.CMAP} represents the colour map (CMAP) or palette of a bitmap image. Although common,
-        the chunk is optional and can be omitted from the parent ILBM chunk. It is interpreted as a
-        vector of colours (i.e., a \code{character} string formatted as `#RRGGBB' or named colours such as `blue').
-      }
-      \item{
-        \code{IFF.CAMG} represents a chunk with information with respect
-        to the display mode in which the bitmap image should be displayed.
-        This information can be used to determine the correct pixel aspect
-        ratio, or is sometimes required to correctly interpret the bitmap
-        information. The \code{IFF.CAMG} chunk is interpreted as a named list
-        containing the following elements:
-        \itemize{
-          \item{
-            \code{monitor}: a \code{factor} indicating the hardware monitor
-            on which the image was created and should be displayed (see 
-            \code{\link{amiga_monitors}}).
-          }
-          \item{
-            \code{display.mode}: a \code{factor} indicating the display
-            mode in which the image should be displayed (see
-            \code{\link{amiga_display_modes}}).
-          }
-        }
-      }
-      \item{
-        \code{IFF.CRNG} is an optional chunk nested in an ILBM chunk.
-        It represents a `colour range' and is used to cycle through
-        colours in the bitmap's palette in order to achieve
-        animation effects. It is interpreted as a named list with the
-        following elements. This chunk is currently not used with
-        the interpretation of ILBM images.
-        \itemize{
-          \item{
-            \code{padding} are two \code{raw} padding bytes and are
-            ignored when interpreted.
-          }
-          \item{
-            \code{rate} is a \code{numeric} value specifying the rate
-            at which the colours are cycled. The rate is in steps per
-            second.
-          }
-          \item{
-            \code{flags} is a flag that indicates how colours should
-            be cycled. It is a \code{character} string that can equal
-            any of the following: "\code{RNG_OFF}", "\code{RNG_ACTIVE}",
-            "\code{RNG_REVERSE}" or "\code{RNG_UNKNOWN}". When equal to the
-            first, colours are not cycled. When equal to the second, colours
-            are cycled. When equal to the third, colours are cycled in
-            reverse direction. When equal to the latter, an undocumented
-            form of cycling is applied.
-          }
-          \item{
-            \code{low} and \code{high} are \code{numeric} indices of
-            colours between which should be cycled. Only colour from
-            index \code{low} up to index \code{high} are affected.
-          }
-        }
-      }
-    }
-  }
-  \item{
-    \code{IFF.8SVX} represents 8-bit sampled voice chunks (8SVX). The original
-    Amiga supported 8-bit audio which could be stored using the IFF. 8SVX chunks
-    can contain separate audio samples for each octave. 8SVX chunks are usually
-    stored inside a FORM container. Its body chunk contains 8-bit PCM wave data that
-    could be compressed. When the 8SVX chunk is
-    interpreted with this package, a \code{list} is returned where each element
-    represents an octave given as a \code{\link[tuneR]{Wave}} object. Possible
-    chunks nested in 8SVX chunks and currently supported by this package are
-    as follows.
-    \itemize{
-      \item{
-        \code{IFF.VHDR} represents voice header chunks (VHDR). It contains (meta-)information about
-        the audio stored in the body of the parent 8SVX chunk. When interpreted, a named \code{list} is
-        returned with the following elements:
-        \itemize{
-          \item{
-            \code{oneShotHiSamples} is a \code{numeric} value indicating how many samples there are in the
-            audio wave of the first octave in the file, that should not be looped (repeated).
-          }
-          \item{
-            \code{repeatHiSamples} is a \code{numeric} value indicating how many samples there are in the
-            audio wave of the first octave in the file, that should be looped (repeated).
-          }
-          \item{
-            \code{samplesPerHiCycle} is a \code{numeric} value specifying the
-            number of samples per repeat cycle in the first octave, or 0 when unknown.
-            The number of \code{repeatHiSamples} should be an exact multiple of
-            \code{samplesPerHiCycle}.
-          }
-          \item{
-            \code{samplesPerSec} is a \code{numeric} value specifying the data
-            sampling rate.
-          }
-          \item{
-            \code{ctOctave} a positive whole \code{numeric} value indicating how many octaves are included.
-            In 8SVX files the audio wave is resampled for each octave. The wave data in the body starts with
-            the audio sample in the highest octave (least number of samples). The data is then followed by
-            each subsequent octave, where the number of samples increase by a factor of 2 for each octave.
-          }
-          \item{
-            \code{sCompression} is a \code{character} string indicating whether and how the wave data in the body
-            is compressed. It can have one of the following values: "\code{sCmpNone}" (no compression),
-            "\code{sCmpFibDelta}" (\code{\link{deltaFibonacciCompress}}ion is applied), "\code{sCmpUnknown}" (an
-            undocumented and unknown form of compression is applied).
-          }
-          \item{
-            \code{volume} is a numeric value between \code{0} (minimum) and \code{0x10000} (maximum) playback volume.
-          }
-        }
-      }
-      \item{
-        \code{IFF.CHAN} represents the channel chunk (CHAN). When interpreted it returns a named list with 1 named element:
-        "\code{channel}". It's value can be one of the following \code{character} strings "\code{LEFT}", "\code{RIGHT}" or
-        "\code{STEREO}". This indicates for how many (one or two) audio channels data is available in the body of the parent
-        8SVX chunk. It also indicates two which channels the audio should be played back.
-      }
-    }
-  }
-  \item{
-    \code{IFF.ANNO}, \code{IFF.AUTH}, \code{IFF.CHRS}, \code{IFF.NAME}, \code{IFF.TEXT} and \code{IFF.copyright}
-    are all unformatted text chunks that can be included optionally in any of the chunk types. Respectively, they
-    represent an annotation, the author's name, a generic character string, the name of the work, generic unformatted text,
-    and copyright text. They are interpreted as a \code{character} string.
-  }
+\item \code{IFF.FORM} represents a FORM chunk, which is a container that can hold any kind of chunk.
+When interpreted, it is represented as a \code{list}, where each element is an interpreted chunk
+nested inside the FORM.
+\item \code{IFF.BODY} represents the actual data in an IFF file. However, without context
+this chunk cannot be interpreted and is therefore interpreted as a vector of \code{raw} data.
+\item \code{IFF.ANIM} represents an animation (ANIM) chunk. When interpreted, it will return a \code{list} where each
+element is an animation frame represented as an \code{IFF.ILBM} object. Each animation frame should be
+nested inside an ILBM chunk nested inside a FORM chunk, nested inside an ANIM chunk.
+\itemize{
+\item \code{IFF.ANHD} represents an ANimation HeaDer (ANHD) chunk. When interpreted,
+it returns a named \code{list} containing the
+following information:
+\itemize{
+\item \code{operation} is a \code{character} string indicating how the bitmap
+data for the animation frame is encoded. Can be one of the following:
+"\code{standard}", "\code{XOR}", "\code{LongDeltaMode}",
+"\code{ShortDeltaMode}", "\code{GeneralDeltamode}",
+"\code{ByteVerticalCompression}", "\code{StereoOp5}", or
+"\code{ShortLongVerticalDeltaMode}". Currently, only the
+ByteVerticalCompression is implemented in this package.
+\item \code{mask} is a \code{vector} of 8 \code{logical} values. It is currently
+ignored.
+\item \code{w} and \code{h} are positive \code{numeric} values, specifying
+the width and height of the frame (should be identical for all frames).
+\item \code{x} and \code{y} are \code{numeric} values, specifying the plotting
+position for the frame.
+\item \code{abstime} is a positive \code{numeric} value - currently unused - used for
+timing the frame relative to the time the first frame was displayed. In
+jiffies (1/60 sec).
+\item \code{reltime} is a positive \code{numeric} value for timing the frame
+relative to time previous frame was displayed. In jiffies (1/60 sec).
+\item \code{interleave} is currently unused. It should be set to 0.
+\item \code{pad0} is a padding byte (\code{raw}) for future use.
+\item \code{flags} is a \code{vector} of 32 \code{logical} values. They contain
+information on how the bitmap data is stored.
+\item \code{pad1} are 16 padding bytes (\code{raw}) for future use.
+}
+\item \code{IFF.DPAN} represents an DPaint ANimation (DPAN) chunk. Some software will
+require this chunk to correctly derive the total number of frames in the animation.
+When interpreted, it will return a named \code{list} with the following elements:
+\itemize{
+\item \code{version} a \code{numeric} version number.
+\item \code{nframes} a positive \code{numeric} value, indicating the number
+of frames in the animation.
+\item \code{flags} a \code{vector} of 32 \code{logical} values. Ignored in
+this package as it was intended for future implementations.
+}
+\item \code{IFF.DLTA} represents a delta mode data chunk (DLTA). The first animation
+frame is stored as a normal InterLeaved BitMap (ILBM) image as described below.
+The following frames only store differences in bitmap data compared to the
+previous frames but is not interleaved. They are thus incorrectly embedded in
+an ILBM chunk (but is kept so for backward compatibility). When interpreted,
+a \code{grDevices} raster object is returned only showing the differences. It
+is not very meaningful to interpret these chunks on their own, but rather the
+entire parent ANIM chunk.
+}
+\item \code{IFF.ILBM} represents InterLeaved BitMap (ILBM) chunks. It is interpreted here as a
+raster image (see \code{\link[grDevices:as.raster]{grDevices::as.raster()}}). ILBM chunks are usually nested inside
+a FORM container.
+\itemize{
+\item \code{IFF.BMHD} represents the header chunk of a bitmap (BMHD), and should always be present
+(nested inside) an ILBM chunk. It is interpreted as a named list containing the following elements:
+\itemize{
+\item \code{w} and \code{h} are positive \code{numeric} values specifying
+the bitmap width and height in pixels. Note that the width
+can be any positive whole number, whereas the bitmap data always
+has a width divisible by 16.
+\item \code{x} and \code{y} are \code{numeric} values specifying the plotting
+position relative to the top left position of the screen.
+Although required in the bitmap header. It is ignored in the
+interpretation of bitmap images.
+\item \code{nPlanes} is a positive value indicating the number of
+bitplanes in the image. The number of colours in an image
+can be calculated as \code{2^nPlanes}.
+\item \code{Masking} indicates whether there are bitplanes that should
+be masked (i.e. are treated as transparent). It is a \code{character}
+string equalling any of the following: "\code{mskNone}",
+"\code{mskHasMask}", "\code{mskHasTransparentColour}",
+"\code{mskLasso}" or "\code{mskUnknown}". Only the first (no transparency)
+and third (one of the colours should be treated as transparent)
+id is currently interpreted correctly. The others are ignored.
+"\code{mskUnknown}" means that an undocumented mask is applied
+to the image.
+\item \code{Compression} indicates whether the bitmap data is
+compressed. It is a \code{character} string that can equal any
+of the following: "\code{cmpNone}", "\code{cmpByteRun1}" or
+"\code{cmpUnknown}". The latter means an undocumented form of
+compression is applied and is currently ignored. In most cases
+bitmap data is compressed with the \code{cmpByteRun1} algorithm
+(\code{\link[=packBitmap]{packBitmap()}}). In some cases, bitmap data is not
+compressed (\code{cmpNone}).
+\item \code{pad} is a \code{raw} byte that is only used to
+align data. It is ignored in the interpretation.
+\item \code{transparentColour} is a \code{numeric} value that indicates
+which colour number in the palette should be treated as fully
+transparent (when \code{Masking} equals
+"\code{mskHasTransparentColour}").
+\item \code{xAspect} and \code{yAspect} or positive \code{numeric}
+values that indicate the aspect ratio of
+the pixels in the image. Amiga screen modes allowed for some
+extreme pixel aspect ratios. These values are used to stretch
+the image to their intended display mode.
+\item \code{pageWidth} and \code{pageHeight} are positive
+\code{numeric} values indicating the size of the screen in which
+the image should be displayed. They are ignored in the
+interpretation of the image.
+}
+\item \code{IFF.CMAP} represents the colour map (CMAP) or palette of a bitmap image. Although common,
+the chunk is optional and can be omitted from the parent ILBM chunk. It is interpreted as a
+vector of colours (i.e., a \code{character} string formatted as '#RRGGBB' or named colours such as
+'blue').
+\item \code{IFF.CAMG} represents a chunk with information with respect
+to the display mode in which the bitmap image should be displayed.
+This information can be used to determine the correct pixel aspect
+ratio, or is sometimes required to correctly interpret the bitmap
+information. The \code{IFF.CAMG} chunk is interpreted as a named list
+containing the following elements:
+\itemize{
+\item \code{monitor}: a \code{factor} indicating the hardware monitor
+on which the image was created and should be displayed (see
+\code{\link[=amiga_monitors]{amiga_monitors()}}).
+\item \code{display.mode}: a \code{factor} indicating the display
+mode in which the image should be displayed (see
+\code{\link[=amiga_display_modes]{amiga_display_modes()}}).
+}
+\item \code{IFF.CRNG} is an optional chunk nested in an ILBM chunk.
+It represents a `colour range' and is used to cycle through
+colours in the bitmap's palette in order to achieve
+animation effects. It is interpreted as a named list with the
+following elements. This chunk is currently not used with
+the interpretation of ILBM images.
+\itemize{
+\item \code{padding} are two \code{raw} padding bytes and are
+ignored when interpreted.
+\item \code{rate} is a \code{numeric} value specifying the rate
+at which the colours are cycled. The rate is in steps per
+second.
+\item \code{flags} is a flag that indicates how colours should
+be cycled. It is a \code{character} string that can equal
+any of the following: "\code{RNG_OFF}", "\code{RNG_ACTIVE}",
+"\code{RNG_REVERSE}" or "\code{RNG_UNKNOWN}". When equal to the
+first, colours are not cycled. When equal to the second, colours
+are cycled. When equal to the third, colours are cycled in
+reverse direction. When equal to the latter, an undocumented
+form of cycling is applied.
+\item \code{low} and \code{high} are \code{numeric} indices of
+colours between which should be cycled. Only colour from
+index \code{low} up to index \code{high} are affected.
+}
+}
+\item \code{IFF.8SVX} represents 8-bit sampled voice chunks (8SVX). The original
+Amiga supported 8-bit audio which could be stored using the IFF. 8SVX chunks
+can contain separate audio samples for each octave. 8SVX chunks are usually
+stored inside a FORM container. Its body chunk contains 8-bit PCM wave data that
+could be compressed. When the 8SVX chunk is
+interpreted with this package, a \code{list} is returned where each element
+represents an octave given as a \code{\link[tuneR:Wave]{tuneR::Wave()}} object. Possible
+chunks nested in 8SVX chunks and currently supported by this package are
+as follows.
+\itemize{
+\item \code{IFF.VHDR} represents voice header chunks (VHDR). It contains (meta-)information about
+the audio stored in the body of the parent 8SVX chunk. When interpreted, a named \code{list} is
+returned with the following elements:
+\itemize{
+\item \code{oneShotHiSamples} is a \code{numeric} value indicating how many samples there are in the
+audio wave of the first octave in the file, that should not be looped (repeated).
+\item \code{repeatHiSamples} is a \code{numeric} value indicating how many samples there are in the
+audio wave of the first octave in the file, that should be looped (repeated).
+\item \code{samplesPerHiCycle} is a \code{numeric} value specifying the
+number of samples per repeat cycle in the first octave, or 0 when unknown.
+The number of \code{repeatHiSamples} should be an exact multiple of
+\code{samplesPerHiCycle}.
+\item \code{samplesPerSec} is a \code{numeric} value specifying the data
+sampling rate.
+\item \code{ctOctave} a positive whole \code{numeric} value indicating how many octaves are included.
+In 8SVX files the audio wave is resampled for each octave. The wave data in the body starts with
+the audio sample in the highest octave (least number of samples). The data is then followed by
+each subsequent octave, where the number of samples increase by a factor of 2 for each octave.
+\item \code{sCompression} is a \code{character} string indicating whether and how the wave data in the body
+is compressed. It can have one of the following values: "\code{sCmpNone}" (no compression),
+"\code{sCmpFibDelta}" (\code{\link[=deltaFibonacciCompress]{deltaFibonacciCompress()}}ion is applied), "\code{sCmpUnknown}" (an
+undocumented and unknown form of compression is applied).
+\item \code{volume} is a numeric value between \code{0} (minimum) and \code{0x10000} (maximum) playback volume.
+}
+\item \code{IFF.CHAN} represents the channel chunk (CHAN). When interpreted it returns a named list
+with 1 named element:
+"\code{channel}". It's value can be one of the following \code{character} strings "\code{LEFT}", "\code{RIGHT}" or
+"\code{STEREO}". This indicates for how many (one or two) audio channels data is available in the
+body of the parent
+8SVX chunk. It also indicates two which channels the audio should be played back.
+}
+\item \code{IFF.ANNO}, \code{IFF.AUTH}, \code{IFF.CHRS}, \code{IFF.NAME}, \code{IFF.TEXT} and \code{IFF.copyright}
+are all unformatted text chunks that can be included optionally in any of the chunk types.
+Respectively, they
+represent an annotation, the author's name, a generic character string, the name of the work,
+generic unformatted text,
+and copyright text. They are interpreted as a \code{character} string.
 }
 }
 \examples{

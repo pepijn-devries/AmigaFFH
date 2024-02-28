@@ -31,19 +31,19 @@ system-configuration file. It is a a \code{list} where the elements have identic
 names as listed in the documents provided the references. The names are usually
 self-explanatory, but the referred documents can also be
 consulted to obtain more detailed information with respect to each of
-these elements. The mouse pointer is included as a \code{\link{hardwareSprite}} object
-in the list. The pointer image can be replaced by a different \code{\link{hardwareSprite}},
+these elements. The mouse pointer is included as a \code{\link[=hardwareSprite]{hardwareSprite()}} object
+in the list. The pointer image can be replaced by a different \code{\link[=hardwareSprite]{hardwareSprite()}},
 but make sure it has an height of 16 pixels.
 
 It is possible to change the values of the list, but not all values may be valid.
 Note that they will not be fully checked for validity. Invalid values may result in errors
-when writing to a binary file using \code{\link{write.SysConfig}}, or may simply not
+when writing to a binary file using \code{\link[=write.SysConfig]{write.SysConfig()}}, or may simply not
 work properly on an Amiga or in an emulator.
 
-Use \code{\link{simpleSysConfig}} for creating a simple SysConfig object which can
-be modified. Use \code{\link{read.SysConfig}} to read, and \code{\link{write.SysConfig}}
-to write system-configuration files. With \code{\link{rawToSysConfig}} and
-\code{\link[AmigaFFH]{as.raw}} SysConfig can be coerced back and forth from and to
+Use \code{\link[=simpleSysConfig]{simpleSysConfig()}} for creating a simple SysConfig object which can
+be modified. Use \code{\link[=read.SysConfig]{read.SysConfig()}} to read, and \code{\link[=write.SysConfig]{write.SysConfig()}}
+to write system-configuration files. With \code{\link[=rawToSysConfig]{rawToSysConfig()}} and
+\code{\link[=as.raw]{as.raw()}} SysConfig can be coerced back and forth from and to
 its raw (binary) form.
 }
 \references{

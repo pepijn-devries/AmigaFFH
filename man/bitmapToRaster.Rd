@@ -34,22 +34,22 @@ values.}
 An interleaved bitmap image stores each consecutive bitmap layer per horizontal scanline.}
 }
 \value{
-Returns a raster object (\code{\link{as.raster}}) as specified in
-the \code{\link{grDevices}} package. Unless, \code{palette} is set to \code{NULL},
+Returns a raster object (\code{\link[=as.raster]{as.raster()}}) as specified in
+the \code{\link[=grDevices]{grDevices()}} package. Unless, \code{palette} is set to \code{NULL},
 in which case a \code{matrix} with \code{numeric} palette index values is returned.
 }
 \description{
 Amiga images are usually stored as bitmap images with indexed colours. This
 function converts raw Amiga bitmap data into raster data
-(\code{\link[grDevices]{as.raster}}).
+(\code{\link[grDevices:as.raster]{grDevices::as.raster()}}).
 }
 \details{
 Bitmap images stored as raw data, representing palette index colours, can
-be converted into raster data (\code{\link[grDevices]{as.raster}}). The latter
+be converted into raster data (\code{\link[grDevices:as.raster]{grDevices::as.raster()}}). The latter
 data can easily be plotted in R. It is usually not necessary to call this function
 directly, as there are several more convenient wrappers for this function. Those
 wrappers can convert specific file formats (such as IFF ILBM and Hardware Sprites,
-see \code{\link[AmigaFFH]{as.raster}}) into raster objects. This function is
+see \code{\link[=as.raster]{as.raster()}}) into raster objects. This function is
 provided for completeness sake (or for when you want to search for images in an
 amiga memory dump).
 }

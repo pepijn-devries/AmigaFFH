@@ -12,27 +12,27 @@ indicating the font height in pixels. Use \code{file} as a \code{character}
 string representing that file location.}
 
 \item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk}} object. Using
+read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
 this argument requires the adfExplorer package.
 When set to \code{NULL}, this argument is ignored.}
 
-\item{...}{Arguments passed on to \code{\link{rawToAmigaBitmapFont}}.}
+\item{...}{Arguments passed on to \code{\link[=rawToAmigaBitmapFont]{rawToAmigaBitmapFont()}}.}
 }
 \value{
-Returns an \code{\link{AmigaBitmapFont}} object read from the specified file.
+Returns an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object read from the specified file.
 }
 \description{
 Amiga Font Bitmaps of distinctive font heights are stored in separate
 files, which in combination form a font collection or set. This
 function can be used to read a specific bitmap from a set and returns
-it as an \code{\link{AmigaBitmapFont}} class object.
+it as an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class object.
 }
 \details{
 Individual font bitmaps are stored in a font's subdirectory where
 the file name is usually equal to the font height in pixels. This
 function will read such a font bitmap file and return it as an
-\code{\link{AmigaBitmapFont}} class object. It can also read such
-files from \code{\link[adfExplorer]{amigaDisk-class}} objects,
+\code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class object. It can also read such
+files from \code{\link[adfExplorer:amigaDisk-class]{adfExplorer::amigaDisk-class()}} objects,
 but that requires the adfExplorer package to be installed.
 }
 \examples{

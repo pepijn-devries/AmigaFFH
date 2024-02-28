@@ -5,10 +5,11 @@
 \alias{amiga_display_keys}
 \title{A list of special display modes}
 \format{
-a \code{data.frame} with 2 columns:
+{
+A \code{data.frame} with 2 columns:
 \itemize{
-  \item{The column named `mode': a \code{factor} reflecting a display mode, monitor or bitwise mask}
-  \item{The column named `code': vector of 4 \code{raw} values as used by the Amiga to reflect specific display modes}
+\item The column named 'mode': a \code{factor} reflecting a display mode, monitor or bitwise mask
+\item The column named 'code': vector of 4 \code{raw} values as used by the Amiga to reflect specific display modes}
 }
 }
 \description{
@@ -17,8 +18,8 @@ A list of special display modes on the Amiga and corresponding \code{raw} keys.
 \details{
 This table show specific special display modes and to which Amiga monitors they
 relate. The \code{raw} codes can be used to interpret specific display modes
-as listed in \code{\link{amiga_display_modes}}. This information is used to
-interpret \code{\link{IFFChunk}} objects of type `CAMG'. It is also used to
+as listed in \code{\link[=amiga_display_modes]{amiga_display_modes()}}. This information is used to
+interpret \code{\link[=IFFChunk]{IFFChunk()}} objects of type 'CAMG'. It is also used to
 interpret ILBM images and creating IFF files from raster images.
 }
 \examples{

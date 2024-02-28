@@ -19,8 +19,8 @@
 \S4method{getIFFChunk}{IFFChunk,character,integer,IFFChunk}(x, chunk.path, chunk.number = NULL) <- value
 }
 \arguments{
-\item{x}{An \code{\link{IFFChunk}} object from which the nested
-\code{\link{IFFChunk}} should be extracted an returned.}
+\item{x}{An \code{\link[=IFFChunk]{IFFChunk()}} object from which the nested
+\code{\link[=IFFChunk]{IFFChunk()}} should be extracted an returned.}
 
 \item{chunk.path}{A \code{vector} of 4 \code{character} long strings
 of IFF chunk labels, specifying the path of the target IFF chunk.
@@ -33,17 +33,17 @@ chunks with the same label. With this argument you can specify which element
 should be returned. By default (when missing), the first element is always
 returned.}
 
-\item{value}{An \code{\link{IFFChunk}} with which the target chunk should be
+\item{value}{An \code{\link[=IFFChunk]{IFFChunk()}} with which the target chunk should be
 replaced. Make sure that \code{value} is of the same \code{chunk.type} as the last
 chunk specified in the \code{chunk.path}.}
 }
 \value{
-Returns an \code{\link{IFFChunk}} object nested inside \code{x} at the
+Returns an \code{\link[=IFFChunk]{IFFChunk()}} object nested inside \code{x} at the
 specified path. Or in case of the replace method the original chunk \code{x} is
 returned with the target chunk replaced by \code{value}.
 }
 \description{
-\code{\link{IFFChunk}}s can be nested in a tree-like structure. Use this method
+\code{\link[=IFFChunk]{IFFChunk()}}s can be nested in a tree-like structure. Use this method
 to get a specific chunk with a specific label.
 }
 \details{
@@ -51,7 +51,7 @@ to get a specific chunk with a specific label.
 of chunk you are dealing with. These chunks can be nested inside of each other.
 Use this method to extract specific chunks by referring to there respective
 identifiers. The identifiers are shown when calling \code{print} on an
-\code{\link{IFFChunk}}. If a specified path doesn't exist, this method throws a
+\code{\link[=IFFChunk]{IFFChunk()}}. If a specified path doesn't exist, this method throws a
 `subscript out of range' error.
 }
 \examples{

@@ -5,22 +5,23 @@
 \alias{amiga_display_modes}
 \title{A table of display modes on the Amiga and corresponding \code{raw} codes}
 \format{
+{
 A \code{data.frame} with 4 columns:
 \itemize{
-  \item{The column named `DISPLAY_MODE': a \code{factor} reflecting
-  the display mode}
-  \item{The column named `DISPLAY_MODE_ID': A \code{list} containing a \code{vector}
-  of 4 \code{raw} values as used by the Amiga to reflect specific display modes.
-  These raw values are usually also stored with bitmap images in the Interchange
-  File Format in a \code{\link{IFFChunk}} called `CAMG'.}
-  \item{The column named `MONITOR_ID': A \code{character} string identifying
-  the monitor that could display the specific mode.}
-  \item{The column named `CHIPSET': a \code{factor} identifying the minimal
-  chip set that was required to display the specific mode. OCS is the original
-  chip set; ECS is the Enhanced Chip Set. AGA is the Advanced Graphics Architecture
-  chip set (in some countries known as just Advanced Architecture). AGA could
-  also display OCS and ECS modes, ECS could also display OCS modes, OCS could only
-  display OCS modes.}
+\item The column named 'DISPLAY_MODE': a \code{factor} reflecting
+the display mode
+\item The column named 'DISPLAY_MODE_ID': A \code{list} containing a \code{vector}
+of 4 \code{raw} values as used by the Amiga to reflect specific display modes.
+These raw values are usually also stored with bitmap images in the Interchange
+File Format in a \code{\link[=IFFChunk]{IFFChunk()}} called 'CAMG'.
+\item The column named 'MONITOR_ID': A \code{character} string identifying
+the monitor that could display the specific mode.
+\item The column named 'CHIPSET': a \code{factor} identifying the minimal
+chip set that was required to display the specific mode. OCS is the original
+chip set; ECS is the Enhanced Chip Set. AGA is the Advanced Graphics Architecture
+chip set (in some countries known as just Advanced Architecture). AGA could
+also display OCS and ECS modes, ECS could also display OCS modes, OCS could only
+display OCS modes.}
 }
 }
 \description{
@@ -32,8 +33,8 @@ This table contains most display modes that were available on the Amiga.
 It also contains \code{raw} codes that were used to represent these modes.
 The table also contains the hardware monitors that could display the specific
 modes, and the minimal chip set that was required for the display mode.
-This data is used to interpret \code{\link{IFFChunk}} objects of type
-`CAMG'. It is also used to interpret ILBM images and creating IFF files from
+This data is used to interpret \code{\link[=IFFChunk]{IFFChunk()}} objects of type
+'CAMG'. It is also used to interpret ILBM images and creating IFF files from
 raster images.
 }
 \examples{

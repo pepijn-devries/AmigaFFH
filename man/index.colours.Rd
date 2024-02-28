@@ -16,7 +16,7 @@ index.colours(
 )
 }
 \arguments{
-\item{x}{A raster object (\code{\link[grDevices]{as.raster}}), or a \code{matrix}
+\item{x}{A raster object (\code{\link[grDevices:as.raster]{grDevices::as.raster()}}), or a \code{matrix}
 containing \code{character} strings representing colours. \code{x} can also
 be a \code{list} of such matrices or rasters. All elements of this list should
 have identical dimensions. An overall palette will be generated for elements in the
@@ -28,35 +28,35 @@ colours in the indexed palette.
 It can also be a \code{character} string indicating which special
 Amiga display mode should be used when indexing colours.
 \sQuote{\code{HAM6}} and \sQuote{\code{HAM8}} are supported.
-See \code{\link{rasterToBitmap}} for more details on these
+See \code{\link[=rasterToBitmap]{rasterToBitmap()}} for more details on these
 special modes.}
 
 \item{palette}{A vector of no more than \code{length.out} colours, to be used
 for the bitmap image. When missing or set to \code{NULL}, a palette will be
 generated based on the provided colours in raster \code{x}. In that case,
-\code{\link[stats]{kmeans}} is used on the hue, saturation, brightness and
+\code{\link[stats:kmeans]{stats::kmeans()}} is used on the hue, saturation, brightness and
 alpha values of the colours in \code{x} for clustering the colours. The cluster
 centres will be used as palette colours.}
 
 \item{background}{On the Amiga, indexed images could not be semi-transparent.
 Only a single colour could be designated as being fully transparent. The
-`\code{background}' argument should contain a background colour with which
+``background`' argument should contain a background colour with which
 semi-transparent colours should be mixed, before colour quantisation. It is
 white by default.}
 
 \item{dither}{Dither the output image using the algorithm specified here.
 See the usage section for possible options. By default no dithering ("\code{none}")
-is applied. See \code{\link{dither}} for more details.}
+is applied. See \code{\link[=dither]{dither()}} for more details.}
 
 \item{colour.depth}{A \code{character} string indicating the colour depth to be used.
-Can be either "\code{12 bit}" (default, standard on an Amiga with original chipset),
-or "\code{24 bit}".
+Can be either "\verb{12 bit}" (default, standard on an Amiga with original chipset),
+or "\verb{24 bit}".
 
 This argument is overruled when \code{length.out} is set to \dQuote{\code{HAM6}}
 or \dQuote{\code{HAM8}}. In that case the colour depth linked to that special mode
 is used (12 bit for HAM6, 24 bit for HAM8).}
 
-\item{...}{Arguments that are passed onto \code{\link[stats]{kmeans}} (see
+\item{...}{Arguments that are passed onto \code{\link[stats:kmeans]{stats::kmeans()}} (see
 \code{palette} argument).}
 }
 \value{
@@ -71,11 +71,11 @@ matrix containing numeric indices of a quantised colour palette.
 }
 \details{
 Determines the optimal limited palette by clustering colours in an image
-with \code{\link[stats]{kmeans}}. The result of the optimisation routine
+with \code{\link[stats:kmeans]{stats::kmeans()}}. The result of the optimisation routine
 will depend on the randomly chosen cluster centres by this algorithm. This
 means that the result may slightly differ for each call to this function. If
 you want reproducible results, you may want to reset the random seed
-(\code{\link{set.seed}}) before each call to this function.
+(\code{\link[=set.seed]{set.seed()}}) before each call to this function.
 }
 \examples{
 \dontrun{

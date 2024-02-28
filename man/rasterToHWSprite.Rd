@@ -7,31 +7,29 @@
 rasterToHWSprite(x, indexing = index.colours)
 }
 \arguments{
-\item{x}{A \code{\link{grDevices}} raster object (\code{\link[grDevices]{as.raster}})
-that needs to be converted into a \code{\link{hardwareSprite}} class object.
-Note that a \code{\link{hardwareSprite}} has a maximum width of 16 pixels.
+\item{x}{A \code{\link[=grDevices]{grDevices()}} raster object (\code{\link[grDevices:as.raster]{grDevices::as.raster()}})
+that needs to be converted into a \code{\link[=hardwareSprite]{hardwareSprite()}} class object.
+Note that a \code{\link[=hardwareSprite]{hardwareSprite()}} has a maximum width of 16 pixels.
 When \code{x} is wider, it will be cropped.}
 
 \item{indexing}{A function that accepts two arguments: \code{x} (a grDevices
 \code{raster} object); \code{length.out}, a numeric value indicating the
 desired size of the palette (i.e., the number of colours). It should return
 a matrix with numeric palette indices (ranging from 1 up to the number of
-colours in the palette). The result should have an attribute named `palette' that
-contains the colours that correspond with the index numbers. The result should
-also carry an attribute with the name `transparent', with a single numeric value
+colours in the palette). The result should have an attribute named \verb{palette' that contains the colours that correspond with the index numbers. The result should also carry an attribute with the name }transparent', with a single numeric value
 representing which colour in the palette should be treated as transparent (or
 \code{NA} when no transparency is required). By default the
-function \code{\link{index.colours}} is used.}
+function \code{\link[=index.colours]{index.colours()}} is used.}
 }
 \value{
-Returns a \code{\link{hardwareSprite}} class object based on \code{x}
+Returns a \code{\link[=hardwareSprite]{hardwareSprite()}} class object based on \code{x}
 }
 \description{
 Convert a grDevices raster object into an Amiga hardwareSprite class object.
 }
 \details{
-A \code{\link{grDevices}} raster image can be converted into a
-\code{\link{hardwareSprite}} class object with this function. For this purpose
+A \code{\link[=grDevices]{grDevices()}} raster image can be converted into a
+\code{\link[=hardwareSprite]{hardwareSprite()}} class object with this function. For this purpose
 the any true-colour image will be converted to an indexed palette with 4 colours.
 The Amiga hardware sprite will reserve one of the colours as transparent. Thos function
 will use fully transparent colours in the original image (i.e., the alpha level equals 0)
