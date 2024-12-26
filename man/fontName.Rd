@@ -31,7 +31,6 @@ correctly. This is also the name that will be used when writing the
 font to a file with \code{\link[=write.AmigaBitmapFontSet]{write.AmigaBitmapFontSet()}}.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## show the name of the example font:
@@ -42,7 +41,6 @@ fontName(font_example) <- "foo"
 
 ## see it worked:
 fontName(font_example)
-}
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

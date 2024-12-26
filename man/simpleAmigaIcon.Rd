@@ -46,10 +46,8 @@ can be modified afterwards. It uses simple generic images to represent
 different types of files or directories.
 }
 \examples{
-\dontrun{
 ## Create an AmigaIcon object using the default arguments:
 icon <- simpleAmigaIcon()
-}
 }
 \seealso{
 Other AmigaIcon.operations: 

@@ -38,7 +38,6 @@ most frequently occuring colour (at least when the default \code{indexing} funct
 is used).
 }
 \examples{
-\dontrun{
 ## first create a raster object that can be used as input
 ## (making sure that the background is transparent):
 rst <- as.raster(simpleSysConfig()$PointerMatrix, "#AAAAAA00")
@@ -48,7 +47,6 @@ spr <- rasterToHWSprite(rst)
 
 ## and plot it as a check:
 plot(spr)
-}
 }
 \seealso{
 Other raster.operations: 

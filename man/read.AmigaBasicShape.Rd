@@ -4,15 +4,10 @@
 \alias{read.AmigaBasicShape}
 \title{Read Amiga Basic Shape files}
 \usage{
-read.AmigaBasicShape(file, disk = NULL, ...)
+read.AmigaBasicShape(file, ...)
 }
 \arguments{
 \item{file}{A \code{character} string of the filename of the Amiga Basic Shape file to be read.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Arguments passed to \code{\link[=rawToAmigaBasicShape]{rawToAmigaBasicShape()}}.}
 }
@@ -26,10 +21,9 @@ Read Amiga Basic Shape files
 AmigaBasic used the term 'shapes' for graphics (sprites and blitter objects) which it could display.
 These graphics were stored in a specific binary format, which can be read with this function. See
 \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} for more details. The file can also be read from a virtual Amiga disk
-(\code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}}).
+(\code{\link[adfExplorer:adf_file_con]{adf_file_con()}}).
 }
 \examples{
-\dontrun{
 filename <- system.file("ball.shp", package = "AmigaFFH")
 ball     <- read.AmigaBasicShape(filename)
 ## This is a sprite:
@@ -45,7 +39,6 @@ r_logo$flags[["fVSprite"]]
 
 ## Just for fun, plot it:
 plot(r_logo)
-}
 }
 \seealso{
 Other AmigaBasicShape.operations: 

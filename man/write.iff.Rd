@@ -4,24 +4,17 @@
 \alias{write.iff}
 \title{Write Interchange File Format (IFF)}
 \usage{
-write.iff(x, file, disk = NULL)
+write.iff(x, file)
 }
 \arguments{
 \item{x}{An \code{\link[=IFFChunk]{IFFChunk()}} object that needs to be written to a file.}
 
 \item{file}{A filename for the IFF file to which the \code{\link[=IFFChunk]{IFFChunk()}} needs
 to be saved, or a connection to which the data should be written.}
-
-\item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns either \code{NULL} or an \code{integer} status invisibly as passed
 by the \code{\link[base:connections]{close()}} statement used to close the file connection.
-When \code{disk} is specified, a copy of \code{disk} is returned
-to which the file is written.
 }
 \description{
 Write an \code{\link[=IFFChunk]{IFFChunk()}} object conform the Interchange File Format (IFF).
@@ -33,7 +26,6 @@ a correctly structured file does not necessarily result in an interpretable file
 (see examples).
 }
 \examples{
-\dontrun{
 ## read an IFF file as an IFFChunk object:
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -41,7 +33,6 @@ example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 ## to the temp directory:
 write.iff(example.iff, file.path(tempdir(), "image.iff"))
 
-}
 }
 \references{
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}

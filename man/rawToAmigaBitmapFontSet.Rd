@@ -4,7 +4,7 @@
 \alias{rawToAmigaBitmapFontSet}
 \title{Coerce raw data into an AmigaBitmapFontSet class object}
 \usage{
-rawToAmigaBitmapFontSet(x, file, disk = NULL)
+rawToAmigaBitmapFontSet(x, file)
 }
 \arguments{
 \item{x}{A \code{vector} of \code{raw} data that needs to be
@@ -16,11 +16,6 @@ construct an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} the file lo
 original *.font file is required in order to read and include the
 font bitmap image information. \code{file} should thus be a \code{character}
 string specifying the file location of the *.font file.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object.
@@ -37,7 +32,6 @@ to load the nested bitmap images for each font height.
 This function is effectively the inverse of \code{\link[=as.raw]{as.raw()}}.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## First create raw font set data. Note that this raw data
@@ -48,7 +42,6 @@ fontset.raw <- as.raw(font_example)
 write.AmigaBitmapFontSet(font_example, tempdir())
 
 font.restored <- rawToAmigaBitmapFontSet(fontset.raw, file.path(tempdir(), "AmigaFFH.font"))
-}
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

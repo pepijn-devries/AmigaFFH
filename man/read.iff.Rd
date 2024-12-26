@@ -4,16 +4,11 @@
 \alias{read.iff}
 \title{Read Interchange File Format (IFF)}
 \usage{
-read.iff(file, disk = NULL)
+read.iff(file)
 }
 \arguments{
 \item{file}{A filename of an IFF file to be read, or a connection from which
 binary data can be read.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns a \code{\link[=IFFChunk]{IFFChunk()}} object read from the specified file.
@@ -31,14 +26,12 @@ does not interpret the file. Use \code{\link[=interpretIFFChunk]{interpretIFFChu
 purpose.
 }
 \examples{
-\dontrun{
 ## let's read a bitmap image stored in IFF as provided with this package:
 filename <- system.file("ilbm8lores.iff", package = "AmigaFFH")
 example.iff <- read.iff(filename)
 
 ## And plot it:
 plot(example.iff)
-}
 }
 \seealso{
 Other io.operations: 

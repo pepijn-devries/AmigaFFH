@@ -23,13 +23,11 @@ the display mode that should be used on an Amiga. See also
 and the example for \code{\link[=bitmapToRaster]{bitmapToRaster()}}.
 }
 \examples{
-\dontrun{
 filename <- system.file("ilbm8lores.iff", package = "AmigaFFH")
 example.iff <- read.iff(filename)
 
 ## show the structure of the IFF file:
 print(example.iff)
-}
 }
 \references{
 \url{https://en.wikipedia.org/wiki/Interchange_File_Format}

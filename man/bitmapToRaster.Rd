@@ -10,7 +10,7 @@ bitmapToRaster(
   h,
   depth,
   palette = grDevices::gray(seq(0, 1, length.out = 2^depth)),
-  interleaved = T
+  interleaved = TRUE
 )
 }
 \arguments{
@@ -54,7 +54,6 @@ provided for completeness sake (or for when you want to search for images in an
 amiga memory dump).
 }
 \examples{
-\dontrun{
 ## first load an example image:
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -87,7 +86,6 @@ example.raster <- bitmapToRaster(bitmap.data,
 ## We now have a raster object that can be plotted:
 
 plot(example.raster, interpolate = FALSE)
-}
 }
 \seealso{
 Other raster.operations: 

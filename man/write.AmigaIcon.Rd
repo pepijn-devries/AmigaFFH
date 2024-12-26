@@ -4,24 +4,18 @@
 \alias{write.AmigaIcon}
 \title{Write an Amiga Workbench icon (info) file}
 \usage{
-write.AmigaIcon(x, file, disk = NULL)
+write.AmigaIcon(x, file)
 }
 \arguments{
 \item{x}{An \code{\link[=AmigaIcon]{AmigaIcon()}} class object.}
 
 \item{file}{A \code{character} string representing the file name to which the
 icon data should be written.}
-
-\item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns \code{NULL} or an \code{integer} status passed on by the
 \code{\link[=close]{close()}} function, that is used to close the file connection.
-It is returned invisibly. Or, when \code{disk} is specified, a copy of
-\code{disk} is returned to which the file is written.
+It is returned invisibly.
 }
 \description{
 Graphical representation of files and directories (icons) are stored as
@@ -37,13 +31,11 @@ write this object to a file which can be used on the Commodore Amiga
 or emulator.
 }
 \examples{
-\dontrun{
 ## create a simple AmigaIcon:
 icon <- simpleAmigaIcon()
 
 ## write the icon to the temp dir:
 write.AmigaIcon(icon, file.path(tempdir(), "icon.info"))
-}
 }
 \seealso{
 Other AmigaIcon.operations: 

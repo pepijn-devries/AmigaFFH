@@ -4,15 +4,10 @@
 \alias{read.AmigaBasic}
 \title{Read Amiga Basic files}
 \usage{
-read.AmigaBasic(file, disk = NULL, ...)
+read.AmigaBasic(file, ...)
 }
 \arguments{
 \item{file}{A \code{character} string of the filename of the Amiga Basic file to be read.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Currently ignored}
 }
@@ -26,18 +21,16 @@ Read an \code{\link[=AmigaBasic]{AmigaBasic()}} script from its binary format.
 Normally Amiga Basic code is stored encoded in a binary format
 (\code{\link[=rawToAmigaBasic]{rawToAmigaBasic()}}).
 This function reads the binary data from a file (which can be
-stored on a virtual disk (\code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}}))
+stored on a virtual disk (\code{\link[adfExplorer:adf_file_con]{adf_file_con()}}))
 and converts in into an \code{\link[=AmigaBasic]{AmigaBasic()}} class objec.
 }
 \examples{
-\dontrun{
 ## First create an AmigaBasic file
 write.AmigaBasic(as.AmigaBasic("PRINT \"Hello world\""),
                  file.path(tempdir(), "helloworld.bas"))
 
 ## Now let's read the same file:
 bas <- read.AmigaBasic(file.path(tempdir(), "helloworld.bas"))
-}
 
 ## There's also a demo file included with the package
 demo.bas <- read.AmigaBasic(system.file("demo.bas", package = "AmigaFFH"))

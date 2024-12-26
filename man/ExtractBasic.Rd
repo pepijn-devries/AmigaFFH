@@ -40,7 +40,6 @@ Extract or replace lines of Amiga Basic code
 Extract or replace specific lines in an \code{\link[=AmigaBasic]{AmigaBasic()}}-class object.
 }
 \examples{
-\dontrun{
 ## First generate a few lines of Basic code:
 bas <- as.AmigaBasic(c(
   "LET a = 1",
@@ -65,7 +64,6 @@ bas[2] <- as.AmigaBasic("a = a + 3")
 
 ## single lines can also be selected with '[['
 bas[[2]]
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

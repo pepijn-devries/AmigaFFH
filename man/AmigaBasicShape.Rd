@@ -12,13 +12,11 @@ Amiga Basic used a specific format to store bitmap images that could be displaye
 sprites and blitter objects can be stored and used. This class is used to represent such files.
 }
 \examples{
-\dontrun{
 ball   <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
 r_logo <- read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
 
 plot(ball)
 plot(r_logo)
-}
 }
 \seealso{
 Other AmigaBasicShape.operations: 

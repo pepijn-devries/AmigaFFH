@@ -24,11 +24,11 @@ Returns a list of data returned by tuneR's \code{\link[tuneR:play]{tuneR::play()
 is undocumented.
 }
 \description{
-A wrapper for \code{\link[=tuneR]{tuneR()}}-package's \code{\link[tuneR:play]{tuneR::play()}} routine. Allowing it to play
+A wrapper for \code{tuneR} package's \code{\link[tuneR:play]{tuneR::play()}} routine. Allowing it to play
 Amiga audio (for instance stored in an 8SVX Interchange File Format).
 }
 \details{
-A wrapper for \code{\link[=tuneR]{tuneR()}}-package's \code{\link[tuneR:play]{tuneR::play()}} routine. It will try to play
+A wrapper for \code{tuneR} package's \code{\link[tuneR:play]{tuneR::play()}} routine. It will try to play
 audio using an external audio player. When 8SVX audio is played, each octave is played separately.
 When a FORM container contains multiple 8SVX samples, they are also played successively.
 
@@ -36,7 +36,6 @@ Note that a separate package is developed to interpret and play ProTracker modul
 (\code{\link[ProTrackR:ProTrackR-package]{ProTrackR()}}).
 }
 \examples{
-\dontrun{
 ## First get an audio sample from the ProTrackR package
 snare.samp <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 
@@ -44,7 +43,8 @@ snare.samp <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 snare.iff <- WaveToIFF(snare.samp)
 
 ## Play the 8SVX sample:
-play(snare.iff)
+if (interactive()) {
+  play(snare.iff)
 }
 }
 \author{

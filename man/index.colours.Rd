@@ -78,7 +78,6 @@ you want reproducible results, you may want to reset the random seed
 (\code{\link[=set.seed]{set.seed()}}) before each call to this function.
 }
 \examples{
-\dontrun{
 ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
   min(volcano) + 1], nrow(volcano))))
@@ -97,10 +96,9 @@ volcano.dith <- as.raster(apply(volcano.dith, 2,
 
 ## plot the images side by side for comparison
 par(mfcol = c(1, 3))
-plot(volcano.raster, interpolate = F)
-plot(volcano.index, interpolate = F)
-plot(volcano.dith, interpolate = F)
-}
+plot(volcano.raster, interpolate = FALSE)
+plot(volcano.index, interpolate = FALSE)
+plot(volcano.dith, interpolate = FALSE)
 }
 \seealso{
 Other colour.quantisation.operations: 

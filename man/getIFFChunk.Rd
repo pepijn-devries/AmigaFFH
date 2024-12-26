@@ -55,7 +55,6 @@ identifiers. The identifiers are shown when calling \code{print} on an
 `subscript out of range' error.
 }
 \examples{
-\dontrun{
 ## load an IFF file
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -75,7 +74,6 @@ bmhd <- IFFChunk(bmhd.itpt)
 
 ## Now replace the header from the original iff with the modified header:
 getIFFChunk(example.iff, c("ILBM", "BMHD")) <- bmhd
-}
 }
 \seealso{
 Other iff.operations: 

@@ -32,7 +32,6 @@ consist of valid Amiga BASIC syntaxis. This function does not perform a
 full check of the syntaxis, but will break on some fundamental syntaxis malformations
 }
 \examples{
-\dontrun{
 ## An AmigaBasic object can be created from text.
 ## Note that each line of code is a seperate element
 ## in the vector:
@@ -47,7 +46,6 @@ bas.raw <- as.raw(bas)
 ## We can also use the raw data to create an Amiga Basic object:
 ## Note that this effectively the same as calling 'rawToAmigaBasic'
 bas <- as.AmigaBasic(bas.raw)
-}
 }
 \references{
 \url{https://en.wikipedia.org/wiki/AmigaBASIC}

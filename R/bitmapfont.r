@@ -98,7 +98,6 @@
 #' <http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node03DE.html>
 #' <http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node05BA.html>
 #' @examples
-#' \dontrun{
 #' ## 'font_example' is an example of the AmigaBitmapFontSet object:
 #' data(font_example)
 #' 
@@ -113,8 +112,7 @@
 #' 
 #' ## You can also format text using the font:
 #' formated_raster     <- as.raster(font_example, text = "Foo bar", style = "bold")
-#' plot(font_example, text = "Foo bar", style = "underlined", interpolate = F)
-#' }
+#' plot(font_example, text = "Foo bar", style = "underlined", interpolate = FALSE)
 NULL
 
 .print_to_raster <- function(text, font, style = NULL, palette = NULL) {
@@ -124,7 +122,7 @@ NULL
   }
   if (!inherits(font, "AmigaBitmapFont")) stop("'font' should be of class AmigaBitmapFont or AmigaBitmapFontSet.")
   if (!is.null(style)) {
-    style <- match.arg(style, c("bold", "italic", "underlined"), T)
+    style <- match.arg(style, c("bold", "italic", "underlined"), TRUE)
     ## You can't apply styles to a font that is already styled:
     style <- style[!font$tf_Style[toupper(style)]]
   }
@@ -146,7 +144,7 @@ NULL
     y[y > font$tf_HiChar] <- font$tf_HiChar + 1
     y <- 1 + y - font$tf_LoChar
     positions <- apply(
-      font$glyph.info[y,][,names(font$glyph.info) %in% c("glyphWidth", "charSpace"), drop = F],
+      font$glyph.info[y,][,names(font$glyph.info) %in% c("glyphWidth", "charSpace"), drop = FALSE],
       1, max
     )
     if (!is.null(font$glyph.info$charKern)) positions <- positions + c(font$glyph.info$charKern[y][-1], 0)
@@ -154,7 +152,7 @@ NULL
     positions <- 1 + positions - min(positions)
     h <- font$tf_YSize
     glyphs <- mapply(function(loc, w, sp, kern) {
-      result <- matrix(F, h + 2,
+      result <- matrix(FALSE, h + 2,
                        max(c(sp, w)) +
                          ifelse("bold" %in% style, font$tf_BoldSmear, 0) +
                          ifelse(kern > 0, kern, 0) +
@@ -166,14 +164,14 @@ NULL
         if ("italic" %in% style) {
           for (j in 1:(h - ifelse(h > 15, 2, 1))) { ## The displacement seems to shift for h > 15
             displacement <- floor((h - j + ifelse(h > 15, 0, 1))/2)
-            result[j,] <- c(rep(F, displacement), utils::head(result[j,], -displacement))
+            result[j,] <- c(rep(FALSE, displacement), utils::head(result[j,], -displacement))
           }
         }
       }
       if (ncol(result) > 0) {
         if ("underlined" %in% style) {
           result[font$tf_Baseline + 2,] <- result[font$tf_Baseline + 2,] |
-            (c(!result[font$tf_Baseline + 2,][-1], T) & c(T, !result[font$tf_Baseline + 2,][-ncol(result)]))
+            (c(!result[font$tf_Baseline + 2,][-1], TRUE) & c(TRUE, !result[font$tf_Baseline + 2,][-ncol(result)]))
         }
       }
       result
@@ -184,9 +182,9 @@ NULL
       font$glyph.info$charSpace[y],
     kern  = if(is.null(font$glyph.info$charKern)) rep(0, length(y)) else
       c(font$glyph.info$charKern[y][-1], 0),
-    SIMPLIFY = F)
+    SIMPLIFY = FALSE)
     widths <- unlist(lapply(glyphs, ncol))
-    result <- matrix(F, nrow = h + 2, ncol = max(positions + widths))
+    result <- matrix(FALSE, nrow = h + 2, ncol = max(positions + widths))
     lapply(1:length(glyphs), function(i) {
       result[,positions[i]:(positions[i] + widths[i] - 1)] <<-
         result[,positions[i]:(positions[i] + widths[i] - 1)] |
@@ -210,9 +208,9 @@ NULL
 
 .amiga.node <- data.frame(
   byte      = c(4, 4, 1, 1, 4),
-  signed    = c(F, F, F, T, F),
+  signed    = c(FALSE, FALSE, FALSE, TRUE, FALSE),
   par.names = c("ln_Succ", "ln_Pred", "ln_Type", "ln_Pri", "ln_Name"),
-  stringsAsFactors = F
+  stringsAsFactors = FALSE
 )
 
 .amiga.node.types <- c("NT_UNKNOWN", "NT_TASK", "NT_INTERRUPT", "NT_DEVICE", "NT_MSGPORT", "NT_MESSAGE",
@@ -222,9 +220,9 @@ NULL
 
 .amiga.font.sets <- data.frame(
   byte      = c(2, 2),
-  signed    = c(F, F),
+  signed    = c(FALSE, FALSE),
   par.names = c("fch_FileID", "fch_NumEntries"),
-  stringsAsFactors = F
+  stringsAsFactors = FALSE
 )
 
 .amiga.font.types <- c("FontContents", "TFontContents", "ScalableOutline")
@@ -252,13 +250,13 @@ NULL
 
 .amiga.font.header <- data.frame(
   byte      = c(-36, -14, 2, 2, 4, -32, -14, 4, 2, 2, -1, -1, 2, 2, 2, 2, 1, 1, 4, 2, 4, 4, 4),
-  signed    = c(  F,   F, F, F, F,   F,   F, F, F, F,  F,  F, F, F, F, F, F, F, F, F, F, F, F),
+  signed    = rep(FALSE, 23),
   par.names = c("leadingHunks", "node.disklink", "dfh_FileID", "dfh_Revision", "dfh_Segment",
                  "fontName", "node.message", "mn_ReplyPort", "mn_Length", "tf_YSize",
                  "tf_Style", "tf_Flags", "tf_XSize", "tf_Baseline", "tf_BoldSmear",
                  "tf_Accessors", "tf_LoChar", "tf_HiChar", "tf_CharData", "tf_Modulo",
                  "tf_CharLoc", "tf_CharSpace", "tf_CharKern"),
-  stringsAsFactors = F
+  stringsAsFactors = FALSE
 )
 
 #' Read AmigaBitmapFontSet from *.font file
@@ -273,19 +271,14 @@ NULL
 #' [AmigaBitmapFontSet()].
 #'
 #' It can also read *.font files
-#' from [adfExplorer::amigaDisk-class()] objects,
+#' from virtual disks (([`adf_file_con()`][adfExplorer::adf_file_con])) objects,
 #' but that requires the adfExplorer package to be installed.
 #' @rdname read.AmigaBitmapFontSet
 #' @name read.AmigaBitmapFontSet
 #' @param file A `character` string of the filename of the *.font file to be read.
-#' @param disk A virtual Commodore Amiga disk from which the `file` should be
-#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @param ... Currently ignored.
 #' @returns Returns an [AmigaBitmapFontSet()] object read from the specified file.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## in order to read, we first need to write a file"
@@ -299,18 +292,27 @@ NULL
 #' ## similarly, the file can also be written and read from and to
 #' ## a virtual amiga disk. The following codes requires the 'adfExplorer'
 #' ## package:
-#' adf <- adfExplorer::blank.amigaDOSDisk("font.disk")
-#' adf <- adfExplorer::dir.create.adf(adf, "FONTS")
-#' adf <- write.AmigaBitmapFontSet(font_example, "DF0:FONTS", adf)
-#' font.read <- read.AmigaBitmapFontSet("DF0:FONTS/AmigaFFH.font", adf)
+#' if (requireNamespace("adfExplorer")) {
+#'   library("adfExplorer")
+#'   virtual_disk_file <- tempfile(fileext = ".adf") |>
+#'     create_adf_device(write_protected = FALSE) |>
+#'     prepare_adf_device("font_disk") |>
+#'     make_adf_dir("FONTS")
+#'   
+#'   dest <- virtual_path(virtual_disk_file, "DF0:FONTS")
+#'   write.AmigaBitmapFontSet(font_example, dest)
+#'   font.read <- read.AmigaBitmapFontSet(
+#'     virtual_path(virtual_disk_file, "DF0:FONTS/AmigaFFH.font")
+#'   )
+#'   close(virtual_disk_file)
 #' }
 #' @family AmigaBitmapFont.operations
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-read.AmigaBitmapFontSet <- function(file, disk = NULL, ...) {
-  dat <- .read.generic(file, disk)
-  rawToAmigaBitmapFontSet(dat, file, disk)
+read.AmigaBitmapFontSet <- function(file, ...) {
+  dat <- .read.generic(file)
+  rawToAmigaBitmapFontSet(dat, file)
 }
 
 #' Coerce raw data into an AmigaBitmapFontSet class object
@@ -334,13 +336,8 @@ read.AmigaBitmapFontSet <- function(file, disk = NULL, ...) {
 #' original *.font file is required in order to read and include the
 #' font bitmap image information. `file` should thus be a `character`
 #' string specifying the file location of the *.font file.
-#' @param disk A virtual Commodore Amiga disk from which the `file` should be
-#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @returns Returns an [AmigaBitmapFontSet()] object.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## First create raw font set data. Note that this raw data
@@ -351,12 +348,11 @@ read.AmigaBitmapFontSet <- function(file, disk = NULL, ...) {
 #' write.AmigaBitmapFontSet(font_example, tempdir())
 #' 
 #' font.restored <- rawToAmigaBitmapFontSet(fontset.raw, file.path(tempdir(), "AmigaFFH.font"))
-#' }
 #' @family AmigaBitmapFont.operations
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
-rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
+rawToAmigaBitmapFontSet <- function(x, file) {
   result <- with(.amiga.font.sets, .read.amigaData(x[1:4], byte, signed, par.names))
 
   result$fch_FileID <- .match.factor(result, "fch_FileID", c(0x0f00, 0x0f02, 0x0f03),
@@ -369,23 +365,33 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
       offset <- 260*(i - 1)
       result <- list(
         fc_FileName = .rawToCharNull(x[-1:-4][offset + 1:256]),
-        fc_YSize    = .rawToAmigaInt(x[-1:-4][offset + 257:258], 16, F),
+        fc_YSize    = .rawToAmigaInt(x[-1:-4][offset + 257:258], 16, FALSE),
         fc_Style    = x[-1:-4][offset + 259],
         fc_Flags    = x[-1:-4][offset + 260]
       )
-      result$fc_Style        <- as.logical(.rawToBitmap(result$fc_Style, F, F))
+      result$fc_Style        <- as.logical(.rawToBitmap(result$fc_Style, FALSE, FALSE))
       names(result$fc_Style) <- c("UNDERLINED", "BOLD", "ITALIC", "EXTENDED", "RESERVED1", "RESERVED2", "COLORFONT", "TAGGED")
-      result$fc_Flags        <- as.logical(.rawToBitmap(result$fc_Flags, F, F))
+      result$fc_Flags        <- as.logical(.rawToBitmap(result$fc_Flags, FALSE, FALSE))
       names(result$fc_Flags) <- c("ROMFONT", "DISKFONT", "REVPATH", "TALLDOT", "WIDEDOT", "PROPORTIONAL", "DESIGNED", "REMOVED")
       
-      if (is.null(disk)) {
+      if (inherits(file, c("virtual_path", "adf_file_con"))) {
+        if (requireNamespace("adfExplorer")) {
+          if (inherits(file, "adf_file_con")) {
+            stop("Reading font set from `adf_file_con` is currently not possible")
+          } else {
+            vp <- unclass(file)
+            vp$path <- paste(dirname(as.character(file)), result$fc_FileName, sep = "/")
+            vp <- vctrs::new_rcrd(vp, class = "virtual_path")
+          }
+          result[["BitmapFont"]] <- read.AmigaBitmapFont(vp)
+        } else {
+          stop("Package `adfEplorer` is required to read from a virtual disk.")
+        }
+      } else {
         result[["BitmapFont"]] <-
           ## replace the file amiga file separator with the platform dependent file separator,
           ## and read font from file:
           read.AmigaBitmapFont(file.path(dirname(file), gsub("[/]", .Platform$file.sep, result$fc_FileName)))
-      } else {
-        result[["BitmapFont"]] <-
-          read.AmigaBitmapFont(paste(c(utils::head(strsplit(file, "/", T)[[1]], -1), result$fc_FileName), collapse = "/"), disk)
       }
       if (any(result$fc_Style != result$BitmapFont$tf_Style)) warning(sprintf("Styles defined in main font (*.font) and bitmap file (%s) do not match.", result$fc_FileName))
       if (any(result$fc_Flags != result$BitmapFont$tf_Flags)) warning(sprintf("Flags defined in main font (*.font) and bitmap file (%s) do not match.", result$fc_FileName))
@@ -414,7 +420,7 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
 #' the file name is usually equal to the font height in pixels. This
 #' function will read such a font bitmap file and return it as an
 #' [AmigaBitmapFont()] class object. It can also read such
-#' files from [adfExplorer::amigaDisk-class()] objects,
+#' files from virtual disks ([`adf_file_con()`][adfExplorer::adf_file_con]) objects,
 #' but that requires the adfExplorer package to be installed.
 #'
 #' @rdname read.AmigaBitmapFont
@@ -422,14 +428,9 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
 #' @param file The file name of a font subset is usually simply a numeric number
 #' indicating the font height in pixels. Use `file` as a `character`
 #' string representing that file location.
-#' @param disk A virtual Commodore Amiga disk from which the `file` should be
-#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @param ... Arguments passed on to [rawToAmigaBitmapFont()].
 #' @returns Returns an [AmigaBitmapFont()] object read from the specified file.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## Let's store the example font first:
@@ -440,17 +441,26 @@ rawToAmigaBitmapFontSet <- function(x, file, disk = NULL) {
 #' 
 #' ## The same can be done with a virtual Amiga disk. The following
 #' ## examples require the 'adfExplorer' package.
-#' font.disk <- adfExplorer::blank.amigaDOSDisk("font.disk")
-#' font.disk <- adfExplorer::dir.create.adf(font.disk, "FONTS")
-#' font.disk <- write.AmigaBitmapFontSet(font_example, "DF0:FONTS", font.disk)
-#' font.sub <- read.AmigaBitmapFont("DF0:FONTS/AmigaFFH/9", font.disk)
+#' if (requireNamespace("adfExplorer")) {
+#'   library("adfExplorer")
+#'   virtual_disk_file <- tempfile(fileext = ".adf") |>
+#'     create_adf_device(write_protected = FALSE) |>
+#'     prepare_adf_device("font_disk") |>
+#'     make_adf_dir("FONTS")
+#'   
+#'   dest <- virtual_path(virtual_disk_file, "DF0:FONTS")
+#'   write.AmigaBitmapFontSet(font_example, dest)
+#'   font.read <- read.AmigaBitmapFont(
+#'     virtual_path(virtual_disk_file, "DF0:FONTS/AmigaFFH/9")
+#'   )
+#'   close(virtual_disk_file)
 #' }
 #' @family AmigaBitmapFont.operations
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-read.AmigaBitmapFont <- function(file, disk = NULL, ...) {
-  dat <- .read.generic(file, disk)
+read.AmigaBitmapFont <- function(file, ...) {
+  dat <- .read.generic(file)
   rawToAmigaBitmapFont(dat, file, ...)
 }
 
@@ -487,61 +497,85 @@ read.AmigaBitmapFont <- function(file, disk = NULL, ...) {
 #' will be created with the same name (without the extension) if it doesn't
 #' already exists. In this subdirectory all the nested [AmigaBitmapFont()]
 #' objects are stored.
-#' @param disk A virtual Commodore Amiga disk to which the `file` should be
-#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @returns Invisibly returns the result of the call of `close` to the
-#' file connection. Or, when `disk` is specified, a copy of
-#' `disk` is returned to which the file(s) is/are written.
+#' file connection.
 #' @examples
-#' \dontrun{
 #' ## obtain a bitmap font set:
 #' data(font_example)
 #' 
 #' ## write the font set to their files. The file name
 #' ## is extracted from the font object, so you only have
 #' ## to provide the path:
-#' write.AmigaBitmapFont(font_example, temp.dir())
+#' write.AmigaBitmapFontSet(font_example, tempdir())
 #' 
 #' ## extract a font bitmap:
 #' font <- getAmigaBitmapFont(font_example, 9)
 #' 
 #' ## and write it to the temp dir:
-#' write.AmigaBitmapFont(font, file.path(temp.dir(), "9"))
+#' write.AmigaBitmapFont(font, file.path(tempdir(), "9"))
 #' 
 #' ## The following examples require the 'adfExplorer' package:
-#' font.disk <- adfExplorer::blank.amigaDOSDisk("font.disk")
-#' font.disk <- adfExplorer::dir.create.adf(font.disk, "FONTS")
-#' font.disk <- write.AmigaBitmapFontSet(font_example, "DF0:FONTS", font.disk)
+#' if (requireNamespace("adfExplorer")) {
+#'   library("adfExplorer")
+#'   virtual_disk_file <- tempfile(fileext = ".adf") |>
+#'     create_adf_device(write_protected = FALSE) |>
+#'     prepare_adf_device("font_disk") |>
+#'     make_adf_dir("FONTS")
+#'   
+#'   dest <- virtual_path(virtual_disk_file, "DF0:FONTS")
+#'   write.AmigaBitmapFontSet(font_example, dest)
+#'   close(virtual_disk_file)
 #' }
 #' @family AmigaBitmapFont.operations
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-write.AmigaBitmapFont <- function(x, file, disk = NULL) {
+write.AmigaBitmapFont <- function(x, file) {
   if (!inherits(x, "AmigaBitmapFont")) stop("x should be of class AmigaBitmapFont.")
-  .write.generic(x, file, disk)
+  .write.generic(x, file)
 }
 
 #' @rdname write.AmigaBitmapFont
 #' @name write.AmigaBitmapFontSet
 #' @export
-write.AmigaBitmapFontSet <- function(x, path = getwd(), disk = NULL) {
+write.AmigaBitmapFontSet <- function(x, path = getwd()) {
   if (!inherits(x, "AmigaBitmapFontSet")) stop("x should be of class AmigaBitmapFontSet.")
   filenames <- unlist(lapply(x$FontContents, function(y) y$fc_FileName))
   filenames <- do.call(rbind, strsplit(filenames, "/"))
   if (ncol(filenames) != 2) stop("Unexpected file structure.")
   if (length(unique(filenames[,1])) != 1) stop("Not a single base name for the font.")
   fn <- sprintf("%s.font", filenames[1, 1])
-  if (is.null(disk)) {
-    if (path != "") fn <- file.path(path, fn)
+  if (inherits(path, "virtual_path")) {
+    if (length(path) != 1) stop("`virtual_path` should be of length 1")
+    vp <- unclass(path[[1]])
+    vp$path <- paste(vp$path, fn, sep = "/")
+    fn <- vctrs::new_rcrd(vp, class = "virtual_path")
+  } else if (inherits(path, "adf_file_con")) {
+    stop("Writing a font set to an `adf_file_con` is currently not possible")
   } else {
-    if (path != "") fn <- paste(path, fn, sep = ifelse(substr(path, nchar(path), nchar(path)) == "/", "", "/"))
+    if (path != "") fn <- file.path(path, fn)
   }
-  disk <- .write.generic(x, fn, disk)
+  .write.generic(x, fn)
   dr <- filenames[1, 1]
-  if (is.null(disk)) {
+  if (inherits(path, "virtual_path")) {
+    vp <- unclass(path[[1]])
+    vp$path <- paste(vp$path, dr, sep = "/")
+    dr <- vctrs::new_rcrd(vp, class = "virtual_path")
+    if (requireNamespace("adfExplorer")) {
+      if (!adfExplorer::adf_dir_exists(dr))
+        adfExplorer::make_adf_dir(dr)
+      result <- lapply(1:nrow(filenames), function(y) {
+        fn <- file.path(filenames[y, 1], filenames[y, 2])
+        vp <- unclass(path[[1]])
+        vp$path <- paste(vp$path, fn, sep = "/")
+        fn <- vctrs::new_rcrd(vp, class = "virtual_path")
+        write.AmigaBitmapFont(x$FontContents[[y]]$BitmapFont, fn)
+      })
+    } else {
+      stop("Writing to virtual disks requires the 'adfExplorer' package.")
+    }
+    
+  } else {
     if (path != "") dr <- file.path(path, dr)
     if (!dir.exists(dr))
       dir.create(dr)
@@ -551,16 +585,6 @@ write.AmigaBitmapFontSet <- function(x, path = getwd(), disk = NULL) {
       write.AmigaBitmapFont(x$FontContents[[y]]$BitmapFont, fn)
     })
     return(invisible(result[[length(result)]]))
-  } else {
-    if (path != "") dr <- paste(path, dr, sep = ifelse(substr(path, nchar(path), nchar(path)) == "/", "", "/"))
-    if (!adfExplorer::adf.file.exists(disk, dr)) ## better to use 'dir.exists', this needs to be implemented in adfExplorer
-      disk <- adfExplorer::dir.create.adf(disk, dr)
-    lapply(1:nrow(filenames), function(y) {
-      fn <- paste(filenames[y, 1], filenames[y, 2], sep = "/")
-      if (path != "") fn <- paste(path, fn, sep = ifelse(substr(path, nchar(path), nchar(path)) == "/", "", "/"))
-      disk <<- write.AmigaBitmapFont(x$FontContents[[y]]$BitmapFont, fn, disk = disk)
-    })
-    return(disk)
   }
 }
 
@@ -583,21 +607,19 @@ write.AmigaBitmapFontSet <- function(x, path = getwd(), disk = NULL) {
 #' @param ... Currently ignored.
 #' @returns A `vector` of `raw` data representing `x`.
 #' @examples
-#' \dontrun{
 #' ## first create raw data that can be converted into a AmigaBitmapFont
 #' data(font_example)
 #' font.raw <- as.raw(getAmigaBitmapFont(font_example, 9))
 #' 
 #' ## Convert it back into an AmigaBitmapFont object:
 #' font <- rawToAmigaBitmapFont(font.raw)
-#' }
 #' @family AmigaBitmapFont.operations
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
 rawToAmigaBitmapFont <- function(x, ...) {
   result <- with(.amiga.font.header, .read.amigaData(x, byte, signed, par.names))
-  index.trailing.hunks     <- (1 + 4*(.rawToAmigaInt(result$leadingHunks[21:24], 32, F) + 8))
+  index.trailing.hunks     <- (1 + 4*(.rawToAmigaInt(result$leadingHunks[21:24], 32, FALSE) + 8))
   ## remove first part as it is not required for interpreting the data
   
   ## Check the leading hunks
@@ -617,9 +639,9 @@ rawToAmigaBitmapFont <- function(x, ...) {
   trailing.hunks         <- x[index.trailing.hunks:length(x)]
   x                      <- x[1:(index.trailing.hunks - 1)]
   result$dfh_FileID      <- .match.factor(result, "dfh_FileID", 0xf80, "DFH_ID") ## Disk Font Header
-  result$tf_Style        <- as.logical(.rawToBitmap(result$tf_Style, F, F))
+  result$tf_Style        <- as.logical(.rawToBitmap(result$tf_Style, FALSE, FALSE))
   names(result$tf_Style) <- c("UNDERLINED", "BOLD", "ITALIC", "EXTENDED", "RESERVED1", "RESERVED2", "COLORFONT", "TAGGED")
-  result$tf_Flags        <- as.logical(.rawToBitmap(result$tf_Flags, F, F))
+  result$tf_Flags        <- as.logical(.rawToBitmap(result$tf_Flags, FALSE, FALSE))
   names(result$tf_Flags) <- c("ROMFONT", "DISKFONT", "REVPATH", "TALLDOT", "WIDEDOT", "PROPORTIONAL", "DESIGNED", "REMOVED")
   
   result$node.disklink     <- .read.amiga.node(result$node.disklink)
@@ -630,23 +652,22 @@ rawToAmigaBitmapFont <- function(x, ...) {
   n.glyphs <- 2 + result$tf_HiChar - result$tf_LoChar # +1 for difference in index base; another +1 for the default character
   
   glyph.info <- .rawToAmigaInt(x[result$tf_CharLoc + 32 + (1:(4*n.glyphs))],
-                               16, F)
-  # glyph.info <- as.data.frame(matrix(glyph.info, ncol = 2, byrow = T))
-  glyph.info <- as.data.frame(matrix(glyph.info, ncol = 2, byrow = T))
+                               16, FALSE)
+  glyph.info <- as.data.frame(matrix(glyph.info, ncol = 2, byrow = TRUE))
   names(glyph.info) <- c("glyphLocation", "glyphWidth")
 
   if (result$tf_CharSpace != 0) {
     glyph.info$charSpace <- .rawToAmigaInt(x[result$tf_CharSpace + 32 + (1:(2*n.glyphs))],
-                                           16, T)
+                                           16, TRUE)
   }
   if (result$tf_CharKern != 0) {
     glyph.info$charKern <- .rawToAmigaInt(x[result$tf_CharKern + 32 + (1:(2*n.glyphs))],
-                                          16, T)
+                                          16, TRUE)
   }
   result[["glyph.info"]] <- glyph.info
 
   ## trailing.hunks
-  trailing.hunks <- .rawToAmigaInt(trailing.hunks, 32, F)
+  trailing.hunks <- .rawToAmigaInt(trailing.hunks, 32, FALSE)
   hunk.dat <- c(2, 7, 19, 21, if(result$tf_CharSpace != 0) 22, if(result$tf_CharKern != 0) 23)
   hunk.dat <- cumsum(abs(.amiga.font.header$byte[-1]))[hunk.dat - 1]
   if (any(trailing.hunks[c(1, length(trailing.hunks))] != c(1004, 1010)) ||
@@ -760,22 +781,22 @@ as.raw.AmigaBitmapFont <- function(x, ...) {
     header$node.message  <- .amiga.node.to.raw(header$node.message)
     header$dfh_FileID    <- 0xF80
     header$fontName      <- charToRaw(header$fontName)[1:32]
-    header$tf_Style      <- .bitmapToRaw(header$tf_Style, F, F)
-    header$tf_Flags      <- .bitmapToRaw(header$tf_Flags, F, F)
+    header$tf_Style      <- .bitmapToRaw(header$tf_Style, FALSE, FALSE)
+    header$tf_Flags      <- .bitmapToRaw(header$tf_Flags, FALSE, FALSE)
     
     header$tf_CharLoc <- 110  # This is where the first data always start
-    addToPointer      <- 2*prod(dim(x$glyph.info[,c("glyphLocation", "glyphWidth"), drop = F]))
+    addToPointer      <- 2*prod(dim(x$glyph.info[,c("glyphLocation", "glyphWidth"), drop = FALSE]))
     if (is.null(x$glyph.info$charSpace)) {
       header$tf_CharSpace  <- 0
     } else {
       header$tf_CharSpace <- header$tf_CharLoc + addToPointer
-      addToPointer        <- 2*prod(dim(x$glyph.info[,"charSpace", drop = F]))
+      addToPointer        <- 2*prod(dim(x$glyph.info[,"charSpace", drop = FALSE]))
     }
     if (is.null(x$glyph.info$charKern)) {
       header$tf_CharKern <- 0
     } else {
       header$tf_CharKern <- max(c(header$tf_CharLoc, header$tf_CharSpace)) + addToPointer
-      addToPointer       <- 2*prod(dim(x$glyph.info[,"charKern", drop = F]))
+      addToPointer       <- 2*prod(dim(x$glyph.info[,"charKern", drop = FALSE]))
     }
     header$tf_CharData <- max(with(header, c(tf_CharLoc, tf_CharSpace, tf_CharKern))) + addToPointer
     
@@ -791,28 +812,28 @@ as.raw.AmigaBitmapFont <- function(x, ...) {
                         trailing.hunks,         # adresses
                         0,                      # terminator (no more data follows)
                         1010)                   # stop loading HUNKS
-    trailing.hunks <- .amigaIntToRaw(trailing.hunks, 32, F)
+    trailing.hunks <- .amigaIntToRaw(trailing.hunks, 32, FALSE)
     
     header <- with(.amiga.font.header,
                    .write.amigaData(header, byte, signed, par.names))
     
-    font.data <- .amigaIntToRaw(unlist(c(t(x$glyph.info[,c("glyphLocation", "glyphWidth")])), use.names = F), 16, F)
+    font.data <- .amigaIntToRaw(unlist(c(t(x$glyph.info[,c("glyphLocation", "glyphWidth")])), use.names = FALSE), 16, FALSE)
     
     if (!is.null(x$glyph.info$charSpace))
-      font.data <- c(font.data, .amigaIntToRaw(x$glyph.info$charSpace, 16, T))
+      font.data <- c(font.data, .amigaIntToRaw(x$glyph.info$charSpace, 16, TRUE))
     if (!is.null(x$glyph.info$charKern))
-      font.data <- c(font.data, .amigaIntToRaw(x$glyph.info$charKern, 16, T))
+      font.data <- c(font.data, .amigaIntToRaw(x$glyph.info$charKern, 16, TRUE))
     
     palette   <- attr(x$bitmap, "palette")
-    bm        <- apply(as.matrix(x$bitmap), 1, function(y) c(F, T)[match(y, palette)])
-    bm        <- .bitmapToRaw(bm, invert.bytes = T, invert.longs = F)
+    bm        <- apply(as.matrix(x$bitmap), 1, function(y) c(FALSE, TRUE)[match(y, palette)])
+    bm        <- .bitmapToRaw(bm, invert.bytes = TRUE, invert.longs = FALSE)
     font.data <- c(header, font.data, bm)
     
     ## Add padding bytes to align the data along 32 bit.
     font.data <- font.data[1:(4*ceiling(length(font.data)/4))]
     
     ## specify in the leading hunks where the trailing hunks start:
-    font.data[c(21:24, 29:32)] <- .amigaIntToRaw(ceiling((length(font.data) - 32)/4), 32, F)
+    font.data[c(21:24, 29:32)] <- .amigaIntToRaw(ceiling((length(font.data) - 32)/4), 32, FALSE)
     
     return(c(font.data, trailing.hunks))
   },
@@ -835,16 +856,16 @@ as.raw.AmigaBitmapFontSet <- function(x, ...) {
     .as.raw.FontContents <- function(y) {
       y <- y[c("fc_FileName", "fc_YSize", "fc_Style", "fc_Flags")]
       y$fc_FileName <- charToRaw(y$fc_FileName)[1:256]
-      y$fc_YSize    <- .amigaIntToRaw(y$fc_YSize, 16, F)
-      y$fc_Style    <-  .bitmapToRaw(y$fc_Style, F, F)
-      y$fc_Flags    <-  .bitmapToRaw(y$fc_Flags, F, F)
-      unlist(y, use.names = F)
+      y$fc_YSize    <- .amigaIntToRaw(y$fc_YSize, 16, FALSE)
+      y$fc_Style    <-  .bitmapToRaw(y$fc_Style, FALSE, FALSE)
+      y$fc_Flags    <-  .bitmapToRaw(y$fc_Flags, FALSE, FALSE)
+      unlist(y, use.names = FALSE)
     }
-    x$FontContents   <- unlist(lapply(x$FontContents, .as.raw.FontContents), use.names = F)
+    x$FontContents   <- unlist(lapply(x$FontContents, .as.raw.FontContents), use.names = FALSE)
     x$fch_FileID     <- c(0x0f00, 0x0f02, 0x0f03)[match(as.character(x$fch_FileID), .amiga.font.types)]
-    x$fch_FileID     <- .amigaIntToRaw(x$fch_FileID, 16, F)
-    x$fch_NumEntries <- .amigaIntToRaw(x$fch_NumEntries, 16, F)
-    return(unlist(x, use.names = F))
+    x$fch_FileID     <- .amigaIntToRaw(x$fch_FileID, 16, FALSE)
+    x$fch_NumEntries <- .amigaIntToRaw(x$fch_NumEntries, 16, FALSE)
+    return(unlist(x, use.names = FALSE))
   },
   warning=function(w) {
     if (startsWith(conditionMessage(w), "Replacement operator for AmigaBitmapFont"))
@@ -944,7 +965,6 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #' objects are combined, an [AmigaBasic()] object is returned
 #' in which the lines of Amiga Basic code are combined.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## first get some AmigaBitmapFont objects:
@@ -958,7 +978,6 @@ as.raster.AmigaBitmapFontSet <- function(x, text, style, palette, ...) {
 #' bas1 <- as.AmigaBasic("LET a = 1")
 #' bas2 <- as.AmigaBasic("PRINT a")
 #' bas  <- c(bas1, bas2)
-#' }
 #' @family AmigaBitmapFont.operations
 #' @author Pepijn de Vries
 #' @export
@@ -1007,7 +1026,6 @@ c.AmigaBitmapFont <- function(..., name = "font") {
 #' @returns Returns the font name. In case of the replace function, a copy
 #' of `x` is returned with the name replaced by '`value`'.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## show the name of the example font:
@@ -1018,7 +1036,6 @@ c.AmigaBitmapFont <- function(..., name = "font") {
 #' 
 #' ## see it worked:
 #' fontName(font_example)
-#' }
 #' @family AmigaBitmapFont.operations
 #' @author Pepijn de Vries
 #' @export
@@ -1067,13 +1084,11 @@ fontName <- function(x) {
 #' @returns Returns an [AmigaBitmapFont()] of the requested size.
 #' An error is thrown when the requested size is not available.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## get the font object for the first available size:
 #' font <- getAmigaBitmapFont(font_example,
 #'                            availableFontSizes(font_example)[1])
-#' }
 #' @family AmigaBitmapFont.operations
 #' @author Pepijn de Vries
 #' @export
@@ -1100,12 +1115,10 @@ getAmigaBitmapFont <- function(x, size) {
 #' @returns Returns a `vector` of `numeric` values specifying
 #' the available font sizes (height in pixels) for `x`.
 #' @examples
-#' \dontrun{
 #' data(font_example)
 #' 
 #' ## The example font holds two font sizes (8 and 9):
 #' availableFontSizes(font_example)
-#' }
 #' @family AmigaBitmapFont.operations
 #' @author Pepijn de Vries
 #' @export
@@ -1185,7 +1198,6 @@ availableFontSizes <- function(x) {
 #' @param ... Currently ignored.
 #' @returns Returns a [AmigaBitmapFont()] class object based on `x`.
 #' @examples
-#' \dontrun{
 #' data("font_example")
 #' 
 #' ## make a raster that we can use to create a bitmap font
@@ -1245,11 +1257,11 @@ availableFontSizes <- function(x) {
 #'   ## each element, you can recycle a glyph to represent different
 #'   ## characters. So in this case, the glyph 'a' is used for
 #'   ## all the accented variants of the character 'a'.
-#'   glyphs        = list("a\xE0\xE1\xE2\xE3\xE4\xE5",
+#'   glyphs        = list("a\ue0\ue1\ue2\ue3\ue4\ue5",
 #'                        "b",
-#'                        "c\xA2\xE7",
+#'                        "c\ua2\ue7",
 #'                        "d",
-#'                        "e\xE8\xE9\xEA\xEB"),
+#'                        "e\ue8\ue9\uea\ueb"),
 #'   default_glyph = "c", ## 'c' is used as default glyph for all other characters
 #'   baseline      = 7,
 #'   glyph_width   = c(4, 4, 4, 4, 4),
@@ -1258,25 +1270,24 @@ availableFontSizes <- function(x) {
 #' )
 #' 
 #' ## see what happens when you format text using the font we just created:
-#' plot(font9.abc, text = "a\xE0\xE1\xE2\xE3\xE4\xE5bc\xA2\xE7de\xE8\xE9\xEA\xEB, foo bar")
-#' }
+#' plot(font9.abc, text = "a\uE0\uE1\uE2\uE3\uE4\uE5\uA2\uE7\uE8\uE9\uEA\uEB, foo bar")
 #' @family AmigaBitmapFont.operations
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @export
 rasterToAmigaBitmapFont <- function(x, glyphs, default_glyph, baseline, glyph_width, glyph_space, glyph_kern, palette, ...) {
   glyph_width <- round(glyph_width)
-  if (glyph_width < 0 || glyph_width > 65535) stop("'glyph_width' out of range (0, 65535).")
+  if (any(glyph_width < 0 | glyph_width > 65535)) stop("'glyph_width' out of range (0, 65535).")
   if (baseline < 0 || baseline > (nrow(x) - 1) || baseline != round(baseline)) stop("'baseline' should be whole number between 0 and tf_YSize - 1.")
   if (is.character(default_glyph)) default_glyph <- utf8ToInt(enc2utf8(default_glyph))
   if (length(default_glyph) != 1) stop("'default_glyph' should have a length of 1.")
   if (is.list(glyphs)) {
-    test.default <- F
+    test.default <- FALSE
     glyphs <- lapply(1:length(glyphs), function(i) {
       if (is.character(glyphs[[i]])) glyphs[[i]] <- utf8ToInt(enc2utf8(glyphs[[i]]))
       if (default_glyph %in% glyphs[[i]]) {
         default_glyph <<- i
-        test.default <<- T
+        test.default <<- TRUE
       }
       data.frame(
         idx = i,
@@ -1340,13 +1351,13 @@ rasterToAmigaBitmapFont <- function(x, glyphs, default_glyph, baseline, glyph_wi
   font.result$tf_Baseline  <- baseline
   font.result$tf_XSize     <- stats::median(glyph_width)
   font.result$tf_BoldSmear <- 1
-  font.result$tf_Style     <- rep(F, 8)
-  font.result$tf_Flags     <- c(F, T, F, F, F, T, T, F)
+  font.result$tf_Style     <- rep(FALSE, 8)
+  font.result$tf_Flags     <- c(FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE)
   names(font.result$tf_Style) <- c("UNDERLINED", "BOLD", "ITALIC", "EXTENDED", "RESERVED1",
                                    "RESERVED2", "COLORFONT", "TAGGED")
   names(font.result$tf_Flags) <- c("ROMFONT", "DISKFONT", "REVPATH", "TALLDOT",
                                    "WIDEDOT", "PROPORTIONAL", "DESIGNED", "REMOVED")
-  glyphs <- merge(glyphs, data.frame(glyphs = char_lo:(char_hi + 1)), all.x = T, all.y = T)
+  glyphs <- merge(glyphs, data.frame(glyphs = char_lo:(char_hi + 1)), all.x = TRUE, all.y = TRUE)
   glyphs$idx[is.na(glyphs$idx)] <- default_glyph
   loc <- cumsum(c(0, glyph_width))
   font.result$glyph.info <- data.frame (
@@ -1357,14 +1368,14 @@ rasterToAmigaBitmapFont <- function(x, glyphs, default_glyph, baseline, glyph_wi
   font.result$tf_CharLoc   <- 110
   if (!missing(glyph_space)) {
     glyph_space <- round(glyph_space)
-    if (glyph_space < 0 || glyph_space > 65535) stop("'glyph_space' out of range (0, 65535).")
+    if (any(glyph_space < 0 | glyph_space > 65535)) stop("'glyph_space' out of range (0, 65535).")
     font.result$glyph.info$charSpace <- glyph_space[glyphs$idx]
     font.result$tf_CharSpace <- 110 + 2*2*nrow(font.result$glyph.info)
     offs <- offs + 1
   }
   if (!missing(glyph_kern)) {
     glyph_kern  <- round(glyph_kern)
-    if (glyph_kern < -32768 || glyph_kern > 32767) stop("'glyph_kern' out of range (-32768, 32767).")
+    if (any(glyph_kern < -32768 | glyph_kern > 32767)) stop("'glyph_kern' out of range (-32768, 32767).")
     font.result$glyph.info$charKern <- glyph_kern[glyphs$idx]
     font.result$tf_CharKern <- 110 + (2 + offs)*2*nrow(font.result$glyph.info)
     offs <- offs + 1

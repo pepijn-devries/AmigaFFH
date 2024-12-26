@@ -28,7 +28,6 @@ into a more comprehensive names list (see \code{\link[=AmigaIcon]{AmigaIcon()}})
 \code{\link[=as.raw]{as.raw()}} to achieve the inverse.
 }
 \examples{
-\dontrun{
 ## generate a simple AmigaIcon object:
 icon <- simpleAmigaIcon()
 
@@ -37,7 +36,6 @@ icon.raw <- as.raw(icon)
 
 ## convert the raw data back into an icon:
 icon.restored <- rawToAmigaIcon(icon.raw)
-}
 }
 \seealso{
 Other AmigaIcon.operations: 

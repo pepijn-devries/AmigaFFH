@@ -99,13 +99,11 @@ NULL
 #' See [IFFChunk-class()] and references for more information
 #' about the Interchange File Format.}
 #' @examples
-#' \dontrun{
 #' filename <- system.file("ilbm8lores.iff", package = "AmigaFFH")
 #' example.iff <- read.iff(filename)
 #' 
 #' ## show the structure of the IFF file:
 #' print(example.iff)
-#' }
 #' @references <https://en.wikipedia.org/wiki/Interchange_File_Format>
 #' @references <https://wiki.amigaos.net/wiki/A_Quick_Introduction_to_IFF>
 NULL
@@ -130,11 +128,9 @@ NULL
 #' See [AmigaBasic()] and [AmigaBasicShape()] for more information
 #' about the format.}
 #' @examples
-#' \dontrun{
 #' read.AmigaBasic(system.file("demo.bas", package = "AmigaFFH"))
 #' read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
 #' read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
-#' }
 NULL
 
 #' Commonly used palettes on the Commodore Amiga

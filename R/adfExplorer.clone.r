@@ -1,4 +1,4 @@
-.amigaIntToRaw <- function(x, bits = 8, signed = F) {
+.amigaIntToRaw <- function(x, bits = 8, signed = FALSE) {
   x <- round(x)
   if (!signed && any(x < 0)) stop("negative values not allowed for unsigned values.")
   val.range <- c(0, 2^bits - 1)
@@ -10,7 +10,7 @@
   }
   if (signed) x[x < 0] <- (2^bits) + x[x < 0]
   ## used later on to reorder bits for the little-endian bytes
-  idx <- sort(rep(((1:(bits/8)) - 1)*8, 8), T) + rep(1:8, bits/8)
+  idx <- sort(rep(((1:(bits/8)) - 1)*8, 8), TRUE) + rep(1:8, bits/8)
   result <- unlist(lapply(x, function(y) {
     bitlist <- NULL
     while (y > 0) {
@@ -24,7 +24,7 @@
   return(result)
 }
 
-.bitmapToRaw <- function(x, invert.bytes = T, invert.longs = T) {
+.bitmapToRaw <- function(x, invert.bytes = TRUE, invert.longs = TRUE) {
   # 'x' should be anything that is accepted by packBits
   if (!all("logical" %in% c(typeof(invert.bytes), typeof(invert.longs)))) stop ("Both 'invert.bytes' and 'invert.longs' should be a logical value.")
   if (length(invert.bytes) != 1 || length(invert.longs) != 1) stop("Both 'invert.bytes' and 'invert.longs' should have a length of 1.")
@@ -48,7 +48,7 @@
   return(x)
 }
 
-.rawToAmigaInt <- function(x, bits = 8, signed = F) {
+.rawToAmigaInt <- function(x, bits = 8, signed = FALSE) {
   # Convert raw values into Amiga integers (BYTE (8 bit signed), UBYTE (8 bit unsigned),
   # WORD (16 bit signed), UWORD (16 bit unsigned), LONG (32 bit signed), ULONG (32 bit unsigned))
   if ((bits %% 8) != 0 || bits < 8) stop("Bits should be positive, it should also be a multitude of 8 (or 8 itself).")
@@ -71,7 +71,7 @@
   }
 }
 
-.rawToBitmap <- function(x, invert.bytes = F, invert.longs = T) {
+.rawToBitmap <- function(x, invert.bytes = FALSE, invert.longs = TRUE) {
   if (typeof(x) != "raw") stop("Argument 'x' should be a vector of raw data.")
   if (!all("logical" %in% c(typeof(invert.bytes), typeof(invert.longs)))) stop ("Both 'invert.bytes' and 'invert.longs' should be a logical value.")
   if (length(invert.bytes) != 1 || length(invert.longs) != 1) stop("Both 'invert.bytes' and 'invert.longs' should have a length of 1.")

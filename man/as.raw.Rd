@@ -64,13 +64,11 @@ data that is returned, so handle with care.
 As this package grows additional objects can be converted with this method.
 }
 \examples{
-\dontrun{
 ## read an IFF file as an IFFChunk object:
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
 ## This will recreate the exact raw data as it was read from the file:
 example.raw <- as.raw(example.iff)
-}
 }
 \seealso{
 Other raw.operations: 

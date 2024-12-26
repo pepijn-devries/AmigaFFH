@@ -26,7 +26,6 @@ can also convert a named list into an S3 class object. See \verb{Arguments' and 
 this list.
 }
 \examples{
-\dontrun{
 ## For the dos.library, the start of the bmap list would look like:
 dos.list <- list(
   xOpen = list(
@@ -47,7 +46,6 @@ dos.list <- list(
 ## This merely serves as an example.
 ## This list can be converted to an S3 class as follows:
 dos.bmap <- as.AmigaBasicBMAP(dos.list)
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

@@ -28,14 +28,12 @@ name and usually have the font height in pixels as file name.
 This function is effectively the inverse of \code{\link[=as.raw]{as.raw()}}.
 }
 \examples{
-\dontrun{
 ## first create raw data that can be converted into a AmigaBitmapFont
 data(font_example)
 font.raw <- as.raw(getAmigaBitmapFont(font_example, 9))
 
 ## Convert it back into an AmigaBitmapFont object:
 font <- rawToAmigaBitmapFont(font.raw)
-}
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

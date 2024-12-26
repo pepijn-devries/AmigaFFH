@@ -27,13 +27,11 @@ in \code{\link[=AmigaBasic]{AmigaBasic()}}-class objects. Use this function to c
 these objects into legible \code{character} data.
 }
 \examples{
-\dontrun{
 ## First create an Amiga Basic object:
 bas <- as.AmigaBasic("PRINT \"Hello world!\"")
 
 ## now convert the object back into text:
 bas.txt <- as.character(bas)
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

@@ -25,7 +25,6 @@ comprehensive \link{SysConfig} class object. Use this function to create such an
 with basic settings (which can be modified).
 }
 \examples{
-\dontrun{
 ## Create a simple system-configuration (S3 SysConfigClass)
 sc <- simpleSysConfig()
 
@@ -37,7 +36,6 @@ sc$PrinterPort <- factor("SERIAL_PRINTER", levels(sc$PrinterPort))
 ## It is also to provide modifications to the configuration
 ## via the 'options' argument:
 sc <- simpleSysConfig(options = list(FontHeight = 9))
-}
 }
 \seealso{
 Other SysConfig.operations: 

@@ -52,7 +52,6 @@ information from other \code{IFFChunk}s.}
 }}
 
 \examples{
-\dontrun{
 ## load an IFF file
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -69,7 +68,6 @@ new("IFFChunk")
 new("IFFChunk",
     chunk.type = "TEXT",
     chunk.data = list(charToRaw("A simple chunk")))
-}
 }
 \references{
 \url{https://wiki.amigaos.net/wiki/IFF_Standard}

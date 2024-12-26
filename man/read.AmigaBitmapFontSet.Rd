@@ -4,15 +4,10 @@
 \alias{read.AmigaBitmapFontSet}
 \title{Read AmigaBitmapFontSet from *.font file}
 \usage{
-read.AmigaBitmapFontSet(file, disk = NULL, ...)
+read.AmigaBitmapFontSet(file, ...)
 }
 \arguments{
 \item{file}{A \code{character} string of the filename of the *.font file to be read.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Currently ignored.}
 }
@@ -31,11 +26,10 @@ all nested bitmap files and returns it as a
 \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}.
 
 It can also read *.font files
-from \code{\link[adfExplorer:amigaDisk-class]{adfExplorer::amigaDisk-class()}} objects,
+from virtual disks ((\code{\link[adfExplorer:adf_file_con]{adf_file_con()}})) objects,
 but that requires the adfExplorer package to be installed.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## in order to read, we first need to write a file"
@@ -49,10 +43,19 @@ font.read <- read.AmigaBitmapFontSet(file.path(tempdir(), "AmigaFFH.font"))
 ## similarly, the file can also be written and read from and to
 ## a virtual amiga disk. The following codes requires the 'adfExplorer'
 ## package:
-adf <- adfExplorer::blank.amigaDOSDisk("font.disk")
-adf <- adfExplorer::dir.create.adf(adf, "FONTS")
-adf <- write.AmigaBitmapFontSet(font_example, "DF0:FONTS", adf)
-font.read <- read.AmigaBitmapFontSet("DF0:FONTS/AmigaFFH.font", adf)
+if (requireNamespace("adfExplorer")) {
+  library("adfExplorer")
+  virtual_disk_file <- tempfile(fileext = ".adf") |>
+    create_adf_device(write_protected = FALSE) |>
+    prepare_adf_device("font_disk") |>
+    make_adf_dir("FONTS")
+  
+  dest <- virtual_path(virtual_disk_file, "DF0:FONTS")
+  write.AmigaBitmapFontSet(font_example, dest)
+  font.read <- read.AmigaBitmapFontSet(
+    virtual_path(virtual_disk_file, "DF0:FONTS/AmigaFFH.font")
+  )
+  close(virtual_disk_file)
 }
 }
 \seealso{

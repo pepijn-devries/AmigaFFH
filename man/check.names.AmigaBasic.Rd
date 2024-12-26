@@ -33,14 +33,12 @@ such as dollar- or percentage sign)
 This function tests names against each of these criteria.
 }
 \examples{
-\dontrun{
 ## These are valid names in Amiga Basic:
 check.names.AmigaBasic(c("Foo", "Bar"))
 
 ## Reserved words and repeated names are not allowed:
 
 check.names.AmigaBasic(c("Print", "Foo", "Foo"))
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

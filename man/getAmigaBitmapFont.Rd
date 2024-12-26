@@ -28,13 +28,11 @@ bitmaps for specific font sizes (heights). Use this function to
 obtain such a specific \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}}.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## get the font object for the first available size:
 font <- getAmigaBitmapFont(font_example,
                            availableFontSizes(font_example)[1])
-}
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

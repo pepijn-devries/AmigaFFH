@@ -26,13 +26,11 @@ painstaking reverse engineering on my part. Consequently the Amiga Basic file en
 here may not be infallible.
 }
 \examples{
-\dontrun{
 ## This creates an AmigaBasic-class object:
 bas <- as.AmigaBasic("PRINT \"hello world!\"")
 
 ## This will decode the object as plain text:
 as.character(bas)
-}
 }
 \references{
 \url{https://en.wikipedia.org/wiki/AmigaBASIC}
