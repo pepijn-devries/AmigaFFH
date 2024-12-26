@@ -28,7 +28,6 @@ methods using the \code{\link[=read.iff]{read.iff()}} function. Use \code{\link[
 to achieve the inverse of this method.
 }
 \examples{
-\dontrun{
 ## Get an IFFChunk object:
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -40,7 +39,6 @@ example.iff.new <- rawToIFFChunk(example.raw)
 
 ## These conversions were non-destructive:
 identical(example.iff, example.iff.new)
-}
 }
 \seealso{
 Other iff.operations: 

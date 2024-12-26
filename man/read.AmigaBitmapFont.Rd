@@ -4,17 +4,12 @@
 \alias{read.AmigaBitmapFont}
 \title{Read an AmigaBitmapFont class object from a file}
 \usage{
-read.AmigaBitmapFont(file, disk = NULL, ...)
+read.AmigaBitmapFont(file, ...)
 }
 \arguments{
 \item{file}{The file name of a font subset is usually simply a numeric number
 indicating the font height in pixels. Use \code{file} as a \code{character}
 string representing that file location.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Arguments passed on to \code{\link[=rawToAmigaBitmapFont]{rawToAmigaBitmapFont()}}.}
 }
@@ -32,11 +27,10 @@ Individual font bitmaps are stored in a font's subdirectory where
 the file name is usually equal to the font height in pixels. This
 function will read such a font bitmap file and return it as an
 \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} class object. It can also read such
-files from \code{\link[adfExplorer:amigaDisk-class]{adfExplorer::amigaDisk-class()}} objects,
+files from virtual disks (\code{\link[adfExplorer:adf_file_con]{adf_file_con()}}) objects,
 but that requires the adfExplorer package to be installed.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## Let's store the example font first:
@@ -47,10 +41,19 @@ font.sub <- read.AmigaBitmapFont(file.path(tempdir(), "AmigaFFH", "9"))
 
 ## The same can be done with a virtual Amiga disk. The following
 ## examples require the 'adfExplorer' package.
-font.disk <- adfExplorer::blank.amigaDOSDisk("font.disk")
-font.disk <- adfExplorer::dir.create.adf(font.disk, "FONTS")
-font.disk <- write.AmigaBitmapFontSet(font_example, "DF0:FONTS", font.disk)
-font.sub <- read.AmigaBitmapFont("DF0:FONTS/AmigaFFH/9", font.disk)
+if (requireNamespace("adfExplorer")) {
+  library("adfExplorer")
+  virtual_disk_file <- tempfile(fileext = ".adf") |>
+    create_adf_device(write_protected = FALSE) |>
+    prepare_adf_device("font_disk") |>
+    make_adf_dir("FONTS")
+  
+  dest <- virtual_path(virtual_disk_file, "DF0:FONTS")
+  write.AmigaBitmapFontSet(font_example, dest)
+  font.read <- read.AmigaBitmapFont(
+    virtual_path(virtual_disk_file, "DF0:FONTS/AmigaFFH/9")
+  )
+  close(virtual_disk_file)
 }
 }
 \seealso{

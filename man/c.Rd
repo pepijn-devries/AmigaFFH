@@ -57,7 +57,6 @@ in the object. As this name will also be used as a file name when
 writing the font to a file, make sure that it is a valid filename.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## first get some AmigaBitmapFont objects:
@@ -71,7 +70,6 @@ font.set <- c(font8, font9, name = "my_font_name")
 bas1 <- as.AmigaBasic("LET a = 1")
 bas2 <- as.AmigaBasic("PRINT a")
 bas  <- c(bas1, bas2)
-}
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

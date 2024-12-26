@@ -23,7 +23,6 @@ An \link[=AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in 
 function converts the raw format in which it would be stored as a file into a comprehensive S3 class object.
 }
 \examples{
-\dontrun{
 ## A small fragment of the dos.library BMAP would look like this:
 dos.bmap <- as.AmigaBasicBMAP(list(
   xOpen = list(
@@ -45,7 +44,6 @@ dos.bmap.raw <- as.raw(dos.bmap)
 
 ## And the reverse
 rawToAmigaBasicBMAP(dos.bmap.raw)
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

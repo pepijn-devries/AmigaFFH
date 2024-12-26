@@ -53,7 +53,9 @@ dither <- function(x, method, ...) {
 #' amigaRawToColour(as.raw(c(0xf0, 0xf0, 0xf0)), n.bytes = "3")
 #' 
 #' ## lower nybbles are ignored, you will get a warning when it is not zero:
+#' \donttest{
 #' amigaRawToColour(as.raw(c(0xf0, 0xf0, 0x0f)), n.bytes = "3")
+#' }
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
@@ -67,7 +69,7 @@ colourToAmigaRaw <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
   }
   if (colour.depth == "24 bit") col <- col/16
   if (n.bytes == "3") {
-    as.vector(apply(col, 2, function(y) .amigaIntToRaw(16*y, 8, F)))
+    as.vector(apply(col, 2, function(y) .amigaIntToRaw(16*y, 8, FALSE)))
   } else {
     as.vector(apply(col, 2, function(y) as.raw(c(y[1], y[2]*16 + y[3]))))
   }
@@ -88,7 +90,7 @@ amigaRawToColour <- function(x, colour.depth = c("12 bit", "24 bit"), n.bytes = 
   lo <- .loNybble(x)
   if (colour.depth == "24 bit" && n.bytes == "3") {
     sq <- seq(1, to = length(x), by = 3)
-    x <- .rawToAmigaInt(x, 8, F)
+    x <- .rawToAmigaInt(x, 8, FALSE)
     return(grDevices::rgb(x[sq]/255, x[sq + 1]/255, x[sq + 2]/255))
   } else if (colour.depth == "12 bit" && n.bytes == "3") {
     sq <- seq(1, to = length(x), by = 3)
@@ -184,11 +186,11 @@ packBitmap <- function(x) {
   l <- l[order(i)]
   i <- i[order(i)]
   while (any(duplicated(i))) {
-    i[duplicated(i, fromLast = T)] <- i[duplicated(i, fromLast = T)] - 1
+    i[duplicated(i, fromLast = TRUE)] <- i[duplicated(i, fromLast = TRUE)] - 1
   }
   ## End skipping double repeats
-  one.series.start <- which(diff(c(F, l == 1, F)) == 1)
-  one.series.end <- which(diff(c(F, l == 1, F)) == -1) - 1
+  one.series.start <- which(diff(c(FALSE, l == 1, FALSE)) == 1)
+  one.series.end <- which(diff(c(FALSE, l == 1, FALSE)) == -1) - 1
   if (length(one.series.start) != length(one.series.end)) stop("Unexpected error in packing the bitmap. Please report this error to the package author.")
   one.series <- mapply(function(start, end) {
     list(x[i[start[[1]]]:i[end[[1]]]])
@@ -198,16 +200,16 @@ packBitmap <- function(x) {
     yl <- length(y)
     result <- NULL
     while (yl > 128) {
-      result <- c(result, .amigaIntToRaw(127, 8, T), y[1:128])
+      result <- c(result, .amigaIntToRaw(127, 8, TRUE), y[1:128])
       yl <- yl - 128
       y <- y[-1:-128]
     }
-    return(c(result, .amigaIntToRaw(yl - 1, 8, T), y))
+    return(c(result, .amigaIntToRaw(yl - 1, 8, TRUE), y))
   })
   result <- rep(list(raw(0)), length(l))
   result[one.series.start] <- one.series
   more.series <- mapply(function(y, dat, rep) {
-    list(c(.amigaIntToRaw(-rep + 1, 8, T), dat))
+    list(c(.amigaIntToRaw(-rep + 1, 8, TRUE), dat))
   }, dat = x[i[l > 1]], rep = l[l > 1])
   result[l > 1] <- more.series
   result <- unlist(result)
@@ -224,7 +226,7 @@ unPackBitmap <- function(x) {
   result <- raw(0)
   offset <- 0
   while (offset < length(x)) {
-    n <- .rawToAmigaInt(x[offset + 1], 8, T)
+    n <- .rawToAmigaInt(x[offset + 1], 8, TRUE)
     if (n == -128) {
       offset <- offset + 1
     } else if (n < 0) {
@@ -273,7 +275,6 @@ unPackBitmap <- function(x) {
 #' @rdname bitmapToRaster
 #' @name bitmapToRaster
 #' @examples
-#' \dontrun{
 #' ## first load an example image:
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -306,11 +307,10 @@ unPackBitmap <- function(x) {
 #' ## We now have a raster object that can be plotted:
 #' 
 #' plot(example.raster, interpolate = FALSE)
-#' }
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @export
-bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, length.out = 2^depth)), interleaved = T) {
+bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, length.out = 2^depth)), interleaved = TRUE) {
   if (!is.raw(x)) stop("x should be a vector of raw values.")
   w <- round(w)
   h <- round(h)
@@ -322,7 +322,7 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
   interleaved <- as.logical(interleaved[[1]])
   ## invert bytes and longs is opposite to the defaults in adfExplorer.
   ## Does the user need to be able to change these values for bitmap images?
-  x <- .rawToBitmap(x, invert.bytes = T, invert.longs = F)
+  x <- .rawToBitmap(x, invert.bytes = TRUE, invert.longs = FALSE)
   if (interleaved) {
     x <- array(x, c(16*ceiling(w/16), depth, h))
     x <- apply(x, c(1, 3), function(y) {
@@ -335,12 +335,12 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
     })
   }
   if (is.null(palette)) {
-    x <- matrix(x, ncol = h, byrow = F)
-    x <- t(x)[, 1:w, drop = F]
+    x <- matrix(x, ncol = h, byrow = FALSE)
+    x <- t(x)[, 1:w, drop = FALSE]
     return(x)
   } else {
-    x <- matrix(palette[x + 1], ncol = h, byrow = F)
-    x <- t(x)[, 1:w, drop = F]
+    x <- matrix(palette[x + 1], ncol = h, byrow = FALSE)
+    x <- t(x)[, 1:w, drop = FALSE]
     return(grDevices::as.raster(x))
   }
 }
@@ -415,7 +415,6 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #' @rdname rasterToBitmap
 #' @name rasterToBitmap
 #' @examples
-#' \dontrun{
 #' ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 #' volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
 #'   min(volcano) + 1], nrow(volcano))))
@@ -446,11 +445,10 @@ bitmapToRaster <- function(x, w, h, depth, palette = grDevices::gray(seq(0, 1, l
 #' 
 #' ## Make a bitmap using a special display mode (HAM6):
 #' volcano.HAM <- rasterToBitmap(volcano.raster, "HAM6")
-#' }
 #' @family raster.operations
 #' @author Pepijn de Vries
 #' @export
-rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colours) {
+rasterToBitmap <- function(x, depth = 3, interleaved = TRUE, indexing = index.colours) {
   special.mode <- "none"
   if (depth %in% c("HAM6", "HAM8")) {
     special.mode <- depth
@@ -529,7 +527,6 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 #' @rdname index.colours
 #' @name index.colours
 #' @examples
-#' \dontrun{
 #' ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 #' volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
 #'   min(volcano) + 1], nrow(volcano))))
@@ -548,10 +545,9 @@ rasterToBitmap <- function(x, depth = 3, interleaved = T, indexing = index.colou
 #' 
 #' ## plot the images side by side for comparison
 #' par(mfcol = c(1, 3))
-#' plot(volcano.raster, interpolate = F)
-#' plot(volcano.index, interpolate = F)
-#' plot(volcano.dith, interpolate = F)
-#' }
+#' plot(volcano.raster, interpolate = FALSE)
+#' plot(volcano.index, interpolate = FALSE)
+#' plot(volcano.dith, interpolate = FALSE)
 #' @family colour.quantisation.operations
 #' @family raster.operations
 #' @author Pepijn de Vries
@@ -596,7 +592,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
     c.dim <- dim(x)
   }
 
-  col.vals <- grDevices::col2rgb(x, T)
+  col.vals <- grDevices::col2rgb(x, TRUE)
   if (special.mode %in% c("HAM6", "HAM8")) col.vals.rgb <- col.vals
   alpha <- col.vals[4,]
   col.vals <- col.vals[-4,]
@@ -656,7 +652,7 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
       result <- lapply(result, matrix, nrow = c.dim)
     }
   } else {
-    palette <- grDevices::col2rgb(palette, T)
+    palette <- grDevices::col2rgb(palette, TRUE)
     transparent <- which(palette[4,] == 0)[1]
     palette[4,palette[4,] > 0] <- 255
     palette <- grDevices::rgb(palette[1,], palette[2,], palette[3,], palette[4,], maxColorValue = 255)
@@ -720,7 +716,6 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' @name dither
 #' @aliases dither.raster
 #' @examples
-#' \dontrun{
 #' ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 #' volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
 #'   min(volcano) + 1], nrow(volcano))))
@@ -733,12 +728,11 @@ index.colours <- function(x, length.out = 8, palette = NULL, background = "#FFFF
 #' ## Convert the indices back into a raster object, such that we can plot it:
 #' volcano.dither <- as.raster(apply(volcano.dither, 2, function(x) c("yellow", "green")[x]))
 #' par(mfcol = c(1, 2))
-#' plot(volcano.raster, interpolate = F)
-#' plot(volcano.dither, interpolate = F)
+#' plot(volcano.raster, interpolate = FALSE)
+#' plot(volcano.dither, interpolate = FALSE)
 #' 
 #' ## results will get better when a better matching colour palette is used.
 #' ## for that purpose use the function 'index.colours'.
-#' }
 #' @references R.W. Floyd, L. Steinberg, *An adaptive algorithm for spatial grey scale*. Proceedings of the Society of Information Display 17, 75-77 (1976).
 #' @references J. F. Jarvis, C. N. Judice, and W. H. Ninke, *A survey of techniques for the display of continuous tone pictures on bilevel displays*. Computer Graphics and Image Processing, 5:1:13-40 (1976).
 #' @references <https://en.wikipedia.org/wiki/Floyd-Steinberg_dithering>
@@ -758,11 +752,11 @@ dither.raster <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
   c.dim <- dim(x)
   
   ## create an array with width, height, r, g, b and alpha as separate dimensions
-  x <- grDevices::col2rgb(x, T)
+  x <- grDevices::col2rgb(x, TRUE)
   x <- lapply(split(x, row(x)), matrix, nrow = c.dim)
   x <- array(c(x[[1]], x[[2]], x[[3]], x[[4]]), dim = c(rev(c.dim), 4))
   
-  pal.rgb <- col2rgb(palette, T)
+  pal.rgb <- col2rgb(palette, TRUE)
 
   result <- matrix(rep(NA, prod(c.dim)), nrow = c.dim)
   if (method == "floyd-steinberg") {
@@ -913,13 +907,14 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' @rdname deltaFibonacciCompress
 #' @name deltaFibonacciCompress
 #' @examples
-#' \dontrun{
 #' ## Let's get an audio wave from the ProTrackR package, which we
 #' ## can use in this example:
 #' buzz     <- ProTrackR::PTSample(ProTrackR::mod.intro, 1)
 #' 
 #' ## Let's convert it into raw data, such that we can compress it:
-#' buzz.raw <- adfExplorer::amigaIntToRaw(ProTrackR::waveform(buzz) - 128, 8, T)
+#' buzz.raw <- as.integer(ProTrackR::waveform(buzz) - 128) |>
+#'   bitwAnd(0xFF) |>
+#'   as.raw()
 #' 
 #' ## Let's compress it:
 #' buzz.compress <- deltaFibonacciCompress(buzz.raw)
@@ -932,7 +927,9 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' buzz.decompress <- deltaFibonacciDecompress(buzz.compress)
 #' 
 #' ## And turn the raw data into numeric data:
-#' buzz.decompress <- adfExplorer::rawToAmigaInt(buzz.decompress, 8, T)
+#' buzz.decompress <-
+#'   ifelse(buzz.decompress > 0x7f, as.integer(buzz.decompress) - 256L,
+#'          as.integer(buzz.decompress))
 #' 
 #' ## Plot the original wave in black, the decompressed wave in blue
 #' ## and the error in red (difference between the original and decompressed
@@ -951,7 +948,9 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' snare.drum <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 #' 
 #' ## Let's convert it into raw data, such that we can compress it:
-#' snare.raw <- adfExplorer::amigaIntToRaw(ProTrackR::waveform(snare.drum) - 128, 8, T)
+#' snare.raw <- as.integer(ProTrackR::waveform(snare.drum) - 128L) |>
+#'   bitwAnd(0xFF) |>
+#'   as.raw()
 #' 
 #' ## Let's compress it:
 #' snare.compress <- deltaFibonacciCompress(snare.raw)
@@ -960,7 +959,9 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' snare.decompress <- deltaFibonacciDecompress(snare.compress)
 #' 
 #' ## And turn the raw data into numeric data:
-#' snare.decompress <- adfExplorer::rawToAmigaInt(snare.decompress, 8, T)
+#' snare.decompress <-
+#'   ifelse(snare.decompress > 0x7f, as.integer(snare.decompress) - 256L,
+#'          as.integer(snare.decompress))
 #' 
 #' ## Now if we make the same comparison as before, we note that the
 #' ## error in the decompressed wave is much larger than in the previous
@@ -973,7 +974,6 @@ dither.matrix <- function(x, method = c("none", "floyd-steinberg", "JJN", "stuck
 #' ## this can also be visualised by plotting the orignal wave data against
 #' ## the decompressed data (and observe a nice but not perfect correlation):
 #' plot(ProTrackR::waveform(snare.drum) - 128, snare.decompress)
-#' }
 #' @references <https://en.wikipedia.org/wiki/Delta_encoding>
 #' @references <http://amigadev.elowar.com/read/ADCD_2.1/Devices_Manual_guide/node02D6.html>
 #' @author Pepijn de Vries
@@ -984,7 +984,7 @@ deltaFibonacciCompress <- function(x, ...) {
   ## achieved with Audiomaster IV. But the total error is smaller
   ## in this implementation
   result <- c(raw(1), x[1])
-  x <- .rawToAmigaInt(x, 8, T)
+  x <- .rawToAmigaInt(x, 8, TRUE)
   fibonacci <- rev(c(-34,-21,-13,-8,-5,-3,-2,-1,0,1,2,3,5,8,13,21))
   fib.deltas <- rep(NA, length(x))
   new.wave <- fib.deltas
@@ -1026,9 +1026,9 @@ deltaFibonacciDecompress <- function(x, ...) {
   fibonacci <- c(-34,-21,-13,-8,-5,-3,-2,-1,0,1,2,3,5,8,13,21)
   result <- c(rbind(.hiNybble(x), .loNybble(x)))
   result <- fibonacci[result + 1]
-  result <- .rawToAmigaInt(base.val, 8, T) + cumsum(result)
+  result <- .rawToAmigaInt(base.val, 8, TRUE) + cumsum(result)
   result <- ((result + 128) %% 256) - 128
-  return(.amigaIntToRaw(result, 8, T))
+  return(.amigaIntToRaw(result, 8, TRUE))
 }
 
 .is.colour <- function(x)
@@ -1164,13 +1164,13 @@ deltaFibonacciDecompress <- function(x, ...) {
   ## x should be a matrix of palette indices
   x <- cbind(x, matrix(1, ncol = -ncol(x)%%16, nrow = nrow(x)))
   x.dim <- dim(x)
-  x <- .rawToBitmap(.amigaIntToRaw(c(x) - 1, 32, F), T, F)
+  x <- .rawToBitmap(.amigaIntToRaw(c(x) - 1, 32, FALSE), TRUE, FALSE)
   sq <- c(outer(31:(32 - depth), seq(1, length(x), by = 32), "+"))
   x <- as.logical(x[sq])
   rm(sq)
   # dimensions are bitplane, height, width
   x <- array(x, dim = c(depth, x.dim))
-  if (interleaved == T) {
+  if (interleaved == TRUE) {
     ## rearrange dimensions to height, bitplane, width (non-interleaved.)
     x <- c(aperm(x, c(3, 1, 2)))
   } else {
@@ -1210,7 +1210,7 @@ timeval <- function(x) {
   ## get timeval struct from raw data
   if ((length(x) %% 8) != 0) stop("The length of x should be a multiple of 8.")
   if (typeof(x) != "raw") stop("x should be of type 'raw'.")
-  x <- matrix(.rawToAmigaInt(x, 32, F), ncol = 2, byrow = T)
+  x <- matrix(.rawToAmigaInt(x, 32, FALSE), ncol = 2, byrow = TRUE)
   result <- apply(x, 1, function(y) y[[1]] + y[[2]]/1e6)
   class(result) <- "AmigaTimeVal"
   return(result)
@@ -1226,7 +1226,7 @@ as.raw.AmigaTimeVal <- function(x, ...) {
   micros <- round((x - secs)*1e6)
   secs[secs >= 2^32] <-  (2^32) - 1
   micros[micros >= 2^32] <-  (2^32) - 1
-  .amigaIntToRaw(c(rbind(secs, micros)), 32, F)
+  .amigaIntToRaw(c(rbind(secs, micros)), 32, FALSE)
 }
 
 #' @export
@@ -1238,7 +1238,7 @@ print.AmigaTimeVal <- function(x, ...) {
   ## read numeric and raw data from amiga raw input
   ## dat = vector of raw data
   ## n.bytes = vector of lengths of bytes to be read from input data. Negative values are negated and indicate that raw data should be read as is
-  ## signed = vector of logicals. Indicate whether the values read from data are signed (T) or unsigned (F)
+  ## signed = vector of logicals. Indicate whether the values read from data are signed (TRUE) or unsigned (FALSE)
   ## par.names = parameter names for the data read from the input data
   n.bytes <- round(n.bytes)
   offset <- 0
@@ -1252,7 +1252,7 @@ print.AmigaTimeVal <- function(x, ...) {
     }
     offset <<- offset + n.b
     return(res)
-  }, n.b = n.bytes, sgnd = signed, SIMPLIFY = F)
+  }, n.b = n.bytes, sgnd = signed, SIMPLIFY = FALSE)
   names(result) <- par.names
   result
 }
@@ -1325,7 +1325,7 @@ print.AmigaTimeVal <- function(x, ...) {
 
 .rawToCharNull <- function(raw_dat) {
   result <- ""
-  if (length(raw_dat) < 3) try(result <- (rawToChar(raw_dat)), silent = T) else
+  if (length(raw_dat) < 3) try(result <- (rawToChar(raw_dat)), silent = TRUE) else
   {
     result    <- raw_dat
     runlength <- rle(result)$lengths
@@ -1337,26 +1337,27 @@ print.AmigaTimeVal <- function(x, ...) {
       result[rel_range][result[rel_range] == as.raw(0x00)] <- as.raw(0x20)
       result <- result[result != raw(1)]
     }
-    try(result <- rawToChar(result), silent = T)
+    try(result <- rawToChar(result), silent = TRUE)
     if (inherits(result, "raw")) result <- ""
   }
   return(result)
 }
 
-.read.generic <- function(file, disk = NULL) {
+.read.generic <- function(file) {
   ## If the file size can be determined from 'file', that size
   ## will be read. Other wise, the file will be read in 5 kB chunks.
   size <- 5*1024
-  if (!is.null(disk)) {
-    if ("adfExplorer" %in% rownames(utils::installed.packages())) {
-      dat <- adfExplorer::get.adf.file(disk, file)
-      size <- length(dat)
-      file <- rawConnection(dat, "rb")
+  close_later <- FALSE
+  if (inherits(file, "virtual_path")) {
+    if (requireNamespace("adfExplorer")) {
+      file <- adfExplorer::adf_file_con(file)
+      close_later <- TRUE
     } else {
-      stop("When specifying 'disk', the 'adfExplorer' package needs to be installed.")
+      stop("Package `adfExplorer` is required to read from virtual disks.")
     }
   }
   if (inherits(file, "character")) {
+    close_later <- TRUE
     size <- file.size(file)
     file <- file(file, "rb")
   }
@@ -1367,30 +1368,45 @@ print.AmigaTimeVal <- function(x, ...) {
   result <- NULL
   repeat {
     l1 <- length(result)
-    result <- c(result, readBin(file, "raw", size))
+    if (inherits(file, "adf_file_con")) {
+      if (requireNamespace("adfExplorer")) {
+        result <- c(result, adfExplorer::readBin(file, "raw", size))
+      } else {
+        stop("Package `adfExplorer` is required to read from virtual disks.")
+      }
+    } else {
+      result <- c(result, readBin(file, "raw", size))
+    }
     l2 <- length(result)
     if ((l2 - l1) < size) break
   }
-  close(file)
+  if (close_later) close(file)
   return(result)
 }
 
-.write.generic <- function(x, file, disk = NULL, ...) {
+.write.generic <- function(x, file, ...) {
   raw.dat <- as.raw(x, ...)
-  if (is.null(disk)) {
-    if (inherits(file, "character")) con <- file(file, "wb")
-    if (inherits(file, "connection")) {
-      con_info <- summary(con)
-      if (con_info$`can write` != "yes" || con_info$text != "binary") stop("file is not a connection to which binary data can be written...")
-      con <- file
-    }
-    writeBin(raw.dat, con, endian = "big")
-    if (inherits(file, "character")) return(close(con))
-  } else {
-    if ("adfExplorer" %in% rownames(utils::installed.packages())) {
-      return(adfExplorer::put.adf.file(disk, raw.dat, file))
+  if (inherits(file, "virtual_path")) {
+    if (requireNamespace("adfExplorer")) {
+      con <- adfExplorer::adf_file_con(file, writable = TRUE)
     } else {
-      stop("When specifying 'disk', the 'adfExplorer' package needs to be installed.")
+      stop("Please install package `adfExplorer` to write to virtual disks.")
     }
   }
+  if (inherits(file, "character")) con <- file(file, "wb")
+  if (inherits(file, "connection")) {
+    con_info <- summary(con)
+    if (con_info$`can write` != "yes" || con_info$text != "binary") stop("file is not a connection to which binary data can be written...")
+    con <- file
+  }
+  if (inherits(con, "adf_file_con")) {
+    if (requireNamespace("adfExplorer")) {
+      adfExplorer::writeBin(raw.dat, con, endian = "big")
+    } else {
+      stop("Please install package `adfExplorer` to write to virtual disks.")
+    }
+  } else {
+    writeBin(raw.dat, con, endian = "big")
+  }
+  if (inherits(file, c("character", "virtual_path"))) return(close(con))
 }

@@ -89,18 +89,18 @@ as.raw.SysConfig <- function(x, ...) {
                                           "PrintFlags",
                                           .SysConfigMultiFactors[["PrintFlags"]]$vals,
                                           .SysConfigMultiFactors[["PrintFlags"]]$levs)
-  x$SerRWBits <- .bitmapToRaw(x$SerRWBits, F, F)
+  x$SerRWBits <- .bitmapToRaw(x$SerRWBits, FALSE, FALSE)
   x$SerParShk <- .amigaIntToRaw(
     16*.match.factor.inv(x$SerParShk, "SerialParity", 0:4, c("SPARITY_NONE", "SPARITY_EVEN", "SPARITY_ODD",
                                                              "SPARITY_MARK", "SPARITY_SPACE")) +
       .match.factor.inv(x$SerParShk,
                         "HandshakeMode", 0:2, c("SHSHAKE_XON", "SHSHAKE_RTS", "SHSHAKE_NONE")),
-    8, F)
+    8, FALSE)
   x$SerStopBuf <- .amigaIntToRaw(
     16*(x$SerStopBuf$N.StopBits - 1) +
       .match.factor.inv(x$SerStopBuf,
                         "BufSize", 0:5, c("SBUF_512", "SBUF_1024", "SBUF_2048", "SBUF_4096", "SBUF_8000", "SBUF_16000")),
-    8, F)
+    8, FALSE)
   x <- .write.amigaData(x, .SysConfigData$byte, .SysConfigData$signed, .SysConfigData$par.names)
   return(x)
 }
@@ -114,56 +114,56 @@ as.raw.SysConfig <- function(x, ...) {
              "PIXEL_DIMENSIONS", "MULTIPLY_DIMENSIONS", "INTEGER_SCALING",
              "ORDERED_DITHERING", "HALFTONE_DITHERING", "FLOYD_DITHERING",
              "ANTI_ALIAS", "GREY_SCALE2"),
-    stringsAsFactors = F
+    stringsAsFactors = FALSE
   )
 )
 
 .SysConfigFactors <- list(
   PrinterPort  = data.frame(vals = c(0x00, 0x01),
                             levs = c("PARALLEL_PRINTER", "SERIAL_PRINTER"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   BaudRate     = data.frame(vals = 0:7,
                             levs = c("BAUD_110", "BAUD_300", "BAUD_1200", "BAUD_2400",
                                      "BAUD_4800", "BAUD_9600", "BAUD_19200", "BAUD_MIDI"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PaperType    = data.frame(vals = c(0x00, 0x80),
                             levs = c("FANFOLD", "SINGLE"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PrintPitch   = data.frame(vals = c(0x000, 0x400, 0x800),
                             levs = c("PICA", "ELITE", "FINE"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PrintQuality = data.frame(vals = c(0x000, 0x100),
                             levs = c("DRAFT", "LETTER")),
   PrintSpacing = data.frame(vals = c(0x000, 0x200),
                             levs = c("SIX_LPI", "EIGHT_LPI"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PrintImage   = data.frame(vals = c(0x00, 0x01),
                             levs = c("IMAGE_POSITIVE", "IMAGE_NEGATIVE"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PrintAspect  = data.frame(vals = c(0x00, 0x01),
                             levs = c("ASPECT_HORIZ", "ASPECT_VERT"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PrintShade   = data.frame(vals = c(0x00, 0x01, 0x02),
                             levs = c("SHADE_BW", "SHADE_GREYSCALE", "SHADE_COLOR"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PaperSize    = data.frame(vals = (0:13)*16,
                             levs = c("US_LETTER", "US_LEGAL", "N_TRACTOR", "W_TRACTOR", "CUSTOM", paste0("EURO_A", 0:8)),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   PrinterType  = data.frame(vals = 0:12,
                             levs = c("CUSTOM_NAME", "ALPHA_P_101", "BROTHER_15XL", "CBM_MPS1000",
                                      "DIAB_630", "DIAB_ADV_D25", "DIAB_C_150", "EPSON", "EPSON_JX_80",
                                      "OKIMATE_20", "QUME_LP_20", "HP_LASERJET", "HP_LASERJET_PLUS"),
-                            stringsAsFactors = F),
+                            stringsAsFactors = FALSE),
   LaceWB       = data.frame(vals = 0:1,
                             levs = c("NO_LACE", "LACE"),
-                            stringsAsFactors = F)
+                            stringsAsFactors = FALSE)
 )
 
 .SysConfigData <- data.frame(
   byte      = c(1, 1, 2, -8, -8, -8, -72, 1, 1, -6, 2, -8, 1, 1, 2, 2, -2, 2, -30, rep(2, 12),
                 rep(-1, 3), 1, -12, -16, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 1, 1),
-  signed    = c(T, F, F,  F,  F,  F,   F, T, T,  F, F, F, T, T, T, T,  F, T,   F, rep(F, 8), T, F, F, F,
-                rep( F, 3), F,   F,   F, T, T, F, F, F, F, F, F, F, F, F, F, F),
+  signed    = c(TRUE, FALSE, FALSE,  FALSE,  FALSE,  FALSE,   FALSE, TRUE, TRUE,  FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE,  FALSE, TRUE,   FALSE, rep(FALSE, 8), TRUE, FALSE, FALSE, FALSE,
+                rep( FALSE, 3), FALSE,   FALSE,   FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
   par.names = c("FontHeight", "PrinterPort", "BaudRate", "KeyRptSpeed",
                 "KeyRptDelay", "DoubleClick", "PointerMatrix", "XOffset", "YOffset",
                 "spriteColours", "PointerTicks", "WBColours", "ViewXOffset", "ViewYOffset", "ViewInitX",
@@ -175,7 +175,7 @@ as.raw.SysConfig <- function(x, ...) {
                 "RowSizeChange", "ColumnSizeChange", "PrintFlags", "PrintMaxWidth",
                 "PrintMaxHeight", "PrintDensity", "PrintXOffset", "wb_Width", "wb_Height",
                 "wb_Depth", "ext_size"),
-  stringsAsFactors = F
+  stringsAsFactors = FALSE
 )
 
 #' Read an Amiga system-configuration file
@@ -189,13 +189,8 @@ as.raw.SysConfig <- function(x, ...) {
 #' @name read.SysConfig
 #' @param file The file name of a system-configuration file to be read.
 #' Can also be a connection that allows reading binary data.
-#' @param disk A virtual Commodore Amiga disk from which the `file` should be
-#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @return Returns an S3 [SysConfig] class object based on the file that is read.
 #' @examples
-#' \dontrun{
 #' ## Put a simple SysConfig object into the tempdir:
 #' write.SysConfig(simpleSysConfig(), file.path(tempdir(), "system-configuration"))
 #' 
@@ -204,13 +199,12 @@ as.raw.SysConfig <- function(x, ...) {
 #' 
 #' ## and plot it
 #' plot(sc)
-#' }
 #' @family SysConfig.operations
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-read.SysConfig <- function(file, disk = NULL) {
-  dat <- .read.generic(file, disk)
+read.SysConfig <- function(file) {
+  dat <- .read.generic(file)
   rawToSysConfig(dat)
 }
 
@@ -226,30 +220,23 @@ read.SysConfig <- function(file, disk = NULL) {
 #' @name write.SysConfig
 #' @param x An S3 [SysConfig] class object.
 #' @param file A file name to which the binary file should be written.
-#' @param disk A virtual Commodore Amiga disk to which the `file` should be
-#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @return Returns `NULL` or an `integer` status passed on by the
 #' [close()] function, that is used to close the file connection.
-#' It is returned invisibly. Or, when `disk` is specified, a copy of
-#' `disk` is returned to which the file is written.
+#' It is returned invisibly.
 #' 
 #' @examples
-#' \dontrun{
 #' ## First generate a simple SysConfig object to write to a file:
 #' sc <- simpleSysConfig()
 #' 
 #' ## And write to the tempdir:
 #' write.SysConfig(sc, file.path(tempdir(), "system-configuration"))
-#' }
 #' @family SysConfig.operations
 #' @family io.operations
 #' @author Pepijn de Vries
 #' @export
-write.SysConfig <- function(x, file, disk = NULL) {
+write.SysConfig <- function(x, file) {
   if (!inherits(x, "SysConfig")) stop("x should be of class SysConfig.")
-  .write.generic(x, file, disk)
+  .write.generic(x, file)
 }
 
 #' Coerce raw data into a SysConfig class object
@@ -270,15 +257,22 @@ write.SysConfig <- function(x, file, disk = NULL) {
 #' system-configurations can be extended, such extended files are not supported here.
 #' @return Returns a [SysConfig] class object based on `x`.
 #' @examples
-#' \dontrun{
-#' ## get the system-configuration from the adfExplorer example disk:
-#' sc <- adfExplorer::get.adf.file(adfExplorer::adf.example, "devs/system-configuration")
+#' if (requireNamespace("adfExplorer", quietly = TRUE)) {
+#'   library(adfExplorer)
+#'   
+#'   ## get the system-configuration from the adfExplorer example disk:
+#'   disk <- connect_adf(
+#'     system.file("example.adz", package = "adfExplorer")
+#'   )
+#'   virtual_file_con <- adf_file_con(disk, "devs/system-configuration")
+#'   sc <- readBin(virtual_file_con, "raw", 1024)
+#'   close(disk)
 #' 
-#' ## This will get you the raw data from the file:
-#' typeof(sc)
+#'   ## This will get you the raw data from the file:
+#'   typeof(sc)
 #' 
-#' ## Convert the raw data to a more comprehensive named list (and S3 SysConfig class):
-#' sc <- rawToSysConfig(sc)
+#'   ## Convert the raw data to a more comprehensive named list (and S3 SysConfig class):
+#'   sc <- rawToSysConfig(sc)
 #' }
 #' @family SysConfig.operations
 #' @family raw.operations
@@ -312,7 +306,7 @@ rawToSysConfig <- function(x) {
   if (sum(grepl("DITHERING", system.configuration$PrintFlags)) > 1)
     system.configuration$PrintFlags <- system.configuration$PrintFlags[!grepl("ORDERED_DITHERING",
                                                                               system.configuration$PrintFlags)]
-  system.configuration$SerRWBits <- as.logical(.rawToBitmap(system.configuration$SerRWBits, F, F))
+  system.configuration$SerRWBits <- as.logical(.rawToBitmap(system.configuration$SerRWBits, FALSE, FALSE))
   names(system.configuration$SerRWBits) <- c(t(outer(c("write.bit", "read.bit"), 0:3, paste0)))
   system.configuration$SerParShk <- list(
     SerialParity  = .match.factor(list(SerialParity = ProTrackR::hiNybble(system.configuration$SerParShk)),
@@ -347,7 +341,6 @@ rawToSysConfig <- function(x) {
 #' @return Returns a comprehensive representation of a system-configuration file in the
 #' for of a [SysConfig] class object.
 #' @examples
-#' \dontrun{
 #' ## Create a simple system-configuration (S3 SysConfigClass)
 #' sc <- simpleSysConfig()
 #' 
@@ -359,7 +352,6 @@ rawToSysConfig <- function(x) {
 #' ## It is also to provide modifications to the configuration
 #' ## via the 'options' argument:
 #' sc <- simpleSysConfig(options = list(FontHeight = 9))
-#' }
 #' @family SysConfig.operations
 #' @author Pepijn de Vries
 #' @export

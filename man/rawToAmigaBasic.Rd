@@ -25,7 +25,6 @@ This function will convert raw data as stored in Amiga Basic files into its corr
 \code{\link[=AmigaBasic]{AmigaBasic()}}-class object.
 }
 \examples{
-\dontrun{
 ## First create an AmigaBAsic object:
 bas <- as.AmigaBasic("PRINT \"Hello world!\"")
 
@@ -34,7 +33,6 @@ bas.raw <- as.raw(bas)
 
 ## Now convert it back to an AmigaBasic object:
 bas <- rawToAmigaBasic(bas.raw)
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

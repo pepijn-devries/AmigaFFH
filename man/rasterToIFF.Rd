@@ -49,7 +49,6 @@ is in true colour (i.e., a 24 bit colour depth) it will be converted
 into a bitmap image with an indexed palette.
 }
 \examples{
-\dontrun{
 ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
   min(volcano) + 1], nrow(volcano))))
@@ -69,7 +68,6 @@ volcano.ham.dither <- rasterToIFF(volcano.raster, "HAM_KEY", depth = "HAM8",
   indexing = function(x, length.out) {
     index.colours(x, length.out, dither = "JJN", iter.max = 20)
   })
-}
 }
 \seealso{
 Other iff.operations: 

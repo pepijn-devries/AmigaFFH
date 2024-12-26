@@ -5,17 +5,12 @@
 \alias{write.AmigaBasicBMAP}
 \title{Read and write Amiga Basic BMAP files}
 \usage{
-read.AmigaBasicBMAP(file, disk = NULL)
+read.AmigaBasicBMAP(file)
 
-write.AmigaBasicBMAP(x, file, disk = NULL)
+write.AmigaBasicBMAP(x, file)
 }
 \arguments{
 \item{file}{A \code{character} string of the filename of the Amiga Basic BMAP file to be read or written.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read or written to. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 
 \item{x}{A \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} class object that needs to be
 stored.}
@@ -23,8 +18,7 @@ stored.}
 \value{
 Returns an \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} class object read from the \code{file} in case of
 \code{read.AmigaBasicBMAP}. Otherwise, invisibly returns the result of the call of \code{close} to the
-file connection. Or, when \code{disk} is specified, a copy of
-\code{disk} is returned to which the file is written.
+file connection.
 }
 \description{
 Read and write \code{\link[=AmigaBasicBMAP]{AmigaBasicBMAP()}} binary file format.
@@ -34,7 +28,6 @@ An \link[=AmigaBasicBMAP]{Amiga Basic BMAP} file maps the offset of routines in 
 read as a comprehensive list and written back to a binary file using these functions.
 }
 \examples{
-\dontrun{
 ## A small fragment of the dos.library BMAP would look like this:
 dos.bmap <- as.AmigaBasicBMAP(list(
   xOpen = list(
@@ -56,7 +49,6 @@ write.AmigaBasicBMAP(dos.bmap, file.path(tempdir(), "dos.bmap"))
 
 ## This will read the same file:
 dos.bmap.copy <- read.AmigaBasicBMAP(file.path(tempdir(), "dos.bmap"))
-}
 }
 \seealso{
 Other AmigaBasic.operations: 

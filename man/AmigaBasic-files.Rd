@@ -25,9 +25,7 @@ The 'demo.bas' file is an example of a binary encoded \link[=AmigaBasic]{Amiga B
 \code{\link[=read.AmigaBasic]{read.AmigaBasic()}}. The script demonstrates how the shape files could be used in Amiga Basic.
 }
 \examples{
-\dontrun{
 read.AmigaBasic(system.file("demo.bas", package = "AmigaFFH"))
 read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
 read.AmigaBasicShape(system.file("r_logo.shp", package = "AmigaFFH"))
-}
 }

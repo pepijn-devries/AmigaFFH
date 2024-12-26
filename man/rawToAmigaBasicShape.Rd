@@ -26,7 +26,6 @@ and sprite graphics that can be used in \code{\link[=AmigaBasic]{AmigaBasic()}} 
 to convert \code{raw} content to an \code{\link[=AmigaBasicShape]{AmigaBasicShape()}} object.
 }
 \examples{
-\dontrun{
 filename <- system.file("ball.shp", package = "AmigaFFH")
 
 ## read as binary:
@@ -39,7 +38,6 @@ ball     <- rawToAmigaBasicShape(ball.raw)
 
 ## A shortcut would be to call read.AmigaBasicShape
 ball2    <- read.AmigaBasicShape(filename)
-}
 }
 \seealso{
 Other raw.operations: 

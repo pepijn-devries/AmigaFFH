@@ -16,7 +16,7 @@
   if (!all(.is.colour(object@colours))) stop("colours should represent colours")
   if (!all(object@end.of.data == raw(4))) warning("Extended sprites are currently not supported")
   if (length(object@bitmap) != (object@VStop - object@VStart)*4) stop("bitmap should have a length of (VStop-VStart)*4")
-  return(T)
+  return(TRUE)
 }
 
 #' The hardwareSprite class
@@ -83,7 +83,7 @@ setClass("hardwareSprite",
          prototype(VStart        = 0,
                    HStart        = 0,
                    VStop         = 1,
-                   control.bits  = rep(F, 8),
+                   control.bits  = rep(FALSE, 8),
                    bitmap        = raw(4),
                    end.of.data   = raw(4),
                    colours       = c("#000000", "#888888", "#FFFFFF")),
@@ -143,11 +143,11 @@ setGeneric("rawToHWSprite", function(x, col) standardGeneric("rawToHWSprite"))
 #' @export
 setMethod("rawToHWSprite", c("raw", "missing"), function(x, col) {
   result <- methods::new("hardwareSprite")
-  result@HStart <- .rawToAmigaInt(x[1], 8, F)
-  result@VStart <- .rawToAmigaInt(x[2], 8, F)
-  result@VStop  <- .rawToAmigaInt(x[3], 8, F)
+  result@HStart <- .rawToAmigaInt(x[1], 8, FALSE)
+  result@VStart <- .rawToAmigaInt(x[2], 8, FALSE)
+  result@VStop  <- .rawToAmigaInt(x[3], 8, FALSE)
   if (result@VStop == 0) result@VStop <- 16 ## This appears to be the case for the mouse pointer. Check if this is always the case
-  result@control.bits <- as.logical(.rawToBitmap(x[4], invert.longs = F))
+  result@control.bits <- as.logical(.rawToBitmap(x[4], invert.longs = FALSE))
   vlen <- result@VStop - result@VStart
   result@bitmap <- x[4 + 1:(vlen*4)]
   offset <- vlen*4 + 4
@@ -194,8 +194,8 @@ plot.hardwareSprite <- function(x, y, ...) {
 #' @export
 setMethod("as.raw", "hardwareSprite", function(x) {
   result <- c(
-    .amigaIntToRaw(c(x@HStart, x@VStart, x@VStop), 8, F),
-    .bitmapToRaw(x@control.bits, invert.longs = F, invert.bytes = F),
+    .amigaIntToRaw(c(x@HStart, x@VStart, x@VStop), 8, FALSE),
+    .bitmapToRaw(x@control.bits, invert.longs = FALSE, invert.bytes = FALSE),
     x@bitmap,
     x@end.of.data
   )
@@ -243,7 +243,6 @@ setMethod("show", "hardwareSprite", function(object){
 #' function [index.colours()] is used.
 #' @returns Returns a [hardwareSprite()] class object based on `x`
 #' @examples
-#' \dontrun{
 #' ## first create a raster object that can be used as input
 #' ## (making sure that the background is transparent):
 #' rst <- as.raster(simpleSysConfig()$PointerMatrix, "#AAAAAA00")
@@ -253,7 +252,6 @@ setMethod("show", "hardwareSprite", function(object){
 #' 
 #' ## and plot it as a check:
 #' plot(spr)
-#' }
 #' @family raster.operations
 #' @family HWSprite.operations
 #' @author Pepijn de Vries
@@ -283,7 +281,7 @@ rasterToHWSprite <- function(x, indexing = index.colours) {
     attributes(result)[["transparent"]] <- trans
     result
   })
-  bm <- .bitmapToRaw(bm, T, F)
+  bm <- .bitmapToRaw(bm, TRUE, FALSE)
   result <- new("hardwareSprite",
                 VStop   = dim(x)[1],
                 bitmap  = bm,

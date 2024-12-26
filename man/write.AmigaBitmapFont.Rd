@@ -5,9 +5,9 @@
 \alias{write.AmigaBitmapFontSet}
 \title{Write an AmigaBitmapFont(set) file}
 \usage{
-write.AmigaBitmapFont(x, file, disk = NULL)
+write.AmigaBitmapFont(x, file)
 
-write.AmigaBitmapFontSet(x, path = getwd(), disk = NULL)
+write.AmigaBitmapFontSet(x, path = getwd())
 }
 \arguments{
 \item{x}{Respectively an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} or a
@@ -20,11 +20,6 @@ to which \code{x} (an \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} object) 
 It is common practice on the Amiga to use the font height in pixels as
 file name.}
 
-\item{disk}{A virtual Commodore Amiga disk to which the \code{file} should be
-written. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
-
 \item{path}{A \code{character} string specifying the path where
 \code{x} (an \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} object) needs to be stored.
 The filename for the font set will be extracted from \code{x} using
@@ -35,8 +30,7 @@ objects are stored.}
 }
 \value{
 Invisibly returns the result of the call of \code{close} to the
-file connection. Or, when \code{disk} is specified, a copy of
-\code{disk} is returned to which the file(s) is/are written.
+file connection.
 }
 \description{
 Functions to write \code{\link[=AmigaBitmapFont]{AmigaBitmapFont()}} and \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}}
@@ -56,25 +50,31 @@ to embed the font bitmap in a font set (using \code{\link[=c]{c()}})
 and write the set to corresponding files.
 }
 \examples{
-\dontrun{
 ## obtain a bitmap font set:
 data(font_example)
 
 ## write the font set to their files. The file name
 ## is extracted from the font object, so you only have
 ## to provide the path:
-write.AmigaBitmapFont(font_example, temp.dir())
+write.AmigaBitmapFontSet(font_example, tempdir())
 
 ## extract a font bitmap:
 font <- getAmigaBitmapFont(font_example, 9)
 
 ## and write it to the temp dir:
-write.AmigaBitmapFont(font, file.path(temp.dir(), "9"))
+write.AmigaBitmapFont(font, file.path(tempdir(), "9"))
 
 ## The following examples require the 'adfExplorer' package:
-font.disk <- adfExplorer::blank.amigaDOSDisk("font.disk")
-font.disk <- adfExplorer::dir.create.adf(font.disk, "FONTS")
-font.disk <- write.AmigaBitmapFontSet(font_example, "DF0:FONTS", font.disk)
+if (requireNamespace("adfExplorer")) {
+  library("adfExplorer")
+  virtual_disk_file <- tempfile(fileext = ".adf") |>
+    create_adf_device(write_protected = FALSE) |>
+    prepare_adf_device("font_disk") |>
+    make_adf_dir("FONTS")
+  
+  dest <- virtual_path(virtual_disk_file, "DF0:FONTS")
+  write.AmigaBitmapFontSet(font_example, dest)
+  close(virtual_disk_file)
 }
 }
 \seealso{

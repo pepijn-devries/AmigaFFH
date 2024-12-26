@@ -1,8 +1,7 @@
 Package: AmigaFFH
 Type: Package
 Title: Commodore Amiga File Format Handler
-Version: 0.4.5
-Date: 2024-02-28
+Version: 0.4.6
 Authors@R: c(person("Pepijn", "de Vries", role = c("aut", "cre", "dtc"),
     email = "pepijn.devries@outlook.com"))
 Author: Pepijn de Vries [aut, cre, dtc]
@@ -12,9 +11,18 @@ Description: Modern software often poorly support older file formats. This
     antiquated Commodore Amiga machine. This package focuses on file types from
     the older Amiga operating systems (<= 3.0). It will read and write specific
     file formats and coerces them into more contemporary data.
-Depends: tuneR (>= 1.0), R (>= 2.10)
-Imports: grDevices, methods, utils, vctrs
-Suggests: ProTrackR (>= 0.3.4), adfExplorer (>= 0.1.4)
+Depends:
+    R (>= 2.10),
+    tuneR (>= 1.0)
+Imports:
+    grDevices,
+    methods,
+    utils,
+    vctrs
+Suggests:
+    adfExplorer (>= 2.0.0),
+    ProTrackR (>= 0.3.4),
+    testthat (>= 3.0.0)
 License: GPL-3
 LazyData: True
 Encoding: UTF-8
@@ -23,3 +31,4 @@ NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
 URL: https://pepijn-devries.github.io/AmigaFFH/, https://github.com/pepijn-devries/AmigaFFH/
 BugReports: https://github.com/pepijn-devries/AmigaFFH/issues
+Config/testthat/edition: 3

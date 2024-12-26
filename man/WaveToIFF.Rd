@@ -53,7 +53,6 @@ normalised and scaled to a pcm-formatted 8-bit sample using
 the sample to 8-bit pcm yourself before calling this function.
 }
 \examples{
-\dontrun{
 ## First get an audio sample from the ProTrackR package
 snare.samp <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 
@@ -69,7 +68,8 @@ snare.iff <- WaveToIFF(snare.wav)
 ## You could also use a sine wave as input (although you will get some warnings).
 ## This will work because the vector of numeric data can be coerced to
 ## a WaveMC object
-sine.iff <- WaveToIFF(sin((0:2000)/20))
+\donttest{
+  sine.iff <- WaveToIFF(sin((0:2000)/20))
 }
 }
 \references{

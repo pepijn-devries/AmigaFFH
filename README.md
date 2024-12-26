@@ -1,6 +1,15 @@
 
 # AmigaFFH
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/pepijn-devries/AmigaFFH/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pepijn-devries/AmigaFFH/actions/workflows/R-CMD-check.yaml)
+[![AmigaFFH status
+badge](https://pepijn-devries.r-universe.dev/badges/AmigaFFH)](https://pepijn-devries.r-universe.dev/AmigaFFH)
+[![version](https://www.r-pkg.org/badges/version/AmigaFFH)](https://CRAN.R-project.org/package=AmigaFFH)
+![cranlogs](https://cranlogs.r-pkg.org/badges/AmigaFFH)
+<!-- badges: end -->
+
 The Amiga File Format Handler package (AmigaFFH) is designed to
 interpret file formats that were native to [Commodore
 Amiga](https://en.wikipedia.org/wiki/Amiga) machines. In combination
@@ -160,8 +169,6 @@ a complete overhaul which will be released in due time as a new package.
 This new package will:
 
 - have the same or similar features as the current package.
-- will implement modern R features and try to adhere to
-  [tidyverse](https://www.tidyverse.org) principles.
 - implement rendering procedures in C++ giving the package a speed
   boost.
 

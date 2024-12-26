@@ -4,7 +4,7 @@
 \alias{rasterToBitmap}
 \title{Convert a grDevices \code{raster} object into binary bitmap data}
 \usage{
-rasterToBitmap(x, depth = 3, interleaved = T, indexing = index.colours)
+rasterToBitmap(x, depth = 3, interleaved = TRUE, indexing = index.colours)
 }
 \arguments{
 \item{x}{A raster object created with \code{\link[grDevices:as.raster]{grDevices::as.raster()}} which
@@ -77,7 +77,6 @@ of available colours even further. The SHAM mode is currently not
 supported by this package.
 }
 \examples{
-\dontrun{
 ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
   min(volcano) + 1], nrow(volcano))))
@@ -108,7 +107,6 @@ volcano.bw <- rasterToBitmap(volcano.raster,
 
 ## Make a bitmap using a special display mode (HAM6):
 volcano.HAM <- rasterToBitmap(volcano.raster, "HAM6")
-}
 }
 \seealso{
 Other raster.operations: 

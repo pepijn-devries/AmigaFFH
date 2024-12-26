@@ -39,13 +39,14 @@ the sake of completeness. The implementation here only compresses 8-bit data, as
 for 16-bit data the quality loss will be more considerable.
 }
 \examples{
-\dontrun{
 ## Let's get an audio wave from the ProTrackR package, which we
 ## can use in this example:
 buzz     <- ProTrackR::PTSample(ProTrackR::mod.intro, 1)
 
 ## Let's convert it into raw data, such that we can compress it:
-buzz.raw <- adfExplorer::amigaIntToRaw(ProTrackR::waveform(buzz) - 128, 8, T)
+buzz.raw <- as.integer(ProTrackR::waveform(buzz) - 128) |>
+  bitwAnd(0xFF) |>
+  as.raw()
 
 ## Let's compress it:
 buzz.compress <- deltaFibonacciCompress(buzz.raw)
@@ -58,7 +59,9 @@ length(buzz.compress)/length(buzz.raw)
 buzz.decompress <- deltaFibonacciDecompress(buzz.compress)
 
 ## And turn the raw data into numeric data:
-buzz.decompress <- adfExplorer::rawToAmigaInt(buzz.decompress, 8, T)
+buzz.decompress <-
+  ifelse(buzz.decompress > 0x7f, as.integer(buzz.decompress) - 256L,
+         as.integer(buzz.decompress))
 
 ## Plot the original wave in black, the decompressed wave in blue
 ## and the error in red (difference between the original and decompressed
@@ -77,7 +80,9 @@ plot(ProTrackR::waveform(buzz) - 128, buzz.decompress)
 snare.drum <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 
 ## Let's convert it into raw data, such that we can compress it:
-snare.raw <- adfExplorer::amigaIntToRaw(ProTrackR::waveform(snare.drum) - 128, 8, T)
+snare.raw <- as.integer(ProTrackR::waveform(snare.drum) - 128L) |>
+  bitwAnd(0xFF) |>
+  as.raw()
 
 ## Let's compress it:
 snare.compress <- deltaFibonacciCompress(snare.raw)
@@ -86,7 +91,9 @@ snare.compress <- deltaFibonacciCompress(snare.raw)
 snare.decompress <- deltaFibonacciDecompress(snare.compress)
 
 ## And turn the raw data into numeric data:
-snare.decompress <- adfExplorer::rawToAmigaInt(snare.decompress, 8, T)
+snare.decompress <-
+  ifelse(snare.decompress > 0x7f, as.integer(snare.decompress) - 256L,
+         as.integer(snare.decompress))
 
 ## Now if we make the same comparison as before, we note that the
 ## error in the decompressed wave is much larger than in the previous
@@ -99,7 +106,6 @@ lines(snare.error, col = "red")
 ## this can also be visualised by plotting the orignal wave data against
 ## the decompressed data (and observe a nice but not perfect correlation):
 plot(ProTrackR::waveform(snare.drum) - 128, snare.decompress)
-}
 }
 \references{
 \url{https://en.wikipedia.org/wiki/Delta_encoding}

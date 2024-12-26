@@ -11,7 +11,7 @@
   if (object@chunk.type %in% c("FORM", "LIST", "CAT ", "PROP") && data.types == "raw") stop("IFF containers should contain IFF chunks, not raw data.")
   ## TODO note that the validity of all the IFFChunk objects in the data list are not checked
   ## TODO Doing that will make the object fool-proof, but also a lot slower...
-  return(T)
+  return(TRUE)
 }
 
 #' A class structure to represent IFF files
@@ -61,7 +61,6 @@
 #' @name IFFChunk-class
 #' @rdname IFFChunk-class
 #' @examples
-#' \dontrun{
 #' ## load an IFF file
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -78,7 +77,6 @@
 #' new("IFFChunk",
 #'     chunk.type = "TEXT",
 #'     chunk.data = list(charToRaw("A simple chunk")))
-#' }
 #' @family iff.operations
 #' @exportClass IFFChunk
 #' @author Pepijn de Vries
@@ -109,26 +107,20 @@ setClass("IFFChunk",
 #' @name read.iff
 #' @param file A filename of an IFF file to be read, or a connection from which
 #' binary data can be read.
-#' @param disk A virtual Commodore Amiga disk from which the `file` should be
-#' read. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @returns Returns a [IFFChunk()] object read from the specified file.
 #' @examples
-#' \dontrun{
 #' ## let's read a bitmap image stored in IFF as provided with this package:
 #' filename <- system.file("ilbm8lores.iff", package = "AmigaFFH")
 #' example.iff <- read.iff(filename)
 #' 
 #' ## And plot it:
 #' plot(example.iff)
-#' }
 #' @family io.operations
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
-read.iff <- function(file, disk = NULL) {
-  result <- .read.generic(file, disk)
+read.iff <- function(file) {
+  result <- .read.generic(file)
   result <- rawToIFFChunk(result)
   if (result@chunk.type != "FORM") stop("FORM is currently the only supported IFF container. LIST, CAT and others are not...")
   return (result)
@@ -156,22 +148,20 @@ read.iff <- function(file, disk = NULL) {
 #' See usage section for all supported objects.
 #' @returns Returns a `vector` of `raw` data based on `x`.
 #' @examples
-#' \dontrun{
 #' ## read an IFF file as an IFFChunk object:
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
 #' ## This will recreate the exact raw data as it was read from the file:
 #' example.raw <- as.raw(example.iff)
-#' }
 #' @family raw.operations
 #' @author Pepijn de Vries
 #' @export
 setMethod("as.raw", "IFFChunk", function(x) {
-  get.data <- function(y, parent.is.container = F) {
+  get.data <- function(y, parent.is.container = FALSE) {
     result <- charToRaw(y@chunk.type)
     if (inherits(y@chunk.data[[1]], "raw")) {
       ## only store chunk size if parent is not a container (i.e., FORM, LIST or CAT)
-      if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(y@chunk.data[[1]]), 32, F))
+      if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(y@chunk.data[[1]]), 32, FALSE))
       result <- c(result, y@chunk.data[[1]])
       ## Chunks should always be WORD aligned (pad with zeros if
       ## it is not):
@@ -182,13 +172,13 @@ setMethod("as.raw", "IFFChunk", function(x) {
       dat <- unlist(lapply(y@chunk.data, get.data,
                            parent.is.container = container))
       ## only store chunk size if parent is not a container (i.e., FORM, LIST, CAT or PROP)
-      if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(dat), 32, F))
+      if (!parent.is.container) result <- c(result, .amigaIntToRaw(length(dat), 32, FALSE))
       result <- c(result, dat)
     } else {
       stop("IFFChunk contains invalid data")
     }
   }
-  return(get.data(x, F))
+  return(get.data(x, FALSE))
 })
 
 #' @rdname as.raw
@@ -214,18 +204,11 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' @param x An [IFFChunk()] object that needs to be written to a file.
 #' @param file A filename for the IFF file to which the [IFFChunk()] needs
 #' to be saved, or a connection to which the data should be written.
-#' @param disk A virtual Commodore Amiga disk to which the `file` should be
-#' written. This should be an [`amigaDisk()`][adfExplorer::amigaDisk-class] object. Using
-#' this argument requires the adfExplorer package.
-#' When set to `NULL`, this argument is ignored.
 #' @returns Returns either `NULL` or an `integer` status invisibly as passed
 #' by the [`close()`][base::connections] statement used to close the file connection.
-#' When `disk` is specified, a copy of `disk` is returned
-#' to which the file is written.
 #' 
 #' @references <https://en.wikipedia.org/wiki/Interchange_File_Format>
 #' @examples
-#' \dontrun{
 #' ## read an IFF file as an IFFChunk object:
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -233,14 +216,13 @@ as.raw.IFF.ANY <- function(x, ...) {
 #' ## to the temp directory:
 #' write.iff(example.iff, file.path(tempdir(), "image.iff"))
 #' 
-#' }
 #' @family io.operations
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
-write.iff <- function(x, file, disk = NULL) {
+write.iff <- function(x, file) {
   if (!inherits(x, "IFFChunk")) stop("x should be of class IFFChunk.")
-  .write.generic(x, file, disk)
+  .write.generic(x, file)
 }
 
 setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric("getIFFChunk"))
@@ -276,7 +258,6 @@ setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric(
 #' specified path. Or in case of the replace method the original chunk `x` is
 #' returned with the target chunk replaced by `value`.
 #' @examples
-#' \dontrun{
 #' ## load an IFF file
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -296,7 +277,6 @@ setGeneric("getIFFChunk", function(x, chunk.path, chunk.number) standardGeneric(
 #' 
 #' ## Now replace the header from the original iff with the modified header:
 #' getIFFChunk(example.iff, c("ILBM", "BMHD")) <- bmhd
-#' }
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
@@ -394,7 +374,6 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' a list of audio [tuneR::Wave()]s, a `character` string or a named
 #' `list`.
 #' @examples
-#' \dontrun{
 #' ## load an IFF file
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -414,7 +393,6 @@ setGeneric("interpretIFFChunk", function(x, ...) standardGeneric("interpretIFFCh
 #' class(bmhd.itpt)
 #' typeof(bmhd.itpt)
 #' print(bmhd.itpt)
-#' }
 #' @family iff.operations
 #' @author Pepijn de Vries
 #' @export
@@ -464,19 +442,19 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
   } else if(type == "BMHD") {
     ## BITMAP HEADER
     result <- list(
-      w                  = .rawToAmigaInt(dat[1:2],   16, F),
-      h                  = .rawToAmigaInt(dat[3:4],   16, F),
-      x                  = .rawToAmigaInt(dat[5:6],   16, T),
-      y                  = .rawToAmigaInt(dat[7:8],   16, T),
-      nPlanes            = .rawToAmigaInt(dat[9],     8, F),
-      Masking            = .rawToAmigaInt(dat[10],    8, F),
-      Compression        = .rawToAmigaInt(dat[11],    8, F),
+      w                  = .rawToAmigaInt(dat[1:2],   16, FALSE),
+      h                  = .rawToAmigaInt(dat[3:4],   16, FALSE),
+      x                  = .rawToAmigaInt(dat[5:6],   16, TRUE),
+      y                  = .rawToAmigaInt(dat[7:8],   16, TRUE),
+      nPlanes            = .rawToAmigaInt(dat[9],     8, FALSE),
+      Masking            = .rawToAmigaInt(dat[10],    8, FALSE),
+      Compression        = .rawToAmigaInt(dat[11],    8, FALSE),
       pad                = dat[12],
-      transparentColour  = .rawToAmigaInt(dat[13:14], 16, F),
-      xAspect            = .rawToAmigaInt(dat[15],    8, F),
-      yAspect            = .rawToAmigaInt(dat[16],    8, F),
-      pageWidth          = .rawToAmigaInt(dat[17:18], 16, T),
-      pageHeight         = .rawToAmigaInt(dat[19:20], 16, T)
+      transparentColour  = .rawToAmigaInt(dat[13:14], 16, FALSE),
+      xAspect            = .rawToAmigaInt(dat[15],    8, FALSE),
+      yAspect            = .rawToAmigaInt(dat[16],    8, FALSE),
+      pageWidth          = .rawToAmigaInt(dat[17:18], 16, TRUE),
+      pageHeight         = .rawToAmigaInt(dat[19:20], 16, TRUE)
     )
     if (result$Masking > 3) result$Masking <- 4
     result$Masking <- c("mskNone", "mskHasMask", "mskHasTransparentColour", "mskLasso", "mskUnknown")[result$Masking + 1]
@@ -493,10 +471,10 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
     ## DPaint colour range (used for colour cycling)
     result <- list(
       padding = dat[1:2],
-      rate    = .rawToAmigaInt(dat[3:4], 16, F)*60/(2^14), ## steps per second
-      flags   = .rawToAmigaInt(dat[5:6], 16, F),
-      low     = .rawToAmigaInt(dat[7], 8, F),
-      high    = .rawToAmigaInt(dat[8], 8, F)
+      rate    = .rawToAmigaInt(dat[3:4], 16, FALSE)*60/(2^14), ## steps per second
+      flags   = .rawToAmigaInt(dat[5:6], 16, FALSE),
+      low     = .rawToAmigaInt(dat[7], 8, FALSE),
+      high    = .rawToAmigaInt(dat[8], 8, FALSE)
     )
     result$flags[result$flags > 2] <- 2
     result$flags <- c("RNG_OFF", "RNG_ACTIVE", "RNG_REVERSE", "RNG_UNKNOWN")[result$flags + 1]
@@ -505,7 +483,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
   } else if (type == "ANIM") {
     result <- list()
     dpan <- NULL
-    suppressWarnings(try(dpan <- interpretIFFChunk(getIFFChunk(x, c("FORM", "ILBM", "DPAN"))), T))
+    suppressWarnings(try(dpan <- interpretIFFChunk(getIFFChunk(x, c("FORM", "ILBM", "DPAN"))), TRUE))
     interleave <- interpretIFFChunk(getIFFChunk(x, c("FORM", "ILBM", "ANHD"), c(2L, 1L, 1L)))$interleave
     interleave[interleave == 0] <- 2
     if (length(x@chunk.data) < (2 + interleave)) stop("Animation contains insufficient information for at least 2 frames.")
@@ -545,17 +523,17 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
     return(result)
   } else if (type == "ANHD") {
     result <- list(
-      operation       = .rawToAmigaInt(dat[1], 8, F),
-      mask            = as.logical(.rawToBitmap(dat[2], F, F)),
-      w               = .rawToAmigaInt(dat[3:4], 16, F),
-      h               = .rawToAmigaInt(dat[5:6], 16, F),
-      x               = .rawToAmigaInt(dat[7:8], 16, T),
-      y               = .rawToAmigaInt(dat[9:10], 16, T),
-      abstime         = .rawToAmigaInt(dat[11:14], 32, T),
-      reltime         = .rawToAmigaInt(dat[15:18], 32, T),
-      interleave      = .rawToAmigaInt(dat[19], 8, F),
+      operation       = .rawToAmigaInt(dat[1], 8, FALSE),
+      mask            = as.logical(.rawToBitmap(dat[2], FALSE, FALSE)),
+      w               = .rawToAmigaInt(dat[3:4], 16, FALSE),
+      h               = .rawToAmigaInt(dat[5:6], 16, FALSE),
+      x               = .rawToAmigaInt(dat[7:8], 16, TRUE),
+      y               = .rawToAmigaInt(dat[9:10], 16, TRUE),
+      abstime         = .rawToAmigaInt(dat[11:14], 32, TRUE),
+      reltime         = .rawToAmigaInt(dat[15:18], 32, TRUE),
+      interleave      = .rawToAmigaInt(dat[19], 8, FALSE),
       pad0            = dat[20],
-      flags           = as.logical(.rawToBitmap(dat[21:24], F, T)),
+      flags           = as.logical(.rawToBitmap(dat[21:24], FALSE, TRUE)),
       pad1            = dat[25:40]
     )
     if (result$operation > 7) result$operation <- "UnknownMode" else
@@ -570,17 +548,17 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
   } else if (type == "DPAN") {
     ## DPaint Animation chunk, is only used to determine number of animation frames
     result <- list(
-      version         = .rawToAmigaInt(dat[1:2], 16, F),
-      nframes         = .rawToAmigaInt(dat[3:4], 16, F),
-      flags           = as.logical(.rawToBitmap(dat[5:8], F, T))
+      version         = .rawToAmigaInt(dat[1:2], 16, FALSE),
+      nframes         = .rawToAmigaInt(dat[3:4], 16, FALSE),
+      flags           = as.logical(.rawToBitmap(dat[5:8], FALSE, TRUE))
     )
     return(result)
   } else if (type == "VHDR") {
-    result <- as.list(.rawToAmigaInt(dat[1:(3*4)], 32, F))
+    result <- as.list(.rawToAmigaInt(dat[1:(3*4)], 32, FALSE))
     result <- c(result,
-                .rawToAmigaInt(dat[13:14], 16, F),
-                .rawToAmigaInt(dat[15:16], 8, F),
-                .rawToAmigaInt(dat[17:20], 32, F))
+                .rawToAmigaInt(dat[13:14], 16, FALSE),
+                .rawToAmigaInt(dat[15:16], 8, FALSE),
+                .rawToAmigaInt(dat[17:20], 32, FALSE))
     names(result) <- c("oneShotHiSamples",
                        "repeatHiSamples",
                        "samplesPerHiCycle",
@@ -593,7 +571,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
     class(result) <- c("IFF.VHDR", "IFF.ANY")
     return(result)
   } else if (type == "CHAN") {
-    result <- which(c(2, 4, 6) %in% .rawToAmigaInt(dat, 32, F))[[1]]
+    result <- which(c(2, 4, 6) %in% .rawToAmigaInt(dat, 32, FALSE))[[1]]
     if (length(result) == 0) result <- list(channel = "UNKOWN") else
       result <- list(channel = c("LEFT", "RIGHT", "STEREO")[result])
     class(result) <- c("IFF.CHAN", "IFF.ANY")
@@ -621,7 +599,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
         l <- ((vhdr$oneShotHiSamples + vhdr$repeatHiSamples)*(2^(y - 1)))
         result <- body[samp.offset + (1:l)]
         samp.offset <<- samp.offset + l
-        .rawToAmigaInt(result, 8, T) + 128
+        .rawToAmigaInt(result, 8, TRUE) + 128
       })
     })
     ## wav will be a list of one or more Wave objects.
@@ -636,7 +614,7 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
       Wave(left = wav[[1]][[y]],
            right = right,
            bit = 8,
-           pcm = T,
+           pcm = TRUE,
            samp.rate = vhdr$samplesPerSec)
     })
     class(wav) <- c("IFF.8SVX", "IFF.ANY", class(wav))
@@ -872,7 +850,6 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' `x` represents.
 #' @returns Returns an [IFFChunk-class()] representation of `x`.
 #' @examples
-#' \dontrun{
 #' ## load an IFF file
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -902,7 +879,6 @@ setMethod("interpretIFFChunk", "IFFChunk", function(x, ...) {
 #' 
 #' ## This creates a basic colour palette:
 #' cmap <- IFFChunk("CMAP")
-#' }
 #' @references <https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry>
 #' @name IFFChunk-method
 #' @rdname IFFChunk
@@ -1009,7 +985,7 @@ IFFChunk.character <- function(x, ...) {
   } else if (x == "ANHD") {
     result <- list(
       operation       = "ByteVerticalCompression",
-      mask            = rep(F, 8),
+      mask            = rep(FALSE, 8),
       w               = 16,
       h               = 16,
       x               = 0,
@@ -1018,7 +994,7 @@ IFFChunk.character <- function(x, ...) {
       reltime         = 2,
       interleave      = 0,
       pad0            = raw(1),
-      flags           = rep(F, 32),
+      flags           = rep(FALSE, 32),
       pad1            = raw(16)
     )
     class(result) <- "IFF.ANHD"
@@ -1027,7 +1003,7 @@ IFFChunk.character <- function(x, ...) {
     result <- list(
       version = 4,
       nframes = 2,
-      flags   = rep(F, 32)
+      flags   = rep(FALSE, 32)
     )
     class(result) <- "IFF.DPAN"
     return(IFFChunk(result))
@@ -1152,7 +1128,7 @@ as.list.IFFChunk <- function(x, ...) {
   return(slotList(x))
 }
 
-.rawToIFFChunk <- function(x, skip.size = F) {
+.rawToIFFChunk <- function(x, skip.size = FALSE) {
   offset <- 0
   chunks <- list()
   while (offset < length(x)) {
@@ -1163,16 +1139,16 @@ as.list.IFFChunk <- function(x, ...) {
                                chunk.type = chunk.type,
                                chunk.data = .rawToIFFChunk(x[(offset + 1):length(x)]))))
     }
-    chunk.size <- .rawToAmigaInt(x[offset + 5:8], 32, F)
+    chunk.size <- .rawToAmigaInt(x[offset + 5:8], 32, FALSE)
     offset <- offset + 8
     chunk.data <- x[offset + 1:chunk.size]
     offset <- offset + chunk.size
     ## Data should be word aligned:
     if ((offset %% 2) == 1) offset <- offset + 1
     if (chunk.type %in% "FORM") { ## contains nested chunks, the container directly following 'FORM' will not specify the chunk length (hence the skip)
-      chunk.data <- .rawToIFFChunk(chunk.data, skip.size = T)
+      chunk.data <- .rawToIFFChunk(chunk.data, skip.size = TRUE)
     } else if (chunk.type %in% c("ILBM", "8SVX", "ANIM")) {
-      chunk.data <- .rawToIFFChunk(chunk.data, skip.size = F)
+      chunk.data <- .rawToIFFChunk(chunk.data, skip.size = FALSE)
     }
     if (inherits(chunk.data, "raw")) chunk.data <- list(chunk.data)
     chunks[[length(chunks) + 1]] <- methods::new("IFFChunk",
@@ -1208,7 +1184,6 @@ setGeneric("rawToIFFChunk", function(x) standardGeneric("rawToIFFChunk"))
 #' class object.
 #' @returns Returns an [IFFChunk()] class object based on `x`.
 #' @examples
-#' \dontrun{
 #' ## Get an IFFChunk object:
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -1220,7 +1195,6 @@ setGeneric("rawToIFFChunk", function(x) standardGeneric("rawToIFFChunk"))
 #' 
 #' ## These conversions were non-destructive:
 #' identical(example.iff, example.iff.new)
-#' }
 #' @family iff.operations
 #' @family raw.operations
 #' @author Pepijn de Vries

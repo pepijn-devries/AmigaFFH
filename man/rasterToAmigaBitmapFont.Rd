@@ -98,7 +98,6 @@ a two-coloured raster image and specifying which characters are
 depicted by the image.
 }
 \examples{
-\dontrun{
 data("font_example")
 
 ## make a raster that we can use to create a bitmap font
@@ -158,11 +157,11 @@ font9.abc <- rasterToAmigaBitmapFont(
   ## each element, you can recycle a glyph to represent different
   ## characters. So in this case, the glyph 'a' is used for
   ## all the accented variants of the character 'a'.
-  glyphs        = list("a\xE0\xE1\xE2\xE3\xE4\xE5",
+  glyphs        = list("a\ue0\ue1\ue2\ue3\ue4\ue5",
                        "b",
-                       "c\xA2\xE7",
+                       "c\ua2\ue7",
                        "d",
-                       "e\xE8\xE9\xEA\xEB"),
+                       "e\ue8\ue9\uea\ueb"),
   default_glyph = "c", ## 'c' is used as default glyph for all other characters
   baseline      = 7,
   glyph_width   = c(4, 4, 4, 4, 4),
@@ -171,8 +170,7 @@ font9.abc <- rasterToAmigaBitmapFont(
 )
 
 ## see what happens when you format text using the font we just created:
-plot(font9.abc, text = "a\xE0\xE1\xE2\xE3\xE4\xE5bc\xA2\xE7de\xE8\xE9\xEA\xEB, foo bar")
-}
+plot(font9.abc, text = "a\uE0\uE1\uE2\uE3\uE4\uE5\uA2\uE7\uE8\uE9\uEA\uEB, foo bar")
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

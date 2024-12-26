@@ -26,15 +26,22 @@ a more comprehensive \link{SysConfig} object. Use \code{\link[=as.raw]{as.raw()}
 to achieve the inverse.
 }
 \examples{
-\dontrun{
-## get the system-configuration from the adfExplorer example disk:
-sc <- adfExplorer::get.adf.file(adfExplorer::adf.example, "devs/system-configuration")
+if (requireNamespace("adfExplorer", quietly = TRUE)) {
+  library(adfExplorer)
+  
+  ## get the system-configuration from the adfExplorer example disk:
+  disk <- connect_adf(
+    system.file("example.adz", package = "adfExplorer")
+  )
+  virtual_file_con <- adf_file_con(disk, "devs/system-configuration")
+  sc <- readBin(virtual_file_con, "raw", 1024)
+  close(disk)
 
-## This will get you the raw data from the file:
-typeof(sc)
+  ## This will get you the raw data from the file:
+  typeof(sc)
 
-## Convert the raw data to a more comprehensive named list (and S3 SysConfig class):
-sc <- rawToSysConfig(sc)
+  ## Convert the raw data to a more comprehensive named list (and S3 SysConfig class):
+  sc <- rawToSysConfig(sc)
 }
 }
 \seealso{

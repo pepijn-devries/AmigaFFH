@@ -39,7 +39,6 @@ of currently supported IFF chunks. This list may increase while this package
 matures.
 }
 \examples{
-\dontrun{
 ## load an IFF file
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -59,7 +58,6 @@ bmhd.itpt <- interpretIFFChunk(bmhd)
 class(bmhd.itpt)
 typeof(bmhd.itpt)
 print(bmhd.itpt)
-}
 }
 \seealso{
 Other iff.operations: 

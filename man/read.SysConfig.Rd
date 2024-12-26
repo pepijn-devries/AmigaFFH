@@ -4,16 +4,11 @@
 \alias{read.SysConfig}
 \title{Read an Amiga system-configuration file}
 \usage{
-read.SysConfig(file, disk = NULL)
+read.SysConfig(file)
 }
 \arguments{
 \item{file}{The file name of a system-configuration file to be read.
 Can also be a connection that allows reading binary data.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 }
 \value{
 Returns an S3 \link{SysConfig} class object based on the file that is read.
@@ -26,7 +21,6 @@ Amiga OS 1.x stored system preferences in a binary system-configuration file. Th
 function returns the file in a comprehensive format (a \link{SysConfig} object).
 }
 \examples{
-\dontrun{
 ## Put a simple SysConfig object into the tempdir:
 write.SysConfig(simpleSysConfig(), file.path(tempdir(), "system-configuration"))
 
@@ -35,7 +29,6 @@ sc <- read.SysConfig(file.path(tempdir(), "system-configuration"))
 
 ## and plot it
 plot(sc)
-}
 }
 \seealso{
 Other SysConfig.operations: 

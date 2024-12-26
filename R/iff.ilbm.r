@@ -24,13 +24,13 @@ IFFChunk.IFF.BMHD <- function(x, ...) {
   mask <- which(c("mskNone", "mskHasMask", "mskHasTransparentColour", "mskLasso") == x$Masking) - 1
   ## if the masking type is unknown, set to 0
   if (length(mask) == 0) mask <- 0
-  result <- c(.amigaIntToRaw(c(x$w, x$h), 16, F),
-              .amigaIntToRaw(c(x$x, x$y), 16, T),
-              .amigaIntToRaw(c(x$nPlanes, mask, compr), 8, F),
+  result <- c(.amigaIntToRaw(c(x$w, x$h), 16, FALSE),
+              .amigaIntToRaw(c(x$x, x$y), 16, TRUE),
+              .amigaIntToRaw(c(x$nPlanes, mask, compr), 8, FALSE),
               as.raw(x$pad)[[1]],
-              .amigaIntToRaw(x$transparentColour, 16, F),
-              .amigaIntToRaw(c(x$xAspect, x$yAspect), 8, F),
-              .amigaIntToRaw(c(x$pageWidth, x$pageHeight), 16, F))
+              .amigaIntToRaw(x$transparentColour, 16, FALSE),
+              .amigaIntToRaw(c(x$xAspect, x$yAspect), 8, FALSE),
+              .amigaIntToRaw(c(x$pageWidth, x$pageHeight), 16, FALSE))
   return(new("IFFChunk", chunk.type = "BMHD", chunk.data = list(result)))
 }
 
@@ -48,9 +48,9 @@ IFFChunk.IFF.CRNG <- function(x, ...) {
   if (length(flag) == 0) flag <- 0
   dat <- c(
     x$padding,
-    .amigaIntToRaw(round(x$rate*(2^14)/60), 16, F),
-    .amigaIntToRaw(flag, 16, F),
-    .amigaIntToRaw(c(x$low, x$high), 8, F)
+    .amigaIntToRaw(round(x$rate*(2^14)/60), 16, FALSE),
+    .amigaIntToRaw(flag, 16, FALSE),
+    .amigaIntToRaw(c(x$low, x$high), 8, FALSE)
   )
   result <- new("IFFChunk", chunk.type = "CRNG", chunk.data = list(dat))
   return(result)
@@ -68,14 +68,14 @@ IFFChunk.IFF.ANHD <- function(x, ...) {
   oper <- which(x$operation == c("standard", "XOR", "LongDeltaMode", "ShortDeltaMode", "GeneralDeltamode", "ByteVerticalCompression", "StereoOp5", "ShortLongVerticalDeltaMode")) - 1
   ## if the flag is unknown, set to 0
   if (length(oper) == 0) oper <- 0
-  result <- c(.amigaIntToRaw(oper, 8, F),
-              .bitmapToRaw(x$mask, F, F),
-              .amigaIntToRaw(c(x$w, x$h), 16, F),
-              .amigaIntToRaw(c(x$x, x$y), 16, T),
-              .amigaIntToRaw(c(x$abstime, x$reltime), 32, T),
-              .amigaIntToRaw(x$interleave, 8, F),
+  result <- c(.amigaIntToRaw(oper, 8, FALSE),
+              .bitmapToRaw(x$mask, FALSE, FALSE),
+              .amigaIntToRaw(c(x$w, x$h), 16, FALSE),
+              .amigaIntToRaw(c(x$x, x$y), 16, TRUE),
+              .amigaIntToRaw(c(x$abstime, x$reltime), 32, TRUE),
+              .amigaIntToRaw(x$interleave, 8, FALSE),
               x$pad0,
-              .bitmapToRaw(x$flags, T, T),
+              .bitmapToRaw(x$flags, TRUE, TRUE),
               x$pad1
   )
   result <- new("IFFChunk", chunk.type = "ANHD", chunk.data = list(result))
@@ -91,8 +91,8 @@ IFFChunk.IFF.DLTA <- function(x, ...) {
 #' @rdname IFFChunk
 #' @export
 IFFChunk.IFF.DPAN <- function(x, ...) {
-  result <- c(.amigaIntToRaw(c(x$version, x$nframes), 16, F),
-              .bitmapToRaw(x$flags, T, T)
+  result <- c(.amigaIntToRaw(c(x$version, x$nframes), 16, FALSE),
+              .bitmapToRaw(x$flags, TRUE, TRUE)
   )
   result <- new("IFFChunk", chunk.type = "DPAN", chunk.data = list(result))
   return(result)
@@ -129,7 +129,6 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' based on `x`. If `x` is an animation ([IFFChunk()] of type ANIM),
 #' a `list` of raster objects is returned.
 #' @examples
-#' \dontrun{
 #' ## load an IFF file
 #' example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 #' 
@@ -157,7 +156,6 @@ IFFChunk.IFF.DPAN <- function(x, ...) {
 #' ## AmigaBasicShape objects can also be converted into rasters:
 #' ball <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
 #' ball.rst <- as.raster(ball)
-#' }
 #' @family iff.operations
 #' @family raster.operations
 #' @author Pepijn de Vries
@@ -185,7 +183,7 @@ as.raster.IFFChunk <- function(x, ...) {
     ## default palette in case 'CMAP' chunk is missing:
     bm.palette <- grDevices::gray(round(seq(0, 15, length.out = 2^bm.header$nPlanes))/15)
     ## Colours are interpreted as 12 bit when al low bits are 0, otherwise as 24 bit
-    try(bm.palette <- interpretIFFChunk(getIFFChunk(x, "CMAP")), silent = T)
+    try(bm.palette <- interpretIFFChunk(getIFFChunk(x, "CMAP")), silent = TRUE)
     ## extend the palette when the extra halfbright mode is used:
     if (!is.null(bm.vp.mode) && bm.vp.mode$is.halfbright) {
       bm.palette <- c(bm.palette,
@@ -295,7 +293,6 @@ plot.IFF.ANIM <- function(x, y, ...) {
 #' @returns Returns an [IFFChunk()] object holding an Interleaved
 #' Bitmap (ILBM) image based on `x`.
 #' @examples
-#' \dontrun{
 #' ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 #' volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
 #'   min(volcano) + 1], nrow(volcano))))
@@ -315,7 +312,6 @@ plot.IFF.ANIM <- function(x, y, ...) {
 #'   indexing = function(x, length.out) {
 #'     index.colours(x, length.out, dither = "JJN", iter.max = 20)
 #'   })
-#' }
 #' @family iff.operations
 #' @family raster.operations
 #' @author Pepijn de Vries
@@ -364,7 +360,7 @@ rasterToIFF <- function(x,
     anhd <- lapply(1:(length(x) + 2), function(z) {
       anhdz <- list(
         operation       = "ByteVerticalCompression",
-        mask            = rep(F, 8),
+        mask            = rep(FALSE, 8),
         w               = dim(x[[1]])[[2]],
         h               = dim(x[[1]])[[1]],
         x               = 0,
@@ -373,7 +369,7 @@ rasterToIFF <- function(x,
         reltime         = 2,
         interleave      = 0,
         pad0            = raw(1),
-        flags           = rep(F, 32),
+        flags           = rep(FALSE, 32),
         pad1            = raw(16)
       )
       class(anhdz) <- "IFF.ANHD"
@@ -381,10 +377,10 @@ rasterToIFF <- function(x,
       anhdz
     })
     
-    frame1 <- .indexToBitmap(x[[1]], pars$depth, T)
+    frame1 <- .indexToBitmap(x[[1]], pars$depth, TRUE)
     frame1 <- .bitmapToILBM(frame1, dim(x[[1]]), display.mode, monitor, pars$depth, pars$colour.depth, pal, trans)
     ## DPaint needs this class to set the correct number of frames:
-    dpan <- list(version = 4, nframes = length(x), flags = rep(F, 32))
+    dpan <- list(version = 4, nframes = length(x), flags = rep(FALSE, 32))
     class(dpan) <- "IFF.DPAN"
     frame1@chunk.data <- c(frame1@chunk.data[1],
                            anhd[[1]],
@@ -427,7 +423,7 @@ rasterToIFF <- function(x,
 ## dlta = raw data from dlta chunk
 .byteVerticalDecompression <- function(dlta, w, h, interleave, use.xor, previous = NULL) {
   interleave[interleave == 0] <- 2
-  pointers <- .rawToAmigaInt(dlta[1:(16*4)], 32, F)[1:8]
+  pointers <- .rawToAmigaInt(dlta[1:(16*4)], 32, FALSE)[1:8]
   if (all(pointers == 0)) {
     if (is.null(previous) || length(previous) == 0) {
       result <- matrix(0, h, w)
@@ -453,7 +449,7 @@ rasterToIFF <- function(x,
       prev <- apply(prev, 2, function(z) {
         as.logical(floor(z/(2^(y - 1))) %% 2)
       })
-      prev <- cbind(prev, matrix(F, h, w - ncol(prev)))
+      prev <- cbind(prev, matrix(FALSE, h, w - ncol(prev)))
     }
     ## if the pointer is zero for a bitmap layer, there is no change. Just return previous frame
     if (offs == 0) {
@@ -464,27 +460,27 @@ rasterToIFF <- function(x,
     ## loop columns:
     layer <- NULL
     for (i in 1:(w/8)) {
-      op.count <- .rawToAmigaInt(dlta[1 + offs], 8, F)
+      op.count <- .rawToAmigaInt(dlta[1 + offs], 8, FALSE)
       offs <- offs + 1
-      row.result <- matrix(F, 0, 8)
+      row.result <- matrix(FALSE, 0, 8)
       if (op.count > 0) {
         for (j in 1:op.count) {
-          op <- .rawToAmigaInt(dlta[1 + offs], 8, F)
+          op <- .rawToAmigaInt(dlta[1 + offs], 8, FALSE)
           offs <- offs + 1
           if (op == 0) { ## RUN operation; followed by number of repetitions and the repeating byte
-            rep.count <- .rawToAmigaInt(dlta[1 + offs], 8, F)
+            rep.count <- .rawToAmigaInt(dlta[1 + offs], 8, FALSE)
             rep.dat <- matrix(rep(
-              as.logical(.rawToBitmap(dlta[2 + offs], T, F)),
+              as.logical(.rawToBitmap(dlta[2 + offs], TRUE, FALSE)),
               rep.count
             ),
-            ncol = 8, byrow = T)
+            ncol = 8, byrow = TRUE)
             if (use.xor)
               rep.dat <- xor(prev[nrow(row.result) + 1:nrow(rep.dat), i*8 + (-7:0)], rep.dat)
             row.result <- rbind(row.result, rep.dat)
             offs <- offs + 2
           } else if (op < 0x80) { ## SKIP operation; move the cursor op bytes forward
             if (is.null(previous) || (is.list(previous) && length(previous) == 0)) {
-              row.result <- rbind(row.result, matrix(F, nrow = op, ncol = 8))
+              row.result <- rbind(row.result, matrix(FALSE, nrow = op, ncol = 8))
             } else {
               nroff <- nrow(row.result) + 1
               if (length(nroff) == 0) nroff <- 1
@@ -492,8 +488,8 @@ rasterToIFF <- function(x,
             }
           } else { ## DUMP operation; use op bytes literally
             op.cor <- op - 0x80
-            temp <- as.logical(.rawToBitmap(dlta[(1 + offs):(offs + op.cor)], T, F))
-            temp <- matrix(temp, ncol = 8, byrow = T)
+            temp <- as.logical(.rawToBitmap(dlta[(1 + offs):(offs + op.cor)], TRUE, FALSE))
+            temp <- matrix(temp, ncol = 8, byrow = TRUE)
             if (use.xor)
               temp <- xor(prev[nrow(row.result) + 1:nrow(temp), i*8 + (-7:0)], temp)
             row.result <- rbind(row.result, temp)
@@ -503,7 +499,7 @@ rasterToIFF <- function(x,
       }
       if (nrow(row.result) == 0 || op.count == 0) {
         if (is.null(previous)) {
-          row.result <- matrix(F, ncol = 8, nrow = h)
+          row.result <- matrix(FALSE, ncol = 8, nrow = h)
         } else {
           row.result <- prev[1:h, i*8 + (-7:0)]
         }
@@ -536,7 +532,7 @@ rasterToIFF <- function(x,
     if (prev.id < 1) prev.id <- 1
     ## loop bitmap layers
     pointers <- NULL
-    no.change <- rep(F, 16)
+    no.change <- rep(FALSE, 16)
     for (j in 1:depth) {
       ## loop columns
       dep.data <- NULL
@@ -548,7 +544,7 @@ rasterToIFF <- function(x,
         ## this is to avoid the large overhead of the operation bytes
         run.lengths <- rle(row.similarity)$lengths
         run.lengths <- rep(run.lengths, run.lengths)
-        row.similarity[row.similarity & run.lengths < 3] <- F
+        row.similarity[row.similarity & run.lengths < 3] <- FALSE
         ## If the entire row is similar to the previous frame, add 0 as op.count to the result
         cursor <- 1
         op.count <- 0
@@ -556,18 +552,18 @@ rasterToIFF <- function(x,
         if (!all(row.similarity)) {
           while (cursor <= h) {
             if (row.similarity[[cursor]]) { ## when elements at the cursor are the same compared to the previous frame, the SKIP operation is in place
-              skip <- which(diff(c(row.similarity[cursor:h], F)) != 0)[[1]]
+              skip <- which(diff(c(row.similarity[cursor:h], FALSE)) != 0)[[1]]
               repskip <- floor(skip/127)
               ## note that the op.count needs to preceed each column of data
               ## it will be added after all ops of the column have been processed
               op.data <- c(op.data,
                            .amigaIntToRaw(c(
                              rep(127, repskip),
-                             skip %% 127), 8, F))
+                             skip %% 127), 8, FALSE))
               op.count <- op.count + repskip + 1
               cursor <- cursor + skip
             } else {
-              dup <- c(T, duplicated(curr.column[cursor:h,, drop = F], fromLast = F)[-1]) & !row.similarity[cursor:h]
+              dup <- c(TRUE, duplicated(curr.column[cursor:h,, drop = FALSE], fromLast = FALSE)[-1]) & !row.similarity[cursor:h]
               dup.run.length <- rle(dup)$lengths
               dup.run1 <- dup.run.length[[1]]
               dup.run1[dup.run1 > 255] <- 255
@@ -575,19 +571,19 @@ rasterToIFF <- function(x,
               dup.run.length <- rep(dup.run.length, dup.run.length)
               if (dup.run1 > 3 && length(dup) > 3 && dup[[2]]){ ## When elements at the cursor are not the same as the previous frame, and they are repetative, the RUN operation is in place
                 op.data <- c(op.data,
-                             .amigaIntToRaw(c(0, dup.run1), 8, F),
-                             .bitmapToRaw(as.logical(t(curr.column[cursor,, drop = F])),
-                                                      T, F))
+                             .amigaIntToRaw(c(0, dup.run1), 8, FALSE),
+                             .bitmapToRaw(as.logical(t(curr.column[cursor,, drop = FALSE])),
+                                                      TRUE, FALSE))
                 op.count <- op.count + 1
                 cursor <- cursor + dup.run1
               } else { ## When elements at the cursor are not the same as the previous frame, and they are not repetative, the DUMP operation is in place
                 skip <- which(diff(c(row.similarity[cursor:h] |
-                                       c(dup.run.length[-1] > 2 & dup[-1], F), T)) != 0)[[1]]
+                                       c(dup.run.length[-1] > 2 & dup[-1], FALSE), TRUE)) != 0)[[1]]
                 skip[skip > 127] <- 127
-                dat <- .bitmapToRaw(as.logical(t(curr.column[cursor:(cursor + skip - 1),, drop = F])),
-                                                T, F)
+                dat <- .bitmapToRaw(as.logical(t(curr.column[cursor:(cursor + skip - 1),, drop = FALSE])),
+                                                TRUE, FALSE)
                 op.data <- c(op.data,
-                             .amigaIntToRaw(skip + 0x80, 8, F),
+                             .amigaIntToRaw(skip + 0x80, 8, FALSE),
                              dat)
                 cursor <- cursor + skip
                 op.count <- op.count + 1
@@ -598,11 +594,11 @@ rasterToIFF <- function(x,
         ## After each column, bind the result to the previous column. Each column should start with the count of
         ## the total number of operations in the column, followed by the encoded data.
         dep.data <- c(dep.data,
-                      .amigaIntToRaw(op.count, 8, F),
+                      .amigaIntToRaw(op.count, 8, FALSE),
                       op.data)
       }
       if (all(dep.data == raw(1))) {
-        no.change[[j]] <- T
+        no.change[[j]] <- TRUE
         dep.data <- NULL
       }
       pointers <- c(pointers, length(dep.data))
@@ -615,7 +611,7 @@ rasterToIFF <- function(x,
     ## combine the op-data from all bitmap layers, starting with pointers to the start of the data for each layer
     ## if there was no change to a bitmap layer, there is no data. The pointer is set to 0 in that case.
     result[[i]] <- c(
-      .amigaIntToRaw(ptrs, 32, F),
+      .amigaIntToRaw(ptrs, 32, FALSE),
       result[[i]]
     )
     ## DLTA should be preceded by an ANHD chunk, this is not added by this function
@@ -625,8 +621,8 @@ rasterToIFF <- function(x,
 }
 
 .bitmapToILBM <- function(bm, dim.x, display.mode, monitor, depth, colour.depth, pal, transparent) {
-  bm <- .bitmapToRaw(bm, T, F)
-  bm <- matrix(bm, nrow = 2*ceiling(dim.x[[2]]/16), byrow = F)
+  bm <- .bitmapToRaw(bm, TRUE, FALSE)
+  bm <- matrix(bm, nrow = 2*ceiling(dim.x[[2]]/16), byrow = FALSE)
   bm <- c(unlist(apply(bm, 2, packBitmap)))
   
   ## Create a BODY chunk based on the bitmap data

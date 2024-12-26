@@ -66,7 +66,9 @@ amigaRawToColour(as.raw(c(0x0f, 0xff)))
 amigaRawToColour(as.raw(c(0xf0, 0xf0, 0xf0)), n.bytes = "3")
 
 ## lower nybbles are ignored, you will get a warning when it is not zero:
+\donttest{
 amigaRawToColour(as.raw(c(0xf0, 0xf0, 0x0f)), n.bytes = "3")
+}
 }
 \seealso{
 Other raw.operations: 

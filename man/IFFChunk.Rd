@@ -310,7 +310,6 @@ and copyright text. They are interpreted as a \code{character} string.
 }
 }
 \examples{
-\dontrun{
 ## load an IFF file
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -340,7 +339,6 @@ bmhd <- IFFChunk("BMHD")
 
 ## This creates a basic colour palette:
 cmap <- IFFChunk("CMAP")
-}
 }
 \references{
 \url{https://wiki.amigaos.net/wiki/IFF_FORM_and_Chunk_Registry}

@@ -22,12 +22,10 @@ An \code{\link[=AmigaBitmapFontSet]{AmigaBitmapFontSet()}} can hold bitmaps of m
 sizes. Use this function to obtain the available size from such a set.
 }
 \examples{
-\dontrun{
 data(font_example)
 
 ## The example font holds two font sizes (8 and 9):
 availableFontSizes(font_example)
-}
 }
 \seealso{
 Other AmigaBitmapFont.operations: 

@@ -46,13 +46,11 @@ limited palette. This palette can be forced as an argument to this function. Oth
 the input image.
 }
 \examples{
-\dontrun{
 ## get a raster image:
 ilbm <- as.raster(read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH")))
 
 ## convert to an Amiga Basic blitter object:
 bob <- rasterToAmigaBasicShape(ilbm, "blitter object")
-}
 }
 \seealso{
 Other AmigaBasicShape.operations: 

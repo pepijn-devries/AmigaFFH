@@ -4,16 +4,11 @@
 \alias{read.AmigaIcon}
 \title{Read an Amiga Workbench icon (info) file}
 \usage{
-read.AmigaIcon(file, disk = NULL, ...)
+read.AmigaIcon(file, ...)
 }
 \arguments{
 \item{file}{A \code{character} string representing the file name from which the
 icon data should be read.}
-
-\item{disk}{A virtual Commodore Amiga disk from which the \code{file} should be
-read. This should be an \code{\link[adfExplorer:amigaDisk-class]{amigaDisk()}} object. Using
-this argument requires the adfExplorer package.
-When set to \code{NULL}, this argument is ignored.}
 
 \item{...}{Arguments passed on to \code{\link[=rawToAmigaIcon]{rawToAmigaIcon()}}.}
 }
@@ -34,7 +29,6 @@ read an Amiga icon (with the .info extension) from a file and convert
 it into an \code{\link[=AmigaIcon]{AmigaIcon()}} object.
 }
 \examples{
-\dontrun{
 ## create a simple AmigaIcon:
 icon <- simpleAmigaIcon()
 
@@ -43,7 +37,6 @@ write.AmigaIcon(icon, file.path(tempdir(), "icon.info"))
 
 ## read the same file:
 icon2 <- read.AmigaIcon(file.path(tempdir(), "icon.info"))
-}
 }
 \seealso{
 Other AmigaIcon.operations: 

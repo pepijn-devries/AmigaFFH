@@ -108,7 +108,6 @@ Use \code{\link[=c]{c()}} to combine one or more
 }
 
 \examples{
-\dontrun{
 ## 'font_example' is an example of the AmigaBitmapFontSet object:
 data(font_example)
 
@@ -123,8 +122,7 @@ font_example_raster <- as.raster(font_example)
 
 ## You can also format text using the font:
 formated_raster     <- as.raster(font_example, text = "Foo bar", style = "bold")
-plot(font_example, text = "Foo bar", style = "underlined", interpolate = F)
-}
+plot(font_example, text = "Foo bar", style = "underlined", interpolate = FALSE)
 }
 \references{
 \url{http://amigadev.elowar.com/read/ADCD_2.1/Libraries_Manual_guide/node03E0.html}

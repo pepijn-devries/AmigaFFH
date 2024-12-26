@@ -83,7 +83,6 @@ A plotting routine is implemented for most AmigaFFH objects. See the usage secti
 for all supported objects.
 }
 \examples{
-\dontrun{
 ## load an IFF file
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -99,12 +98,11 @@ plot(simpleSysConfig())
 ## As can Amiga fonts:
 data(font_example)
 plot(font_example)
-plot(font_example, text = "foo bar", style = "underlined", interpolate = F)
+plot(font_example, text = "foo bar", style = "underlined", interpolate = FALSE)
 
 ## As can AmigaBasicShapes:
 ball <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
 plot(ball)
-}
 }
 \author{
 Pepijn de Vries

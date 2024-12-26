@@ -2,7 +2,7 @@
 #' @export
 IFFChunk.IFF.CHAN <- function(x, ...) {
   x <- c(2, 4, 6)[c("LEFT", "RIGHT", "STEREO") == x$channel[[1]]]
-  x <- list(.amigaIntToRaw(x, 32, F))
+  x <- list(.amigaIntToRaw(x, 32, FALSE))
   return(new("IFFChunk", chunk.type = "CHAN", chunk.data = x))
 }
 
@@ -16,10 +16,10 @@ IFFChunk.IFF.VHDR <- function(x, ...) {
   result <- c(
     .amigaIntToRaw(c(x$oneShotHiSamples,
                                  x$repeatHiSamples,
-                                 x$samplesPerHiCycle), 32, F),
-    .amigaIntToRaw(x$samplesPerSec, 16, F),
-    .amigaIntToRaw(c(x$ctOctave, compr), 8, F),
-    .amigaIntToRaw(x$volume, 32, F)
+                                 x$samplesPerHiCycle), 32, FALSE),
+    .amigaIntToRaw(x$samplesPerSec, 16, FALSE),
+    .amigaIntToRaw(c(x$ctOctave, compr), 8, FALSE),
+    .amigaIntToRaw(x$volume, 32, FALSE)
   )
   return(new("IFFChunk", chunk.type = "VHDR", chunk.data = list(result)))
 }
@@ -44,7 +44,7 @@ IFFChunk.IFF.8SVX <- function(x, ...) {
     stop("All waves in x should be pcm formatted.")
   }
   wav  <- .amigaIntToRaw(c(do.call(c, lapply(x, function(y) y@left)) - 128,
-                                       do.call(c, lapply(x, function(y) y@right)) - 128), 8, T)
+                                       do.call(c, lapply(x, function(y) y@right)) - 128), 8, TRUE)
   if ((length(wav) %% 2) != 0) wav <- c(wav, raw(1))
   vhdr <- list(
     oneShotHiSamples = length(x[[1]]),
@@ -76,10 +76,10 @@ plot.IFF.8SVX <- function(x, y, ...) {
 
 #' Playing Amiga audio data
 #' 
-#' A wrapper for [tuneR()]-package's [tuneR::play()] routine. Allowing it to play
+#' A wrapper for `tuneR` package's [tuneR::play()] routine. Allowing it to play
 #' Amiga audio (for instance stored in an 8SVX Interchange File Format).
 #' 
-#' A wrapper for [tuneR()]-package's [tuneR::play()] routine. It will try to play
+#' A wrapper for `tuneR` package's [tuneR::play()] routine. It will try to play
 #' audio using an external audio player. When 8SVX audio is played, each octave is played separately.
 #' When a FORM container contains multiple 8SVX samples, they are also played successively.
 #' 
@@ -96,7 +96,6 @@ plot.IFF.8SVX <- function(x, y, ...) {
 #' @return Returns a list of data returned by tuneR's [tuneR::play()], for which the output
 #' is undocumented.
 #' @examples
-#' \dontrun{
 #' ## First get an audio sample from the ProTrackR package
 #' snare.samp <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 #' 
@@ -104,7 +103,8 @@ plot.IFF.8SVX <- function(x, y, ...) {
 #' snare.iff <- WaveToIFF(snare.samp)
 #' 
 #' ## Play the 8SVX sample:
-#' play(snare.iff)
+#' if (interactive()) {
+#'   play(snare.iff)
 #' }
 #' @author Pepijn de Vries
 #' @export
@@ -167,7 +167,6 @@ setMethod("play", "IFFChunk", function(object, player = NULL, ...) {
 #' @return Returns an [IFFChunk-class()] object with a FORM container that
 #' contains an 8SVX waveform based on `x`.
 #' @examples
-#' \dontrun{
 #' ## First get an audio sample from the ProTrackR package
 #' snare.samp <- ProTrackR::PTSample(ProTrackR::mod.intro, 2)
 #' 
@@ -183,7 +182,8 @@ setMethod("play", "IFFChunk", function(object, player = NULL, ...) {
 #' ## You could also use a sine wave as input (although you will get some warnings).
 #' ## This will work because the vector of numeric data can be coerced to
 #' ## a WaveMC object
-#' sine.iff <- WaveToIFF(sin((0:2000)/20))
+#' \donttest{
+#'   sine.iff <- WaveToIFF(sin((0:2000)/20))
 #' }
 #' @family iff.operations
 #' @references <https://en.wikipedia.org/wiki/8SVX>
@@ -199,16 +199,16 @@ WaveToIFF <- function(x, loop.start = NA, octaves = 1, compress = c("sCmpNone", 
     ## Note tuneR's implementation let's 8-bit audio range from 0-254 instead of 0-255
     ## writeWave from the same package uses the range of 0-255. Maybe contact package
     ## maintainer to check whether this discrapency is intentional
-    x <- tuneR::normalize(x, "8", pcm = T)
+    x <- tuneR::normalize(x, "8", pcm = TRUE)
   }
   if (is.null(colnames(x@.Data))) colnames(x@.Data) <- MCnames$name[1:ncol(x@.Data)]
-  x <- tuneR::WaveMC(data  = cbind(FL = rowMeans(x@.Data[,grepl("L", colnames(x@.Data)), drop = F]),
-                                   FR = rowMeans(x@.Data[,grepl("R", colnames(x@.Data)), drop = F])),
+  x <- tuneR::WaveMC(data  = cbind(FL = rowMeans(x@.Data[,grepl("L", colnames(x@.Data)), drop = FALSE]),
+                                   FR = rowMeans(x@.Data[,grepl("R", colnames(x@.Data)), drop = FALSE])),
                      bit   = x@bit,
                      samp.rate = x@samp.rate,
                      pcm   = x@pcm)
-  if (any(is.nan(x@.Data[,"FL"]))) x@.Data <- x@.Data[,colnames(x@.Data) != "FL", drop = F]
-  if (any(is.nan(x@.Data[,"FR"]))) x@.Data <- x@.Data[,colnames(x@.Data) != "FR", drop = F]
+  if (any(is.nan(x@.Data[,"FL"]))) x@.Data <- x@.Data[,colnames(x@.Data) != "FL", drop = FALSE]
+  if (any(is.nan(x@.Data[,"FR"]))) x@.Data <- x@.Data[,colnames(x@.Data) != "FR", drop = FALSE]
   if (octaves > 1) {
     temp <- lapply(2:octaves, function(y) {
       tuneR::WaveMC(data = apply(x@.Data, 2, function(z) {
@@ -251,7 +251,7 @@ WaveToIFF <- function(x, loop.start = NA, octaves = 1, compress = c("sCmpNone", 
   chan <- IFFChunk(chan)
 
   wav <- unlist(lapply(1:ncol(x[[1]]@.Data), function(z) {
-    unlist(lapply(x, function(y) .amigaIntToRaw(y@.Data[,z] - 128, 8, T)))
+    unlist(lapply(x, function(y) .amigaIntToRaw(y@.Data[,z] - 128, 8, TRUE)))
   }))
   
   if (compress == "sCmpFibDelta") {

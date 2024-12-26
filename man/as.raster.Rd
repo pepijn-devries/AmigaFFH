@@ -22,7 +22,7 @@
 
 \method{as.raster}{IFFChunk}(x, ...)
 
-\method{as.raster}{AmigaIcon}(x, selected = F, ...)
+\method{as.raster}{AmigaIcon}(x, selected = FALSE, ...)
 }
 \arguments{
 \item{x}{Object that needs to be converted into a \code{grDevices} raster. It
@@ -74,7 +74,6 @@ can be used to convert AmigaFFH objects read from such files into
 grDevices raster images (\code{\link[grDevices:as.raster]{grDevices::as.raster()}}).
 }
 \examples{
-\dontrun{
 ## load an IFF file
 example.iff <- read.iff(system.file("ilbm8lores.iff", package = "AmigaFFH"))
 
@@ -102,7 +101,6 @@ spr.raster <- as.raster(spr, background = "green")
 ## AmigaBasicShape objects can also be converted into rasters:
 ball <- read.AmigaBasicShape(system.file("ball.shp", package = "AmigaFFH"))
 ball.rst <- as.raster(ball)
-}
 }
 \seealso{
 Other raster.operations: 

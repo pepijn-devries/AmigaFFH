@@ -73,7 +73,6 @@ for your convenience. As it is not in the main scope of this package you should
 use dedicated software for faster/better results.
 }
 \examples{
-\dontrun{
 ## first: Let's make a raster out of the 'volcano' data, which we can use in the example:
 volcano.raster <- as.raster(t(matrix(terrain.colors(1 + diff(range(volcano)))[volcano -
   min(volcano) + 1], nrow(volcano))))
@@ -86,12 +85,11 @@ volcano.dither <- dither(volcano.raster,
 ## Convert the indices back into a raster object, such that we can plot it:
 volcano.dither <- as.raster(apply(volcano.dither, 2, function(x) c("yellow", "green")[x]))
 par(mfcol = c(1, 2))
-plot(volcano.raster, interpolate = F)
-plot(volcano.dither, interpolate = F)
+plot(volcano.raster, interpolate = FALSE)
+plot(volcano.dither, interpolate = FALSE)
 
 ## results will get better when a better matching colour palette is used.
 ## for that purpose use the function 'index.colours'.
-}
 }
 \references{
 R.W. Floyd, L. Steinberg, \emph{An adaptive algorithm for spatial grey scale}. Proceedings of the Society of Information Display 17, 75-77 (1976).
