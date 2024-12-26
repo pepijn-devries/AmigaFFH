@@ -21,7 +21,8 @@ Imports:
     vctrs
 Suggests:
     adfExplorer (>= 2.0.0),
-    ProTrackR (>= 0.3.4)
+    ProTrackR (>= 0.3.4),
+    testthat (>= 3.0.0)
 License: GPL-3
 LazyData: True
 Encoding: UTF-8
@@ -30,3 +31,4 @@ NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
 URL: https://pepijn-devries.github.io/AmigaFFH/, https://github.com/pepijn-devries/AmigaFFH/
 BugReports: https://github.com/pepijn-devries/AmigaFFH/issues
+Config/testthat/edition: 3
