@@ -1,234 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/404.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasic-files.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasic.reserved.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasicBMAP-io.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasicBMAP.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasicShape.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBitmapFont.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaFFH-package.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaIcon.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/ExtractBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/IFFChunk-class.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/IFFChunk.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/SysConfig.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/WaveToIFF.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_display_keys.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_display_modes.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_monitors.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_palettes.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.AmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.AmigaBasicBMAP.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.character.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.raster.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.raw.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/availableFontSizes.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/bitmapToRaster.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/c.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/check.names.AmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/colourToAmigaRaw.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/deltaFibonacciCompress.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/dither.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/fontName.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/font_example.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/getAmigaBitmapFont.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/getIFFChunk.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/hardwareSprite-class.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/ilbm8lores.iff.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/index.colours.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/interpretIFFChunk.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/names.AmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/packBitmap.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/play.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/plot.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToAmigaBasicShape.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToAmigaBitmapFont.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToBitmap.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToHWSprite.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToIFF.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBasicBMAP.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBasicShape.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBitmapFont.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBitmapFontSet.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaIcon.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToHWSprite.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToIFFChunk.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToSysConfig.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBasicShape.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBitmapFont.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBitmapFontSet.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaIcon.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.SysConfig.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.iff.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/simpleAmigaIcon.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/simpleSysConfig.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/timeval.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaBasic.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaBasicShape.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaBitmapFont.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaIcon.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.SysConfig.html</loc>
-  </url>
-  <url>
-    <loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.iff.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/404.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/authors.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/index.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/news/index.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasic-files.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasic.reserved.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasicBMAP-io.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasicBMAP.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBasicShape.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaBitmapFont.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaFFH-package.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/AmigaIcon.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/ExtractBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/IFFChunk-class.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/IFFChunk.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/SysConfig.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/WaveToIFF.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_display_keys.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_display_modes.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_monitors.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/amiga_palettes.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.AmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.AmigaBasicBMAP.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.character.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.raster.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/as.raw.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/availableFontSizes.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/bitmapToRaster.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/c.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/check.names.AmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/colourToAmigaRaw.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/deltaFibonacciCompress.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/dither.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/fontName.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/font_example.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/getAmigaBitmapFont.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/getIFFChunk.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/hardwareSprite-class.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/ilbm8lores.iff.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/index.colours.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/index.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/interpretIFFChunk.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/names.AmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/packBitmap.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/play.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/plot.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToAmigaBasicShape.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToAmigaBitmapFont.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToBitmap.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToHWSprite.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rasterToIFF.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBasicBMAP.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBasicShape.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBitmapFont.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaBitmapFontSet.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToAmigaIcon.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToHWSprite.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToIFFChunk.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/rawToSysConfig.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBasicShape.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBitmapFont.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaBitmapFontSet.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.AmigaIcon.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.SysConfig.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/read.iff.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/simpleAmigaIcon.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/simpleSysConfig.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/timeval.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaBasic.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaBasicShape.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaBitmapFont.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.AmigaIcon.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.SysConfig.html</loc></url>
+<url><loc>https://pepijn-devries.github.io/AmigaFFH/reference/write.iff.html</loc></url>
 </urlset>
+
