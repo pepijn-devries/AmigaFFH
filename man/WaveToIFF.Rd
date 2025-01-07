@@ -68,9 +68,7 @@ snare.iff <- WaveToIFF(snare.wav)
 ## You could also use a sine wave as input (although you will get some warnings).
 ## This will work because the vector of numeric data can be coerced to
 ## a WaveMC object
-\donttest{
-  sine.iff <- WaveToIFF(sin((0:2000)/20))
-}
+# sine.iff <- WaveToIFF(sin((0:2000)/20))
 }
 \references{
 \url{https://en.wikipedia.org/wiki/8SVX}
