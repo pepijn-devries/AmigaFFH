@@ -1,4 +1,4 @@
-AmigaFFH v0.4.6
+AmigaFFH v0.4.7
 =============
 
  * Fixed broken `adfExplorer` dependency

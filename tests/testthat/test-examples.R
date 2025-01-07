@@ -1,1 +1,2 @@
-test_examples()
+test_examples() |>
+  capture_output()
