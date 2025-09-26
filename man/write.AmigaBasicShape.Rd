@@ -38,11 +38,11 @@ Other AmigaBasicShape.operations:
 \code{\link{read.AmigaBasicShape}()}
 
 Other io.operations: 
+\code{\link{read.AmigaBasic}()},
 \code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasicShape}()},
-\code{\link{read.AmigaBasic}()},
-\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{read.AmigaIcon}()},
 \code{\link{read.SysConfig}()},
 \code{\link{read.iff}()},

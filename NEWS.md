@@ -1,3 +1,8 @@
+AmigaFFH v0.4.8
+=============
+
+ * Corrected R dependency
+
 AmigaFFH v0.4.7
 =============
 

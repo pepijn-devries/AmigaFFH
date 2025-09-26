@@ -1,7 +1,7 @@
 Package: AmigaFFH
 Type: Package
 Title: Commodore Amiga File Format Handler
-Version: 0.4.7
+Version: 0.4.8
 Authors@R: c(person("Pepijn", "de Vries", role = c("aut", "cre", "dtc"),
     email = "pepijn.devries@outlook.com"))
 Author: Pepijn de Vries [aut, cre, dtc]
@@ -12,7 +12,7 @@ Description: Modern software often poorly support older file formats. This
     the older Amiga operating systems (<= 3.0). It will read and write specific
     file formats and coerces them into more contemporary data.
 Depends:
-    R (>= 2.10),
+    R (>= 4.1.0),
     tuneR (>= 1.0)
 Imports:
     grDevices,
@@ -26,7 +26,7 @@ Suggests:
 License: GPL-3
 LazyData: True
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 NeedsCompilation: no
 Roxygen: list(markdown = TRUE)
 URL: https://pepijn-devries.github.io/AmigaFFH/, https://github.com/pepijn-devries/AmigaFFH/

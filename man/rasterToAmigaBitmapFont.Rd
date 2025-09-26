@@ -180,10 +180,10 @@ Other AmigaBitmapFont.operations:
 \code{\link{fontName}()},
 \code{\link{font_example}},
 \code{\link{getAmigaBitmapFont}()},
-\code{\link{rawToAmigaBitmapFontSet}()},
 \code{\link{rawToAmigaBitmapFont}()},
-\code{\link{read.AmigaBitmapFontSet}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
 \code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{write.AmigaBitmapFont}()}
 
 Other raster.operations: 

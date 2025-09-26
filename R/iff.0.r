@@ -1113,6 +1113,7 @@ print.IFFChunk <- function(x, ...) {
   cat(typ)
 }
 
+#' @export
 as.list.IFFChunk <- function(x, ...) {
   slotList <- function(x) {
     if (inherits(x@chunk.data[[1]], "raw")) {
