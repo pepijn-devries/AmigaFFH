@@ -35,26 +35,26 @@ write.AmigaBasic(bas, file.path(tempdir(), "helloworld.bas"))
 }
 \seealso{
 Other AmigaBasic.operations: 
+\code{\link{AmigaBasic}},
 \code{\link{AmigaBasic.reserved}()},
 \code{\link{AmigaBasicBMAP}},
-\code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
-\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},
 \code{\link{names.AmigaBasic}()},
-\code{\link{rawToAmigaBasicBMAP}()},
 \code{\link{rawToAmigaBasic}()},
-\code{\link{read.AmigaBasicBMAP}()},
-\code{\link{read.AmigaBasic}()}
+\code{\link{rawToAmigaBasicBMAP}()},
+\code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()}
 
 Other io.operations: 
+\code{\link{read.AmigaBasic}()},
 \code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasicShape}()},
-\code{\link{read.AmigaBasic}()},
-\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{read.AmigaIcon}()},
 \code{\link{read.SysConfig}()},
 \code{\link{read.iff}()},

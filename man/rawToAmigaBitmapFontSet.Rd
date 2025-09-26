@@ -53,8 +53,8 @@ Other AmigaBitmapFont.operations:
 \code{\link{getAmigaBitmapFont}()},
 \code{\link{rasterToAmigaBitmapFont}()},
 \code{\link{rawToAmigaBitmapFont}()},
-\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{read.AmigaBitmapFont}()},
+\code{\link{read.AmigaBitmapFontSet}()},
 \code{\link{write.AmigaBitmapFont}()}
 
 Other raw.operations: 
@@ -62,9 +62,9 @@ Other raw.operations:
 \code{\link{as.raw.AmigaBasic}()},
 \code{\link{colourToAmigaRaw}()},
 \code{\link{packBitmap}()},
+\code{\link{rawToAmigaBasic}()},
 \code{\link{rawToAmigaBasicBMAP}()},
 \code{\link{rawToAmigaBasicShape}()},
-\code{\link{rawToAmigaBasic}()},
 \code{\link{rawToAmigaBitmapFont}()},
 \code{\link{rawToAmigaIcon}()},
 \code{\link{rawToHWSprite}()},

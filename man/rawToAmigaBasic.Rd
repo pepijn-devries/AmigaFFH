@@ -36,18 +36,18 @@ bas <- rawToAmigaBasic(bas.raw)
 }
 \seealso{
 Other AmigaBasic.operations: 
+\code{\link{AmigaBasic}},
 \code{\link{AmigaBasic.reserved}()},
 \code{\link{AmigaBasicBMAP}},
-\code{\link{AmigaBasic}},
 \code{\link{[.AmigaBasic}()},
-\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.AmigaBasic}()},
+\code{\link{as.AmigaBasicBMAP}()},
 \code{\link{as.character}()},
 \code{\link{check.names.AmigaBasic}()},
 \code{\link{names.AmigaBasic}()},
 \code{\link{rawToAmigaBasicBMAP}()},
-\code{\link{read.AmigaBasicBMAP}()},
 \code{\link{read.AmigaBasic}()},
+\code{\link{read.AmigaBasicBMAP}()},
 \code{\link{write.AmigaBasic}()}
 
 Other raw.operations: 
@@ -57,8 +57,8 @@ Other raw.operations:
 \code{\link{packBitmap}()},
 \code{\link{rawToAmigaBasicBMAP}()},
 \code{\link{rawToAmigaBasicShape}()},
-\code{\link{rawToAmigaBitmapFontSet}()},
 \code{\link{rawToAmigaBitmapFont}()},
+\code{\link{rawToAmigaBitmapFontSet}()},
 \code{\link{rawToAmigaIcon}()},
 \code{\link{rawToHWSprite}()},
 \code{\link{rawToIFFChunk}()},
