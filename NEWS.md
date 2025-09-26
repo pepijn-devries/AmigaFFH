@@ -1,4 +1,4 @@
-AmigaFFH v0.4.7.0001
+AmigaFFH v0.4.8
 =============
 
  * Corrected R dependency
